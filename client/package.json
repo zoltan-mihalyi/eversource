@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "webpack": "webpack",
+    "tsc": "tsc",
     "dev": "webpack --watch"
   },
   "author": "",
