@@ -4,9 +4,9 @@
   "description": "",
   "main": "dist/server/index.js",
   "scripts": {
-    "tsc": "tsc",
+    "tsc": "tsc -p src",
     "start": "node dist/server/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha -r ts-node/register test/**/*Test.ts"
   },
   "author": "",
   "license": "ISC",
@@ -14,7 +14,12 @@
     "ws": "^6.0.0"
   },
   "devDependencies": {
+    "@types/mocha": "^5.2.5",
     "@types/node": "^10.9.3",
+    "@types/sinon": "^5.0.2",
+    "mocha": "^5.2.0",
+    "sinon": "^6.1.5",
+    "ts-node": "^7.0.1",
     "typescript": "^3.0.1"
   }
 }

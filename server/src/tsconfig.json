@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "outDir": "./dist/",
+    "outDir": "../dist/",
     "sourceMap": true,
     "noImplicitAny": true,
     "strict": true,
@@ -10,7 +10,7 @@
     "lib": [
       "es6"
     ],
-    "rootDir": ".."
+    "rootDir": "../.."
   },
   "include": [
     "./**/*"
