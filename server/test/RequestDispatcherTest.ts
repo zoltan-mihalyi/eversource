@@ -1,5 +1,5 @@
 import { RequestDispatcher } from '../src/protocol/RequestDispatcher';
-import { CharacterId, CharacterInfo, ClassId } from '../../common/domain/CharacterInfo';
+import { CharacterId, CharacterInfo, CharacterName, ClassId } from '../../common/domain/CharacterInfo';
 import { X, Y, ZoneId } from '../../common/domain/Location';
 import { UserDao } from '../src/dao/UserDao';
 import * as sinon from 'sinon';
@@ -7,6 +7,7 @@ import * as assert from 'assert';
 
 const characters: CharacterInfo[] = [
     {
+        name: 'John' as CharacterName,
         id: '1' as CharacterId,
         classId: 'warrior' as ClassId,
 
@@ -91,6 +92,18 @@ describe('RequestDispatcher', () => {
         sinon.assert.calledOnce(world.createObject);
     });
 
+    it('should respond to ready with ready', function () {
+        const send = sinon.fake();
+
+        const dispatcher = new RequestDispatcher(new FakeUserDao(), fakeWorld(), send);
+
+        dispatcher.handleRequest('characters', void 0);
+        dispatcher.handleRequest('enter', '1');
+        dispatcher.handleRequest('ready', void 0);
+
+        sinon.assert.calledWith(send, 'ready', void 0);
+    });
+
     it('should create character on ready only once', function () {
         const world = fakeWorld();
 
@@ -154,6 +167,6 @@ describe('RequestDispatcher', () => {
         dispatcher.handleRequest('leave', void 0);
         dispatcher.handleRequest('characters', void 0);
 
-        sinon.assert.calledTwice(send);
+        sinon.assert.calledThrice(send); // characters, ready, characters
     });
 });

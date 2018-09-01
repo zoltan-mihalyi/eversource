@@ -6,6 +6,7 @@
   "scripts": {
     "tsc": "tsc -p src",
     "start": "node dist/server/index.js",
+    "dev": "ts-node-dev --project src/tsconfig.json src/index.ts",
     "test": "mocha -r ts-node/register test/**/*Test.ts"
   },
   "author": "",
@@ -17,9 +18,11 @@
     "@types/mocha": "^5.2.5",
     "@types/node": "^10.9.3",
     "@types/sinon": "^5.0.2",
+    "@types/ws": "^6.0.0",
     "mocha": "^5.2.0",
     "sinon": "^6.1.5",
     "ts-node": "^7.0.1",
+    "ts-node-dev": "^1.0.0-pre.26",
     "typescript": "^3.0.1"
   }
 }
