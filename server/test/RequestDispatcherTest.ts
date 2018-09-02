@@ -32,9 +32,15 @@ class FakeUserDao implements UserDao {
     }
 }
 
-function fakeWorld() {
+function fakeWorld(async?: boolean) {
     return {
-        createObject: sinon.spy(),
+        createObject: sinon.mock().callsFake((location, token, callback) => {
+            if (async) {
+                setTimeout(() => callback({}), 10);
+            } else {
+                callback({});
+            }
+        }),
         removeObject: sinon.spy(),
     }
 }
@@ -102,6 +108,33 @@ describe('RequestDispatcher', () => {
         dispatcher.handleRequest('ready', void 0);
 
         sinon.assert.calledWith(send, 'ready', void 0);
+    });
+
+
+    it('should do nothing when calling ready twice before server ready', function () {
+        const world = fakeWorld(true);
+
+        const dispatcher = new RequestDispatcher(new FakeUserDao(), world, sinon.fake());
+
+        dispatcher.handleRequest('characters', void 0);
+        dispatcher.handleRequest('enter', '1');
+        dispatcher.handleRequest('ready', void 0);
+        dispatcher.handleRequest('ready', void 0);
+
+        sinon.assert.calledOnce(world.createObject);
+    });
+
+    it('should cancel createObject when exit', function () {
+        const world = fakeWorld(true);
+
+        const dispatcher = new RequestDispatcher(new FakeUserDao(), world, sinon.fake());
+
+        dispatcher.handleRequest('characters', void 0);
+        dispatcher.handleRequest('enter', '1');
+        dispatcher.handleRequest('ready', void 0);
+        dispatcher.handleExit();
+
+        assert(world.createObject.getCall(0).args[1].cancelled);
     });
 
     it('should create character on ready only once', function () {

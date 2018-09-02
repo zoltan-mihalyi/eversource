@@ -5,13 +5,15 @@
   "main": "dist/server/index.js",
   "scripts": {
     "tsc": "tsc -p src",
+    "tsc-watch": "tsc -w -p src",
     "start": "node dist/server/index.js",
     "dev": "ts-node-dev --project src/tsconfig.json src/index.ts",
-    "test": "mocha -r ts-node/register test/**/*Test.ts"
+    "test": "cd test && mocha -r ts-node/register **/*Test.ts"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "tmx-parser": "^1.5.0",
     "ws": "^6.0.0"
   },
   "devDependencies": {
