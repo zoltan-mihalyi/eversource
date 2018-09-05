@@ -1,9 +1,7 @@
-///<reference path="../defs.d.ts"/>
-import * as tmx from "tmx-parser";
-import { Map, TileLayer } from "tmx-parser";
-import { Grid } from './Grid';
+import { Map, NodeLoader, TileLayer } from '@eversource/tmx-parser';
 import { ZoneId } from '../../../common/domain/Location';
 import { SafeCallback } from '../../../common/util/SafeCallback';
+import { Grid } from '../../../common/Grid';
 
 const BLOCKS: { [name: string]: boolean } = {
     Lava: true,
@@ -17,16 +15,18 @@ export interface GridLoader {
     load(zoneId: ZoneId, callback: SafeCallback<Grid>): void;
 }
 
+const tmxLoader = new NodeLoader();
+
 export class TmxGridLoader implements GridLoader {
     constructor(private basePath: string) {
     }
 
     load(zoneId: ZoneId, callback: SafeCallback<Grid>) {
-        tmx.parseFile(this.zoneFileName(zoneId), (err, map) => {
+        tmxLoader.parseFile(this.zoneFileName(zoneId), (err, map) => {
             if (err) {
                 callback(err);
             } else {
-                callback(null, this.createGrid(map!));
+                callback(null, this.createGrid(map as Map));
             }
         });
     }

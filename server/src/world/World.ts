@@ -1,7 +1,7 @@
 import { Location, ZoneId } from '../../../common/domain/Location';
 import { CancellationToken } from '../util/CancellationToken';
-import { Grid } from './Grid';
 import { GridLoader } from './GridLoader';
+import { Grid } from '../../../common/Grid';
 
 export interface WorldObject {
     world: World;

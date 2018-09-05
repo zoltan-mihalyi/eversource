@@ -13,7 +13,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "tmx-parser": "^1.5.0",
+    "@eversource/tmx-parser": "^1.6.0",
     "ws": "^6.0.0"
   },
   "devDependencies": {

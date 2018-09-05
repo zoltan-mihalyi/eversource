@@ -1,7 +1,7 @@
 import { TmxGridLoader } from '../src/world/GridLoader';
 import { ZoneId } from '../../common/domain/Location';
-import { Grid } from '../src/world/Grid';
 import * as assert from 'assert';
+import { Grid } from '../../common/Grid';
 
 const X = true;
 const _ = false;
