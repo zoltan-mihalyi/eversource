@@ -1,9 +1,13 @@
 import * as React from 'react';
 
-export class LoadingScreen extends React.Component {
+interface Props {
+    zone: string;
+}
+
+export class LoadingScreen extends React.Component<Props> {
     render() {
         return (
-            <p>Loading...</p>
+            <p>Loading {this.props.zone}...</p>
         );
     }
 }

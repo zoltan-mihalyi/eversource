@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { CharacterId, CharacterInfo } from '../../../../common/domain/CharacterInfo';
+import { CharacterInfo } from '../../../../common/domain/CharacterInfo';
 
 interface Props {
-    startLoading: (id: CharacterId) => void;
+    startLoading: (character: CharacterInfo) => void;
     exit: () => void;
     characters: CharacterInfo[];
 }
@@ -16,8 +16,8 @@ export class CharacterSelectionScreen extends React.Component<Props> {
                 <ul>
                     {characters.map((character, idx) => (
                         <li key={idx}>
-                            {character.name} {' the '} {character.classId} {' '}
-                            <button onClick={() => startLoading(character.id)}>enter</button>
+                            {`${character.name} the ${character.classId} @${character.location.zoneId} `}
+                            <button onClick={() => startLoading(character)}>enter</button>
                         </li>
                     ))}
                 </ul>
