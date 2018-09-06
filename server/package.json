@@ -6,7 +6,7 @@
   "scripts": {
     "tsc": "tsc -p src",
     "tsc-watch": "tsc -w -p src",
-    "start": "node dist/server/index.js",
+    "start": "node dist/server/src/index.js",
     "dev": "ts-node-dev --project src/tsconfig.json src/index.ts",
     "test": "cd test && mocha -r ts-node/register **/*Test.ts"
   },
