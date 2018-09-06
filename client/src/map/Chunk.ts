@@ -1,34 +1,31 @@
 import * as PIXI from 'pixi.js'
 import { TexturedTileSet } from './TexturedTileset';
-import { Map as TmxMap, TileLayer, Layer } from '@eversource/tmx-parser';
+import { Layer, Map as TmxMap, TileLayer } from '@eversource/tmx-parser';
 import { X, Y } from '../../../common/domain/Location';
 
-export class Chunk extends PIXI.Container {
-    private baseLayer: PIXI.Container;
+export class Chunk {
+    readonly base: PIXI.Container = new PIXI.Container();
+    readonly above: PIXI.Container = new PIXI.Container();
 
     constructor(map: TmxMap, ts: TexturedTileSet[], readonly chunkX: X, readonly chunkY: Y, width: number, height: number) {
-        super();
-        this.x = chunkX;
-        this.y = chunkY;
-        this.scale.x = 1 / map.tileWidth;
-        this.scale.y = 1 / map.tileHeight;
 
-        let base;
+        for (const container of [this.base, this.above]) {
+            container.x = chunkX;
+            container.y = chunkY;
+            container.scale.x = 1 / map.tileWidth;
+            container.scale.y = 1 / map.tileHeight;
+        }
+
         for (const layer of map.layers) {
-            if (layer.type === 'tile' && layer.name === 'Base') {
-                base = layer
+            if (layer.type === 'tile') {
+                this.addLayerToContainers(map, ts, width, height, layer);
             }
         }
-        if (!base) {
-            throw new Error('Base layer not found!');
-        }
-        this.baseLayer = this.addLayer(map, ts, width, height, base);
+        cacheAsBitmapIfNotEmpty(this.base);
+        cacheAsBitmapIfNotEmpty(this.above);
     }
 
-    private addLayer(map: TmxMap, ts: TexturedTileSet[], width: number, height: number, layer: Layer): PIXI.Container {
-        const layerContainer = new PIXI.Container();
-        this.addChild(layerContainer);
-
+    private addLayerToContainers(map: TmxMap, ts: TexturedTileSet[], width: number, height: number, layer: Layer) {
         for (let i = 0; i < width; i++) {
             for (let j = 0; j < height; j++) {
                 let index = this.chunkX + i + ((this.chunkY + j) * map.width);
@@ -40,11 +37,10 @@ export class Chunk extends PIXI.Container {
                 const sprite = new PIXI.Sprite(tileSet.textures[tile.gid! - tileSet.firstGid]);
                 sprite.x = i * map.tileWidth;
                 sprite.y = j * map.tileHeight;
-                layerContainer.addChild(sprite);
+                const container = (tile.properties as any).type === 'above' ? this.above : this.base;
+                container.addChild(sprite);
             }
         }
-        layerContainer.cacheAsBitmap = true;
-        return layerContainer;
     }
 }
 
@@ -56,4 +52,10 @@ function findTileset(gid: number, tileSets: TexturedTileSet[]): TexturedTileSet 
         }
     }
     throw new Error('Tile not found');
+}
+
+function cacheAsBitmapIfNotEmpty(container: PIXI.Container) {
+    if (container.children.length > 0) {
+        container.cacheAsBitmap = true;
+    }
 }

@@ -19,14 +19,16 @@ export class GameLevel {
 
     readonly visibleChunks = new Set<Chunk>();
     readonly container = new PIXI.Container();
-    readonly chunkContainer = new PIXI.Container();
+    readonly chunkBaseContainer = new PIXI.Container();
     readonly objectContainer = new PIXI.Container();
+    readonly chunkAboveContainer = new PIXI.Container();
     private readonly tileSet: TexturedTileSet[];
 
     constructor(readonly map: TmxMap, images: ResourceDictionary) {
         this.tileSet = map.tileSets.map(tileset => new TexturedTileSet(tileset, images));
-        this.container.addChild(this.chunkContainer);
+        this.container.addChild(this.chunkBaseContainer);
         this.container.addChild(this.objectContainer);
+        this.container.addChild(this.chunkAboveContainer);
 
         for (let chunkX = 0; chunkX < map.width; chunkX += CHUNK_WIDTH) {
             for (let chunkY = 0; chunkY <= map.height; chunkY += CHUNK_HEIGHT) {
@@ -46,14 +48,14 @@ export class GameLevel {
 
             const character = new PIXI.Container();
             character.x = x - 16 / tileWidth; // TODO read from file?
-            character.y = y - 32 / tileHeight;
+            character.y = y - 40 / tileHeight;
             character.scale.x = 1 / tileWidth;
             character.scale.y = 1 / tileHeight;
 
             const shadow = new PIXI.Sprite(this.textureLoader.get('misc', 'shadow'));
             shadow.blendMode = PIXI.BLEND_MODES.MULTIPLY;
             shadow.x = 16;
-            shadow.y = 32 + 6;
+            shadow.y = 38;
             character.addChild(shadow);
 
             const sprite = new PIXI.Sprite(this.textureLoader.get(object.type, directionToName(object.direction)));
@@ -82,7 +84,8 @@ export class GameLevel {
         this.visibleChunks.forEach((chunk: Chunk) => {
             if (chunk.chunkX < startX || chunk.chunkX > endX || chunk.chunkY < startY || chunk.chunkY > endY) {
                 this.visibleChunks.delete(chunk);
-                this.chunkContainer.removeChild(chunk);
+                this.chunkBaseContainer.removeChild(chunk.base);
+                this.chunkAboveContainer.removeChild(chunk.above);
             }
         });
 
@@ -96,7 +99,8 @@ export class GameLevel {
                     continue;
                 }
                 this.visibleChunks.add(chunk);
-                this.chunkContainer.addChild(chunk);
+                this.chunkBaseContainer.addChild(chunk.base);
+                this.chunkAboveContainer.addChild(chunk.above);
             }
         }
     }

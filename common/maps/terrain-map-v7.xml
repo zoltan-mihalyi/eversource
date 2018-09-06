@@ -15627,6 +15627,186 @@
  <tile id="15559" terrain="13,13,23,23"/>
  <tile id="15560" terrain="13,13,23,13"/>
  <tile id="15561" terrain="13,13,13,23"/>
+ <tile id="15568">
+  <properties>
+   <property name="type" value="below"/>
+  </properties>
+ </tile>
+ <tile id="15569">
+  <properties>
+   <property name="type" value="below"/>
+  </properties>
+ </tile>
+ <tile id="15570">
+  <properties>
+   <property name="type" value="below"/>
+  </properties>
+ </tile>
+ <tile id="15571">
+  <properties>
+   <property name="type" value="below"/>
+  </properties>
+ </tile>
+ <tile id="15572">
+  <properties>
+   <property name="type" value="below"/>
+  </properties>
+ </tile>
+ <tile id="15573">
+  <properties>
+   <property name="type" value="below"/>
+  </properties>
+ </tile>
+ <tile id="15574">
+  <properties>
+   <property name="type" value="below"/>
+  </properties>
+ </tile>
+ <tile id="15577">
+  <properties>
+   <property name="type" value="below"/>
+  </properties>
+ </tile>
+ <tile id="15578">
+  <properties>
+   <property name="type" value="below"/>
+  </properties>
+ </tile>
+ <tile id="15579">
+  <properties>
+   <property name="type" value="below"/>
+  </properties>
+ </tile>
+ <tile id="15580">
+  <properties>
+   <property name="type" value="below"/>
+  </properties>
+ </tile>
+ <tile id="15582">
+  <properties>
+   <property name="type" value="below"/>
+  </properties>
+ </tile>
+ <tile id="15583">
+  <properties>
+   <property name="type" value="below"/>
+  </properties>
+ </tile>
+ <tile id="15584">
+  <properties>
+   <property name="type" value="below"/>
+  </properties>
+ </tile>
+ <tile id="15585">
+  <properties>
+   <property name="type" value="below"/>
+  </properties>
+ </tile>
+ <tile id="15586">
+  <properties>
+   <property name="type" value="below"/>
+  </properties>
+ </tile>
+ <tile id="15587">
+  <properties>
+   <property name="type" value="below"/>
+  </properties>
+ </tile>
+ <tile id="15588">
+  <properties>
+   <property name="type" value="below"/>
+  </properties>
+ </tile>
+ <tile id="15589">
+  <properties>
+   <property name="type" value="below"/>
+  </properties>
+ </tile>
+ <tile id="15590">
+  <properties>
+   <property name="type" value="below"/>
+  </properties>
+ </tile>
+ <tile id="15593">
+  <properties>
+   <property name="type" value="below"/>
+  </properties>
+ </tile>
+ <tile id="15594">
+  <properties>
+   <property name="type" value="below"/>
+  </properties>
+ </tile>
+ <tile id="15595">
+  <properties>
+   <property name="type" value="below"/>
+  </properties>
+ </tile>
+ <tile id="15596">
+  <properties>
+   <property name="type" value="below"/>
+  </properties>
+ </tile>
+ <tile id="15598">
+  <properties>
+   <property name="type" value="below"/>
+  </properties>
+ </tile>
+ <tile id="15599">
+  <properties>
+   <property name="type" value="below"/>
+  </properties>
+ </tile>
+ <tile id="15602">
+  <properties>
+   <property name="type" value="below"/>
+  </properties>
+ </tile>
+ <tile id="15603">
+  <properties>
+   <property name="type" value="below"/>
+  </properties>
+ </tile>
+ <tile id="15604">
+  <properties>
+   <property name="type" value="below"/>
+  </properties>
+ </tile>
+ <tile id="15605">
+  <properties>
+   <property name="type" value="below"/>
+  </properties>
+ </tile>
+ <tile id="15606">
+  <properties>
+   <property name="type" value="below"/>
+  </properties>
+ </tile>
+ <tile id="15618">
+  <properties>
+   <property name="type" value="below"/>
+  </properties>
+ </tile>
+ <tile id="15619">
+  <properties>
+   <property name="type" value="below"/>
+  </properties>
+ </tile>
+ <tile id="15620">
+  <properties>
+   <property name="type" value="below"/>
+  </properties>
+ </tile>
+ <tile id="15621">
+  <properties>
+   <property name="type" value="below"/>
+  </properties>
+ </tile>
+ <tile id="15622">
+  <properties>
+   <property name="type" value="below"/>
+  </properties>
+ </tile>
  <tile id="15632" terrain="3,3,3,3" probability="0.1"/>
  <tile id="15633" terrain="3,3,3,3"/>
  <tile id="15634" terrain="3,3,3,3"/>

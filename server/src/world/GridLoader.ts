@@ -33,6 +33,13 @@ export class TmxGridLoader implements GridLoader {
             return tile.terrain.find(terrain => terrain.properties.block) !== void 0;
         });
 
+        const topLayer = layers.find(layer => layer.name === 'Top') as TileLayer;
+        topLayer.tiles.forEach((tile, index) => {
+            if (!(tile.properties as any).type) {
+                data[index] = true;
+            }
+        });
+
         console.log(`Grid created in ${new Date().getTime() - start.getTime()} ms`);
         return new Grid(width, height, data);
     }
