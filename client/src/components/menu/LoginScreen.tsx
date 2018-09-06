@@ -49,6 +49,18 @@ export class LoginScreen extends React.Component<Props> {
 
     private onSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
         e.preventDefault();
+        requestFullscreen();
         this.props.onSubmit();
     };
+
+}
+
+function requestFullscreen() {
+    const el = document.documentElement as any,
+        rfs = el.requestFullscreen
+            || el.webkitRequestFullScreen
+            || el.mozRequestFullScreen
+            || el.msRequestFullscreen;
+
+    rfs.call(el);
 }
