@@ -2,3 +2,5 @@
 *.iml
 dist
 node_modules
+cordova/platforms/
+cordova/plugins/

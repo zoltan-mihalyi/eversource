@@ -1,8 +1,10 @@
+var CopyWebpackPlugin = require('copy-webpack-plugin');
+
 module.exports = {
     entry: "./src/index.tsx",
     output: {
         filename: "bundle.js",
-        path: __dirname + "/dist"
+        path: __dirname + "/../cordova/www/dist"
     },
 
     // Enable sourcemaps for debugging webpack's output.
@@ -22,6 +24,10 @@ module.exports = {
             { enforce: "pre", test: /\.js$/, loader: "source-map-loader" }
         ]
     },
+
+    plugins: [
+        new CopyWebpackPlugin([{from: '../common/maps/', to: 'maps/'}])
+    ],
 
     mode: "development"
 

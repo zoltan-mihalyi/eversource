@@ -1,0 +1,33 @@
+{
+    "name": "io.mz.eversource",
+    "displayName": "Eversource",
+    "version": "1.0.0",
+    "description": "Eversource MMORPG",
+    "main": "index.js",
+    "scripts": {
+        "prepare": "cordova prepare",
+        "build": "cordova build",
+        "browser": "cordova run browser -- --live-reload",
+        "android": "cordova run android",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "Zoltan Mihalyi",
+    "license": "MIT",
+    "dependencies": {
+        "cordova": "^8.0.0",
+        "cordova-android": "^7.0.0",
+        "cordova-browser": "^5.0.4",
+        "cordova-plugin-browsersync": "^1.1.0",
+        "cordova-plugin-whitelist": "^1.3.3"
+    },
+    "cordova": {
+        "plugins": {
+            "cordova-plugin-whitelist": {},
+            "cordova-plugin-browsersync": {}
+        },
+        "platforms": [
+            "android",
+            "browser"
+        ]
+    }
+}

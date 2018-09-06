@@ -40,6 +40,7 @@ interface State {
     screen: ShowScreen;
 }
 
+const basePath = './dist/maps';
 const wsUri = `ws://${location.hostname}:8080`;
 
 export class App extends React.Component<{}, State> {
@@ -82,7 +83,6 @@ export class App extends React.Component<{}, State> {
                     cb(null, (loader.resources.file.xhr as any).responseText);
                 });
         };
-        const basePath = '../common/maps';
         new Loader(pixiLoader).parseFile(`${basePath}/${zoneId}.xml`, (err: any, map?: Map | TileSet) => {
             const textureLoader = new PIXI.loaders.Loader();
 
