@@ -1,6 +1,12 @@
 import { ClientState } from './ClientState';
 import { InitialClientState } from './InitialClientState';
-import { WorldObject } from '../world/World';
+import { GameObject } from '../../../common/GameObject';
+import { Zone } from '../world/Zone';
+
+export interface WorldObject {
+    zone: Zone;
+    object: GameObject;
+}
 
 export class PlayingRequestHandler extends ClientState<WorldObject> {
     leave() {
@@ -13,6 +19,8 @@ export class PlayingRequestHandler extends ClientState<WorldObject> {
     }
 
     private cleanup() {
-        this.handlerManager.world.removeObject(this.data);
+        const { zone, object } = this.data;
+
+        zone.removeObject(object);
     }
 }

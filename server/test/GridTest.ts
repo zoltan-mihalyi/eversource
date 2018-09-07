@@ -1,4 +1,4 @@
-import { Grid } from '../src/world/Grid';
+import { Grid } from '../../common/Grid';
 import * as assert from 'assert';
 
 const X = true;

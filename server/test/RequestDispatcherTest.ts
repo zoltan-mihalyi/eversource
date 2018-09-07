@@ -32,16 +32,23 @@ class FakeUserDao implements UserDao {
     }
 }
 
-function fakeWorld(async?: boolean) {
+function fakeZone() {
     return {
-        createObject: sinon.mock().callsFake((location, token, callback) => {
+        addObject: sinon.mock(),
+        removeObject: sinon.mock(),
+    };
+}
+
+function fakeWorld(zone = fakeZone(), async?: boolean) {
+
+    return {
+        getZone: sinon.mock().callsFake((zoneId, callback) => {
             if (async) {
-                setTimeout(() => callback({}), 10);
+                setTimeout(() => callback(zone), 10);
             } else {
-                callback({});
+                callback(zone);
             }
         }),
-        removeObject: sinon.spy(),
     }
 }
 
@@ -83,11 +90,12 @@ describe('RequestDispatcher', () => {
         dispatcher.handleRequest('characters', void 0);
         dispatcher.handleRequest('enter', '1');
 
-        sinon.assert.notCalled(world.createObject);
+        sinon.assert.notCalled(world.getZone);
     });
 
     it('should create character on ready', function () {
-        const world = fakeWorld();
+        const zone = fakeZone();
+        const world = fakeWorld(zone);
 
         const dispatcher = new RequestDispatcher(new FakeUserDao(), world, sinon.fake());
 
@@ -95,7 +103,8 @@ describe('RequestDispatcher', () => {
         dispatcher.handleRequest('enter', '1');
         dispatcher.handleRequest('ready', void 0);
 
-        sinon.assert.calledOnce(world.createObject);
+        sinon.assert.calledOnce(world.getZone);
+        sinon.assert.calledOnce(zone.addObject);
     });
 
     it('should respond to ready with ready', function () {
@@ -112,7 +121,8 @@ describe('RequestDispatcher', () => {
 
 
     it('should do nothing when calling ready twice before server ready', function () {
-        const world = fakeWorld(true);
+        const zone = fakeZone();
+        const world = fakeWorld(zone, true);
 
         const dispatcher = new RequestDispatcher(new FakeUserDao(), world, sinon.fake());
 
@@ -121,11 +131,15 @@ describe('RequestDispatcher', () => {
         dispatcher.handleRequest('ready', void 0);
         dispatcher.handleRequest('ready', void 0);
 
-        sinon.assert.calledOnce(world.createObject);
+        sinon.assert.calledOnce(world.getZone);
     });
 
-    it('should cancel createObject when exit', function () {
-        const world = fakeWorld(true);
+    it('should not call createObject when exit before zone load', function () {
+        const zone = fakeZone();
+
+        const world = {
+            getZone: sinon.spy(),
+        };
 
         const dispatcher = new RequestDispatcher(new FakeUserDao(), world, sinon.fake());
 
@@ -134,11 +148,14 @@ describe('RequestDispatcher', () => {
         dispatcher.handleRequest('ready', void 0);
         dispatcher.handleExit();
 
-        assert(world.createObject.getCall(0).args[1].cancelled);
+        world.getZone.getCall(0).args[1](zone);
+
+        sinon.assert.notCalled(zone.addObject);
     });
 
     it('should create character on ready only once', function () {
-        const world = fakeWorld();
+        const zone = fakeZone();
+        const world = fakeWorld(zone);
 
         const dispatcher = new RequestDispatcher(new FakeUserDao(), world, sinon.fake());
 
@@ -147,11 +164,12 @@ describe('RequestDispatcher', () => {
         dispatcher.handleRequest('ready', void 0);
         dispatcher.handleRequest('ready', void 0);
 
-        sinon.assert.calledOnce(world.createObject);
+        sinon.assert.calledOnce(zone.addObject);
     });
 
     it('should do nothing when entering incorrect character id', function () {
-        const world = fakeWorld();
+        const zone = fakeZone();
+        const world = fakeWorld(zone);
 
         const dispatcher = new RequestDispatcher(new FakeUserDao(), world, sinon.fake());
 
@@ -159,11 +177,12 @@ describe('RequestDispatcher', () => {
         dispatcher.handleRequest('enter', '0');
         dispatcher.handleRequest('ready', void 0);
 
-        sinon.assert.notCalled(world.createObject);
+        sinon.assert.notCalled(zone.addObject);
     });
 
     it('should remove character on leave', function () {
-        const world = fakeWorld();
+        const zone = fakeZone();
+        const world = fakeWorld(zone);
 
         const dispatcher = new RequestDispatcher(new FakeUserDao(), world, sinon.fake());
 
@@ -172,11 +191,12 @@ describe('RequestDispatcher', () => {
         dispatcher.handleRequest('ready', void 0);
         dispatcher.handleRequest('leave', void 0);
 
-        sinon.assert.calledOnce(world.removeObject);
+        sinon.assert.calledOnce(zone.removeObject);
     });
 
     it('should remove character on exit', function () {
-        const world = fakeWorld();
+        const zone = fakeZone();
+        const world = fakeWorld(zone);
 
         const dispatcher = new RequestDispatcher(new FakeUserDao(), world, sinon.fake());
 
@@ -185,7 +205,7 @@ describe('RequestDispatcher', () => {
         dispatcher.handleRequest('ready', void 0);
         dispatcher.handleExit();
 
-        sinon.assert.calledOnce(world.removeObject);
+        sinon.assert.calledOnce(zone.removeObject);
     });
 
     it('should accept characters request after leave', function () {

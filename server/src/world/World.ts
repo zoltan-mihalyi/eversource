@@ -1,57 +1,32 @@
-import { Location, ZoneId } from '../../../common/domain/Location';
-import { CancellationToken } from '../util/CancellationToken';
+import { ZoneId } from '../../../common/domain/Location';
 import { GridLoader } from './GridLoader';
 import { Grid } from '../../../common/Grid';
+import { Zone } from './Zone';
 
-export interface WorldObject {
-    world: World;
-}
-
-type Cb = () => void;
+type ZoneCb = (zone: Zone) => void;
 
 export interface World {
-    createObject(location: Location, token: CancellationToken, callback: (object: WorldObject) => void): void;
-
-    removeObject(object: WorldObject): void;
+    getZone(zoneId: ZoneId, callback: ZoneCb): void;
 }
 
 export class WorldImpl implements World {
-    private loadingLocations = new Map<ZoneId, Cb[]>();
-    private locations = new Map<ZoneId, Grid>();
-    private objects = new Set<WorldObject>();
+    private loadingZones = new Map<ZoneId, ZoneCb[]>();
+    private zones = new Map<ZoneId, Zone>();
 
     constructor(private gridLoader: GridLoader) {
     }
 
-    createObject(location: Location, token: CancellationToken, callback: (object: WorldObject) => void): void {
-        this.loadLocation(location, () => {
-            if (token.cancelled) {
-                return;
-            }
-            const object = {
-                world: this,
-            };
-            this.objects.add(object);
-            callback(object);
-        });
-    }
-
-    removeObject(object: WorldObject) {
-        this.objects.delete(object);
-    }
-
-    private loadLocation(location: Location, callback: () => void) {
-        const { zoneId } = location;
-        if (this.locations.has(zoneId)) {
-            callback();
+    getZone(zoneId: ZoneId, callback: ZoneCb) {
+        if (this.zones.has(zoneId)) {
+            callback(this.zones.get(zoneId)!);
             return;
         }
 
         this.addZoneLoadingCallback(zoneId, callback);
     }
 
-    private addZoneLoadingCallback(zoneId: ZoneId, callback: Cb) {
-        const callbacks = this.loadingLocations.get(zoneId);
+    private addZoneLoadingCallback(zoneId: ZoneId, callback: ZoneCb) {
+        const callbacks = this.loadingZones.get(zoneId);
 
         if (callbacks) {
             callbacks.push(callback);
@@ -61,11 +36,11 @@ export class WorldImpl implements World {
         this.startLoading(zoneId, callback);
     }
 
-    private startLoading(zoneId: ZoneId, callback: Cb) {
+    private startLoading(zoneId: ZoneId, callback: ZoneCb) {
         console.log(`Loading ${zoneId}...`);
         const start = new Date();
-        const callbacks: Cb[] = [callback];
-        this.loadingLocations.set(zoneId, callbacks);
+        const callbacks: ZoneCb[] = [callback];
+        this.loadingZones.set(zoneId, callbacks);
         this.gridLoader.load(zoneId, (err: any, grid?: Grid) => {
             if (err) {
                 console.error(`Failed to load zone: ${zoneId}`, err);
@@ -73,9 +48,11 @@ export class WorldImpl implements World {
             }
 
             console.log(`Loaded ${zoneId} in ${new Date().getTime() - start.getTime()} ms`);
-            this.locations.set(zoneId, grid!);
+            const zone = new Zone(grid!);
+
+            this.zones.set(zoneId, zone);
             for (const cb of callbacks) {
-                cb();
+                cb(zone);
             }
         });
     }
