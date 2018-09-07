@@ -4,6 +4,7 @@ import { X, Y, ZoneId } from '../../common/domain/Location';
 import { UserDao } from '../src/dao/UserDao';
 import * as sinon from 'sinon';
 import * as assert from 'assert';
+import { NetworkLoop } from '../src/NetworkLoop';
 
 const characters: CharacterInfo[] = [
     {
@@ -52,10 +53,16 @@ function fakeWorld(zone = fakeZone(), async?: boolean) {
     }
 }
 
+function fakeNetworkLoop(): NetworkLoop {
+    const loop = new NetworkLoop();
+    loop.add = sinon.spy();
+    return loop;
+}
+
 describe('RequestDispatcher', () => {
 
     it('is valid command', function () {
-        const dispatcher = new RequestDispatcher(new FakeUserDao(), fakeWorld(), sinon.fake());
+        const dispatcher = new RequestDispatcher(new FakeUserDao(), fakeWorld(), sinon.fake(), fakeNetworkLoop());
 
         assert(dispatcher.isValidCommand('characters'));
         assert(!dispatcher.isValidCommand('no_such_command'));
@@ -64,7 +71,7 @@ describe('RequestDispatcher', () => {
     it('should return characters', function () {
         const send = sinon.fake();
 
-        const dispatcher = new RequestDispatcher(new FakeUserDao(), fakeWorld(), send);
+        const dispatcher = new RequestDispatcher(new FakeUserDao(), fakeWorld(), send, fakeNetworkLoop());
 
         dispatcher.handleRequest('characters', void 0);
 
@@ -74,7 +81,7 @@ describe('RequestDispatcher', () => {
     it('should return characters only once', function () {
         const send = sinon.fake();
 
-        const dispatcher = new RequestDispatcher(new FakeUserDao(), fakeWorld(), send);
+        const dispatcher = new RequestDispatcher(new FakeUserDao(), fakeWorld(), send, fakeNetworkLoop());
 
         dispatcher.handleRequest('characters', void 0);
         dispatcher.handleRequest('characters', void 0);
@@ -85,7 +92,7 @@ describe('RequestDispatcher', () => {
     it('should not create character on enter', function () {
         const world = fakeWorld();
 
-        const dispatcher = new RequestDispatcher(new FakeUserDao(), world, sinon.fake());
+        const dispatcher = new RequestDispatcher(new FakeUserDao(), world, sinon.fake(), fakeNetworkLoop());
 
         dispatcher.handleRequest('characters', void 0);
         dispatcher.handleRequest('enter', '1');
@@ -97,7 +104,7 @@ describe('RequestDispatcher', () => {
         const zone = fakeZone();
         const world = fakeWorld(zone);
 
-        const dispatcher = new RequestDispatcher(new FakeUserDao(), world, sinon.fake());
+        const dispatcher = new RequestDispatcher(new FakeUserDao(), world, sinon.fake(), fakeNetworkLoop());
 
         dispatcher.handleRequest('characters', void 0);
         dispatcher.handleRequest('enter', '1');
@@ -110,7 +117,7 @@ describe('RequestDispatcher', () => {
     it('should respond to ready with ready', function () {
         const send = sinon.fake();
 
-        const dispatcher = new RequestDispatcher(new FakeUserDao(), fakeWorld(), send);
+        const dispatcher = new RequestDispatcher(new FakeUserDao(), fakeWorld(), send, fakeNetworkLoop());
 
         dispatcher.handleRequest('characters', void 0);
         dispatcher.handleRequest('enter', '1');
@@ -124,7 +131,7 @@ describe('RequestDispatcher', () => {
         const zone = fakeZone();
         const world = fakeWorld(zone, true);
 
-        const dispatcher = new RequestDispatcher(new FakeUserDao(), world, sinon.fake());
+        const dispatcher = new RequestDispatcher(new FakeUserDao(), world, sinon.fake(), fakeNetworkLoop());
 
         dispatcher.handleRequest('characters', void 0);
         dispatcher.handleRequest('enter', '1');
@@ -141,7 +148,7 @@ describe('RequestDispatcher', () => {
             getZone: sinon.spy(),
         };
 
-        const dispatcher = new RequestDispatcher(new FakeUserDao(), world, sinon.fake());
+        const dispatcher = new RequestDispatcher(new FakeUserDao(), world, sinon.fake(), fakeNetworkLoop());
 
         dispatcher.handleRequest('characters', void 0);
         dispatcher.handleRequest('enter', '1');
@@ -157,7 +164,7 @@ describe('RequestDispatcher', () => {
         const zone = fakeZone();
         const world = fakeWorld(zone);
 
-        const dispatcher = new RequestDispatcher(new FakeUserDao(), world, sinon.fake());
+        const dispatcher = new RequestDispatcher(new FakeUserDao(), world, sinon.fake(), fakeNetworkLoop());
 
         dispatcher.handleRequest('characters', void 0);
         dispatcher.handleRequest('enter', '1');
@@ -171,7 +178,7 @@ describe('RequestDispatcher', () => {
         const zone = fakeZone();
         const world = fakeWorld(zone);
 
-        const dispatcher = new RequestDispatcher(new FakeUserDao(), world, sinon.fake());
+        const dispatcher = new RequestDispatcher(new FakeUserDao(), world, sinon.fake(), fakeNetworkLoop());
 
         dispatcher.handleRequest('characters', void 0);
         dispatcher.handleRequest('enter', '0');
@@ -184,7 +191,7 @@ describe('RequestDispatcher', () => {
         const zone = fakeZone();
         const world = fakeWorld(zone);
 
-        const dispatcher = new RequestDispatcher(new FakeUserDao(), world, sinon.fake());
+        const dispatcher = new RequestDispatcher(new FakeUserDao(), world, sinon.fake(), fakeNetworkLoop());
 
         dispatcher.handleRequest('characters', void 0);
         dispatcher.handleRequest('enter', '1');
@@ -198,7 +205,7 @@ describe('RequestDispatcher', () => {
         const zone = fakeZone();
         const world = fakeWorld(zone);
 
-        const dispatcher = new RequestDispatcher(new FakeUserDao(), world, sinon.fake());
+        const dispatcher = new RequestDispatcher(new FakeUserDao(), world, sinon.fake(), fakeNetworkLoop());
 
         dispatcher.handleRequest('characters', void 0);
         dispatcher.handleRequest('enter', '1');
@@ -212,7 +219,7 @@ describe('RequestDispatcher', () => {
         const send = sinon.fake();
         const world = fakeWorld();
 
-        const dispatcher = new RequestDispatcher(new FakeUserDao(), world, send);
+        const dispatcher = new RequestDispatcher(new FakeUserDao(), world, send, fakeNetworkLoop());
 
         dispatcher.handleRequest('characters', void 0);
         dispatcher.handleRequest('enter', '1');

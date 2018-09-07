@@ -9,11 +9,20 @@ export interface World {
     getZone(zoneId: ZoneId, callback: ZoneCb): void;
 }
 
+const FPS = 50;
+const INTERVAL = 1000 / FPS;
+
 export class WorldImpl implements World {
-    private loadingZones = new Map<ZoneId, ZoneCb[]>();
-    private zones = new Map<ZoneId, Zone>();
+    private readonly loadingZones = new Map<ZoneId, ZoneCb[]>();
+    private readonly zones = new Map<ZoneId, Zone>();
+    private readonly timer: NodeJS.Timer;
 
     constructor(private gridLoader: GridLoader) {
+        this.timer = setInterval(this.update, INTERVAL);
+    }
+
+    stop() {
+        clearInterval(this.timer);
     }
 
     getZone(zoneId: ZoneId, callback: ZoneCb) {
@@ -56,4 +65,10 @@ export class WorldImpl implements World {
             }
         });
     }
+
+    private update = () => {
+        this.zones.forEach((zone) => {
+            zone.update(INTERVAL);
+        });
+    };
 }

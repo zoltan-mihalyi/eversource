@@ -1,16 +1,17 @@
 import * as React from 'react';
-import { ReactChild } from 'react';
-import { LoginScreen, LoginState } from './components/menu/LoginScreen';
-import { GameScreen } from './components/game/GameScreen';
-import { CharacterSelectionScreen } from './components/menu/CharacterSelectionScreen';
-import { CharacterInfo } from '../../common/domain/CharacterInfo';
-import { LoadingScreen } from './components/menu/LoadingScreen';
-import { parseCommand } from './utils';
+import {ReactChild} from 'react';
+import {LoginScreen, LoginState} from './components/menu/LoginScreen';
+import {GameScreen} from './components/game/GameScreen';
+import {CharacterSelectionScreen} from './components/menu/CharacterSelectionScreen';
+import {CharacterInfo} from '../../common/domain/CharacterInfo';
+import {LoadingScreen} from './components/menu/LoadingScreen';
+import {parseCommand, pixiLoader} from './utils';
 import * as PIXI from 'pixi.js';
-import { Loader, Map, TileSet } from '@eversource/tmx-parser';
-import { GameLevel } from './map/GameLevel';
+import {Loader, Map, TileSet} from '@eversource/tmx-parser';
+import {GameLevel} from './map/GameLevel';
 import * as path from 'path';
-import { Location, X, Y, ZoneId } from '../../common/domain/Location';
+import {Location, X, Y, ZoneId} from '../../common/domain/Location';
+import {GameState} from '../../common/protocol/Messages';
 
 type ShowLoginScreen = {
     type: 'login'
@@ -66,7 +67,7 @@ export class App extends React.Component<{}, State> {
                 );
             case 'game':
                 return (
-                    <GameScreen gameLevel={screen.gameLevel} location={screen.location}
+                    <GameScreen gameLevel={screen.gameLevel} location={screen.location} ws={screen.ws}
                                 enterCharacterSelection={() => this.enterCharacterSelection(screen.ws)}/>
                 );
         }
@@ -76,13 +77,6 @@ export class App extends React.Component<{}, State> {
         ws.send('enter:' + character.id);
         const zoneId = character.location.zoneId;
 
-        const pixiLoader = (file: string, cb: (err: any, data: string) => void) => {
-            const loader = new PIXI.loaders.Loader()
-                .add('file', file)
-                .load(() => {
-                    cb(null, (loader.resources.file.xhr as any).responseText);
-                });
-        };
         new Loader(pixiLoader).parseFile(`${basePath}/${zoneId}.xml`, (err: any, map?: Map | TileSet) => {
             const textureLoader = new PIXI.loaders.Loader();
 
@@ -119,7 +113,7 @@ export class App extends React.Component<{}, State> {
         this.setState({
             screen: {
                 type: 'login',
-                state: { type: 'connecting' },
+                state: {type: 'connecting'},
             },
         });
 
@@ -130,14 +124,14 @@ export class App extends React.Component<{}, State> {
             this.setState({
                 screen: {
                     type: 'login',
-                    state: { type: 'error', message: 'closed' },
+                    state: {type: 'error', message: 'closed'},
                 },
             });
         };
         ws.onmessage = evt => {
             const command = parseCommand(evt.data);
 
-            const { screen } = this.state;
+            const {screen} = this.state;
             switch (screen.type) {
                 case 'login':
                     this.setState({
@@ -153,11 +147,14 @@ export class App extends React.Component<{}, State> {
                         screen: {
                             type: 'game',
                             ws,
-                            location: { x: 106 as X, y: 214 as Y, zoneId: 'lavaland' as ZoneId }, //TODO
+                            location: {x: 106 as X, y: 214 as Y, zoneId: 'lavaland' as ZoneId}, //TODO
                             gameLevel: screen.gameLevel!,
                         }, // TODO
                     });
                     break;
+                case 'game':
+                    const state = command.data as GameState;
+                    screen.gameLevel.updateObjects([state.character, ...state.others]);
             }
         };
         ws.onerror = evt => {
@@ -178,7 +175,7 @@ export class App extends React.Component<{}, State> {
         this.setState({
             screen: {
                 type: 'login',
-                state: { type: 'characters' },
+                state: {type: 'characters'},
             },
         });
     }

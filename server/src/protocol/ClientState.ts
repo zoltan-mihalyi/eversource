@@ -11,12 +11,17 @@ export class ClientState<T> {
         enter: (data: string) => this.enter(data),
         ready: () => this.ready(),
         leave: () => this.leave(),
+        command: (data:string) => this.command(data),
     };
 
     constructor(protected handlerManager: HandlerManager, protected data: T) {
     }
 
     handleExit() {
+    }
+
+    onEnter() {
+
     }
 
     protected characters() {
@@ -29,6 +34,9 @@ export class ClientState<T> {
     }
 
     protected leave() {
+    }
+
+    protected command(data: string) {
     }
 }
 

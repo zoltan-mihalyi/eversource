@@ -3,6 +3,7 @@ import { ClientState, ClientStateConstructor } from './ClientState';
 import { InitialClientState } from './InitialClientState';
 import { UserDao } from '../dao/UserDao';
 import { World } from '../world/World';
+import { NetworkLoop } from '../NetworkLoop';
 
 type SendMessage = <T extends ResponseCommand>(command: T, data: ResponseTypes[T]) => void;
 
@@ -10,6 +11,7 @@ export interface HandlerManager {
     readonly dao: UserDao;
     readonly world: World;
     readonly sendMessage: SendMessage;
+    readonly networkLoop: NetworkLoop;
 
     enterState<T>(stateConstructor: ClientStateConstructor<T>, data: T): void;
 }
@@ -17,7 +19,7 @@ export interface HandlerManager {
 export class RequestDispatcher implements HandlerManager {
     private state: ClientState<any> = this.instantiateState(InitialClientState, void 0);
 
-    constructor(readonly dao: UserDao, readonly world: World, readonly sendMessage: SendMessage) {
+    constructor(readonly dao: UserDao, readonly world: World, readonly sendMessage: SendMessage, readonly networkLoop: NetworkLoop) {
     }
 
     isValidCommand(command: string): command is RequestCommand {
@@ -34,6 +36,7 @@ export class RequestDispatcher implements HandlerManager {
 
     enterState<T>(stateConstructor: ClientStateConstructor<T>, data: T): void {
         this.state = this.instantiateState(stateConstructor, data);
+        this.state.onEnter();
     }
 
     private instantiateState<T>(constructor: ClientStateConstructor<T>, data: T): ClientState<T> {

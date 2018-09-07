@@ -3,6 +3,7 @@ import { RequestDispatcher } from './protocol/RequestDispatcher';
 import { ResponseCommand, ResponseTypes } from '../../common/protocol/Messages';
 import { UserDao } from './dao/UserDao';
 import { World } from './world/World';
+import { NetworkLoop } from './NetworkLoop';
 
 class ConnectionHandler {
     private dispatcher: RequestDispatcher;
@@ -18,8 +19,8 @@ class ConnectionHandler {
         this.connection.send(command + suffix);
     };
 
-    constructor(dao: UserDao, world: World, private connection: ws) {
-        this.dispatcher = new RequestDispatcher(dao, world, this.sendMessage);
+    constructor(dao: UserDao, world: World, networkLoop: NetworkLoop, private connection: ws) {
+        this.dispatcher = new RequestDispatcher(dao, world, this.sendMessage, networkLoop);
 
         connection.on('message', (message) => {
             if (typeof message !== 'string') {
@@ -43,12 +44,16 @@ class ConnectionHandler {
 
 
 export class Server {
-    private server: ws.Server;
+    private readonly server: ws.Server;
+    private readonly networkLoop: NetworkLoop;
 
     constructor(daoProvider: (connection: ws) => UserDao | null, world: World, port: number) {
         this.server = new ws.Server({
             port,
         });
+
+        this.networkLoop = new NetworkLoop();
+        this.networkLoop.start();
 
         this.server.on('connection', (connection: ws) => {
             console.log('User connected!');
@@ -59,7 +64,7 @@ export class Server {
                 return;
             }
 
-            const handler = new ConnectionHandler(userDao, world, connection);
+            const handler = new ConnectionHandler(userDao, world, this.networkLoop, connection);
             connection.on('close', () => {
                 console.log('User disconnected!');
                 handler.close();
@@ -68,6 +73,7 @@ export class Server {
     }
 
     close() {
+        this.networkLoop.stop();
         this.server.close();
     }
 }

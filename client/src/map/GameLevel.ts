@@ -4,6 +4,8 @@ import { Map as TmxMap } from '@eversource/tmx-parser';
 import { TexturedTileSet } from './TexturedTileset';
 import * as PIXI from 'pixi.js';
 import { Opaque } from '../../../common/util/Opaque';
+import { GameObject } from '../../../common/GameObject';
+import { CharacterLoader } from './CharacterLoader';
 import ResourceDictionary = PIXI.loaders.ResourceDictionary;
 
 const CHUNK_WIDTH = 16;
@@ -11,21 +13,45 @@ const CHUNK_HEIGHT = 16;
 
 type ChunkPosition = Opaque<string, 'ChunkPosition'>;
 
+const characterLoader = new CharacterLoader();
+
 export class GameLevel {
     readonly chunks = new Map<ChunkPosition, Chunk>();
 
     readonly visibleChunks = new Set<Chunk>();
     readonly container = new PIXI.Container();
+    readonly chunkContainer = new PIXI.Container();
+    readonly objectContainer = new PIXI.Container();
     private readonly tileSet: TexturedTileSet[];
 
     constructor(readonly map: TmxMap, images: ResourceDictionary) {
         this.tileSet = map.tileSets.map(tileset => new TexturedTileSet(tileset, images));
+        this.container.addChild(this.chunkContainer);
+        this.container.addChild(this.objectContainer);
 
         for (let chunkX = 0; chunkX < map.width; chunkX += CHUNK_WIDTH) {
             for (let chunkY = 0; chunkY <= map.height; chunkY += CHUNK_HEIGHT) {
                 const chunk = new Chunk(this.map, this.tileSet, chunkX as X, chunkY as Y, CHUNK_WIDTH, CHUNK_HEIGHT);
                 this.chunks.set(chunkPosition(chunkX as X, chunkY as Y), chunk);
             }
+        }
+    }
+
+    updateObjects(objects: GameObject[]) {
+        this.objectContainer.removeChildren();
+
+        const { tileWidth, tileHeight } = this.map;
+
+        for (const object of objects) {
+            const { x, y } = object.position;
+
+            const sprite = new PIXI.Sprite(characterLoader.get(object.type, object.direction));
+            sprite.x = Math.round(x * tileWidth) / tileWidth;
+            sprite.y = Math.round(y * tileHeight) / tileHeight;
+            sprite.scale.x = 1 / tileWidth;
+            sprite.scale.y = 1 / tileHeight;
+
+            this.objectContainer.addChild(sprite);
         }
     }
 
@@ -39,7 +65,7 @@ export class GameLevel {
         this.visibleChunks.forEach((chunk: Chunk) => {
             if (chunk.chunkX < startX || chunk.chunkX > endX || chunk.chunkY < startY || chunk.chunkY > endY) {
                 this.visibleChunks.delete(chunk);
-                this.container.removeChild(chunk);
+                this.chunkContainer.removeChild(chunk);
             }
         });
 
@@ -53,7 +79,7 @@ export class GameLevel {
                     continue;
                 }
                 this.visibleChunks.add(chunk);
-                this.container.addChild(chunk);
+                this.chunkContainer.addChild(chunk);
             }
         }
     }
