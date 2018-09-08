@@ -56,7 +56,7 @@ export class Server {
         this.networkLoop.start();
 
         this.server.on('connection', (connection: ws) => {
-            console.log('User connected!');
+            console.log(`User connected! Playing: ${this.server.clients.size}`);
 
             const userDao = daoProvider(connection);
             if (!userDao) {
@@ -66,7 +66,7 @@ export class Server {
 
             const handler = new ConnectionHandler(userDao, world, this.networkLoop, connection);
             connection.on('close', () => {
-                console.log('User disconnected!');
+                console.log(`User disconnected! Playing: ${this.server.clients.size}`);
                 handler.close();
             });
         });

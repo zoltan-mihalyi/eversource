@@ -14,7 +14,7 @@ export class LoadingRequestHandler extends ClientState<CharacterInfo> {
         }
         this.serverLoading = true;
 
-        const { zoneId, x, y } = this.data.location;
+        const { zoneId, position } = this.data.location;
 
         this.handlerManager.world.getZone(zoneId, (zone: Zone) => {
             if (this.token.cancelled) {
@@ -23,7 +23,7 @@ export class LoadingRequestHandler extends ClientState<CharacterInfo> {
             const object: GameObject = {
                 direction: 'D',
                 type: 'character',
-                position: { x, y },
+                position,
                 speed: { x: 0 as XPerSecond, y: 0 as YPerSecond },
             };
             zone.addObject(object);

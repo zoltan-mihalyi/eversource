@@ -1,17 +1,18 @@
 import * as React from 'react';
-import {ReactChild} from 'react';
-import {LoginScreen, LoginState} from './components/menu/LoginScreen';
-import {GameScreen} from './components/game/GameScreen';
-import {CharacterSelectionScreen} from './components/menu/CharacterSelectionScreen';
-import {CharacterInfo} from '../../common/domain/CharacterInfo';
-import {LoadingScreen} from './components/menu/LoadingScreen';
-import {parseCommand, pixiLoader} from './utils';
+import { ReactChild } from 'react';
+import { LoginScreen, LoginState } from './components/menu/LoginScreen';
+import { GameScreen } from './components/game/GameScreen';
+import { CharacterSelectionScreen } from './components/menu/CharacterSelectionScreen';
+import { CharacterInfo } from '../../common/domain/CharacterInfo';
+import { LoadingScreen } from './components/menu/LoadingScreen';
+import { parseCommand, pixiLoader } from './utils';
 import * as PIXI from 'pixi.js';
-import {Loader, Map, TileSet} from '@eversource/tmx-parser';
-import {GameLevel} from './map/GameLevel';
+import { Loader, Map, TileSet } from '@eversource/tmx-parser';
+import { GameLevel } from './map/GameLevel';
 import * as path from 'path';
-import {Location, X, Y, ZoneId} from '../../common/domain/Location';
-import {GameState} from '../../common/protocol/Messages';
+import { Location } from '../../common/domain/Location';
+import { GameState } from '../../common/protocol/Messages';
+import { GameApplication } from './map/GameApplication';
 
 type ShowLoginScreen = {
     type: 'login'
@@ -25,14 +26,13 @@ type ShowCharacterSelectionScreen = {
 type ShowLoadingScreen = {
     type: 'loading';
     ws: WebSocket;
-    zone: string;
+    location: Location;
     gameLevel?: GameLevel;
 }
 type ShowGameScreen = {
     type: 'game';
+    game: GameApplication;
     ws: WebSocket;
-    gameLevel: GameLevel;
-    location: Location;
 }
 
 type ShowScreen = ShowLoginScreen | ShowCharacterSelectionScreen | ShowLoadingScreen | ShowGameScreen;
@@ -63,19 +63,21 @@ export class App extends React.Component<{}, State> {
                 );
             case 'loading':
                 return (
-                    <LoadingScreen zone={screen.zone}/>
+                    <LoadingScreen zone={screen.location.zoneId}/>
                 );
             case 'game':
                 return (
-                    <GameScreen gameLevel={screen.gameLevel} location={screen.location} ws={screen.ws}
-                                enterCharacterSelection={() => this.enterCharacterSelection(screen.ws)}/>
+                    <GameScreen game={screen.game}
+                                enterCharacterSelection={() => this.enterCharacterSelection(screen.game, screen.ws)}/>
                 );
         }
     }
 
     private startLoading(ws: WebSocket, character: CharacterInfo) {
-        ws.send('enter:' + character.id);
-        const zoneId = character.location.zoneId;
+        const { id, location } = character;
+
+        ws.send(`enter:${id}`);
+        const { zoneId } = character.location;
 
         new Loader(pixiLoader).parseFile(`${basePath}/${zoneId}.xml`, (err: any, map?: Map | TileSet) => {
             const textureLoader = new PIXI.loaders.Loader();
@@ -88,7 +90,7 @@ export class App extends React.Component<{}, State> {
                 this.setState({
                     screen: {
                         type: 'loading',
-                        zone: zoneId,
+                        location,
                         ws,
                         gameLevel: new GameLevel(map as Map, textureLoader.resources),
                     },
@@ -101,7 +103,7 @@ export class App extends React.Component<{}, State> {
         this.setState({
             screen: {
                 type: 'loading',
-                zone: zoneId,
+                location,
                 ws,
             },
         });
@@ -113,7 +115,7 @@ export class App extends React.Component<{}, State> {
         this.setState({
             screen: {
                 type: 'login',
-                state: {type: 'connecting'},
+                state: { type: 'connecting' },
             },
         });
 
@@ -124,14 +126,14 @@ export class App extends React.Component<{}, State> {
             this.setState({
                 screen: {
                     type: 'login',
-                    state: {type: 'error', message: 'closed'},
+                    state: { type: 'error', message: 'closed' },
                 },
             });
         };
         ws.onmessage = evt => {
             const command = parseCommand(evt.data);
 
-            const {screen} = this.state;
+            const { screen } = this.state;
             switch (screen.type) {
                 case 'login':
                     this.setState({
@@ -142,19 +144,21 @@ export class App extends React.Component<{}, State> {
                         },
                     });
                     break;
-                case 'loading':
+                case 'loading': {
+                    const game = new GameApplication(screen.gameLevel!, screen.location, ws);
                     this.setState({
                         screen: {
                             type: 'game',
                             ws,
-                            location: {x: 106 as X, y: 214 as Y, zoneId: 'lavaland' as ZoneId}, //TODO
-                            gameLevel: screen.gameLevel!,
+                            location: screen.location,
+                            game,
                         }, // TODO
                     });
                     break;
-                case 'game':
-                    const state = command.data as GameState;
-                    screen.gameLevel.updateObjects([state.character, ...state.others]);
+                }
+                case 'game': {
+                    screen.game.updateState(command.data as GameState);
+                }
             }
         };
         ws.onerror = evt => {
@@ -175,7 +179,7 @@ export class App extends React.Component<{}, State> {
         this.setState({
             screen: {
                 type: 'login',
-                state: {type: 'characters'},
+                state: { type: 'characters' },
             },
         });
     }
@@ -184,7 +188,8 @@ export class App extends React.Component<{}, State> {
         ws.close();
     }
 
-    private enterCharacterSelection = (ws: WebSocket) => {
+    private enterCharacterSelection = (game: GameApplication, ws: WebSocket) => {
+        game.destroy();
         ws.send('leave');
         this.enterCharacterLoading(ws);
     };

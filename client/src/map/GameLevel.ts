@@ -4,7 +4,7 @@ import { Map as TmxMap } from '@eversource/tmx-parser';
 import { TexturedTileSet } from './TexturedTileset';
 import * as PIXI from 'pixi.js';
 import { Opaque } from '../../../common/util/Opaque';
-import { GameObject } from '../../../common/GameObject';
+import { GameObject, Position } from '../../../common/GameObject';
 import { CharacterLoader } from './CharacterLoader';
 import ResourceDictionary = PIXI.loaders.ResourceDictionary;
 
@@ -43,15 +43,24 @@ export class GameLevel {
         const { tileWidth, tileHeight } = this.map;
 
         for (const object of objects) {
-            const { x, y } = object.position;
+            const { x, y } = this.round(object.position);
 
             const sprite = new PIXI.Sprite(characterLoader.get(object.type, object.direction));
-            sprite.x = Math.round(x * tileWidth) / tileWidth;
-            sprite.y = Math.round(y * tileHeight) / tileHeight;
+            sprite.x = x;
+            sprite.y = y;
             sprite.scale.x = 1 / tileWidth;
             sprite.scale.y = 1 / tileHeight;
 
             this.objectContainer.addChild(sprite);
+        }
+    }
+
+    round(position: Position): Position {
+        const { tileWidth, tileHeight } = this.map;
+
+        return {
+            x: Math.round(position.x * tileWidth) / tileWidth as X,
+            y: Math.round(position.y * tileHeight) / tileHeight as Y,
         }
     }
 

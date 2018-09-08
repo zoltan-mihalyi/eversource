@@ -7,5 +7,3 @@ ReactDOM.render(
     <App/>,
     document.getElementById('game-gui'),
 );
-
-log('hello');

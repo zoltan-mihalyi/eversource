@@ -1,7 +1,9 @@
 import * as PIXI from 'pixi.js';
-import {Location, X, Y} from '../../../common/domain/Location';
-import {GameLevel} from './GameLevel';
-import {InputHandler, KEYS} from "../InputHandler";
+import { Location, X, Y } from '../../../common/domain/Location';
+import { GameLevel } from './GameLevel';
+import { InputHandler, KEYS } from "../InputHandler";
+import { GameState } from '../../../common/protocol/Messages';
+import { Position } from '../../../common/GameObject';
 
 export class GameApplication extends PIXI.Application {
     private viewContainer = new PIXI.Container();
@@ -14,8 +16,8 @@ export class GameApplication extends PIXI.Application {
         y: 0,
     };
 
-    constructor(canvas: HTMLCanvasElement, private gameLevel: GameLevel, location: Location, private ws: WebSocket) {
-        super({view: canvas});
+    constructor(readonly gameLevel: GameLevel, location: Location, private ws: WebSocket) {
+        super();
 
         this.viewContainer.scale.x = gameLevel.map.tileWidth;
         this.viewContainer.scale.y = gameLevel.map.tileHeight;
@@ -25,7 +27,7 @@ export class GameApplication extends PIXI.Application {
         this.viewContainer.addChild(gameLevel.container);
         this.stage.addChild(this.viewContainer);
 
-        this.setViewCenter(location.x, location.y);
+        this.setViewCenter(location.position);
 
         this.inputHandler = new InputHandler();
     }
@@ -36,7 +38,14 @@ export class GameApplication extends PIXI.Application {
         super.destroy();
     }
 
-    private setViewCenter(x: X, y: Y) {
+    updateState(state: GameState) {
+        this.setViewCenter(state.character.position);
+        this.gameLevel.updateObjects([state.character, ...state.others]);
+    }
+
+    private setViewCenter(position: Position) {
+        const { x, y } = this.gameLevel.round(position);
+
         this.centerX = x;
         this.centerY = y;
 

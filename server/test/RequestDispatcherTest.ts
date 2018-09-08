@@ -13,8 +13,10 @@ const characters: CharacterInfo[] = [
         classId: 'warrior' as ClassId,
 
         location: {
-            x: 100 as X,
-            y: 100 as Y,
+            position: {
+                x: 100 as X,
+                y: 100 as Y,
+            },
             zoneId: 'lavaland' as ZoneId,
         },
     },
