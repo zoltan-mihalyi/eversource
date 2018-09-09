@@ -12,11 +12,23 @@
   <terrain name="Grass_Dead" tile="7"/>
   <terrain name="Grass_Light" tile="8"/>
   <terrain name="Gravel_1" tile="9"/>
-  <terrain name="Hole_Black" tile="10"/>
-  <terrain name="Hole_Brown" tile="11"/>
+  <terrain name="Hole_Black" tile="10">
+   <properties>
+    <property name="block" type="bool" value="true"/>
+   </properties>
+  </terrain>
+  <terrain name="Hole_Brown" tile="11">
+   <properties>
+    <property name="block" type="bool" value="true"/>
+   </properties>
+  </terrain>
   <terrain name="Ice" tile="12"/>
   <terrain name="Ice_Melting" tile="13"/>
-  <terrain name="Lava" tile="14"/>
+  <terrain name="Lava" tile="14">
+   <properties>
+    <property name="block" type="bool" value="true"/>
+   </properties>
+  </terrain>
   <terrain name="Mud_Brown" tile="15"/>
   <terrain name="Mudstone_Brown" tile="16"/>
   <terrain name="Mudstone_Gray" tile="17"/>
@@ -30,10 +42,26 @@
   <terrain name="Soil" tile="25"/>
   <terrain name="Stone_Tan" tile="26"/>
   <terrain name="Stone_White" tile="27"/>
-  <terrain name="Water" tile="28"/>
-  <terrain name="Water_Deep" tile="29"/>
-  <terrain name="Water_Green" tile="30"/>
-  <terrain name="Water_Purple" tile="31"/>
+  <terrain name="Water" tile="28">
+   <properties>
+    <property name="block" type="bool" value="true"/>
+   </properties>
+  </terrain>
+  <terrain name="Water_Deep" tile="29">
+   <properties>
+    <property name="block" type="bool" value="true"/>
+   </properties>
+  </terrain>
+  <terrain name="Water_Green" tile="30">
+   <properties>
+    <property name="block" type="bool" value="true"/>
+   </properties>
+  </terrain>
+  <terrain name="Water_Purple" tile="31">
+   <properties>
+    <property name="block" type="bool" value="true"/>
+   </properties>
+  </terrain>
   <terrain name="Water_Shallows_Dirt" tile="32"/>
   <terrain name="Water_Shallows_Sand" tile="33"/>
  </terraintypes>

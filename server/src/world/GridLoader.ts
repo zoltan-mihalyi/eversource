@@ -3,14 +3,6 @@ import { ZoneId } from '../../../common/domain/Location';
 import { SafeCallback } from '../../../common/util/SafeCallback';
 import { Grid } from '../../../common/Grid';
 
-const BLOCKS: { [name: string]: boolean } = {
-    Lava: true,
-    Hole_Black: true,
-    Hole_Brown: true,
-    Water: true,
-    Water_Deep: true,
-};
-
 export interface GridLoader {
     load(zoneId: ZoneId, callback: SafeCallback<Grid>): void;
 }
@@ -38,7 +30,7 @@ export class TmxGridLoader implements GridLoader {
         const baseLayer = layers.find(layer => layer.name === 'Base') as TileLayer;
 
         const data = baseLayer.tiles.map(tile => {
-            return tile.terrain.find(terrain => BLOCKS[terrain.name]) !== void 0;
+            return tile.terrain.find(terrain => terrain.properties.block) !== void 0;
         });
 
         console.log(`Grid created in ${new Date().getTime() - start.getTime()} ms`);
