@@ -54,8 +54,10 @@ export class GameApplication extends PIXI.Application {
         const viewContainer = this.viewContainer;
         const canvas = this.view;
 
-        viewContainer.x = Math.floor(-this.centerX * viewContainer.scale.x + canvas.width / 2);
-        viewContainer.y = Math.floor(-this.centerY * viewContainer.scale.y + canvas.height / 2);
+        const { tileWidth, tileHeight } = this.gameLevel.map;
+
+        viewContainer.x = Math.floor(-this.centerX * viewContainer.scale.x + canvas.width / 2 - tileWidth / 2);
+        viewContainer.y = Math.floor(-this.centerY * viewContainer.scale.y + canvas.height / 2 - tileHeight / 2);
 
         this.gameLevel.setVisibleArea(
             -viewContainer.x / viewContainer.scale.x as X,
@@ -66,7 +68,7 @@ export class GameApplication extends PIXI.Application {
     };
 
     private update = () => {
-        const {x, y} = this.inputManager.getMovementIntent();
+        const { x, y } = this.inputManager.getMovementIntent();
 
         if (x !== this.lastMovementIntent.x || y !== this.lastMovementIntent.y) {
             this.ws.send('command:move:' + x + ',' + y);

@@ -46,8 +46,8 @@ export class GameLevel {
             const { x, y } = this.round(object.position);
 
             const sprite = new PIXI.Sprite(characterLoader.get(object.type, object.direction));
-            sprite.x = x;
-            sprite.y = y;
+            sprite.x = x - 16 / tileWidth; // TODO read from file?
+            sprite.y = y - 32 / tileHeight;
             sprite.scale.x = 1 / tileWidth;
             sprite.scale.y = 1 / tileHeight;
 
