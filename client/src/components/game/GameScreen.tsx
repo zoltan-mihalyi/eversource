@@ -2,8 +2,6 @@ import * as React from 'react';
 import { CSSProperties } from 'react';
 import { GameApplication } from '../../map/GameApplication';
 
-const PIXEL_RATIO = 2;
-
 interface Props {
     game: GameApplication;
     enterCharacterSelection: () => void;
@@ -64,12 +62,19 @@ export class GameScreen extends React.Component<Props> {
         const { game } = this.props;
         const canvas = game.view;
 
+        const width = window.innerWidth;
         const height = window.innerHeight - 30;
-        const canvasWidth = Math.floor(window.innerWidth / PIXEL_RATIO);
-        const canvasHeight = Math.floor(height / PIXEL_RATIO);
 
-        canvas.style.width = `${canvasWidth * PIXEL_RATIO}px`;
-        canvas.style.height = `${canvasHeight * PIXEL_RATIO}px`;
+        const widthRatio = width / 800;
+        const heightRatio = height / 600;
+
+        const pixelRatio = restrict((widthRatio + heightRatio) / 2, 1, 2);
+
+        const canvasWidth = Math.floor(width / pixelRatio);
+        const canvasHeight = Math.floor(height / pixelRatio);
+
+        canvas.style.width = `${canvasWidth * pixelRatio}px`;
+        canvas.style.height = `${canvasHeight * pixelRatio}px`;
 
         game.renderer.resize(canvasWidth, canvasHeight);
         game.updateView();
@@ -78,4 +83,14 @@ export class GameScreen extends React.Component<Props> {
     private onContextMenu = (event: Event) => {
         event.preventDefault();
     };
+}
+
+function restrict(num: number, start: number, end: number):number {
+    if (num < start) {
+        return start;
+    }
+    if (num > end) {
+        return end;
+    }
+    return num;
 }
