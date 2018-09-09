@@ -18,12 +18,14 @@
         "cordova-android": "^7.0.0",
         "cordova-browser": "^5.0.4",
         "cordova-plugin-browsersync": "^1.1.0",
+        "cordova-plugin-headercolor": "^1.0.0",
         "cordova-plugin-whitelist": "^1.3.3"
     },
     "cordova": {
         "plugins": {
             "cordova-plugin-whitelist": {},
-            "cordova-plugin-browsersync": {}
+            "cordova-plugin-browsersync": {},
+            "cordova-plugin-headercolor": {}
         },
         "platforms": [
             "android",

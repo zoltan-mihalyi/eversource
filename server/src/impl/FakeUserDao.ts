@@ -17,6 +17,32 @@ export class FakeUserDao implements UserDao {
                 zoneId: 'lavaland' as ZoneId,
             },
         },
+        {
+            id: '2' as CharacterId,
+            name: 'Robin' as CharacterName,
+            classId: 'hunter' as ClassId,
+
+            location: {
+                position: {
+                    x: 116 as X,
+                    y: 164 as Y,
+                },
+                zoneId: 'lavaland' as ZoneId,
+            },
+        },
+        {
+            id: '3' as CharacterId,
+            name: 'Unimaginable' as CharacterName,
+            classId: 'mage' as ClassId,
+
+            location: {
+                position: {
+                    x: 116 as X,
+                    y: 164 as Y,
+                },
+                zoneId: 'lavaland' as ZoneId,
+            },
+        },
     ];
 
     getCharacters(): CharacterInfo[] {
@@ -24,9 +50,6 @@ export class FakeUserDao implements UserDao {
     }
 
     getCharacterIfExists(id: string): CharacterInfo | null {
-        if (id !== '1') {
-            return null;
-        }
-        return this.characters[0];
+        return this.characters.find(char => char.id === id) || null;
     }
 }

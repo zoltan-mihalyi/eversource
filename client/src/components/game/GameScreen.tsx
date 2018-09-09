@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { CSSProperties } from 'react';
 import { GameApplication } from '../../map/GameApplication';
+import { Button } from '../gui/Button';
 
 interface Props {
     game: GameApplication;
@@ -11,18 +11,16 @@ interface ImageStyle extends CSSStyleDeclaration {
     imageRendering: string;
 }
 
-const CONTAINER_STYLE: CSSProperties = {
-    cursor: 'url("cursors/default.png"), auto',
-};
-
 export class GameScreen extends React.Component<Props> {
     private canvas: HTMLCanvasElement | null = null;
 
     render() {
         return (
             <div>
-                <div ref={this.containerRef} style={CONTAINER_STYLE}/>
-                <button onClick={this.props.enterCharacterSelection}>leave</button>
+                <div ref={this.containerRef}/>
+                <div className="gui">
+                    <Button onClick={this.props.enterCharacterSelection}>Leave</Button>
+                </div>
             </div>
         );
     }
@@ -63,7 +61,7 @@ export class GameScreen extends React.Component<Props> {
         const canvas = game.view;
 
         const width = window.innerWidth;
-        const height = window.innerHeight - 30;
+        const height = window.innerHeight - 60;
 
         const widthRatio = width / 800;
         const heightRatio = height / 600;
@@ -85,7 +83,7 @@ export class GameScreen extends React.Component<Props> {
     };
 }
 
-function restrict(num: number, start: number, end: number):number {
+function restrict(num: number, start: number, end: number): number {
     if (num < start) {
         return start;
     }

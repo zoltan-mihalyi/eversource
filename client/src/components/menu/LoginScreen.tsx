@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Button } from '../gui/Button';
 
 interface Props {
     onSubmit: () => void;
@@ -27,14 +28,23 @@ export class LoginScreen extends React.Component<Props> {
             case  'initial':
             case 'error':
                 return (
-                    <form onSubmit={this.onSubmit}>
-                        {loginState.type === 'error' ? (
-                            <p>Error: {loginState.message}</p>
-                        ) : null}
-                        <input name="name"/>
-                        <input type="password" name="password"/>
-                        <input type="submit" value="Log in"/>
-                    </form>
+                    <div className="gui">
+                        <h1>Eversource</h1>
+                        <form className="container" onSubmit={this.onSubmit}>
+                            {loginState.type === 'error' ? (
+                                <p>Error: {loginState.message}</p>
+                            ) : null}
+                            <div className="center">
+                                <input name="name" placeholder="name"/>
+                            </div>
+                            <div className="center">
+                                <input type="password" name="password" placeholder="password"/>
+                            </div>
+                            <div className="center">
+                                <Button>Log in</Button>
+                            </div>
+                        </form>
+                    </div>
                 );
             case 'connecting':
                 return (
@@ -49,18 +59,7 @@ export class LoginScreen extends React.Component<Props> {
 
     private onSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
         e.preventDefault();
-        requestFullscreen();
         this.props.onSubmit();
     };
 
-}
-
-function requestFullscreen() {
-    const el = document.documentElement as any,
-        rfs = el.requestFullscreen
-            || el.webkitRequestFullScreen
-            || el.mozRequestFullScreen
-            || el.msRequestFullscreen;
-
-    rfs.call(el);
 }

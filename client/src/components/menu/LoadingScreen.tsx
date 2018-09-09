@@ -7,7 +7,12 @@ interface Props {
 export class LoadingScreen extends React.Component<Props> {
     render() {
         return (
-            <p>Loading {this.props.zone}...</p>
+            <div className="gui">
+                <div className="container">
+                    <h2>Loading...</h2>
+                    <h3 className="secondary">{this.props.zone}</h3>
+                </div>
+            </div>
         );
     }
 }

@@ -1,0 +1,83 @@
+@font-face {
+    font-family: pixel;
+    src: url('alagard_by_pix3m-d6awiwp.ttf');
+}
+
+html {
+    cursor: url('../cursors/default.png'), auto;
+}
+
+body {
+    margin: 0;
+    background-color: #2b2b2b;
+}
+
+input, button {
+    cursor: inherit;
+}
+
+.gui {
+    zoom: 200%;
+    /*noinspection CssOverwrittenProperties*/
+    image-rendering: pixelated;
+    /*noinspection CssOverwrittenProperties*/
+    image-rendering: crisp-edges;
+    /*noinspection CssOverwrittenProperties*/
+    image-rendering: -moz-crisp-edges;
+
+    -moz-user-select: none;
+    /*noinspection CssUnknownProperty*/
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+h1, h2, h3, button, input, li, p {
+    font-family: pixel, serif;
+}
+
+h1 {
+    color: #ccbd7b;
+    text-align: center;
+
+    font-size: 32px;
+    text-shadow: 2px 2px #573726;
+    margin-bottom: 4px;
+}
+
+.center {
+    text-align: center;
+}
+
+.container {
+    width: 110px;
+    margin-left: auto;
+    margin-right: auto;
+
+    margin-top: 16px;
+    padding: 5px;
+
+    background-color: #573726;
+    border: 1px solid #b78c41;
+}
+
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #2b2b2b;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #986a20;
+    cursor: url('../cursors/default.png'), auto;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #86603a;
+}

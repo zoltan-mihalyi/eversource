@@ -1,0 +1,37 @@
+button {
+    border: 0;
+    background: none;
+    padding: 0;
+
+    margin: 2px;
+}
+
+button:focus {
+    outline: 0;
+}
+
+table.button {
+    border-spacing: 0;
+    height: 23px;
+    color: #ccbd7b;
+    text-shadow: 0 1px #000000;
+}
+
+table.button td {
+    padding: 0;
+}
+
+td.button-left {
+    background-image: url('left.png');
+    width: 8px;
+}
+
+td.button-middle {
+    background-image: url('middle.png');
+    width: 80px;
+}
+
+td.button-right {
+    background-image: url('right.png');
+    width: 8px;
+}
