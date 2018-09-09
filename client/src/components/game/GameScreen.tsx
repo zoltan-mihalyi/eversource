@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { CSSProperties } from 'react';
 import { GameApplication } from '../../map/GameApplication';
 
 const PIXEL_RATIO = 2;
@@ -12,12 +13,17 @@ interface ImageStyle extends CSSStyleDeclaration {
     imageRendering: string;
 }
 
+const CONTAINER_STYLE: CSSProperties = {
+    cursor: 'url("cursors/default.png"), auto',
+};
+
 export class GameScreen extends React.Component<Props> {
     private canvas: HTMLCanvasElement | null = null;
 
     render() {
         return (
-            <div ref={this.containerRef}>
+            <div>
+                <div ref={this.containerRef} style={CONTAINER_STYLE}/>
                 <button onClick={this.props.enterCharacterSelection}>leave</button>
             </div>
         );
@@ -29,7 +35,7 @@ export class GameScreen extends React.Component<Props> {
         const canvas = game.view;
         this.canvas = canvas;
         canvas.addEventListener('contextmenu', this.onContextMenu);
-        container.insertBefore(canvas, container.children[0]);
+        container.appendChild(canvas);
 
         const style = (canvas.style as ImageStyle);
         style.imageRendering = 'pixelated';

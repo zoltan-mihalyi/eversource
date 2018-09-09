@@ -1,4 +1,4 @@
-export class InputHandler {
+export class KeyboardInput {
     private down = new Set<number>();
     private pressed = new Set<number>();
 
@@ -20,7 +20,7 @@ export class InputHandler {
         document.removeEventListener('keyup', this.keyUp)
     }
 
-    clear() {
+    clearPressedKeys() {
         this.pressed.clear();
     }
 

@@ -1,7 +1,7 @@
 import * as PIXI from 'pixi.js';
 import { Location, X, Y } from '../../../common/domain/Location';
 import { GameLevel } from './GameLevel';
-import { InputHandler, KEYS } from "../InputHandler";
+import { InputManager, MovementIntent } from '../input/InputManager';
 import { GameState } from '../../../common/protocol/Messages';
 import { Position } from '../../../common/GameObject';
 
@@ -10,11 +10,8 @@ export class GameApplication extends PIXI.Application {
     private centerX = 0 as X;
     private centerY = 0 as Y;
     private timer: number;
-    private inputHandler: InputHandler;
-    private lastDirection = {
-        x: 0,
-        y: 0,
-    };
+    private inputManager: InputManager;
+    private lastMovementIntent: MovementIntent = { x: 0, y: 0 };
 
     constructor(readonly gameLevel: GameLevel, location: Location, private ws: WebSocket) {
         super();
@@ -29,12 +26,12 @@ export class GameApplication extends PIXI.Application {
 
         this.setViewCenter(location.position);
 
-        this.inputHandler = new InputHandler();
+        this.inputManager = new InputManager();
     }
 
     destroy() {
         cancelAnimationFrame(this.timer);
-        this.inputHandler.destroy();
+        this.inputManager.destroy();
         super.destroy();
     }
 
@@ -69,24 +66,14 @@ export class GameApplication extends PIXI.Application {
     };
 
     private update = () => {
-        let directionX = 0;
-        let directionY = 0;
-        if (this.inputHandler.isDown(KEYS.W)) {
-            directionY = -1;
-        } else if (this.inputHandler.isDown(KEYS.S)) {
-            directionY = 1;
+        const {x, y} = this.inputManager.getMovementIntent();
+
+        if (x !== this.lastMovementIntent.x || y !== this.lastMovementIntent.y) {
+            this.ws.send('command:move:' + x + ',' + y);
         }
-        if (this.inputHandler.isDown(KEYS.A)) {
-            directionX = -1;
-        } else if (this.inputHandler.isDown(KEYS.D)) {
-            directionX = 1;
-        }
-        if (directionX !== this.lastDirection.x || directionY !== this.lastDirection.y) {
-            this.ws.send('command:move:' + directionX + ',' + directionY);
-        }
-        this.lastDirection.x = directionX;
-        this.lastDirection.y = directionY;
-        this.inputHandler.clear();
+        this.lastMovementIntent.x = x;
+        this.lastMovementIntent.y = y;
+        this.inputManager.clearPressedKeys();
         this.timer = requestAnimationFrame(this.update);
     };
 }

@@ -37,14 +37,13 @@ export class PlayingRequestHandler extends ClientState<PlayerData> {
                 }
 
                 let direction: Direction | null = null;
-                if (sY < 0) {
+                const xLarger = Math.abs(sX) > Math.abs(sY);
+                if (xLarger) {
+                    direction = sX > 0 ? 'R' : 'L';
+                } else if (sY < 0) {
                     direction = 'U';
                 } else if (sY > 0) {
                     direction = 'D';
-                } else if (sX < 0) {
-                    direction = 'L';
-                } else if (sX > 0) {
-                    direction = 'R';
                 }
 
                 const { object } = this.data;
