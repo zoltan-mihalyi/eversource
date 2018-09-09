@@ -1,6 +1,7 @@
 import { WorldImpl } from '../src/world/World';
 import * as sinon from 'sinon';
 import { ZoneId } from '../../common/domain/Location';
+import { GridLoader } from '../src/world/GridLoader';
 
 const zoneId = 'zone' as ZoneId;
 
@@ -14,11 +15,24 @@ function createGridLoader(load = gridLoaderLoad) {
     };
 }
 
+const runningWorlds = new Set<WorldImpl>();
+
+function newWorld(gridLoader: GridLoader) {
+    const world = new WorldImpl(gridLoader);
+    runningWorlds.add(world);
+    return world;
+}
+
 describe('World', function () {
+    afterEach(function () {
+        runningWorlds.forEach(world => world.stop());
+        runningWorlds.clear();
+    });
+
     it('should load zone and call callback', function () {
 
         const gridLoader = createGridLoader();
-        const world = new WorldImpl(gridLoader);
+        const world = newWorld(gridLoader);
         const callback = sinon.spy();
 
         world.getZone(zoneId, callback);
@@ -31,7 +45,7 @@ describe('World', function () {
 
         const load = sinon.spy();
         const gridLoader = createGridLoader(load);
-        const world = new WorldImpl(gridLoader);
+        const world = newWorld(gridLoader);
         const callback = sinon.mock();
         const callback2 = sinon.mock();
 
