@@ -4,8 +4,8 @@ import { Map as TmxMap } from '@eversource/tmx-parser';
 import { TexturedTileSet } from './TexturedTileset';
 import * as PIXI from 'pixi.js';
 import { Opaque } from '../../../common/util/Opaque';
-import { GameObject, Position } from '../../../common/GameObject';
-import { CharacterLoader } from './CharacterLoader';
+import { Direction, GameObject, Position } from '../../../common/GameObject';
+import { TextureLoader } from './TextureLoader';
 import ResourceDictionary = PIXI.loaders.ResourceDictionary;
 
 const CHUNK_WIDTH = 16;
@@ -13,7 +13,7 @@ const CHUNK_HEIGHT = 16;
 
 type ChunkPosition = Opaque<string, 'ChunkPosition'>;
 
-const characterLoader = new CharacterLoader();
+const textureLoader = new TextureLoader();
 
 export class GameLevel {
     readonly chunks = new Map<ChunkPosition, Chunk>();
@@ -45,13 +45,22 @@ export class GameLevel {
         for (const object of objects) {
             const { x, y } = this.round(object.position);
 
-            const sprite = new PIXI.Sprite(characterLoader.get(object.type, object.direction));
-            sprite.x = x - 16 / tileWidth; // TODO read from file?
-            sprite.y = y - 32 / tileHeight;
-            sprite.scale.x = 1 / tileWidth;
-            sprite.scale.y = 1 / tileHeight;
+            const character = new PIXI.Container();
+            character.x = x - 16 / tileWidth; // TODO read from file?
+            character.y = y - 32 / tileHeight;
+            character.scale.x = 1 / tileWidth;
+            character.scale.y = 1 / tileHeight;
 
-            this.objectContainer.addChild(sprite);
+            const shadow = new PIXI.Sprite(textureLoader.get('misc', 'shadow'));
+            shadow.blendMode = PIXI.BLEND_MODES.MULTIPLY;
+            shadow.x = 16;
+            shadow.y = 32 + 6;
+            character.addChild(shadow);
+
+            const sprite = new PIXI.Sprite(textureLoader.get(object.type, directionToName(object.direction)));
+            character.addChild(sprite);
+
+            this.objectContainer.addChild(character);
         }
     }
 
@@ -96,4 +105,17 @@ export class GameLevel {
 
 function chunkPosition(x: X, y: Y): ChunkPosition {
     return (x / CHUNK_WIDTH) + ':' + (y / CHUNK_HEIGHT) as ChunkPosition;
+}
+
+function directionToName(direction: Direction): string {
+    switch (direction) {
+        case 'U':
+            return 'up';
+        case 'D':
+            return 'down';
+        case 'L':
+            return 'left';
+        case 'R':
+            return 'right';
+    }
 }
