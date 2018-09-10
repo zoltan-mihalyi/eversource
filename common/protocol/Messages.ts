@@ -1,5 +1,6 @@
 import { CharacterInfo } from '../domain/CharacterInfo';
 import { GameObject } from '../GameObject';
+import { ErrorCode } from './ErrorCode';
 
 export interface RequestTypes {
     characters: void;
@@ -20,6 +21,7 @@ export interface GameState {
 }
 
 export interface ResponseTypes {
+    error: ErrorCode;
     leaved: LeaveReason;
     characters: CharacterInfo[];
     ready: void;
@@ -27,3 +29,5 @@ export interface ResponseTypes {
 }
 
 export type ResponseCommand = keyof ResponseTypes;
+
+export const PROTOCOL_VERSION = 1;

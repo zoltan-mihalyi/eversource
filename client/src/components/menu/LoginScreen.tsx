@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Button } from '../gui/Button';
 
 interface Props {
-    onSubmit: () => void;
+    onSubmit: (username: string, password: string) => void;
     loginState: LoginState;
 }
 
@@ -22,6 +22,8 @@ export type LoginState = SimpleState<'initial'>
 
 
 export class LoginScreen extends React.Component<Props> {
+    private usernameInput = React.createRef<HTMLInputElement>();
+    private passwordInput = React.createRef<HTMLInputElement>();
     render() {
         return (
             <div className="gui">
@@ -43,10 +45,10 @@ export class LoginScreen extends React.Component<Props> {
                             <p>Error: {loginState.message}</p>
                         ) : null}
                         <div className="center">
-                            <input name="name" placeholder="name"/>
+                            <input name="username" placeholder="username" ref={this.usernameInput}/>
                         </div>
                         <div className="center">
-                            <input type="password" name="password" placeholder="password"/>
+                            <input type="password" name="password" placeholder="password" ref={this.passwordInput}/>
                         </div>
                         <div className="center">
                             <Button>Log in</Button>
@@ -70,7 +72,8 @@ export class LoginScreen extends React.Component<Props> {
 
     private onSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
         e.preventDefault();
-        this.props.onSubmit();
+        const {usernameInput, passwordInput} = this;
+        this.props.onSubmit(usernameInput.current!.value, passwordInput.current!.value);
     };
 
 }

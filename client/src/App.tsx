@@ -11,8 +11,9 @@ import { Loader, Map, TileSet } from '@eversource/tmx-parser';
 import { GameLevel } from './map/GameLevel';
 import * as path from 'path';
 import { Location } from '../../common/domain/Location';
-import { GameState } from '../../common/protocol/Messages';
+import { GameState, PROTOCOL_VERSION } from '../../common/protocol/Messages';
 import { GameApplication } from './map/GameApplication';
+import { ErrorCode } from '../../common/protocol/ErrorCode';
 
 type ShowLoginScreen = {
     type: 'login'
@@ -44,6 +45,11 @@ interface State {
 const basePath = './dist/maps';
 const wsUri = `ws://${location.hostname}:8080`;
 
+const errorMessages: { [P in ErrorCode]: string } = {
+    [ErrorCode.VERSION_MISMATCH]: 'Version mismatch',
+    [ErrorCode.MISSING_PARAMETERS]: 'Missing parameters',
+    [ErrorCode.INVALID_CREDENTIALS]: 'Invalid credentials',
+};
 export class App extends React.Component<{}, State> {
     state: State = {
         screen: { type: 'login', state: { type: 'initial' } },
@@ -109,8 +115,8 @@ export class App extends React.Component<{}, State> {
         });
     };
 
-    private onSubmitLogin = () => {
-        const ws = new WebSocket(wsUri);
+    private onSubmitLogin = (username: string, password: string) => {
+        const ws = new WebSocket(`${wsUri}?v=${PROTOCOL_VERSION}&username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`);
 
         this.setState({
             screen: {
@@ -123,6 +129,10 @@ export class App extends React.Component<{}, State> {
             this.enterCharacterLoading(ws);
         };
         ws.onclose = evt => {
+            const {screen }= this.state;
+            if (screen.type === 'login' && screen.state.type === 'error') {
+                return; // Already handled
+            }
             this.setState({
                 screen: {
                     type: 'login',
@@ -136,13 +146,23 @@ export class App extends React.Component<{}, State> {
             const { screen } = this.state;
             switch (screen.type) {
                 case 'login':
-                    this.setState({
-                        screen: {
-                            type: 'characters',
-                            characters: command.data,
-                            ws,
-                        },
-                    });
+                    if (command.command === 'error') {
+                        this.setState({
+                            screen: {
+                                type: 'login',
+                                state: { type: 'error', message: errorMessages[command.data as ErrorCode] },
+                            },
+                        });
+                        return;
+                    } else {
+                        this.setState({
+                            screen: {
+                                type: 'characters',
+                                characters: command.data,
+                                ws,
+                            },
+                        });
+                    }
                     break;
                 case 'loading': {
                     const game = new GameApplication(screen.gameLevel!, screen.location, ws);
