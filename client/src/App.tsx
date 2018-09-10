@@ -11,7 +11,7 @@ import { Loader, Map, TileSet } from '@eversource/tmx-parser';
 import { GameLevel } from './map/GameLevel';
 import * as path from 'path';
 import { Location } from '../../common/domain/Location';
-import { GameState } from '../../common/protocol/Messages';
+import { GameState, PROTOCOL_VERSION } from '../../common/protocol/Messages';
 import { GameApplication } from './map/GameApplication';
 
 type ShowLoginScreen = {
@@ -42,7 +42,7 @@ interface State {
 }
 
 const basePath = './dist/maps';
-const wsUri = `ws://${location.hostname}:8080`;
+const wsUri = `${location.hostname}:8080`;
 
 export class App extends React.Component<{}, State> {
     state: State = {
@@ -109,8 +109,8 @@ export class App extends React.Component<{}, State> {
         });
     };
 
-    private onSubmitLogin = () => {
-        const ws = new WebSocket(wsUri);
+    private onSubmitLogin = (username: string, password: string) => {
+        const ws = new WebSocket(`ws://${wsUri}?v=${PROTOCOL_VERSION}&username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`);
 
         this.setState({
             screen: {
