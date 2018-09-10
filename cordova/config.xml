@@ -27,7 +27,7 @@
     <plugin name="cordova-plugin-browsersync" spec="^1.1.0" />
     <icon src="res/icon.png" />
     <preference name="HeaderColor" value="#2b2b2b" />
+    <plugin name="cordova-plugin-headercolor" spec="^1.0.0" />
     <engine name="android" spec="^7.0.0" />
     <engine name="browser" spec="^5.0.4" />
-    <plugin name="cordova-plugin-headercolor" spec="^1.0.0" />
 </widget>

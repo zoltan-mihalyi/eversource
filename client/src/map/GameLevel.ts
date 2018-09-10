@@ -42,7 +42,7 @@ export class GameLevel {
 
         const { tileWidth, tileHeight } = this.map;
 
-        for (const object of objects) {
+        for (const object of objects.sort(zIndexSorter)) {
             const { x, y } = this.round(object.position);
 
             const character = new PIXI.Container();
@@ -118,4 +118,8 @@ function directionToName(direction: Direction): string {
         case 'R':
             return 'right';
     }
+}
+
+function zIndexSorter(a: GameObject, b: GameObject): number {
+    return a.position.y - b.position.y;
 }
