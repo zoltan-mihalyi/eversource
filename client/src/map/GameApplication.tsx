@@ -10,7 +10,7 @@ export class GameApplication extends PIXI.Application {
     private centerX = 0 as X;
     private centerY = 0 as Y;
     private timer: number;
-    private inputManager: InputManager;
+    readonly inputManager: InputManager;
     private lastMovementIntent: MovementIntent = { x: 0, y: 0 };
 
     constructor(readonly gameLevel: GameLevel, location: Location, private ws: WebSocket) {

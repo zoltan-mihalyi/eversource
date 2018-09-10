@@ -9,6 +9,7 @@ ul {
 }
 
 li button {
+    opacity: 1;
     text-align: left;
     padding: 2px 6px;
     border: 1px solid #986a20;

@@ -18,12 +18,17 @@ export class GameScreen extends React.Component<Props> {
         return (
             <div>
                 <div ref={this.containerRef}/>
-                <div className="gui">
+                <div className="gui bottom">
                     <Button onClick={this.props.enterCharacterSelection}>Leave</Button>
                 </div>
+                <div ref={this.joystickContainerRef}/>
             </div>
         );
     }
+
+    private joystickContainerRef = (div: HTMLDivElement) => {
+        this.props.game.inputManager.initializeJoystick(div);
+    };
 
     private initialize(container: HTMLElement) {
         const { game } = this.props;
@@ -34,6 +39,7 @@ export class GameScreen extends React.Component<Props> {
         container.appendChild(canvas);
 
         const style = (canvas.style as ImageStyle);
+        style.position = 'fixed';
         style.imageRendering = 'pixelated';
         style.imageRendering = 'crisp-edges';
         style.imageRendering = '-moz-crisp-edges';
@@ -61,7 +67,7 @@ export class GameScreen extends React.Component<Props> {
         const canvas = game.view;
 
         const width = window.innerWidth;
-        const height = window.innerHeight - 60;
+        const height = window.innerHeight;
 
         const widthRatio = width / 800;
         const heightRatio = height / 600;

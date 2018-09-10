@@ -33,6 +33,17 @@ input, button {
     user-select: none;
 }
 
+.gui.bottom{
+    position: absolute;
+    bottom: 0;
+}
+
+@media screen and (max-width: 400px) {
+    .gui {
+        zoom: 150%;
+    }
+}
+
 h1, h2, h3, button, input, li, p {
     font-family: pixel, serif;
 }
@@ -43,7 +54,7 @@ h1 {
 
     font-size: 32px;
     text-shadow: 2px 2px #573726;
-    margin-bottom: 4px;
+    margin-bottom: 30px;
 }
 
 .center {

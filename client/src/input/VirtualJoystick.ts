@@ -1,22 +1,22 @@
 ///<reference path="../defs.d.ts"/>
 import * as nipple from 'nipplejs'
+import { EventData, Manager, NippleInteractiveData } from 'nipplejs'
 import { MovementIntent } from './InputManager';
 import { Wait, waitUntilTouch } from './WaitUntilTouch';
-import { EventData, Manager, NippleInteractiveData } from 'nipplejs';
 
 const NO_MOVEMENT = { x: 0, y: 0 };
 
 export class VirtualJoystick {
-    private waitUntilTouch: Wait;
+    private waitUntilTouch: Wait | null = null;
     private joystick: Manager | null = null;
     private movementIntent: MovementIntent = NO_MOVEMENT;
 
-    constructor() {
+    initialize(element: HTMLElement) {
         this.waitUntilTouch = waitUntilTouch(() => {
             this.joystick = nipple.create({
-                zone: document.body,
+                zone: element,
                 mode: 'static',
-                position: { right: '70px', bottom: '130px' },
+                position: { right: '80px', bottom: '80px' },
                 color: 'white',
             });
             this.joystick.on('move', this.onJoystickUpdate);
@@ -32,7 +32,9 @@ export class VirtualJoystick {
         if (this.joystick) {
             this.joystick.destroy();
         }
-        this.waitUntilTouch.stop();
+        if (this.waitUntilTouch) {
+            this.waitUntilTouch.stop();
+        }
     }
 
     private onJoystickUpdate = (event: EventData, data: NippleInteractiveData) => {

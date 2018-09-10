@@ -35,4 +35,8 @@ export class InputManager {
     clearPressedKeys() {
         this.keyboardInput.clearPressedKeys();
     }
+
+    initializeJoystick(container:HTMLElement){
+        this.virtualJoystick.initialize(container);
+    }
 }

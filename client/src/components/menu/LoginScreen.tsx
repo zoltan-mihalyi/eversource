@@ -23,36 +23,47 @@ export type LoginState = SimpleState<'initial'>
 
 export class LoginScreen extends React.Component<Props> {
     render() {
+        return (
+            <div className="gui">
+                <h1>Eversource</h1>
+                {this.renderContent()}
+            </div>
+        );
+    }
+
+    private renderContent() {
         const { loginState } = this.props;
+
         switch (loginState.type) {
             case  'initial':
             case 'error':
                 return (
-                    <div className="gui">
-                        <h1>Eversource</h1>
-                        <form className="container" onSubmit={this.onSubmit}>
-                            {loginState.type === 'error' ? (
-                                <p>Error: {loginState.message}</p>
-                            ) : null}
-                            <div className="center">
-                                <input name="name" placeholder="name"/>
-                            </div>
-                            <div className="center">
-                                <input type="password" name="password" placeholder="password"/>
-                            </div>
-                            <div className="center">
-                                <Button>Log in</Button>
-                            </div>
-                        </form>
-                    </div>
+                    <form className="container" onSubmit={this.onSubmit}>
+                        {loginState.type === 'error' ? (
+                            <p>Error: {loginState.message}</p>
+                        ) : null}
+                        <div className="center">
+                            <input name="name" placeholder="name"/>
+                        </div>
+                        <div className="center">
+                            <input type="password" name="password" placeholder="password"/>
+                        </div>
+                        <div className="center">
+                            <Button>Log in</Button>
+                        </div>
+                    </form>
                 );
             case 'connecting':
                 return (
-                    <p>connecting...</p>
+                    <div className="container">
+                        <h2>Connecting...</h2>
+                    </div>
                 );
             case 'characters':
                 return (
-                    <p>querying characters...</p>
+                    <div className="container">
+                        <h2>Loading characters...</h2>
+                    </div>
                 );
         }
     }
