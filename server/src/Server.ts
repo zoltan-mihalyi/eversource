@@ -19,10 +19,15 @@ interface RequestInfo {
 class ConnectionHandler {
     private dispatcher: RequestDispatcher;
 
-    private sendMessage = <T extends ResponseCommand>(command: T, data: ResponseTypes[T]) => {
+    private sendMessage = <T extends ResponseCommand>(command: T, data: ResponseTypes[T], unreliable?: boolean) => {
         if (this.connection.readyState !== this.connection.OPEN) {
             return;
         }
+
+        if (unreliable && this.connection.bufferedAmount > 0) {
+            return;
+        }
+
         const suffix = data === void 0
             ? ''
             : ':' + JSON.stringify(data);

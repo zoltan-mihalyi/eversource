@@ -5,7 +5,7 @@ import { UserDao } from '../dao/UserDao';
 import { World } from '../world/World';
 import { NetworkLoop } from '../NetworkLoop';
 
-type SendMessage = <T extends ResponseCommand>(command: T, data: ResponseTypes[T]) => void;
+type SendMessage = <T extends ResponseCommand>(command: T, data: ResponseTypes[T], unreliable?: boolean) => void;
 
 export interface HandlerManager {
     readonly dao: UserDao;

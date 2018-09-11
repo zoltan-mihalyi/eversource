@@ -77,7 +77,7 @@ export class PlayingRequestHandler extends ClientState<PlayerData> {
         this.handlerManager.sendMessage('state', {
             character: object,
             others: zone.query(object),
-        });
+        }, true);
     };
 }
 
