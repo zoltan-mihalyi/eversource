@@ -3,9 +3,9 @@ import { CharacterSelectionRequestHandler } from './CharacterSelectionRequestHan
 
 export class InitialClientState extends ClientState<void> {
     characters() {
-        const characters = this.handlerManager.dao.getCharacters();
+        const characters = this.context.dao.getCharacters();
 
-        this.handlerManager.sendMessage('characters', characters);
-        this.handlerManager.enterState(CharacterSelectionRequestHandler, void 0);
+        this.context.sendMessage('characters', characters);
+        this.manager.enter(CharacterSelectionRequestHandler, void 0);
     }
 }

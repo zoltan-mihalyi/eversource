@@ -11,7 +11,7 @@ export interface PlayerData {
 export class PlayingRequestHandler extends ClientState<PlayerData> {
     leave() {
         this.cleanup();
-        this.handlerManager.enterState(InitialClientState, void 0);
+        this.manager.enter(InitialClientState, void 0);
     }
 
     command(data: string) {
@@ -57,7 +57,7 @@ export class PlayingRequestHandler extends ClientState<PlayerData> {
     }
 
     onEnter() {
-        this.handlerManager.networkLoop.add(this.networkUpdate);
+        this.context.networkLoop.add(this.networkUpdate);
     }
 
     handleExit() {
@@ -67,14 +67,14 @@ export class PlayingRequestHandler extends ClientState<PlayerData> {
     private cleanup() {
         const { zone, object } = this.data;
 
-        this.handlerManager.networkLoop.remove(this.networkUpdate);
+        this.context.networkLoop.remove(this.networkUpdate);
         zone.removeObject(object);
     }
 
     private networkUpdate = () => {
         const { object, zone } = this.data;
 
-        this.handlerManager.sendMessage('state', {
+        this.context.sendMessage('state', {
             character: object,
             others: zone.query(object),
         });

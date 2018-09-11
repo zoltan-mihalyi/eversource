@@ -3,10 +3,10 @@ import { LoadingRequestHandler } from './LoadingRequestHandler';
 
 export class CharacterSelectionRequestHandler extends ClientState<void> {
     enter(data: string) {
-        const character = this.handlerManager.dao.getCharacterIfExists(data);
+        const character = this.context.dao.getCharacterIfExists(data);
         if (!character) {
             return;
         }
-        this.handlerManager.enterState(LoadingRequestHandler, character);
+        this.manager.enter(LoadingRequestHandler, character);
     }
 }

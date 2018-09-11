@@ -1,27 +1,32 @@
-import { RequestCommand, RequestTypes } from '../../../common/protocol/Messages';
-import { HandlerManager } from './RequestDispatcher';
+import { RequestCommand, RequestTypes, ResponseCommand, ResponseTypes } from '../../../common/protocol/Messages';
+import { State, StateManager } from '../../../common/util/StateManager';
+import { UserDao } from '../dao/UserDao';
+import { World } from '../world/World';
+import { NetworkLoop } from '../NetworkLoop';
 
 export type RequestHandler = {
     [P in RequestCommand]: (data: RequestTypes[P]) => void;
 }
 
-export class ClientState<T> {
+export type SendMessage = <T extends ResponseCommand>(command: T, data: ResponseTypes[T]) => void;
+
+export interface ClientStateContext {
+    readonly dao: UserDao;
+    readonly world: World;
+    readonly sendMessage: SendMessage;
+    readonly networkLoop: NetworkLoop;
+}
+
+export class ClientState<T> extends State<ClientStateContext, T> {
     readonly handler: RequestHandler = {
         characters: () => this.characters(),
         enter: (data: string) => this.enter(data),
         ready: () => this.ready(),
         leave: () => this.leave(),
-        command: (data:string) => this.command(data),
+        command: (data: string) => this.command(data),
     };
 
-    constructor(protected handlerManager: HandlerManager, protected data: T) {
-    }
-
     handleExit() {
-    }
-
-    onEnter() {
-
     }
 
     protected characters() {
@@ -38,8 +43,4 @@ export class ClientState<T> {
 
     protected command(data: string) {
     }
-}
-
-export interface ClientStateConstructor<T> {
-    new(stateManager: HandlerManager, data: T): ClientState<T>
 }

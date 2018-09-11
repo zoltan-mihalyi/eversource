@@ -16,7 +16,7 @@ export class LoadingRequestHandler extends ClientState<CharacterInfo> {
 
         const { zoneId, position } = this.data.location;
 
-        this.handlerManager.world.getZone(zoneId, (zone: Zone) => {
+        this.context.world.getZone(zoneId, (zone: Zone) => {
             if (this.token.cancelled) {
                 return;
             }
@@ -28,8 +28,8 @@ export class LoadingRequestHandler extends ClientState<CharacterInfo> {
             };
             zone.addObject(object);
 
-            this.handlerManager.sendMessage('ready', void 0);
-            this.handlerManager.enterState(PlayingRequestHandler, { zone, object });
+            this.context.sendMessage('ready', void 0);
+            this.manager.enter(PlayingRequestHandler, { zone, object });
         });
     }
 
