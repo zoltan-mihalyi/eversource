@@ -13,7 +13,7 @@ export class GameApplication extends PIXI.Application {
     readonly inputManager: InputManager;
     private lastMovementIntent: MovementIntent = { x: 0, y: 0 };
 
-    constructor(readonly gameLevel: GameLevel, location: Location, private ws: WebSocket) {
+    constructor(readonly gameLevel: GameLevel, position:Position, private ws: WebSocket) {
         super();
 
         this.viewContainer.scale.x = gameLevel.map.tileWidth;
@@ -24,7 +24,7 @@ export class GameApplication extends PIXI.Application {
         this.viewContainer.addChild(gameLevel.container);
         this.stage.addChild(this.viewContainer);
 
-        this.setViewCenter(location.position);
+        this.setViewCenter(position);
 
         this.inputManager = new InputManager();
     }

@@ -1,4 +1,5 @@
 import * as PIXI from 'pixi.js';
+import { Texture, BaseTexture } from 'pixi.js';
 
 export interface ParsedCommand {
     command: string;
@@ -29,3 +30,18 @@ export const pixiLoader = (file: string, cb: (err: any, data: string) => void) =
             cb(null, (loader.resources.file.xhr as any).responseText);
         });
 };
+
+export function cleanupTextures() {
+    cleanup(PIXI.utils.TextureCache);
+    cleanup(PIXI.utils.BaseTextureCache);
+}
+
+function cleanup(textures: { [key: string]: Texture | BaseTexture }) {
+    for (const key of Object.keys(textures)) {
+        if (!textures[key]) {
+            continue; // a texture with duplicate keys removed
+        }
+        textures[key].destroy();
+    }
+
+}

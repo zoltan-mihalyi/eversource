@@ -1,7 +1,7 @@
 import { ClientState } from './ClientState';
-import { InitialClientState } from './InitialClientState';
 import { Direction, GameObject, XPerSecond, YPerSecond } from '../../../common/GameObject';
 import { Zone } from '../world/Zone';
+import { CharacterSelectionRequestHandler } from './CharacterSelectionRequestHandler';
 
 export interface PlayerData {
     zone: Zone;
@@ -11,7 +11,7 @@ export interface PlayerData {
 export class PlayingRequestHandler extends ClientState<PlayerData> {
     leave() {
         this.cleanup();
-        this.manager.enter(InitialClientState, void 0);
+        this.manager.enter(CharacterSelectionRequestHandler, void 0);
     }
 
     command(data: string) {

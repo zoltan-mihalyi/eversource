@@ -3,7 +3,6 @@ import { GameObject } from '../GameObject';
 import { ErrorCode } from './ErrorCode';
 
 export interface RequestTypes {
-    characters: void;
     enter: string;
     ready: void;
     leave: void;
@@ -30,4 +29,4 @@ export interface ResponseTypes {
 
 export type ResponseCommand = keyof ResponseTypes;
 
-export const PROTOCOL_VERSION = 1;
+export const PROTOCOL_VERSION = 2;

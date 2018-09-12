@@ -3,14 +3,14 @@ import { CharacterInfo } from '../../../../common/domain/CharacterInfo';
 import { Button } from '../gui/Button';
 
 interface Props {
-    startLoading: (character: CharacterInfo) => void;
-    exit: () => void;
+    onSelect: (character: CharacterInfo) => void;
+    onExit: () => void;
     characters: CharacterInfo[];
 }
 
 export class CharacterSelectionScreen extends React.Component<Props> {
     render() {
-        const { startLoading, exit, characters } = this.props;
+        const { onSelect, onExit, characters } = this.props;
 
         return (
             <div className="gui">
@@ -18,7 +18,7 @@ export class CharacterSelectionScreen extends React.Component<Props> {
                     <ul>
                         {characters.map((character, idx) => (
                             <li key={idx}>
-                                <button onClick={() => startLoading(character)}>
+                                <button onClick={() => onSelect(character)}>
                                     <h2>{character.name}</h2>
                                     <h3>Level 1 {character.classId}</h3>
                                     <h3 className="secondary">{character.location.zoneId}</h3>
@@ -27,7 +27,7 @@ export class CharacterSelectionScreen extends React.Component<Props> {
                         ))}
                     </ul>
                     <div className="center">
-                        <Button onClick={exit}>exit</Button>
+                        <Button onClick={onExit}>Exit</Button>
                     </div>
                 </div>
             </div>

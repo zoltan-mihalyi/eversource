@@ -3,9 +3,9 @@ import { ClientState, ClientStateContext } from './ClientState';
 import { UserDao } from '../dao/UserDao';
 import { World } from '../world/World';
 import { NetworkLoop } from '../NetworkLoop';
-import { InitialClientState } from './InitialClientState';
 import { ResponseCommand, ResponseTypes } from '../../../common/protocol/Messages';
 import { CommandStream } from './CommandStream';
+import { CharacterSelectionRequestHandler } from './CharacterSelectionRequestHandler';
 
 export class ConnectionHandler {
     private stateManager: StateManager<ClientState<any>, ClientStateContext>;
@@ -16,7 +16,7 @@ export class ConnectionHandler {
             world,
             networkLoop,
             sendCommand: this.sendCommand,
-        }, InitialClientState, void 0);
+        }, CharacterSelectionRequestHandler, void 0);
 
         commandStream.onCommand = this.onCommand;
     }

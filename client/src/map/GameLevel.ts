@@ -13,9 +13,8 @@ const CHUNK_HEIGHT = 16;
 
 type ChunkPosition = Opaque<string, 'ChunkPosition'>;
 
-const textureLoader = new TextureLoader();
-
 export class GameLevel {
+    private readonly textureLoader = new TextureLoader();
     readonly chunks = new Map<ChunkPosition, Chunk>();
 
     readonly visibleChunks = new Set<Chunk>();
@@ -51,13 +50,13 @@ export class GameLevel {
             character.scale.x = 1 / tileWidth;
             character.scale.y = 1 / tileHeight;
 
-            const shadow = new PIXI.Sprite(textureLoader.get('misc', 'shadow'));
+            const shadow = new PIXI.Sprite(this.textureLoader.get('misc', 'shadow'));
             shadow.blendMode = PIXI.BLEND_MODES.MULTIPLY;
             shadow.x = 16;
             shadow.y = 32 + 6;
             character.addChild(shadow);
 
-            const sprite = new PIXI.Sprite(textureLoader.get(object.type, directionToName(object.direction)));
+            const sprite = new PIXI.Sprite(this.textureLoader.get(object.type, directionToName(object.direction)));
             character.addChild(sprite);
 
             this.objectContainer.addChild(character);

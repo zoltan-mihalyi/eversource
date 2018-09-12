@@ -19,7 +19,6 @@ export interface ClientStateContext {
 
 export class ClientState<T> extends State<ClientStateContext, T> {
     readonly handler: RequestHandler = {
-        characters: () => this.characters(),
         enter: (data: string) => this.enter(data),
         ready: () => this.ready(),
         leave: () => this.leave(),
