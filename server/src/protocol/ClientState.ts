@@ -1,5 +1,5 @@
 import { RequestCommand, RequestTypes, ResponseCommand, ResponseTypes } from '../../../common/protocol/Messages';
-import { State, StateManager } from '../../../common/util/StateManager';
+import { State } from '../../../common/util/StateManager';
 import { UserDao } from '../dao/UserDao';
 import { World } from '../world/World';
 import { NetworkLoop } from '../NetworkLoop';
@@ -13,7 +13,7 @@ export type SendMessage = <T extends ResponseCommand>(command: T, data: Response
 export interface ClientStateContext {
     readonly dao: UserDao;
     readonly world: World;
-    readonly sendMessage: SendMessage;
+    readonly sendCommand: SendMessage;
     readonly networkLoop: NetworkLoop;
 }
 
@@ -25,6 +25,10 @@ export class ClientState<T> extends State<ClientStateContext, T> {
         leave: () => this.leave(),
         command: (data: string) => this.command(data),
     };
+
+    isValidCommand(command: string): command is RequestCommand {
+        return this.handler.hasOwnProperty(command);
+    }
 
     handleExit() {
     }

@@ -1,46 +1,13 @@
 import * as ws from 'ws';
-import { RequestDispatcher } from './protocol/RequestDispatcher';
-import { PROTOCOL_VERSION, ResponseCommand, ResponseTypes } from '../../common/protocol/Messages';
-import { UserDao } from './dao/UserDao';
+import { PROTOCOL_VERSION } from '../../common/protocol/Messages';
 import { World } from './world/World';
 import { NetworkLoop } from './NetworkLoop';
 import * as url from 'url';
 import * as http from 'http';
 import { Dao, Password, User, UserName } from './dao/Dao';
 import { ErrorCode } from '../../common/protocol/ErrorCode';
-import WebSocket = require('ws');
-
-class ConnectionHandler {
-    private dispatcher: RequestDispatcher;
-
-    constructor(dao: UserDao, world: World, networkLoop: NetworkLoop, private connection: ws) {
-        this.dispatcher = new RequestDispatcher(dao, world, this.sendMessage, networkLoop);
-
-        connection.on('message', this.onMessage);
-    }
-
-    close() {
-        this.dispatcher.handleExit();
-    }
-
-    private sendMessage = <T extends ResponseCommand>(command: T, data: ResponseTypes[T]) => {
-        sendMessage(this.connection, command, data);
-    };
-
-    private onMessage = (message: ws.Data) => {
-        if (typeof message !== 'string') {
-            return;
-        }
-        const commandEnd = message.indexOf(':');
-        const command = commandEnd === -1 ? message : message.substring(0, commandEnd);
-        if (!this.dispatcher.isValidCommand(command)) {
-            return;
-        }
-        const data = commandEnd === -1 ? '' : message.substring(commandEnd + 1);
-
-        this.dispatcher.handleRequest(command, data);
-    };
-}
+import { WebsocketCommandStream } from './protocol/WebsocketCommandStream';
+import { ConnectionHandler } from './protocol/ConnectionHandler';
 
 export class Server {
     private readonly server: ws.Server;
@@ -63,9 +30,11 @@ export class Server {
     }
 
     private onConnection = async (connection: ws, request: http.IncomingMessage) => {
+        const commandStream = new WebsocketCommandStream(connection);
+
         const result = await this.verifyClient(request);
         if (typeof result === 'number') {
-            sendMessage(connection, 'error', result);
+            commandStream.sendCommand('error', result);
             connection.close();
             return;
         }
@@ -74,7 +43,7 @@ export class Server {
 
         const userDao = this.dao.getUserDao(result);
 
-        const handler = new ConnectionHandler(userDao, this.world, this.networkLoop, connection);
+        const handler = new ConnectionHandler(userDao, this.world, this.networkLoop, commandStream);
         connection.on('close', () => {
             console.log(`User disconnected! Playing: ${this.server.clients.size}`);
             handler.close();
@@ -98,15 +67,4 @@ export class Server {
 
         return user;
     }
-}
-
-function sendMessage<T extends ResponseCommand>(ws: WebSocket, command: T, data: ResponseTypes[T]) {
-    if (ws.readyState !== ws.OPEN) {
-        return;
-    }
-    const suffix = data === void 0
-        ? ''
-        : ':' + JSON.stringify(data);
-
-    ws.send(command + suffix);
 }

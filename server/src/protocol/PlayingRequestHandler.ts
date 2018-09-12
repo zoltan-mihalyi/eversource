@@ -74,7 +74,7 @@ export class PlayingRequestHandler extends ClientState<PlayerData> {
     private networkUpdate = () => {
         const { object, zone } = this.data;
 
-        this.context.sendMessage('state', {
+        this.context.sendCommand('state', {
             character: object,
             others: zone.query(object),
         });

@@ -28,7 +28,7 @@ export class LoadingRequestHandler extends ClientState<CharacterInfo> {
             };
             zone.addObject(object);
 
-            this.context.sendMessage('ready', void 0);
+            this.context.sendCommand('ready', void 0);
             this.manager.enter(PlayingRequestHandler, { zone, object });
         });
     }
