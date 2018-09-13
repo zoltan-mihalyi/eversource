@@ -26,8 +26,11 @@ export class GameScreen extends React.Component<Props> {
         );
     }
 
-    private joystickContainerRef = (div: HTMLDivElement) => {
-        this.props.game.inputManager.initializeJoystick(div);
+    private joystickContainerRef = (div: HTMLDivElement | null) => {
+        const { inputManager } = this.props.game;
+        if (div) {
+            inputManager.initializeJoystick(div);
+        }
     };
 
     private initialize(container: HTMLElement) {
