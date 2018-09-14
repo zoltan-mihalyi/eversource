@@ -17,7 +17,10 @@ export interface Speed {
     y: YPerSecond;
 }
 
+export type ObjectId = Opaque<number, 'ObjectId'>;
+
 export interface GameObject {
+    id: ObjectId;
     type: Type;
     position: Position;
     speed: Speed;

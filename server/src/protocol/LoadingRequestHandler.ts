@@ -2,7 +2,9 @@ import { ClientState } from './ClientState';
 import { CharacterInfo } from '../../../common/domain/CharacterInfo';
 import { PlayingRequestHandler } from './PlayingRequestHandler';
 import { Zone } from '../world/Zone';
-import { GameObject, XPerSecond, YPerSecond } from '../../../common/GameObject';
+import { GameObject, ObjectId, XPerSecond, YPerSecond } from '../../../common/GameObject';
+
+let nextId = 0;
 
 export class LoadingRequestHandler extends ClientState<CharacterInfo> {
     private token = { cancelled: false };
@@ -20,7 +22,9 @@ export class LoadingRequestHandler extends ClientState<CharacterInfo> {
             if (this.token.cancelled) {
                 return;
             }
+            const id = nextId++ as ObjectId;
             const object: GameObject = {
+                id,
                 direction: 'D',
                 type: 'character',
                 position,
