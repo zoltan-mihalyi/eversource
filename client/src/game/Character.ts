@@ -1,12 +1,24 @@
 import * as PIXI from 'pixi.js';
+import { Sprite } from 'pixi.js';
 import { Direction, GameObject } from '../../../common/GameObject';
 import { TextureLoader } from '../map/TextureLoader';
-import Sprite = PIXI.Sprite;
 
-interface DirectionSprite {
+interface BaseDirectionSprite {
     direction: Direction;
+    standing: boolean;
     sprite: Sprite;
 }
+
+interface StandingSprite extends BaseDirectionSprite{
+    standing: true;
+}
+
+interface WalkingSprite extends BaseDirectionSprite{
+    standing: false;
+    sprite:PIXI.extras.AnimatedSprite;
+}
+
+type DirectionSprite= StandingSprite | WalkingSprite;
 
 export class Character extends PIXI.Container {
     private directionSprite: DirectionSprite;
@@ -23,20 +35,33 @@ export class Character extends PIXI.Container {
     }
 
     update(object: GameObject) {
-        if (this.directionSprite.direction !== object.direction) {
+        const standing = isStanding(object);
+        if (this.directionSprite.direction !== object.direction || this.directionSprite.standing !== standing) {
             this.removeChild(this.directionSprite.sprite);
+            this.directionSprite.sprite.destroy();
             this.directionSprite = this.createDirectionSprite(object);
+        }
+        if (!this.directionSprite.standing) {
+            this.directionSprite.sprite.animationSpeed = getSpeed(object);
         }
     }
 
     private createDirectionSprite(object: GameObject): DirectionSprite {
-        const sprite = new PIXI.Sprite(this.textureLoader.get(object.type, directionToName(object.direction)));
+        let sprite;
+        const standing = isStanding(object);
+        if (standing) {
+            sprite = new PIXI.Sprite(this.textureLoader.get(object.type, directionToName(object.direction)));
+        } else {
+            sprite = this.textureLoader.createAnimatedSprite(object.type, directionToName(object.direction));
+        }
+
         this.addChild(sprite);
 
         return {
             sprite,
+            standing,
             direction: object.direction,
-        };
+        } as DirectionSprite;
     }
 }
 
@@ -51,4 +76,13 @@ function directionToName(direction: Direction): string {
         case 'R':
             return 'right';
     }
+}
+
+function isStanding(object: GameObject): boolean {
+    return object.speed.x === 0 && object.speed.y === 0
+}
+
+function getSpeed(object: GameObject): number {
+    const { speed } = object;
+    return (Math.abs(speed.x) + Math.abs(speed.y)) / 20;
 }
