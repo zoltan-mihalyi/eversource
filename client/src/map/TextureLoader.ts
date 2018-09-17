@@ -4,17 +4,12 @@ import { pixiLoader } from '../utils';
 import Rectangle = PIXI.Rectangle;
 import AnimatedSprite = PIXI.extras.AnimatedSprite;
 
-interface NamedTextures {
-    [key: string]: Texture | void;
-}
-
 interface PendingAnimatedSprite {
     sprite: AnimatedSprite;
     name: string;
 }
 
 class SpritesheetDetails {
-    private namedTextures: NamedTextures = {};
     private animations: { [key: string]: Texture[] } | null = null;
     private pendingAnimatedSprites = new Set<PendingAnimatedSprite>();
     private tileSet: TileSet | null = null;
@@ -36,15 +31,6 @@ class SpritesheetDetails {
                 baseTexture.once('loaded', updateTiles);
             }
         });
-    }
-
-    get(name: string): Texture {
-        let result = this.namedTextures[name];
-        if (!result) {
-            result = emptyTexture();
-            this.namedTextures[name] = result;
-        }
-        return result;
     }
 
     createAnimatedSprite(name: string): PIXI.extras.AnimatedSprite {
@@ -85,12 +71,8 @@ class SpritesheetDetails {
                 return;
             }
 
-            animations[name] = tile.animations.map(anim => new PIXI.Texture(baseTexture, tileFrame(anim.tileId)));
-
-            const texture = this.get(name);
-            texture.baseTexture = baseTexture;
-
-            texture.frame = tileFrame(index);
+            const tileAnimations = tile.animations.map(anim => texture(anim.tileId));
+            animations[name] = tileAnimations.length === 0 ? [texture(index)] : tileAnimations;
         });
 
         this.pendingAnimatedSprites.forEach(pendingAnimatedSprite => {
@@ -99,20 +81,16 @@ class SpritesheetDetails {
         });
         this.pendingAnimatedSprites.clear();
 
-        function tileFrame(index: number): Rectangle {
+        function texture(index: number): Texture {
             const x = index % columns;
             const y = Math.floor(index / columns);
-            return new Rectangle(x * tileWidth, y * tileHeight, tileWidth, tileHeight);
+            return new PIXI.Texture(baseTexture, new Rectangle(x * tileWidth, y * tileHeight, tileWidth, tileHeight));
         }
     }
 }
 
 export class TextureLoader {
     private textures = new Map<string, SpritesheetDetails>();
-
-    get(fileName: string, name: string): Texture {
-        return this.getSpritesheetDetails(fileName).get(name);
-    }
 
     createAnimatedSprite(fileName: string, name: string): PIXI.extras.AnimatedSprite {
         return this.getSpritesheetDetails(fileName).createAnimatedSprite(name);

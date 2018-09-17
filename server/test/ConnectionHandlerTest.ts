@@ -38,8 +38,8 @@ class FakeUserDao implements UserDao {
 
 function fakeZone() {
     return {
-        addObject: sinon.mock(),
-        removeObject: sinon.mock(),
+        addEntity: sinon.mock(),
+        removeEntity: sinon.mock(),
     };
 }
 
@@ -126,7 +126,7 @@ describe('RequestDispatcher', () => {
         commandStream.onCommand('ready', '');
 
         sinon.assert.calledOnce(world.getZone);
-        sinon.assert.calledOnce(zone.addObject);
+        sinon.assert.calledOnce(zone.addEntity);
     });
 
     it('should respond to ready with ready', function () {
@@ -173,7 +173,7 @@ describe('RequestDispatcher', () => {
 
         world.getZone.getCall(0).args[1](zone);
 
-        sinon.assert.notCalled(zone.addObject);
+        sinon.assert.notCalled(zone.addEntity);
     });
 
     it('should create character on ready only once', function () {
@@ -188,7 +188,7 @@ describe('RequestDispatcher', () => {
         commandStream.onCommand('ready', '');
         commandStream.onCommand('ready', '');
 
-        sinon.assert.calledOnce(zone.addObject);
+        sinon.assert.calledOnce(zone.addEntity);
     });
 
     it('should do nothing when entering incorrect character id', function () {
@@ -202,7 +202,7 @@ describe('RequestDispatcher', () => {
         commandStream.onCommand('enter', '0');
         commandStream.onCommand('ready', '');
 
-        sinon.assert.notCalled(zone.addObject);
+        sinon.assert.notCalled(zone.addEntity);
     });
 
     it('should remove character on leave', function () {
@@ -217,7 +217,7 @@ describe('RequestDispatcher', () => {
         commandStream.onCommand('ready', '');
         commandStream.onCommand('leave', '');
 
-        sinon.assert.calledOnce(zone.removeObject);
+        sinon.assert.calledOnce(zone.removeEntity);
     });
 
     it('should remove character on exit', function () {
@@ -232,7 +232,7 @@ describe('RequestDispatcher', () => {
         commandStream.onCommand('ready', '');
         dispatcher.close();
 
-        sinon.assert.calledOnce(zone.removeObject);
+        sinon.assert.calledOnce(zone.removeEntity);
     });
 
     it('should accept characters request after leave', function () {

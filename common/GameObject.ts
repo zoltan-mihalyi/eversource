@@ -2,7 +2,6 @@ import { X, Y } from './domain/Location';
 import { Opaque } from './util/Opaque';
 
 export type Direction = 'U' | 'D' | 'L' | 'R';
-export type Type = 'character' | 'arrow';
 
 export interface Position {
     x: X;
@@ -19,10 +18,19 @@ export interface Speed {
 
 export type ObjectId = Opaque<number, 'ObjectId'>;
 
-export interface GameObject {
+interface BaseGameObject {
     id: ObjectId;
-    type: Type;
+    type: string;
     position: Position;
-    speed: Speed;
-    direction: Direction;
 }
+
+export type CharacterAnimation = 'standing' | 'walking' | 'casting';
+
+export interface CharacterGameObject extends BaseGameObject {
+    type: 'character';
+    animation: CharacterAnimation;
+    direction: Direction;
+    speed: number;
+}
+
+export type  GameObject = CharacterGameObject;

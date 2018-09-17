@@ -2,7 +2,8 @@ import { ClientState } from './ClientState';
 import { CharacterInfo } from '../../../common/domain/CharacterInfo';
 import { PlayingRequestHandler } from './PlayingRequestHandler';
 import { Zone } from '../world/Zone';
-import { GameObject, ObjectId, XPerSecond, YPerSecond } from '../../../common/GameObject';
+import { ObjectId } from '../../../common/GameObject';
+import { CharacterEntity } from '../entity/CharacterEntity';
 
 let nextId = 0;
 
@@ -23,17 +24,11 @@ export class LoadingRequestHandler extends ClientState<CharacterInfo> {
                 return;
             }
             const id = nextId++ as ObjectId;
-            const object: GameObject = {
-                id,
-                direction: 'D',
-                type: 'character',
-                position,
-                speed: { x: 0 as XPerSecond, y: 0 as YPerSecond },
-            };
-            zone.addObject(object);
+            const character = new CharacterEntity(id, position);
+            zone.addEntity(character);
 
             this.context.sendCommand('ready', void 0);
-            this.manager.enter(PlayingRequestHandler, { zone, object });
+            this.manager.enter(PlayingRequestHandler, { zone, character });
         });
     }
 

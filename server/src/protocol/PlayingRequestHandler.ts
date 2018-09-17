@@ -1,11 +1,11 @@
 import { ClientState } from './ClientState';
-import { Direction, GameObject, XPerSecond, YPerSecond } from '../../../common/GameObject';
 import { Zone } from '../world/Zone';
 import { CharacterSelectionRequestHandler } from './CharacterSelectionRequestHandler';
+import { CharacterEntity } from '../entity/CharacterEntity';
 
 export interface PlayerData {
     zone: Zone;
-    object: GameObject;
+    character: CharacterEntity;
 }
 
 export class PlayingRequestHandler extends ClientState<PlayerData> {
@@ -35,22 +35,7 @@ export class PlayingRequestHandler extends ClientState<PlayerData> {
                     sX /= len;
                     sY /= len;
                 }
-
-                let direction: Direction | null = null;
-                const xLarger = Math.abs(sX) > Math.abs(sY);
-                if (xLarger) {
-                    direction = sX > 0 ? 'R' : 'L';
-                } else if (sY < 0) {
-                    direction = 'U';
-                } else if (sY > 0) {
-                    direction = 'D';
-                }
-
-                const { object } = this.data;
-                if (direction) {
-                    object.direction = direction;
-                }
-                object.speed = { x: sX * 4 as XPerSecond, y: sY * 4 as YPerSecond };
+                this.data.character.setMoving(sX, sY);
             }
         }
 
@@ -65,18 +50,18 @@ export class PlayingRequestHandler extends ClientState<PlayerData> {
     }
 
     private cleanup() {
-        const { zone, object } = this.data;
+        const { zone, character } = this.data;
 
         this.context.networkLoop.remove(this.networkUpdate);
-        zone.removeObject(object);
+        zone.removeEntity(character);
     }
 
     private networkUpdate = () => {
-        const { object, zone } = this.data;
+        const { character, zone } = this.data;
 
         this.context.sendCommand('state', {
-            character: object,
-            others: zone.query(object),
+            character: character.toGameObject(),
+            others: zone.query(character).map(e => e.toGameObject()),
         });
     };
 }

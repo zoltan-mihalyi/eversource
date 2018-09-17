@@ -1,31 +1,19 @@
 import * as PIXI from 'pixi.js';
-import { Sprite } from 'pixi.js';
-import { Direction, GameObject } from '../../../common/GameObject';
+import { CharacterAnimation, Direction, GameObject } from '../../../common/GameObject';
 import { TextureLoader } from '../map/TextureLoader';
 
-interface BaseDirectionSprite {
+interface DirectionSprite {
     direction: Direction;
-    standing: boolean;
-    sprite: Sprite;
+    animation: CharacterAnimation;
+    sprite: PIXI.extras.AnimatedSprite;
 }
-
-interface StandingSprite extends BaseDirectionSprite{
-    standing: true;
-}
-
-interface WalkingSprite extends BaseDirectionSprite{
-    standing: false;
-    sprite:PIXI.extras.AnimatedSprite;
-}
-
-type DirectionSprite= StandingSprite | WalkingSprite;
 
 export class Character extends PIXI.Container {
     private directionSprite: DirectionSprite;
 
     constructor(private textureLoader: TextureLoader, object: GameObject) {
         super();
-        const shadow = new PIXI.Sprite(this.textureLoader.get('misc', 'shadow'));
+        const shadow = this.textureLoader.createAnimatedSprite('misc', 'shadow');
         shadow.blendMode = PIXI.BLEND_MODES.MULTIPLY;
         shadow.x = 16;
         shadow.y = 38;
@@ -35,34 +23,30 @@ export class Character extends PIXI.Container {
     }
 
     update(object: GameObject) {
-        const standing = isStanding(object);
-        if (this.directionSprite.direction !== object.direction || this.directionSprite.standing !== standing) {
-            this.removeChild(this.directionSprite.sprite);
-            this.directionSprite.sprite.destroy();
+        const directionSprite = this.directionSprite;
+        if (directionSprite.direction !== object.direction || directionSprite.animation !== object.animation) {
+            this.removeChild(directionSprite.sprite);
+            directionSprite.sprite.destroy();
             this.directionSprite = this.createDirectionSprite(object);
         }
-        if (!this.directionSprite.standing) {
-            this.directionSprite.sprite.animationSpeed = getSpeed(object);
-        }
+        this.directionSprite.sprite.animationSpeed = getAnimationSpeed(object);
     }
 
     private createDirectionSprite(object: GameObject): DirectionSprite {
-        let sprite;
-        const standing = isStanding(object);
-        if (standing) {
-            sprite = new PIXI.Sprite(this.textureLoader.get(object.type, directionToName(object.direction)));
-        } else {
-            sprite = this.textureLoader.createAnimatedSprite(object.type, directionToName(object.direction));
-        }
+        const sprite = this.textureLoader.createAnimatedSprite(object.type, toName(object.direction, object.animation));
 
         this.addChild(sprite);
 
         return {
             sprite,
-            standing,
+            animation: object.animation,
             direction: object.direction,
-        } as DirectionSprite;
+        };
     }
+}
+
+function toName(direction: Direction, animation: CharacterAnimation): string {
+    return animation + ':' + directionToName(direction);
 }
 
 function directionToName(direction: Direction): string {
@@ -78,11 +62,13 @@ function directionToName(direction: Direction): string {
     }
 }
 
-function isStanding(object: GameObject): boolean {
-    return object.speed.x === 0 && object.speed.y === 0
-}
-
-function getSpeed(object: GameObject): number {
-    const { speed } = object;
-    return (Math.abs(speed.x) + Math.abs(speed.y)) / 20;
+function getAnimationSpeed(object: GameObject): number {
+    switch (object.animation) {
+        case 'standing':
+            return 0.25;
+        case 'walking':
+            return object.speed / 20;
+        case 'casting':
+            return 0.25;
+    }
 }
