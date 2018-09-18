@@ -1,5 +1,6 @@
 import { Opaque } from '../util/Opaque';
 import { Location } from './Location';
+import { Appearance, Equipment } from '../GameObject';
 
 export type ClassId = Opaque<string, 'ClassId'>;
 export type CharacterId = Opaque<string, 'CharacterId'>;
@@ -11,4 +12,6 @@ export interface CharacterInfo {
     name: CharacterName;
     classId: ClassId;
     location: Location;
+    appearance: Appearance;
+    equipment: Equipment;
 }

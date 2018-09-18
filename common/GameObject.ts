@@ -8,14 +8,6 @@ export interface Position {
     y: Y;
 }
 
-export type XPerSecond = Opaque<number, 'XPerSecond'>;
-export type YPerSecond = Opaque<number, 'YPerSecond'>;
-
-export interface Speed {
-    x: XPerSecond;
-    y: YPerSecond;
-}
-
 export type ObjectId = Opaque<number, 'ObjectId'>;
 
 interface BaseGameObject {
@@ -26,10 +18,29 @@ interface BaseGameObject {
 
 export type CharacterAnimation = 'standing' | 'walking' | 'casting';
 
+export interface Appearance {
+    sex: 'male' | 'female';
+    body: string;
+    ears: string | null;
+    eyes: string | null;
+    nose: string | null;
+    hair: string | null;
+}
+
+export interface Equipment {
+    shirt: string | null;
+    head: string | null;
+    chest: string | null;
+    legs: string | null;
+    feet: string | null;
+}
+
 export interface CharacterGameObject extends BaseGameObject {
     type: 'character';
     animation: CharacterAnimation;
     direction: Direction;
+    appearance: Appearance;
+    equipment: Equipment;
     speed: number;
 }
 

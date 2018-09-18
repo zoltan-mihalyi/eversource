@@ -20,6 +20,21 @@ const characters: CharacterInfo[] = [
             },
             zoneId: 'lavaland' as ZoneId,
         },
+        appearance: {
+            sex: 'male',
+            body: '',
+            ears: null,
+            eyes: null,
+            hair: null,
+            nose: null,
+        },
+        equipment: {
+            chest: null,
+            feet: null,
+            head: null,
+            legs: null,
+            shirt: null,
+        },
     },
 ];
 

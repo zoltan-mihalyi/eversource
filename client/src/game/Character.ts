@@ -1,15 +1,96 @@
 import * as PIXI from 'pixi.js';
-import { CharacterAnimation, Direction, GameObject } from '../../../common/GameObject';
+import { Appearance, CharacterAnimation, Direction, Equipment, GameObject } from '../../../common/GameObject';
 import { TextureLoader } from '../map/TextureLoader';
 
-interface DirectionSprite {
-    direction: Direction;
-    animation: CharacterAnimation;
-    sprite: PIXI.extras.AnimatedSprite;
+const PARTS: (keyof Appearance | keyof Equipment)[] = [
+    'body',
+    'eyes',
+    'nose',
+    'shirt',
+    'chest',
+    'feet',
+    'legs',
+    'hair',
+    'ears',
+    'head',
+];
+
+class CharacterContainer extends PIXI.Container {
+    private readonly direction: Direction;
+    private readonly animation: CharacterAnimation;
+    private readonly appearance: Appearance;
+    private readonly equipment: Equipment;
+
+    constructor(textureLoader: TextureLoader, object: GameObject) {
+        super();
+
+        const { appearance, equipment, direction, animation } = object;
+        this.direction = direction;
+        this.animation = animation;
+        this.equipment = equipment;
+        this.appearance = appearance;
+
+        const name = animation + ':' + directionToName(direction);
+
+        for (const part of PARTS) {
+            const holder = appearance.hasOwnProperty(part) ? appearance : equipment;
+            const value = (holder as Appearance & Equipment)[part];
+            if (value === null) {
+                continue;
+            }
+            if (equipment.head) {
+                if (part === 'hair' || part === 'ears') {
+                    continue;
+                }
+            }
+
+            let image: string;
+
+            switch (part) {
+                case 'ears':
+                case 'nose':
+                    image = `character/body/${appearance.sex}/${part}/${value}_${appearance.body}`;
+                    break;
+                case 'eyes':
+                    image = `character/body/${appearance.sex}/${part}/${value}`;
+                    break;
+                default:
+                    image = `character/${part}/${appearance.sex}/${value}`;
+            }
+
+            this.addChild(textureLoader.createCustomAnimatedSprite('character', image, name));
+        }
+    }
+
+    matches(object: GameObject): boolean {
+        if (this.direction !== object.direction) {
+            return false;
+        }
+        if (this.animation !== object.animation) {
+            return false;
+        }
+        for (const key of Object.keys(this.appearance) as (keyof Appearance)[]) {
+            if (this.appearance[key] !== object.appearance[key]) {
+                return false;
+            }
+        }
+        for (const key of Object.keys(this.equipment) as (keyof Equipment)[]) {
+            if (this.equipment[key] !== object.equipment[key]) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    setAnimationSpeed(speed: number) {
+        for (const child of this.children) {
+            (child as PIXI.extras.AnimatedSprite).animationSpeed = speed;
+        }
+    }
 }
 
 export class Character extends PIXI.Container {
-    private directionSprite: DirectionSprite;
+    private characterContainer: CharacterContainer;
 
     constructor(private textureLoader: TextureLoader, object: GameObject) {
         super();
@@ -19,34 +100,22 @@ export class Character extends PIXI.Container {
         shadow.y = 38;
         this.addChild(shadow);
 
-        this.directionSprite = this.createDirectionSprite(object);
+        this.characterContainer = this.createCharacterContainer(object);
     }
 
     update(object: GameObject) {
-        const directionSprite = this.directionSprite;
-        if (directionSprite.direction !== object.direction || directionSprite.animation !== object.animation) {
-            this.removeChild(directionSprite.sprite);
-            directionSprite.sprite.destroy();
-            this.directionSprite = this.createDirectionSprite(object);
+        const directionSprite = this.characterContainer;
+        if (!directionSprite.matches(object)) {
+            this.removeChild(directionSprite);
+            directionSprite.destroy({ children: true });
+            this.characterContainer = this.createCharacterContainer(object);
         }
-        this.directionSprite.sprite.animationSpeed = getAnimationSpeed(object);
+        this.characterContainer.setAnimationSpeed(getAnimationSpeed(object));
     }
 
-    private createDirectionSprite(object: GameObject): DirectionSprite {
-        const sprite = this.textureLoader.createCustomAnimatedSprite(object.type, 'character', toName(object.direction, object.animation));
-
-        this.addChild(sprite);
-
-        return {
-            sprite,
-            animation: object.animation,
-            direction: object.direction,
-        };
+    private createCharacterContainer(object: GameObject): CharacterContainer {
+        return this.addChild(new CharacterContainer(this.textureLoader, object));
     }
-}
-
-function toName(direction: Direction, animation: CharacterAnimation): string {
-    return animation + ':' + directionToName(direction);
 }
 
 function directionToName(direction: Direction): string {

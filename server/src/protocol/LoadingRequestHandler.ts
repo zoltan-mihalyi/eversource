@@ -24,7 +24,7 @@ export class LoadingRequestHandler extends ClientState<CharacterInfo> {
                 return;
             }
             const id = nextId++ as ObjectId;
-            const character = new CharacterEntity(id, position);
+            const character = new CharacterEntity(id, position, this.data.appearance, this.data.equipment);
             zone.addEntity(character);
 
             this.context.sendCommand('ready', void 0);

@@ -16,6 +16,21 @@ export class FakeUserDao implements UserDao {
                 },
                 zoneId: 'lavaland' as ZoneId,
             },
+            appearance: {
+                sex: 'male',
+                body: 'dark',
+                hair: 'messy1',
+                ears: null,
+                eyes: 'red',
+                nose: 'bignose',
+            },
+            equipment:{
+                shirt: 'white',
+                head: 'red_bandana',
+                chest: null,
+                legs: 'red_pants',
+                feet: 'black_shoes',
+            }
         },
         {
             id: '2' as CharacterId,
@@ -24,11 +39,26 @@ export class FakeUserDao implements UserDao {
 
             location: {
                 position: {
-                    x: 116 as X,
-                    y: 164 as Y,
+                    x: 101 as X,
+                    y: 214 as Y,
                 },
                 zoneId: 'lavaland' as ZoneId,
             },
+            appearance: {
+                sex: 'male',
+                body: 'light',
+                hair: 'bedhead',
+                ears: null,
+                eyes: null,
+                nose: 'straightnose',
+            },
+            equipment:{
+                shirt: null,
+                head: 'golden_helm',
+                chest: 'golden_chest',
+                legs: 'golden_greaves',
+                feet: 'golden_boots',
+            }
         },
         {
             id: '3' as CharacterId,
@@ -37,11 +67,27 @@ export class FakeUserDao implements UserDao {
 
             location: {
                 position: {
-                    x: 116 as X,
-                    y: 164 as Y,
+                    x: 106 as X,
+                    y: 210 as Y,
                 },
                 zoneId: 'lavaland' as ZoneId,
             },
+            appearance: {
+                sex: 'female',
+                body: 'light',
+                hair: 'xlongknot',
+                ears: 'elvenears',
+                eyes: 'blue',
+                nose: 'buttonnose',
+            },
+            equipment:{
+                shirt: null,
+                head: 'chain_hood',
+                chest: 'mail',
+                legs: null,
+                // legs: 'robe_skirt',
+                feet: 'maroon_shoes',
+            }
         },
     ];
 

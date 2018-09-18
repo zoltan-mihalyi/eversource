@@ -1,5 +1,12 @@
 import { Entity } from './Entity';
-import { CharacterAnimation, CharacterGameObject, Direction, XPerSecond, YPerSecond } from '../../../common/GameObject';
+import {
+    Appearance,
+    CharacterAnimation,
+    CharacterGameObject,
+    Direction, Equipment,
+    ObjectId,
+    Position
+} from '../../../common/GameObject';
 import { Grid } from '../../../common/Grid';
 
 export interface Moving {
@@ -13,6 +20,10 @@ export class CharacterEntity extends Entity {
     private moving: Moving = { x: 0, y: 0 };
     private lastSpeed: number = 0;
 
+    constructor(id: ObjectId, position: Position, private appearance: Appearance, private equipment: Equipment) {
+        super(id, position);
+    }
+
     toGameObject(): CharacterGameObject {
         return {
             id: this.id,
@@ -20,6 +31,8 @@ export class CharacterEntity extends Entity {
             type: 'character',
             direction: this.direction,
             animation: this.animation,
+            appearance: this.appearance,
+            equipment: this.equipment,
             speed: this.lastSpeed,
         }
     }
