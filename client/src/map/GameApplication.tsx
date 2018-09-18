@@ -2,8 +2,8 @@ import * as PIXI from 'pixi.js';
 import { X, Y } from '../../../common/domain/Location';
 import { GameLevel } from './GameLevel';
 import { InputManager, MovementIntent } from '../input/InputManager';
-import { GameState } from '../../../common/protocol/Messages';
-import { Position } from '../../../common/GameObject';
+import { ObjectId, Position } from '../../../common/GameObject';
+import { Diff } from '../../../common/protocol/Diff';
 
 export class GameApplication extends PIXI.Application {
     private viewContainer = new PIXI.Container();
@@ -12,6 +12,7 @@ export class GameApplication extends PIXI.Application {
     private timer: number;
     readonly inputManager: InputManager;
     private lastMovementIntent: MovementIntent = { x: 0, y: 0 };
+    private objectId: ObjectId | null = null;
 
     constructor(readonly gameLevel: GameLevel, position: Position, private ws: WebSocket) {
         super();
@@ -36,9 +37,17 @@ export class GameApplication extends PIXI.Application {
         super.destroy();
     }
 
-    updateState(state: GameState) {
-        this.setViewCenter(state.character.position);
-        this.gameLevel.updateObjects([state.character, ...state.others]);
+    updateState(diffs: Diff[]) {
+        for (const diff of diffs) {
+            if (diff.type === 'create' && diff.self) {
+                this.objectId = diff.id;
+                this.setViewCenter(diff.object.position);
+            } else if (diff.type === 'change' && diff.id === this.objectId && diff.changes.position) {
+                this.setViewCenter(diff.changes.position);
+            }
+        }
+
+        this.gameLevel.updateObjects(diffs);
     }
 
     private setViewCenter(position: Position) {

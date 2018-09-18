@@ -16,19 +16,10 @@ const PARTS: (keyof Appearance | keyof Equipment)[] = [
 ];
 
 class CharacterContainer extends PIXI.Container {
-    private readonly direction: Direction;
-    private readonly animation: CharacterAnimation;
-    private readonly appearance: Appearance;
-    private readonly equipment: Equipment;
-
-    constructor(textureLoader: TextureLoader, object: GameObject) {
+    constructor(textureLoader: TextureLoader, readonly gameObject: GameObject) {
         super();
 
-        const { appearance, equipment, direction, animation } = object;
-        this.direction = direction;
-        this.animation = animation;
-        this.equipment = equipment;
-        this.appearance = appearance;
+        const { appearance, equipment, direction, animation } = gameObject;
 
         const name = animation + ':' + directionToName(direction);
 
@@ -60,31 +51,50 @@ class CharacterContainer extends PIXI.Container {
 
             this.addChild(textureLoader.createCustomAnimatedSprite('character', image, name));
         }
+        this.updateAnimationSpeed();
     }
 
-    matches(object: GameObject): boolean {
-        if (this.direction !== object.direction) {
+    matches(changes: Partial<GameObject>): boolean {
+        const actual = this.gameObject;
+
+        if (changes.direction && actual.direction !== changes.direction) {
             return false;
         }
-        if (this.animation !== object.animation) {
+        if (changes.animation && actual.animation !== changes.animation) {
             return false;
         }
-        for (const key of Object.keys(this.appearance) as (keyof Appearance)[]) {
-            if (this.appearance[key] !== object.appearance[key]) {
-                return false;
+        if (changes.appearance) {
+            for (const key of Object.keys(actual.appearance) as (keyof Appearance)[]) {
+                if (actual.appearance[key] !== changes.appearance[key]) {
+                    return false;
+                }
             }
         }
-        for (const key of Object.keys(this.equipment) as (keyof Equipment)[]) {
-            if (this.equipment[key] !== object.equipment[key]) {
-                return false;
+        if (changes.equipment) {
+            for (const key of Object.keys(actual.equipment) as (keyof Equipment)[]) {
+                if (actual.equipment[key] !== changes.equipment[key]) {
+                    return false;
+                }
             }
         }
         return true;
     }
 
-    setAnimationSpeed(speed: number) {
+    updateAnimationSpeed() {
+        const speed = this.calculateAnimationSpeed();
         for (const child of this.children) {
             (child as PIXI.extras.AnimatedSprite).animationSpeed = speed;
+        }
+    }
+
+    private calculateAnimationSpeed(): number {
+        switch (this.gameObject.animation) {
+            case 'standing':
+                return 0.25;
+            case 'walking':
+                return this.gameObject.speed / 20;
+            case 'casting':
+                return 0.25;
         }
     }
 }
@@ -103,14 +113,19 @@ export class Character extends PIXI.Container {
         this.characterContainer = this.createCharacterContainer(object);
     }
 
-    update(object: GameObject) {
+    update(changes: Partial<GameObject>) {
         const directionSprite = this.characterContainer;
-        if (!directionSprite.matches(object)) {
+        if (!directionSprite.matches(changes)) {
             this.removeChild(directionSprite);
             directionSprite.destroy({ children: true });
-            this.characterContainer = this.createCharacterContainer(object);
+            this.characterContainer = this.createCharacterContainer({
+                ...directionSprite.gameObject,
+                ...changes
+            });
+        } else {
+            Object.assign(this.characterContainer.gameObject, changes);
         }
-        this.characterContainer.setAnimationSpeed(getAnimationSpeed(object));
+        this.characterContainer.updateAnimationSpeed();
     }
 
     private createCharacterContainer(object: GameObject): CharacterContainer {
@@ -128,16 +143,5 @@ function directionToName(direction: Direction): string {
             return 'left';
         case 'R':
             return 'right';
-    }
-}
-
-function getAnimationSpeed(object: GameObject): number {
-    switch (object.animation) {
-        case 'standing':
-            return 0.25;
-        case 'walking':
-            return object.speed / 20;
-        case 'casting':
-            return 0.25;
     }
 }

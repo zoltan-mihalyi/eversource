@@ -2,15 +2,35 @@ import { GameObject, ObjectId, Position } from '../../../common/GameObject';
 import { Grid } from '../../../common/Grid';
 import { X, Y } from '../../../common/domain/Location';
 
-export abstract class Entity {
-    constructor(protected readonly id: ObjectId, protected readonly position: Position) {
+export abstract class Entity<O extends GameObject = GameObject> {
+    protected constructor(readonly id: ObjectId, protected state: O) {
     }
 
-    update(grid:Grid, delta:number){
+    protected set<K extends keyof O>(partial: Pick<O, K>) {
+        this.state = {
+            ...this.state as any,
+            ...partial as any,
+        };
     }
 
-    tryMove(grid: Grid, dx:number, dy:number) {
-        const { x, y } = this.position;
+    protected setSingle<K extends keyof O>(key: K, value: O[K]) {
+        if (value !== this.state[key]) {
+            this.state = {
+                ...this.state as any,
+                [key]: value,
+            }
+        }
+    }
+
+    get(): O {
+        return this.state;
+    }
+
+    update(grid: Grid, delta: number) {
+    }
+
+    tryMove(grid: Grid, dx: number, dy: number) {
+        const { x, y } = this.state.position;
 
         let newX = x + dx;
         let newY = y + dy;
@@ -38,9 +58,10 @@ export abstract class Entity {
             }
         }
 
-        this.position.x = newX as X;
-        this.position.y = newY as Y;
+        if (newX !== x || newY !== y) {
+            this.set({
+                position: { x: newX as X, y: newY as Y } as Position,
+            });
+        }
     }
-
-    abstract toGameObject(): GameObject;
 }

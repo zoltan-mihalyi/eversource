@@ -1,8 +1,9 @@
-import { GameState, ResponseCommand, ResponseTypes } from '../../../common/protocol/Messages';
+import { ResponseCommand, ResponseTypes } from '../../../common/protocol/Messages';
 import { State } from '../../../common/util/StateManager';
 import { ErrorCode } from '../../../common/protocol/ErrorCode';
 import { CharacterInfo } from '../../../common/domain/CharacterInfo';
 import { Display } from './Display';
+import { Diff } from '../../../common/protocol/Diff';
 
 export type ResponseHandler = {
     [P in ResponseCommand]: (data: ResponseTypes[P]) => void;
@@ -43,7 +44,7 @@ export abstract class NetworkingState<T> extends State<NetworkingContext, T> imp
     characters(characters: CharacterInfo[]) {
     }
 
-    state(state: GameState) {
+    diffs(diffs: Diff[]) {
     }
 
     protected abort(){

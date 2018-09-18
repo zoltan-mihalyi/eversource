@@ -10,6 +10,7 @@ import ResourceDictionary = PIXI.loaders.ResourceDictionary;
 import { Character } from '../game/Character';
 import DisplayObject = PIXI.DisplayObject;
 import { CancellableProcess } from '../../../common/util/CancellableProcess';
+import { Diff } from '../../../common/protocol/Diff';
 
 const CHUNK_WIDTH = 16;
 const CHUNK_HEIGHT = 16;
@@ -43,38 +44,45 @@ export class GameLevel {
         }
     }
 
-    updateObjects(objects: GameObject[]) {
+    updateObjects(diffs: Diff[]) {
         const { tileWidth, tileHeight } = this.map;
 
-        const charactersToRemove = new Map<ObjectId, Character>();
-        this.characters.forEach((character, id) => charactersToRemove.set(id, character));
-
-        for (const object of objects) {
-            const { x, y } = this.round(object.position);
-
-            const id = object.id;
-            charactersToRemove.delete(id);
-
-            let character = this.characters.get(id);
-            if (!character) {
-                character = new Character(this.textureLoader, object);
-                this.characters.set(id, character);
-
-                this.objectContainer.addChild(character);
-            } else {
-                character.update(object);
+        const updateCharacterPosition = (character: Character, changes: Partial<GameObject>) => {
+            if (!changes.position) {
+                return;
             }
+
+            const { x, y } = this.round(changes.position);
 
             character.x = x - 16 / tileWidth; // TODO read from file?
             character.y = y - 40 / tileHeight;
             character.scale.x = 1 / tileWidth;
             character.scale.y = 1 / tileHeight;
-        }
+        };
 
-        charactersToRemove.forEach((character, id) => {
-            this.characters.delete(id);
-            this.objectContainer.removeChild(character);
-        });
+        for (const diff of diffs) {
+            switch (diff.type) {
+                case 'create': {
+                    const character = new Character(this.textureLoader, diff.object);
+                    this.characters.set(diff.id, character);
+                    this.objectContainer.addChild(character);
+                    updateCharacterPosition(character, diff.object);
+                    break;
+                }
+                case 'change': {
+                    const character = this.characters.get(diff.id)!;
+                    character.update(diff.changes);
+                    updateCharacterPosition(character, diff.changes);
+                    break;
+                }
+                case 'remove': {
+                    const character = this.characters.get(diff.id)!;
+                    this.characters.delete(diff.id);
+                    this.objectContainer.removeChild(character);
+                    break;
+                }
+            }
+        }
 
         this.objectContainer.children.sort(zIndexSorter);
     }

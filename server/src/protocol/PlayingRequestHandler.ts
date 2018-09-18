@@ -2,6 +2,9 @@ import { ClientState } from './ClientState';
 import { Zone } from '../world/Zone';
 import { CharacterSelectionRequestHandler } from './CharacterSelectionRequestHandler';
 import { CharacterEntity } from '../entity/CharacterEntity';
+import { Diff } from '../../../common/protocol/Diff';
+import { GameObject } from '../../../common/GameObject';
+import { Entity } from '../entity/Entity';
 
 export interface PlayerData {
     zone: Zone;
@@ -9,6 +12,9 @@ export interface PlayerData {
 }
 
 export class PlayingRequestHandler extends ClientState<PlayerData> {
+    private lastSent: Map<Entity, GameObject> | null = null;
+    private detectionDistance = 15;
+
     leave() {
         this.cleanup();
         this.manager.enter(CharacterSelectionRequestHandler, void 0);
@@ -38,7 +44,6 @@ export class PlayingRequestHandler extends ClientState<PlayerData> {
                 this.data.character.setMoving(sX, sY);
             }
         }
-
     }
 
     onEnter() {
@@ -59,13 +64,69 @@ export class PlayingRequestHandler extends ClientState<PlayerData> {
     private networkUpdate = () => {
         const { character, zone } = this.data;
 
-        this.context.sendCommand('state', {
-            character: character.toGameObject(),
-            others: zone.query(character).map(e => e.toGameObject()),
-        });
+        const distance = this.detectionDistance;
+        const { x, y } = character.get().position;
+        const entities = zone.query(x - distance, y - distance, x + distance, y + distance);
+        const entityMap = indexEntities(entities);
+
+        const lastSent = this.lastSent;
+        if (lastSent === null) {
+            const diffs = entities.map(entity => this.createDiff(entity));
+            this.context.sendCommand('diffs', diffs);
+        } else {
+            const diffs: Diff[] = [];
+
+            entityMap.forEach((object, entity) => {
+                const previousObject = lastSent.get(entity);
+                if (!previousObject) {
+                    diffs.push(this.createDiff(entity));
+                } else {
+                    let hasDiff = false;
+                    const changes: Partial<GameObject> = {};
+                    for (const key of Object.keys(object) as (keyof GameObject)[]) {
+                        if (object[key] !== previousObject[key]) {
+                            hasDiff = true;
+                            changes[key] = object[key];
+                        }
+                    }
+                    if (hasDiff) {
+                        diffs.push({ type: 'change', id: entity.id, changes })
+                    }
+                }
+            });
+
+            lastSent.forEach((object, entity) => {
+                if (!entityMap.has(entity)) {
+                    diffs.push({ type: 'remove', id: entity.id });
+                }
+            });
+
+            if (diffs.length !== 0) {
+                this.context.sendCommand('diffs', diffs);
+            }
+        }
+
+        this.lastSent = entityMap;
     };
+
+    private createDiff(entity: Entity): Diff {
+        return {
+            id: entity.id,
+            type: 'create',
+            self: entity === this.data.character,
+            object: entity.get(),
+        };
+    }
 }
 
 function validNumber(num: number): boolean {
     return !isNaN(num) && isFinite(num);
+}
+
+function indexEntities(entities: Entity[]): Map<Entity, GameObject> {
+    const result = new Map<Entity, GameObject>();
+    for (const entity of entities) {
+        result.set(entity, entity.get());
+    }
+    return result;
 }

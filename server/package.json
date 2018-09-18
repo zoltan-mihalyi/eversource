@@ -14,11 +14,13 @@
   "license": "ISC",
   "dependencies": {
     "@eversource/tmx-parser": "^1.6.0",
+    "rbush": "^2.0.2",
     "ws": "^6.0.0"
   },
   "devDependencies": {
     "@types/mocha": "^5.2.5",
     "@types/node": "^10.9.3",
+    "@types/rbush": "^2.0.2",
     "@types/sinon": "^5.0.2",
     "@types/ws": "^6.0.0",
     "mocha": "^5.2.0",

@@ -5,8 +5,8 @@ import { LoadingCharactersState } from './LoadingCharactersState';
 import { GameApplication } from '../map/GameApplication';
 import { Position } from '../../../common/GameObject';
 import { StateManager } from '../../../common/util/StateManager';
-import { GameState } from '../../../common/protocol/Messages';
 import { cleanupTextures } from '../utils';
+import { Diff } from '../../../common/protocol/Diff';
 
 interface PlayingStateData {
     gameLevel: GameLevel;
@@ -26,8 +26,8 @@ export class PlayingState extends NetworkingState<PlayingStateData> {
         this.context.display.showGame(this.game, this.enterCharacterSelection);
     }
 
-    state(state: GameState) {
-        this.game.updateState(state);
+    diffs(diffs: Diff[]) {
+        this.game.updateState(diffs);
     }
 
     protected abort() {

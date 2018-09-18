@@ -11,7 +11,6 @@ export interface Position {
 export type ObjectId = Opaque<number, 'ObjectId'>;
 
 interface BaseGameObject {
-    id: ObjectId;
     type: string;
     position: Position;
 }
