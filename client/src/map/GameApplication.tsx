@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js';
-import { Location, X, Y } from '../../../common/domain/Location';
+import { X, Y } from '../../../common/domain/Location';
 import { GameLevel } from './GameLevel';
 import { InputManager, MovementIntent } from '../input/InputManager';
 import { GameState } from '../../../common/protocol/Messages';
@@ -13,7 +13,7 @@ export class GameApplication extends PIXI.Application {
     readonly inputManager: InputManager;
     private lastMovementIntent: MovementIntent = { x: 0, y: 0 };
 
-    constructor(readonly gameLevel: GameLevel, position:Position, private ws: WebSocket) {
+    constructor(readonly gameLevel: GameLevel, position: Position, private ws: WebSocket) {
         super();
 
         this.viewContainer.scale.x = gameLevel.map.tileWidth;
@@ -30,6 +30,7 @@ export class GameApplication extends PIXI.Application {
     }
 
     destroy() {
+        this.gameLevel.destroy();
         cancelAnimationFrame(this.timer);
         this.inputManager.destroy();
         super.destroy();

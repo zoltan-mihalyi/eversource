@@ -9,6 +9,7 @@ import { TextureLoader } from './TextureLoader';
 import ResourceDictionary = PIXI.loaders.ResourceDictionary;
 import { Character } from '../game/Character';
 import DisplayObject = PIXI.DisplayObject;
+import { CancellableProcess } from '../../../common/util/CancellableProcess';
 
 const CHUNK_WIDTH = 16;
 const CHUNK_HEIGHT = 16;
@@ -16,7 +17,6 @@ const CHUNK_HEIGHT = 16;
 type ChunkPosition = Opaque<string, 'ChunkPosition'>;
 
 export class GameLevel {
-    private readonly textureLoader = new TextureLoader();
     readonly chunks = new Map<ChunkPosition, Chunk>();
 
     readonly visibleChunks = new Set<Chunk>();
@@ -26,6 +26,8 @@ export class GameLevel {
     readonly objectContainer = new PIXI.Container();
     readonly chunkAboveContainer = new PIXI.Container();
     private readonly tileSet: TexturedTileSet[];
+    private readonly process = new CancellableProcess();
+    private readonly textureLoader = new TextureLoader(this.process);
 
     constructor(readonly map: TmxMap, images: ResourceDictionary) {
         this.tileSet = map.tileSets.map(tileset => new TexturedTileSet(tileset, images));
@@ -59,7 +61,7 @@ export class GameLevel {
                 this.characters.set(id, character);
 
                 this.objectContainer.addChild(character);
-            }else{
+            } else {
                 character.update(object);
             }
 
@@ -115,6 +117,10 @@ export class GameLevel {
                 this.chunkAboveContainer.addChild(chunk.above);
             }
         }
+    }
+
+    destroy() {
+        this.process.stop();
     }
 }
 

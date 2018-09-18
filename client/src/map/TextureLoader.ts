@@ -1,67 +1,22 @@
-import { BaseTexture, Texture } from 'pixi.js';
+import * as PIXI from 'pixi.js';
+import { BaseTexture, Rectangle, Texture } from 'pixi.js';
 import { Loader, TileSet } from '@eversource/tmx-parser';
 import { pixiLoader } from '../utils';
-import Rectangle = PIXI.Rectangle;
-import AnimatedSprite = PIXI.extras.AnimatedSprite;
+import { CancellableProcess } from '../../../common/util/CancellableProcess';
 
-interface PendingAnimatedSprite {
-    sprite: AnimatedSprite;
-    name: string;
+interface Animations {
+    [key: string]: Texture[];
 }
 
-class SpritesheetDetails {
-    private animations: { [key: string]: Texture[] } | null = null;
-    private pendingAnimatedSprites = new Set<PendingAnimatedSprite>();
-    private tileSet: TileSet | null = null;
+class TileSetDetails {
+    private animations = new Map<string, Rectangle[]>();
+    private texturedAnimations = new Map<string, Animations>();
 
-    constructor(fileName: string) {
-        const baseTexture = BaseTexture.fromImage(`spritesheets/${fileName}.png`);
-
-        new Loader(pixiLoader).parseFile(`spritesheets/${fileName}.xml`, (error, tileSet) => {
-            if (error) {
-                throw error;
-            }
-            const updateTiles = () => {
-                this.updateTiles(baseTexture, tileSet as TileSet);
-            };
-
-            if (baseTexture.hasLoaded) {
-                updateTiles();
-            } else {
-                baseTexture.once('loaded', updateTiles);
-            }
-        });
-    }
-
-    createAnimatedSprite(name: string): PIXI.extras.AnimatedSprite {
-        if (this.animations) {
-            const sprite = new PIXI.extras.AnimatedSprite(this.animations[name]);
-            sprite.play();
-            return sprite;
-        } else {
-            const sprite = new PIXI.extras.AnimatedSprite([Texture.EMPTY]);
-            const pendingAnimatedSprite = {
-                name,
-                sprite,
-            };
-            this.pendingAnimatedSprites.add(pendingAnimatedSprite);
-            sprite.destroy = (options) => {
-                PIXI.extras.AnimatedSprite.prototype.destroy.call(sprite, options);
-                this.pendingAnimatedSprites.delete(pendingAnimatedSprite);
-            };
-            return sprite;
-        }
-
-    }
-
-    private updateTiles(baseTexture: BaseTexture, tileSet: TileSet) {
-
-        this.tileSet = tileSet;
+    constructor(tileSet: TileSet) {
         const { image, tiles, tileWidth, tileHeight } = tileSet;
 
         const columns = image!.width / tileWidth; // TODO offset, margin
-        const animations: { [key: string]: Texture[] } = {};
-        this.animations = animations;
+
         tiles.forEach((tile, index) => {
             if (!tile) {
                 return;
@@ -71,41 +26,92 @@ class SpritesheetDetails {
                 return;
             }
 
-            const tileAnimations = tile.animations.map(anim => texture(anim.tileId));
-            animations[name] = tileAnimations.length === 0 ? [texture(index)] : tileAnimations;
+            const tileAnimations = tile.animations.length === 0 ?
+                [tileFrame(index)] :
+                tile.animations.map(anim => tileFrame(anim.tileId));
+
+            this.animations.set(name, tileAnimations);
         });
 
-        this.pendingAnimatedSprites.forEach(pendingAnimatedSprite => {
-            pendingAnimatedSprite.sprite.textures = animations[pendingAnimatedSprite.name];
-            pendingAnimatedSprite.sprite.play();
-        });
-        this.pendingAnimatedSprites.clear();
-
-        function texture(index: number): Texture {
+        function tileFrame(index: number): Rectangle {
             const x = index % columns;
             const y = Math.floor(index / columns);
-            return new PIXI.Texture(baseTexture, new Rectangle(x * tileWidth, y * tileHeight, tileWidth, tileHeight));
+            return new Rectangle(x * tileWidth, y * tileHeight, tileWidth, tileHeight);
         }
+    }
+
+    getAnimations(image: string): Animations {
+        let animations = this.texturedAnimations.get(image);
+        if (!animations) {
+            const baseTexture = BaseTexture.fromImage(`spritesheets/${image}.png`);
+
+            animations = {};
+            this.animations.forEach((animation, key) => {
+                animations![key] = animation.map(rect => new Texture(baseTexture, rect));
+            });
+
+            this.texturedAnimations.set(image, animations);
+
+        }
+
+        return animations;
     }
 }
 
 export class TextureLoader {
-    private textures = new Map<string, SpritesheetDetails>();
+    private tileSetDetails = new Map<string, TileSetDetails>();
+    private loadingTileSets = new Map<string, Set<(details: TileSetDetails) => void>>();
 
-    createAnimatedSprite(fileName: string, name: string): PIXI.extras.AnimatedSprite {
-        return this.getSpritesheetDetails(fileName).createAnimatedSprite(name);
+    constructor(private readonly process: CancellableProcess) {
     }
 
-    private getSpritesheetDetails(fileName: string): SpritesheetDetails {
-        let spritesheetDetails = this.textures.get(fileName);
-        if (!spritesheetDetails) {
-            spritesheetDetails = new SpritesheetDetails(fileName);
-            this.textures.set(fileName, spritesheetDetails);
+    createAnimatedSprite(image: string, name: string): PIXI.extras.AnimatedSprite {
+        return this.createCustomAnimatedSprite(image, image, name);
+    }
+
+    createCustomAnimatedSprite(tileSet: string, image: string, name: string): PIXI.extras.AnimatedSprite {
+        const sprite = new PIXI.extras.AnimatedSprite([Texture.EMPTY]);
+
+        const cb = (details: TileSetDetails) => {
+            sprite.textures = details.getAnimations(image)[name];
+            sprite.play();
+        };
+        sprite.destroy = (options) => {
+            PIXI.extras.AnimatedSprite.prototype.destroy.call(sprite, options);
+            const loading = this.loadingTileSets.get(tileSet);
+            if (loading) {
+                loading.delete(cb);
+            }
+        };
+
+        this.getTileSetDetails(tileSet, cb);
+
+        return sprite;
+    }
+
+    private getTileSetDetails(tileSet: string, cb: (details: TileSetDetails) => void) {
+        const details = this.tileSetDetails.get(tileSet);
+        if (details) {
+            cb(details);
+            return;
         }
-        return spritesheetDetails;
-    }
-}
+        let callbacks = this.loadingTileSets.get(tileSet);
+        if (callbacks) {
+            callbacks.add(cb);
+            return;
+        }
+        callbacks = new Set<(details: TileSetDetails) => void>([cb]);
+        this.loadingTileSets.set(tileSet, callbacks);
 
-function emptyTexture(): Texture {
-    return new Texture(Texture.EMPTY.baseTexture);
+        new Loader(pixiLoader).parseFile(`spritesheets/${tileSet}.xml`, this.process.run((error, result) => {
+            if (error) {
+                throw error;
+            }
+            const details = new TileSetDetails(result as TileSet);
+            this.tileSetDetails.set(tileSet, details);
+            this.loadingTileSets.delete(tileSet);
+
+            callbacks!.forEach(callback => callback(details));
+        }));
+    }
 }

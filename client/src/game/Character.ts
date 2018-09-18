@@ -33,7 +33,7 @@ export class Character extends PIXI.Container {
     }
 
     private createDirectionSprite(object: GameObject): DirectionSprite {
-        const sprite = this.textureLoader.createAnimatedSprite(object.type, toName(object.direction, object.animation));
+        const sprite = this.textureLoader.createCustomAnimatedSprite(object.type, 'character', toName(object.direction, object.animation));
 
         this.addChild(sprite);
 
