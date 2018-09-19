@@ -10,8 +10,8 @@ export interface Moving {
 export class CharacterEntity extends Entity<CharacterGameObject> {
     private moving: Moving = { x: 0, y: 0 };
 
-    constructor(id: ObjectId, position: Position, appearance: Appearance, equipment: Equipment) {
-        super(id, {
+    constructor(position: Position, appearance: Appearance, equipment: Equipment) {
+        super({
             position,
             type: 'character',
             direction: 'D',

@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js';
-import { Appearance, CharacterAnimation, Direction, Equipment, GameObject } from '../../../common/GameObject';
+import { Appearance, Direction, Equipment, GameObject } from '../../../common/GameObject';
 import { TextureLoader } from '../map/TextureLoader';
 
 const PARTS: (keyof Appearance | keyof Equipment)[] = [
@@ -7,9 +7,9 @@ const PARTS: (keyof Appearance | keyof Equipment)[] = [
     'eyes',
     'nose',
     'shirt',
-    'chest',
     'feet',
     'legs',
+    'chest',
     'hair',
     'ears',
     'head',

@@ -80,7 +80,7 @@ function fakeCommandStream() {
     return {
         sendCommand: sinon.spy(),
         onCommand: (command: string, data: string) => {
-        }
+        },
     }
 }
 

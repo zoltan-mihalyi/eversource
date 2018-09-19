@@ -2,25 +2,28 @@ import { WorldImpl } from '../src/world/World';
 import * as sinon from 'sinon';
 import * as assert from 'assert';
 import { ZoneId } from '../../common/domain/Location';
-import { GridLoader } from '../src/world/GridLoader';
+import { MapData, MapLoader } from '../src/world/MapLoader';
 import { Grid } from '../../common/Grid';
+import { Presets } from '../src/world/Presets';
+import { TmxObject } from '@eversource/tmx-parser';
 
 const zoneId = 'zone' as ZoneId;
 
-function gridLoaderLoad(): Promise<Grid> {
-    return Promise.resolve({} as Grid);
-}
-
-function createGridLoader(load = gridLoaderLoad) {
+function createMapLoader(objects: TmxObject[] = []) {
     return {
-        load: sinon.mock().callsFake(load),
+        load: sinon.mock().returns(Promise.resolve<MapData>({
+            grid: {} as Grid,
+            objects,
+            tileWidth: 32,
+            tileHeight: 32,
+        }))
     };
 }
 
 const runningWorlds = new Set<WorldImpl>();
 
-function newWorld(gridLoader: GridLoader) {
-    const world = new WorldImpl(gridLoader);
+function newWorld(mapLoader: MapLoader, presets = {}) {
+    const world = new WorldImpl(mapLoader, presets);
     runningWorlds.add(world);
     return world;
 }
@@ -33,24 +36,66 @@ describe('World', function () {
 
     it('should load and return zone', async function () {
 
-        const gridLoader = createGridLoader();
-        const world = newWorld(gridLoader);
+        const mapLoader = createMapLoader();
+        const world = newWorld(mapLoader);
 
         const zone = await world.getZone(zoneId);
 
         assert(zone != null);
 
-        sinon.assert.calledOnce(gridLoader.load);
+        sinon.assert.calledOnce(mapLoader.load);
     });
 
-    it('should resolve parallel getZone calls but call gridLoader.load only once', async function () {
-        const gridLoader = createGridLoader();
-        const world = newWorld(gridLoader);
+    it('should resolve parallel getZone calls but call mapLoader.load only once', async function () {
+        const mapLoader = createMapLoader();
+        const world = newWorld(mapLoader);
 
         const zones = await Promise.all([world.getZone(zoneId), world.getZone(zoneId)]);
 
         assert(zones[0] === zones[1]);
 
-        sinon.assert.calledOnce(gridLoader.load);
+        sinon.assert.calledOnce(mapLoader.load);
+    });
+
+    it('should add npc characters', async function () {
+        const mapLoader = createMapLoader([
+            {
+                type: 'npc',
+                name: 'orc',
+                x: 320,
+                y: 320,
+                properties: {},
+            } as TmxObject,
+            {
+                properties: {}
+            } as TmxObject
+        ]);
+        const presets: Presets = {
+            orc: {
+                "appearance": {
+                    "sex": "female",
+                    "body": "orc",
+                    "eyes": null,
+                    "ears": null,
+                    "hair": null,
+                    "nose": null
+                },
+                "equipment": {
+                    "chest": null,
+                    "shirt": null,
+                    "feet": "brown_shoes",
+                    "head": null,
+                    "legs": "maroon_pants"
+                }
+            }
+        };
+        const world = newWorld(mapLoader, presets);
+        const zone = await world.getZone(zoneId);
+
+        const entities = zone.query(10, 10, 10, 10);
+        assert.strictEqual(entities.length, 1);
+        const gameObject = entities[0].get();
+        assert.strictEqual(gameObject.appearance, presets.orc.appearance);
+
     });
 });

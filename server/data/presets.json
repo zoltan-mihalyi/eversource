@@ -1,0 +1,53 @@
+{
+  "orc": {
+    "appearance": {
+      "sex": "male",
+      "body": "orc",
+      "eyes": null,
+      "ears": null,
+      "hair": null,
+      "nose": null
+    },
+    "equipment": {
+      "chest": null,
+      "shirt": null,
+      "feet": "black_shoes",
+      "head": null,
+      "legs": "white_pants"
+    }
+  },
+  "diana": {
+    "appearance": {
+      "sex": "female",
+      "body": "darkelf2",
+      "eyes": "purple",
+      "ears": null,
+      "hair": "princess",
+      "nose": null
+    },
+    "equipment": {
+      "chest": null,
+      "shirt": "teal",
+      "feet": "black_shoes",
+      "head": null,
+      "legs": "teal_pants"
+    }
+  },
+  "cacal": {
+    "appearance": {
+      "sex": "female",
+      "body": "dark2",
+      "eyes": "green",
+      "ears": null,
+      "hair": "bangslong2",
+      "nose": null
+    },
+    "equipment": {
+      "chest": null,
+      "shirt": "white",
+      "feet": "black_shoes",
+      "head": null,
+      "legs": "white_pants"
+    }
+  }
+}

@@ -1,14 +1,16 @@
 import { Server } from './Server';
 import { WorldImpl } from './world/World';
-import { TmxGridLoader } from './world/GridLoader';
+import { TmxMapLoader } from './world/MapLoader';
 import { FakeDao } from './impl/FakeDao';
 import * as express from 'express';
+import * as fs from "fs";
 
-const PORT = process.env.PORT ? +process.env.PORT : 8080;
+const PORT = process.env.PORT ? +process.env.PORT : 8000;
 
-const gridLoader = new TmxGridLoader('../common/maps');
+const mapLoader = new TmxMapLoader('../common/maps');
 
-const world = new WorldImpl(gridLoader);
+const presets = JSON.parse(fs.readFileSync('./data/presets.json', 'utf-8'));
+const world = new WorldImpl(mapLoader, presets);
 
 const app = express();
 app.use(express.static('../cordova/www'));
