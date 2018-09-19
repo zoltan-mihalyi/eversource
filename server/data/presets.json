@@ -35,7 +35,8 @@
         "elvenears"
       ],
       "hair": [
-        "princess"
+        "princess",
+        "pink2"
       ],
       "nose": []
     },
@@ -49,7 +50,8 @@
       ],
       "head": [],
       "legs": [
-        "teal_pants"
+        "robe_skirt",
+        "teal"
       ]
     }
   },
@@ -60,25 +62,26 @@
         "dark2"
       ],
       "eyes": [
-        "red"
+        "blue"
       ],
       "ears": [],
       "hair": [
-        "ponytail2"
+        "jewfro",
+        "brown"
       ],
       "nose": []
     },
     "equipment": {
       "chest": [],
       "shirt": [
-        "white"
+        "maroon"
       ],
       "feet": [
         "black_shoes"
       ],
       "head": [],
       "legs": [
-        "white_pants"
+        "magenta_pants"
       ]
     }
   },
