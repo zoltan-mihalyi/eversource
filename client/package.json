@@ -6,10 +6,14 @@
   "scripts": {
     "webpack": "webpack",
     "tsc": "tsc",
-    "dev": "webpack --watch"
+    "dev": "webpack --watch",
+    "test": "webpack"
   },
   "author": "",
   "license": "ISC",
+  "engines": {
+    "node": ">= 6.0.0"
+  },
   "dependencies": {
     "@eversource/pixi-texture-splitter": "^1.0.2",
     "@eversource/tmx-parser": "^1.6.1",
