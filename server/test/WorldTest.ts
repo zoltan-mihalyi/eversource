@@ -1,12 +1,14 @@
 import { WorldImpl } from '../src/world/World';
 import * as sinon from 'sinon';
+import * as assert from 'assert';
 import { ZoneId } from '../../common/domain/Location';
 import { GridLoader } from '../src/world/GridLoader';
+import { Grid } from '../../common/Grid';
 
 const zoneId = 'zone' as ZoneId;
 
-function gridLoaderLoad(zoneId: ZoneId, callback: (err: any, grid?: any) => void) {
-    callback(null, {});
+function gridLoaderLoad(): Promise<Grid> {
+    return Promise.resolve({} as Grid);
 }
 
 function createGridLoader(load = gridLoaderLoad) {
@@ -29,31 +31,26 @@ describe('World', function () {
         runningWorlds.clear();
     });
 
-    it('should load zone and call callback', function () {
+    it('should load and return zone', async function () {
 
         const gridLoader = createGridLoader();
         const world = newWorld(gridLoader);
-        const callback = sinon.spy();
 
-        world.getZone(zoneId, callback);
+        const zone = await world.getZone(zoneId);
+
+        assert(zone != null);
 
         sinon.assert.calledOnce(gridLoader.load);
-        sinon.assert.calledOnce(callback);
     });
 
-    it('should call getZone callbacks added during loading', function () {
-
-        const load = sinon.spy();
-        const gridLoader = createGridLoader(load);
+    it('should resolve parallel getZone calls but call gridLoader.load only once', async function () {
+        const gridLoader = createGridLoader();
         const world = newWorld(gridLoader);
-        const callback = sinon.mock();
-        const callback2 = sinon.mock();
 
-        world.getZone(zoneId, callback);
-        world.getZone(zoneId, callback2);
-        load.getCall(0).args[1](null, {});
+        const zones = await Promise.all([world.getZone(zoneId), world.getZone(zoneId)]);
 
-        sinon.assert.calledOnce(callback);
-        sinon.assert.calledOnce(callback2);
+        assert(zones[0] === zones[1]);
+
+        sinon.assert.calledOnce(gridLoader.load);
     });
 });

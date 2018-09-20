@@ -1,19 +1,16 @@
 import { ZoneId } from '../../../common/domain/Location';
 import { GridLoader } from './GridLoader';
-import { Grid } from '../../../common/Grid';
 import { Zone } from './Zone';
 
-type ZoneCb = (zone: Zone) => void;
-
 export interface World {
-    getZone(zoneId: ZoneId, callback: ZoneCb): void;
+    getZone(zoneId: ZoneId): Promise<Zone>;
 }
 
 const FPS = 50;
 const INTERVAL = 1000 / FPS;
 
 export class WorldImpl implements World {
-    private readonly loadingZones = new Map<ZoneId, ZoneCb[]>();
+    private readonly zonePromises = new Map<ZoneId, Promise<Zone>>();
     private readonly zones = new Map<ZoneId, Zone>();
     private readonly timer: NodeJS.Timer;
 
@@ -25,45 +22,27 @@ export class WorldImpl implements World {
         clearInterval(this.timer);
     }
 
-    getZone(zoneId: ZoneId, callback: ZoneCb) {
-        if (this.zones.has(zoneId)) {
-            callback(this.zones.get(zoneId)!);
-            return;
+    getZone(zoneId: ZoneId): Promise<Zone> {
+        let zonePromise = this.zonePromises.get(zoneId);
+        if (!zonePromise) {
+            zonePromise = this.loadZone(zoneId);
+            this.zonePromises.set(zoneId, zonePromise);
         }
-
-        this.addZoneLoadingCallback(zoneId, callback);
+        return zonePromise;
     }
 
-    private addZoneLoadingCallback(zoneId: ZoneId, callback: ZoneCb) {
-        const callbacks = this.loadingZones.get(zoneId);
-
-        if (callbacks) {
-            callbacks.push(callback);
-            return;
-        }
-
-        this.startLoading(zoneId, callback);
-    }
-
-    private startLoading(zoneId: ZoneId, callback: ZoneCb) {
+    private async loadZone(zoneId: ZoneId): Promise<Zone> {
         console.log(`Loading ${zoneId}...`);
         const start = new Date();
-        const callbacks: ZoneCb[] = [callback];
-        this.loadingZones.set(zoneId, callbacks);
-        this.gridLoader.load(zoneId, (err: any, grid?: Grid) => {
-            if (err) {
-                console.error(`Failed to load zone: ${zoneId}`, err);
-                return;
-            }
 
-            console.log(`Loaded ${zoneId} in ${new Date().getTime() - start.getTime()} ms`);
-            const zone = new Zone(grid!);
+        const grid = await this.gridLoader.load(zoneId);
 
-            this.zones.set(zoneId, zone);
-            for (const cb of callbacks) {
-                cb(zone);
-            }
-        });
+        console.log(`Loaded ${zoneId} in ${new Date().getTime() - start.getTime()} ms`);
+        const zone = new Zone(grid);
+
+        this.zones.set(zoneId, zone);
+
+        return zone;
     }
 
     private update = () => {

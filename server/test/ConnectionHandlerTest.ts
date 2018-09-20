@@ -5,7 +5,10 @@ import { UserDao } from '../src/dao/UserDao';
 import * as sinon from 'sinon';
 import * as assert from 'assert';
 import { NetworkLoop } from '../src/NetworkLoop';
-import { CommandStream } from '../src/protocol/CommandStream';
+
+function tick(): Promise<void> {
+    return new Promise<void>(resolve => setTimeout(resolve, 1));
+}
 
 const characters: CharacterInfo[] = [
     {
@@ -58,15 +61,11 @@ function fakeZone() {
     };
 }
 
-function fakeWorld(zone = fakeZone(), async?: boolean) {
+function fakeWorld(zone = fakeZone()) {
 
     return {
-        getZone: sinon.mock().callsFake((zoneId, callback) => {
-            if (async) {
-                setTimeout(() => callback(zone), 10);
-            } else {
-                callback(zone);
-            }
+        getZone: sinon.mock().callsFake((zoneId) => {
+            return Promise.resolve(zone);
         }),
     }
 }
@@ -117,7 +116,7 @@ describe('RequestDispatcher', () => {
         sinon.assert.calledOnce(commandStream.sendCommand);
     });
 
-    it('should not create character on enter', function () {
+    it('should not create character on enter', async function () {
         const world = fakeWorld();
 
         const commandStream = fakeCommandStream();
@@ -126,10 +125,12 @@ describe('RequestDispatcher', () => {
         commandStream.onCommand('characters', '');
         commandStream.onCommand('enter', '1');
 
+        await tick();
+
         sinon.assert.notCalled(world.getZone);
     });
 
-    it('should create character on ready', function () {
+    it('should create character on ready', async function () {
         const zone = fakeZone();
         const world = fakeWorld(zone);
         const commandStream = fakeCommandStream();
@@ -140,11 +141,13 @@ describe('RequestDispatcher', () => {
         commandStream.onCommand('enter', '1');
         commandStream.onCommand('ready', '');
 
+        await tick();
+
         sinon.assert.calledOnce(world.getZone);
         sinon.assert.calledOnce(zone.addEntity);
     });
 
-    it('should respond to ready with ready', function () {
+    it('should respond to ready with ready', async function () {
         const commandStream = fakeCommandStream();
         new ConnectionHandler(new FakeUserDao(), fakeWorld(), fakeNetworkLoop(), commandStream);
 
@@ -152,46 +155,13 @@ describe('RequestDispatcher', () => {
         commandStream.onCommand('enter', '1');
         commandStream.onCommand('ready', '');
 
+        await tick();
+
         sinon.assert.calledWith(commandStream.sendCommand, 'ready', void 0);
     });
 
 
-    it('should do nothing when calling ready twice before server ready', function () {
-        const zone = fakeZone();
-        const world = fakeWorld(zone, true);
-        const commandStream = fakeCommandStream();
-
-        new ConnectionHandler(new FakeUserDao(), world, fakeNetworkLoop(), commandStream);
-
-        commandStream.onCommand('characters', '');
-        commandStream.onCommand('enter', '1');
-        commandStream.onCommand('ready', '');
-        commandStream.onCommand('ready', '');
-
-        sinon.assert.calledOnce(world.getZone);
-    });
-
-    it('should not call createObject when exit before zone load', function () {
-        const zone = fakeZone();
-        const commandStream = fakeCommandStream();
-
-        const world = {
-            getZone: sinon.spy(),
-        };
-
-        const dispatcher = new ConnectionHandler(new FakeUserDao(), world, fakeNetworkLoop(), commandStream);
-
-        commandStream.onCommand('characters', '');
-        commandStream.onCommand('enter', '1');
-        commandStream.onCommand('ready', '');
-        dispatcher.close();
-
-        world.getZone.getCall(0).args[1](zone);
-
-        sinon.assert.notCalled(zone.addEntity);
-    });
-
-    it('should create character on ready only once', function () {
+    it('should do anything only once when calling ready twice', async function () {
         const zone = fakeZone();
         const world = fakeWorld(zone);
         const commandStream = fakeCommandStream();
@@ -203,10 +173,44 @@ describe('RequestDispatcher', () => {
         commandStream.onCommand('ready', '');
         commandStream.onCommand('ready', '');
 
+        await tick();
+
+        sinon.assert.calledOnce(world.getZone);
+    });
+
+    it('should not call createObject when exit before zone load', async function () {
+        const zone = fakeZone();
+        const commandStream = fakeCommandStream();
+
+        const dispatcher = new ConnectionHandler(new FakeUserDao(), fakeWorld(zone), fakeNetworkLoop(), commandStream);
+
+        commandStream.onCommand('characters', '');
+        commandStream.onCommand('enter', '1');
+        commandStream.onCommand('ready', '');
+        dispatcher.close();
+
+        await tick();
+
+        sinon.assert.notCalled(zone.addEntity);
+    });
+
+    it('should create character on ready only once', async function () {
+        const zone = fakeZone();
+        const commandStream = fakeCommandStream();
+
+        new ConnectionHandler(new FakeUserDao(), fakeWorld(zone), fakeNetworkLoop(), commandStream);
+
+        commandStream.onCommand('characters', '');
+        commandStream.onCommand('enter', '1');
+        commandStream.onCommand('ready', '');
+        commandStream.onCommand('ready', '');
+
+        await tick();
+
         sinon.assert.calledOnce(zone.addEntity);
     });
 
-    it('should do nothing when entering incorrect character id', function () {
+    it('should do nothing when entering incorrect character id', async function () {
         const zone = fakeZone();
         const world = fakeWorld(zone);
         const commandStream = fakeCommandStream();
@@ -217,10 +221,13 @@ describe('RequestDispatcher', () => {
         commandStream.onCommand('enter', '0');
         commandStream.onCommand('ready', '');
 
+        await tick();
+
+        sinon.assert.notCalled(world.getZone);
         sinon.assert.notCalled(zone.addEntity);
     });
 
-    it('should remove character on leave', function () {
+    it('should remove character on leave', async function () {
         const zone = fakeZone();
         const world = fakeWorld(zone);
         const commandStream = fakeCommandStream();
@@ -230,12 +237,15 @@ describe('RequestDispatcher', () => {
         commandStream.onCommand('characters', '');
         commandStream.onCommand('enter', '1');
         commandStream.onCommand('ready', '');
+
+        await tick();
+
         commandStream.onCommand('leave', '');
 
         sinon.assert.calledOnce(zone.removeEntity);
     });
 
-    it('should remove character on exit', function () {
+    it('should remove character on exit', async function () {
         const zone = fakeZone();
         const world = fakeWorld(zone);
         const commandStream = fakeCommandStream();
@@ -245,12 +255,15 @@ describe('RequestDispatcher', () => {
         commandStream.onCommand('characters', '');
         commandStream.onCommand('enter', '1');
         commandStream.onCommand('ready', '');
+
+        await tick();
+
         dispatcher.close();
 
         sinon.assert.calledOnce(zone.removeEntity);
     });
 
-    it('should accept characters request after leave', function () {
+    it('should accept characters request after leave', async function () {
         const world = fakeWorld();
         const commandStream = fakeCommandStream();
 
@@ -259,6 +272,9 @@ describe('RequestDispatcher', () => {
         commandStream.onCommand('characters', '');
         commandStream.onCommand('enter', '1');
         commandStream.onCommand('ready', '');
+
+        await tick();
+
         commandStream.onCommand('leave', '');
         commandStream.onCommand('characters', '');
 

@@ -14,10 +14,17 @@ export class CancellableProcess {
         }
     }
 
+    runPromise<T>(promise:Promise<T>):Promise<T>{
+        return this.promise(((resolve, reject) => {
+            promise.then(resolve);
+            promise.catch(reject);
+        }));
+    }
+
     promise<T>(executor: (resolve: (value?: T | PromiseLike<T>) => void, reject: (reason?: any) => void) => void): Promise<T> {
-        return new Promise<T>((resolve, reject) => {
-            executor(this.run(resolve), this.run(reject));
-        });
+        return new Promise<T>(this.run((resolve, reject) => {
+            executor(this.run(resolve), this.run(reject!));
+        }));
     }
 
     stop() {
