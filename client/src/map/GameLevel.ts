@@ -4,9 +4,11 @@ import { Map as TmxMap } from '@eversource/tmx-parser';
 import { TexturedTileSet } from './TexturedTileset';
 import * as PIXI from 'pixi.js';
 import { Opaque } from '../../../common/util/Opaque';
-import { Direction, GameObject, Position } from '../../../common/GameObject';
+import { GameObject, ObjectId, Position } from '../../../common/GameObject';
 import { TextureLoader } from './TextureLoader';
 import ResourceDictionary = PIXI.loaders.ResourceDictionary;
+import { Character } from '../game/Character';
+import DisplayObject = PIXI.DisplayObject;
 
 const CHUNK_WIDTH = 16;
 const CHUNK_HEIGHT = 16;
@@ -20,6 +22,7 @@ export class GameLevel {
     readonly visibleChunks = new Set<Chunk>();
     readonly container = new PIXI.Container();
     readonly chunkBaseContainer = new PIXI.Container();
+    private characters = new Map<ObjectId, Character>();
     readonly objectContainer = new PIXI.Container();
     readonly chunkAboveContainer = new PIXI.Container();
     private readonly tileSet: TexturedTileSet[];
@@ -39,30 +42,39 @@ export class GameLevel {
     }
 
     updateObjects(objects: GameObject[]) {
-        this.objectContainer.removeChildren();
-
         const { tileWidth, tileHeight } = this.map;
 
-        for (const object of objects.sort(zIndexSorter)) {
+        const charactersToRemove = new Map<ObjectId, Character>();
+        this.characters.forEach((character, id) => charactersToRemove.set(id, character));
+
+        for (const object of objects) {
             const { x, y } = this.round(object.position);
 
-            const character = new PIXI.Container();
+            const id = object.id;
+            charactersToRemove.delete(id);
+
+            let character = this.characters.get(id);
+            if (!character) {
+                character = new Character(this.textureLoader, object);
+                this.characters.set(id, character);
+
+                this.objectContainer.addChild(character);
+            }else{
+                character.update(object);
+            }
+
             character.x = x - 16 / tileWidth; // TODO read from file?
             character.y = y - 40 / tileHeight;
             character.scale.x = 1 / tileWidth;
             character.scale.y = 1 / tileHeight;
-
-            const shadow = new PIXI.Sprite(this.textureLoader.get('misc', 'shadow'));
-            shadow.blendMode = PIXI.BLEND_MODES.MULTIPLY;
-            shadow.x = 16;
-            shadow.y = 38;
-            character.addChild(shadow);
-
-            const sprite = new PIXI.Sprite(this.textureLoader.get(object.type, directionToName(object.direction)));
-            character.addChild(sprite);
-
-            this.objectContainer.addChild(character);
         }
+
+        charactersToRemove.forEach((character, id) => {
+            this.characters.delete(id);
+            this.objectContainer.removeChild(character);
+        });
+
+        this.objectContainer.children.sort(zIndexSorter);
     }
 
     round(position: Position): Position {
@@ -110,19 +122,6 @@ function chunkPosition(x: X, y: Y): ChunkPosition {
     return (x / CHUNK_WIDTH) + ':' + (y / CHUNK_HEIGHT) as ChunkPosition;
 }
 
-function directionToName(direction: Direction): string {
-    switch (direction) {
-        case 'U':
-            return 'up';
-        case 'D':
-            return 'down';
-        case 'L':
-            return 'left';
-        case 'R':
-            return 'right';
-    }
-}
-
-function zIndexSorter(a: GameObject, b: GameObject): number {
+function zIndexSorter(a: DisplayObject, b: DisplayObject): number {
     return a.position.y - b.position.y;
 }
