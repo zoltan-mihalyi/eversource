@@ -164,6 +164,9 @@ export class PlayingRequestHandler extends ClientState<PlayerData> {
     }
 
     private networkUpdate = () => {
+        if (!this.context.canSend()) {
+            return;
+        }
         this.sendPlayerData();
         this.sendQuestLog();
         this.sendWorldData();

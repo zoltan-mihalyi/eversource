@@ -14,6 +14,7 @@ export interface ClientStateContext {
     readonly dao: UserDao;
     readonly world: World;
     readonly sendCommand: SendMessage;
+    readonly canSend: () => boolean;
     readonly networkLoop: NetworkLoop;
 }
 

@@ -16,6 +16,7 @@ export class ConnectionHandler {
             world,
             networkLoop,
             sendCommand: this.sendCommand,
+            canSend: () => this.commandStream.canSend(),
         }, CharacterSelectionRequestHandler, void 0);
 
         commandStream.onCommand = this.onCommand;

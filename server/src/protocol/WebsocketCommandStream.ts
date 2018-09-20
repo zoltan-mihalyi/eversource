@@ -21,6 +21,10 @@ export class WebsocketCommandStream implements CommandStream {
         this.connection.send(command + suffix);
     }
 
+    canSend(): boolean {
+        return this.connection.bufferedAmount === 0;
+    }
+
     private onMessage = (message: ws.Data) => {
         if (typeof message !== 'string') {
             return;
