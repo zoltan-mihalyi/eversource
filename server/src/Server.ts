@@ -1,4 +1,5 @@
 import * as ws from 'ws';
+import { ServerOptions } from 'ws';
 import { PROTOCOL_VERSION } from '../../common/protocol/Messages';
 import { World } from './world/World';
 import { NetworkLoop } from './NetworkLoop';
@@ -13,10 +14,8 @@ export class Server {
     private readonly server: ws.Server;
     private readonly networkLoop: NetworkLoop;
 
-    constructor(private dao: Dao, private world: World, port: number) {
-        this.server = new ws.Server({
-            port,
-        });
+    constructor(private dao: Dao, private world: World, options: ServerOptions) {
+        this.server = new ws.Server(options);
 
         this.server.on('connection', this.onConnection);
 

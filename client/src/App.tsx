@@ -37,7 +37,7 @@ interface State {
     screen: ShowScreen;
 }
 
-const wsUri = `ws://${location.hostname}:8080`;
+const wsUri = `ws://${location.hostname}:${location.port}`;
 
 export class App extends React.Component<{}, State> {
     state: State = {
