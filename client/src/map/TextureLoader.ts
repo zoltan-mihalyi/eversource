@@ -12,7 +12,7 @@ class TileSetDetails {
     private animations = new Map<string, Rectangle[]>();
     private texturedAnimations = new Map<string, Animations>();
 
-    constructor(tileSet: TileSet) {
+    constructor(private baseDir: string, tileSet: TileSet) {
         const { image, tiles, tileWidth, tileHeight } = tileSet;
 
         const columns = image!.width / tileWidth; // TODO offset, margin
@@ -43,7 +43,7 @@ class TileSetDetails {
     getAnimations(image: string): Animations {
         let animations = this.texturedAnimations.get(image);
         if (!animations) {
-            const baseTexture = BaseTexture.fromImage(`spritesheets/${image}.png`);
+            const baseTexture = BaseTexture.fromImage(`${this.baseDir}/${image}.png`);
 
             animations = {};
             this.animations.forEach((animation, key) => {
@@ -62,7 +62,7 @@ export class TextureLoader {
     private tileSetDetails = new Map<string, TileSetDetails>();
     private loadingTileSets = new Map<string, Set<(details: TileSetDetails) => void>>();
 
-    constructor(private readonly process: CancellableProcess) {
+    constructor(private readonly process: CancellableProcess, private baseDir = 'spritesheets') {
     }
 
     createAnimatedSprite(image: string, name: string): PIXI.extras.AnimatedSprite {
@@ -103,11 +103,11 @@ export class TextureLoader {
         callbacks = new Set<(details: TileSetDetails) => void>([cb]);
         this.loadingTileSets.set(tileSet, callbacks);
 
-        new Loader(pixiLoader).parseFile(`spritesheets/${tileSet}.xml`, this.process.run((error, result) => {
+        new Loader(pixiLoader).parseFile(`${this.baseDir}/${tileSet}.xml`, this.process.run((error, result) => {
             if (error) {
                 throw error;
             }
-            const details = new TileSetDetails(result as TileSet);
+            const details = new TileSetDetails(this.baseDir, result as TileSet);
             this.tileSetDetails.set(tileSet, details);
             this.loadingTileSets.delete(tileSet);
 

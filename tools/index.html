@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Eversource Tools</title>
+    <link rel="stylesheet" href="main.css"/>
+    <script>
+        process.on('uncaughtException', function(err) {
+            console.error(err);
+        });
+
+        window.onload = () => {
+            require('ts-node').register();
+            require('./src/index');
+        };
+    </script>
+</head>
+<body style="background: #9c8b78">
+<div id="app"></div>
+</body>
+</html>
