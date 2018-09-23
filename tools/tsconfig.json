@@ -4,6 +4,7 @@
     "target": "es5",
     "lib": ["es6", "dom"],
     "sourceMap": true,
+    "strict": true,
     "jsx": "react"
   },
   "exclude": [

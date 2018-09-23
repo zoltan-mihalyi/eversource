@@ -5,16 +5,20 @@ import { Preset, Presets } from '../../../server/src/world/Presets';
 
 const PRESETS_JSON = '../server/data/presets.json';
 
+interface Props {
+    onExit: () => void;
+}
+
 interface State {
     presets: Presets;
     selected: string | null;
     modified: boolean;
 }
 
-export class PresetsTool extends React.Component<{}, State> {
+export class PresetsTool extends React.Component<Props, State> {
     private addName = React.createRef<HTMLInputElement>();
 
-    constructor(props: {}) {
+    constructor(props: Props) {
         super(props);
         const presets = JSON.parse(fs.readFileSync(PRESETS_JSON, 'utf-8'));
         this.state = { presets, selected: null, modified: false };
@@ -30,6 +34,7 @@ export class PresetsTool extends React.Component<{}, State> {
         return (
             <div className="menu">
                 <button className="big" disabled={!modified} onClick={this.save}>Save</button>
+                <button className="big exit" onClick={this.props.onExit}>X</button>
                 <div>
                     <input style={{ width: 200 }} className="big" ref={this.addName}/>
                     <button className="big" onClick={this.add}>+</button>
@@ -53,7 +58,7 @@ export class PresetsTool extends React.Component<{}, State> {
         this.setState({
             presets: {
                 ...presets,
-                [selected]: preset,
+                [selected!]: preset,
             },
         }, this.save);
     };
@@ -87,7 +92,7 @@ export class PresetsTool extends React.Component<{}, State> {
 
     private rename(name: string) {
         const newName = prompt('New name', name);
-        if (name === newName || !name) {
+        if (name === newName || !newName) {
             return;
         }
 
@@ -96,7 +101,7 @@ export class PresetsTool extends React.Component<{}, State> {
             return;
         }
 
-        const presets = {};
+        const presets:Presets = {};
         for (const key of Object.keys(this.state.presets)) {
             presets[key === name ? newName : key] = this.state.presets[key];
         }

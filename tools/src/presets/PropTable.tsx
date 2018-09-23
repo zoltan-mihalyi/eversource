@@ -4,8 +4,8 @@ import * as React from 'react';
 import { wwwDir } from '../Utils';
 
 interface Props {
-    data: {};
-    onChange: (data: {}) => void;
+    data: any;
+    onChange: (data: any) => void;
 }
 
 const base = path.join(wwwDir, 'spritesheets', 'character');
@@ -16,7 +16,7 @@ function filesInDir(directory: string): string[] {
         .map(file => path.parse(file).name);
 }
 
-const possibleValues = {
+const possibleValues: { [key: string]: (string | null)[] } = {
     sex: ['female', 'male'],
     body: filesInDir('body/female'),
     ears: [null, 'bigears', 'elvenears'],
@@ -43,7 +43,7 @@ export class PropTable extends React.Component<Props> {
                         <td className="prop-value">
                             <select name={key} value={data[key] || ''} onChange={this.onChange}>
                                 {possibleValues[key].map((value) => (
-                                    <option key={value} value={value || ''}>{value}</option>
+                                    <option key={value || ''} value={value || ''}>{value}</option>
                                 ))}
                             </select>
                         </td>

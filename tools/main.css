@@ -1,7 +1,6 @@
-.menu {
+.exit{
     position: absolute;
-    left: 0;
-    width: 320px;
+    right: 0;
 }
 
 button.big {
@@ -74,4 +73,20 @@ input.big {
     display: inline-block;
     margin-left: 20px;
     margin-right: 20px;
+}
+
+.palettes .color{
+    width: 30px;
+    height: 30px;
+    display: inline-block;
+}
+
+.palettes h1{
+    word-break: break-all;
+}
+
+.palettes h3{
+    display: inline-block;
+    margin-bottom: 0;
+    margin-left: 10px;
 }
