@@ -29,7 +29,7 @@ export class FakeUserDao implements UserDao {
                 head: ['red_bandana'],
                 chest: [],
                 legs: ['red_pants'],
-                feet: ['black_shoes'],
+                feet: ['shoes', 'black'],
             },
         },
         {
@@ -85,7 +85,7 @@ export class FakeUserDao implements UserDao {
                 head: ['chain_hood'],
                 chest: ['mail'],
                 legs: [],
-                feet: ['maroon_shoes'],
+                feet: ['shoes', 'maroon'],
             },
         },
     ];

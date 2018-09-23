@@ -14,7 +14,8 @@
       "chest": [],
       "shirt": [],
       "feet": [
-        "black_shoes"
+        "shoes",
+        "black"
       ],
       "head": [],
       "legs": [
@@ -46,7 +47,8 @@
         "teal"
       ],
       "feet": [
-        "black_shoes"
+        "shoes",
+        "black"
       ],
       "head": [],
       "legs": [
@@ -77,7 +79,8 @@
         "maroon"
       ],
       "feet": [
-        "black_shoes"
+        "shoes",
+        "black"
       ],
       "head": [],
       "legs": [
@@ -142,7 +145,8 @@
         "red"
       ],
       "feet": [
-        "black_shoes"
+        "shoes",
+        "black"
       ],
       "chest": []
     }
