@@ -57,8 +57,8 @@ export class ShowCharacter extends React.Component<Props, State> {
                 <button className="big" onClick={this.props.exit}>Exit</button>
                 <h1 className="character-name">{this.props.name}</h1>
                 <div className="config">
-                    <PropTable data={preset.appearance} onChange={this.onChangeAppearance}/>
-                    <PropTable data={preset.equipment} onChange={this.onChangeEquipment}/>
+                    <PropTable data={preset.appearance as {}} onChange={this.onChangeAppearance}/>
+                    <PropTable data={preset.equipment as {}} onChange={this.onChangeEquipment}/>
                     <select onChange={this.changeAnim} value={this.state.animation} size={3}>
                         <option value="standing">Standing</option>
                         <option value="walking">Walking</option>

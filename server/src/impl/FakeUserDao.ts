@@ -18,19 +18,19 @@ export class FakeUserDao implements UserDao {
             },
             appearance: {
                 sex: 'male',
-                body: 'dark',
-                hair: 'messy1',
-                ears: null,
-                eyes: 'red',
-                nose: 'bignose',
+                body: ['dark'],
+                hair: ['messy1'],
+                ears: [],
+                eyes: ['red'],
+                nose: ['bignose'],
             },
-            equipment:{
-                shirt: 'white',
-                head: 'red_bandana',
-                chest: null,
-                legs: 'red_pants',
-                feet: 'black_shoes',
-            }
+            equipment: {
+                shirt: ['white'],
+                head: ['red_bandana'],
+                chest: [],
+                legs: ['red_pants'],
+                feet: ['black_shoes'],
+            },
         },
         {
             id: '2' as CharacterId,
@@ -46,19 +46,19 @@ export class FakeUserDao implements UserDao {
             },
             appearance: {
                 sex: 'male',
-                body: 'light',
-                hair: 'bedhead',
-                ears: null,
-                eyes: null,
-                nose: 'straightnose',
+                body: ['light'],
+                hair: ['bedhead'],
+                ears: [],
+                eyes: [],
+                nose: ['straightnose'],
             },
-            equipment:{
-                shirt: null,
-                head: 'golden_helm',
-                chest: 'golden_chest',
-                legs: 'golden_greaves',
-                feet: 'golden_boots',
-            }
+            equipment: {
+                shirt: [],
+                head: ['golden_helm'],
+                chest: ['golden_chest'],
+                legs: ['golden_greaves'],
+                feet: ['golden_boots'],
+            },
         },
         {
             id: '3' as CharacterId,
@@ -74,20 +74,19 @@ export class FakeUserDao implements UserDao {
             },
             appearance: {
                 sex: 'female',
-                body: 'light',
-                hair: 'xlongknot',
-                ears: 'elvenears',
-                eyes: 'blue',
-                nose: 'buttonnose',
+                body: ['light'],
+                hair: ['xlongknot'],
+                ears: ['elvenears'],
+                eyes: ['blue'],
+                nose: ['buttonnose'],
             },
-            equipment:{
-                shirt: null,
-                head: 'chain_hood',
-                chest: 'mail',
-                legs: null,
-                // legs: 'robe_skirt',
-                feet: 'maroon_shoes',
-            }
+            equipment: {
+                shirt: [],
+                head: ['chain_hood'],
+                chest: ['mail'],
+                legs: [],
+                feet: ['maroon_shoes'],
+            },
         },
     ];
 

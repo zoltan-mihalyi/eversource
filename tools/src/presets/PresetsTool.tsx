@@ -115,18 +115,18 @@ export class PresetsTool extends React.Component<Props, State> {
         const preset: Preset = {
             appearance: {
                 sex: 'female',
-                body: 'tanned',
-                nose: null,
-                hair: null,
-                eyes: null,
-                ears: null,
+                body: ['tanned'],
+                nose: [],
+                hair: [],
+                eyes: [],
+                ears: [],
             },
             equipment: {
-                shirt: null,
-                legs: null,
-                head: null,
-                feet: null,
-                chest: null,
+                shirt: [],
+                legs: [],
+                head: [],
+                feet: [],
+                chest: [],
             },
         };
 

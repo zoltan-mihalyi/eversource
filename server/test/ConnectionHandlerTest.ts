@@ -25,18 +25,18 @@ const characters: CharacterInfo[] = [
         },
         appearance: {
             sex: 'male',
-            body: '',
-            ears: null,
-            eyes: null,
-            hair: null,
-            nose: null,
+            body: [''],
+            ears: [],
+            eyes: [],
+            hair: [],
+            nose: [],
         },
         equipment: {
-            chest: null,
-            feet: null,
-            head: null,
-            legs: null,
-            shirt: null,
+            chest: [],
+            feet: [],
+            head: [],
+            legs: [],
+            shirt: [],
         },
     },
 ];
@@ -84,7 +84,7 @@ function fakeCommandStream() {
     }
 }
 
-describe('RequestDispatcher', () => {
+describe('ConnectionHandler', () => {
 
     it('should not forward command to state if not valid', function () {
         const commandStream = fakeCommandStream();

@@ -17,21 +17,24 @@ interface BaseGameObject {
 
 export type CharacterAnimation = 'standing' | 'walking' | 'casting';
 
+type RequiredColoredImage = [string] | [string, string];
+export type ColoredImage = [] | RequiredColoredImage;
+
 export interface Appearance {
     sex: 'male' | 'female';
-    body: string;
-    ears: string | null;
-    eyes: string | null;
-    nose: string | null;
-    hair: string | null;
+    body: RequiredColoredImage;
+    ears: ColoredImage;
+    eyes: ColoredImage;
+    nose: ColoredImage;
+    hair: ColoredImage;
 }
 
 export interface Equipment {
-    shirt: string | null;
-    head: string | null;
-    chest: string | null;
-    legs: string | null;
-    feet: string | null;
+    shirt: ColoredImage;
+    head: ColoredImage;
+    chest: ColoredImage;
+    legs: ColoredImage;
+    feet: ColoredImage;
 }
 
 export interface CharacterGameObject extends BaseGameObject {

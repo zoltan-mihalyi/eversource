@@ -74,18 +74,18 @@ describe('World', function () {
             orc: {
                 "appearance": {
                     "sex": "female",
-                    "body": "orc",
-                    "eyes": null,
-                    "ears": null,
-                    "hair": null,
-                    "nose": null
+                    "body": ["orc"],
+                    "eyes": [],
+                    "ears": [],
+                    "hair": [],
+                    "nose": []
                 },
                 "equipment": {
-                    "chest": null,
-                    "shirt": null,
-                    "feet": "brown_shoes",
-                    "head": null,
-                    "legs": "maroon_pants"
+                    "chest": [],
+                    "shirt": [],
+                    "feet": ["brown_shoes"],
+                    "head": [],
+                    "legs": ["maroon_pants"]
                 }
             }
         };
