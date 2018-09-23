@@ -1,0 +1,160 @@
+{
+  "base": [
+    {
+      "color": "#281b0e",
+      "coordinates": [
+        32,
+        12
+      ]
+    },
+    {
+      "color": "#3e2613",
+      "coordinates": [
+        32,
+        13
+      ]
+    },
+    {
+      "color": "#62351c",
+      "coordinates": [
+        33,
+        13
+      ]
+    },
+    {
+      "color": "#744b30",
+      "coordinates": [
+        31,
+        14
+      ]
+    },
+    {
+      "color": "#996b4a",
+      "coordinates": [
+        30,
+        18
+      ]
+    },
+    {
+      "color": "#b88751",
+      "coordinates": [
+        29,
+        20
+      ]
+    },
+    {
+      "color": "#380510",
+      "coordinates": [
+        39,
+        22
+      ]
+    },
+    {
+      "color": "#b14e45",
+      "coordinates": [
+        39,
+        23
+      ]
+    },
+    {
+      "color": "#691503",
+      "coordinates": [
+        39,
+        26
+      ]
+    },
+    {
+      "color": "#3d2512",
+      "coordinates": [
+        23,
+        30
+      ]
+    },
+    {
+      "color": "#7c563a",
+      "coordinates": [
+        30,
+        31
+      ]
+    },
+    {
+      "color": "#5a311a",
+      "coordinates": [
+        26,
+        32
+      ]
+    },
+    {
+      "color": "#1d131e",
+      "coordinates": [
+        38,
+        34
+      ]
+    },
+    {
+      "color": "#c39753",
+      "coordinates": [
+        36,
+        82
+      ]
+    },
+    {
+      "color": "#986a49",
+      "coordinates": [
+        37,
+        82
+      ]
+    },
+    {
+      "color": "#af7f4f",
+      "coordinates": [
+        38,
+        84
+      ]
+    },
+    {
+      "color": "#855a3c",
+      "coordinates": [
+        39,
+        85
+      ]
+    },
+    {
+      "color": "#221715",
+      "coordinates": [
+        32,
+        86
+      ]
+    },
+    {
+      "color": "#231714",
+      "coordinates": [
+        38,
+        89
+      ]
+    }
+  ],
+  "variations": {
+    "green": [
+      "#20280e",
+      "#333e13",
+      "#56621c",
+      "#667430",
+      "#87994a",
+      "#96b851",
+      "#380510",
+      "#b14e45",
+      "#691503",
+      "#323d12",
+      "#6d7c3a",
+      "#4f5a1a",
+      "#1e1317",
+      "#94c353",
+      "#869849",
+      "#91af4f",
+      "#75853c",
+      "#222215",
+      "#232314"
+    ]
+  }
+}
