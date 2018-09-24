@@ -19,7 +19,8 @@
       ],
       "head": [],
       "legs": [
-        "white_pants"
+        "pants",
+        "brown"
       ]
     }
   },
@@ -80,11 +81,12 @@
       ],
       "feet": [
         "shoes",
-        "black"
+        "white"
       ],
       "head": [],
       "legs": [
-        "magenta_pants"
+        "pants",
+        "brown"
       ]
     }
   },
