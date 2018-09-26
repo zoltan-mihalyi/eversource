@@ -8,12 +8,12 @@
     "tsc-watch": "tsc -w -p src",
     "start": "node dist/server/src/index.js",
     "dev": "ts-node-dev --project src/tsconfig.json src/index.ts",
+    "convert": "ts-node --project src/tsconfig.json src/scripts/map/convert.ts",
     "test": "cd test && mocha -r ts-node/register **/*Test.ts"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@eversource/tmx-parser": "^1.6.2",
     "express": "^4.16.3",
     "rbush": "^2.0.2",
     "ws": "^6.0.0"
@@ -22,10 +22,14 @@
     "@types/express": "^4.16.0",
     "@types/mocha": "^5.2.5",
     "@types/node": "^10.9.3",
+    "@types/pako": "^1.0.0",
     "@types/rbush": "^2.0.2",
+    "@types/rimraf": "^2.0.2",
     "@types/sinon": "^5.0.2",
     "@types/ws": "^6.0.0",
     "mocha": "^5.2.0",
+    "pako": "^1.0.6",
+    "rimraf": "^2.6.2",
     "sinon": "^6.1.5",
     "ts-node": "^7.0.1",
     "ts-node-dev": "^1.0.0-pre.26",

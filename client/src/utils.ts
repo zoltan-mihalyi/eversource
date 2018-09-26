@@ -23,13 +23,16 @@ export function parseCommand(data: string): ParsedCommand {
     }
 }
 
-export const pixiLoader = (file: string, cb: (err: any, data: string) => void) => {
-    const loader = new PIXI.loaders.Loader()
-        .add('file', file)
-        .load(() => {
-            cb(null, (loader.resources.file.xhr as any).responseText);
-        });
-};
+export function pixiLoader(file: string):Promise<string>{
+    return new Promise<string>((resolve, reject) => {
+        const loader = new PIXI.loaders.Loader()
+            .add('file', file)
+            .load(() => {
+                resolve((loader.resources.file.xhr as any).responseText); // TODO overhead? parsed twice?
+            });
+        loader.onError.add(reject);
+    });
+}
 
 export function cleanupTextures() {
     cleanup(PIXI.utils.TextureCache);

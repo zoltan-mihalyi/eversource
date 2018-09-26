@@ -1,11 +1,12 @@
 import { NetworkingState } from './NetworkingState';
-import { Loader, Map, TileSet } from '@eversource/tmx-parser';
 import { cleanupTextures, pixiLoader } from '../utils';
-import * as PIXI from "pixi.js";
-import * as path from "path";
+import * as PIXI from 'pixi.js';
+import * as path from 'path';
+import * as pako from 'pako';
 import { GameLevel } from '../map/GameLevel';
 import { Location } from '../../../common/domain/Location';
 import { PlayingState } from './PlayingState';
+import { loadMap } from '../../../common/tiled/TiledResolver';
 
 const basePath = './dist/maps';
 
@@ -14,28 +15,26 @@ export class LoadingState extends NetworkingState<Location> {
     private aborted = false;
     private textureLoader = new PIXI.loaders.Loader();
 
-    onEnter() {
+    async onEnter() {
         const { zoneId } = this.data;
 
         this.context.display.showLoading(zoneId);
 
-        new Loader(pixiLoader).parseFile(`${basePath}/${zoneId}.xml`, (err: any, map?: Map | TileSet) => {
+        const map = await loadMap(`${basePath}/${zoneId}.json`, pixiLoader, base64Inflate);
+        if (this.aborted) {
+            return;
+        }
+
+        for (const tileSet of map.tileSets) {
+            this.textureLoader.add(tileSet.image, path.join(basePath, path.dirname(tileSet.source), tileSet.image));
+        }
+        this.textureLoader.load(() => {
             if (this.aborted) {
+                cleanupTextures();
                 return;
             }
-
-            for (const tileSet of (map as Map).tileSets) {
-                this.textureLoader.add(tileSet.image!.source, path.join(basePath, path.dirname(tileSet.source), tileSet.image!.source));
-            }
-
-            this.textureLoader.load(() => {
-                if (this.aborted) {
-                    cleanupTextures();
-                    return;
-                }
-                this.gameLevel = new GameLevel(map as Map, this.textureLoader.resources);
-                this.context.ws.send('ready');
-            });
+            this.gameLevel = new GameLevel(map, this.textureLoader.resources);
+            this.context.ws.send('ready');
         });
     }
 
@@ -54,4 +53,8 @@ export class LoadingState extends NetworkingState<Location> {
         this.textureLoader.destroy();
         cleanupTextures();
     }
+}
+
+function base64Inflate(base64str: string): Uint8Array {
+    return pako.inflate(atob(base64str));
 }

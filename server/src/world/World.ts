@@ -51,7 +51,7 @@ export class WorldImpl implements World {
                     y: object.y / mapData.tileHeight as Y,
                 };
                 const characterEntity = new CharacterEntity(position, npc.appearance, npc.equipment);
-                const direction = (object.properties as any).direction;
+                const direction = object.properties && object.properties.direction;
                 if (typeof direction === 'string') {
                     characterEntity.setSingle('direction', nameToDirection(direction));
                 }

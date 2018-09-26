@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.1.6" orientation="orthogonal" renderorder="right-down" width="20" height="13" tilewidth="32" tileheight="32" infinite="0" nextobjectid="4">
- <tileset firstgid="1" source="../../../common/maps/terrain-map-v7.xml"/>
- <layer name="Base" width="20" height="13">
-  <data encoding="base64" compression="gzip">
-   H4sIAAAAAAAACpWSS0pDQRBFr0ScaIxCEEUUXj8Qx/6Sp3QImWQHgigIWYPLcORnA4ILyDzgNkTcgjMX4Am+hrLSb+DgcKt/t6qr+/JEmsAttM+kDqzD6rHUQyvow6Qv3cA1dJal90r6gE84ZLwFO/CMz1WUpqfS5txHrNV+F+ga4yE6wKcg/ibeQyt89tF7dNaSVogfl6QH/L7weoEN9m5Dt/Y7R0dzLxjid9CTWjDg7BifO3iCN/wqvF6hy1qIv5ooGbfx2z36P8mvrLHepYvtOMTFdeuTm8v52T3B5A8uV1I/n5uzuUJcrN/X1eRfxL/nfV+a7hVcHns/38NcbO/hz6S6cvl8H30PfB/8nty/auqN/yv+PXJ9C5na/Pv7P5HOFTW52m1NP0i6L3YQBAAA
-  </data>
- </layer>
-</map>

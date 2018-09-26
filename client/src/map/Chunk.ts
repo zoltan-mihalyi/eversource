@@ -1,23 +1,25 @@
 import * as PIXI from 'pixi.js'
 import { TexturedTileSet } from './TexturedTileset';
-import { Layer, Map as TmxMap, TileLayer } from '@eversource/tmx-parser';
 import { X, Y } from '../../../common/domain/Location';
+import { TileMap } from '../../../common/tiled/interfaces';
+import { LoadedMap, ResolvedTileLayer } from '../../../common/tiled/TiledResolver';
 
 export class Chunk {
     readonly base: PIXI.Container = new PIXI.Container();
     readonly above: PIXI.Container = new PIXI.Container();
 
-    constructor(map: TmxMap, ts: TexturedTileSet[], readonly chunkX: X, readonly chunkY: Y, width: number, height: number) {
+    constructor(loadedMap: LoadedMap, ts: TexturedTileSet[], readonly chunkX: X, readonly chunkY: Y, width: number, height: number) {
+        const {map} = loadedMap;
 
         for (const container of [this.base, this.above]) {
             container.x = chunkX;
             container.y = chunkY;
-            container.scale.x = 1 / map.tileWidth;
-            container.scale.y = 1 / map.tileHeight;
+            container.scale.x = 1 / map.tilewidth;
+            container.scale.y = 1 / map.tileheight;
         }
 
-        for (const layer of map.layers) {
-            if (layer.type === 'tile') {
+        for (const layer of loadedMap.layers) {
+            if (layer.type === 'tilelayer') {
                 this.addLayerToContainers(map, ts, width, height, layer);
             }
         }
@@ -25,18 +27,18 @@ export class Chunk {
         cacheAsBitmapIfNotEmpty(this.above);
     }
 
-    private addLayerToContainers(map: TmxMap, ts: TexturedTileSet[], width: number, height: number, layer: Layer) {
+    private addLayerToContainers(map: TileMap, ts: TexturedTileSet[], width: number, height: number, layer: ResolvedTileLayer) {
         for (let i = 0; i < width; i++) {
             for (let j = 0; j < height; j++) {
                 let index = this.chunkX + i + ((this.chunkY + j) * map.width);
-                const tile = (layer as TileLayer).tiles[index];
+                const tile = layer.tiles[index];
                 if (!tile) {
                     continue;
                 }
-                let tileSet = findTileset(tile.gid, ts);
-                const sprite = new PIXI.Sprite(tileSet.textures[tile.gid! - tileSet.firstGid]);
-                sprite.x = i * map.tileWidth;
-                sprite.y = j * map.tileHeight;
+                const tileSet = findTileset(tile.globalId, ts);
+                const sprite = new PIXI.Sprite(tileSet.textures[tile.globalId - tileSet.firstGid]);
+                sprite.x = i * map.tilewidth;
+                sprite.y = j * map.tileheight;
                 const container = (tile.properties as any).type === 'above' ? this.above : this.base;
                 container.addChild(sprite);
             }

@@ -17,8 +17,10 @@ export class GameApplication extends PIXI.Application {
     constructor(readonly gameLevel: GameLevel, position: Position, private ws: WebSocket) {
         super();
 
-        this.viewContainer.scale.x = gameLevel.map.tileWidth;
-        this.viewContainer.scale.y = gameLevel.map.tileHeight;
+        const {map} = gameLevel.map;
+
+        this.viewContainer.scale.x = map.tilewidth;
+        this.viewContainer.scale.y = map.tileheight;
 
         this.timer = requestAnimationFrame(this.update);
 
@@ -64,10 +66,10 @@ export class GameApplication extends PIXI.Application {
         const viewContainer = this.viewContainer;
         const canvas = this.view;
 
-        const { tileWidth, tileHeight } = this.gameLevel.map;
+        const { tilewidth, tileheight } = this.gameLevel.map.map;
 
-        viewContainer.x = Math.floor(-this.centerX * viewContainer.scale.x + canvas.width / 2 - tileWidth / 2);
-        viewContainer.y = Math.floor(-this.centerY * viewContainer.scale.y + canvas.height / 2 - tileHeight / 2);
+        viewContainer.x = Math.floor(-this.centerX * viewContainer.scale.x + canvas.width / 2 - tilewidth / 2);
+        viewContainer.y = Math.floor(-this.centerY * viewContainer.scale.y + canvas.height / 2 - tileheight / 2);
 
         this.gameLevel.setVisibleArea(
             -viewContainer.x / viewContainer.scale.x as X,

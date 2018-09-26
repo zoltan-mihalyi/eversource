@@ -5,11 +5,11 @@ import { ZoneId } from '../../common/domain/Location';
 import { MapData, MapLoader } from '../src/world/MapLoader';
 import { Grid } from '../../common/Grid';
 import { Presets } from '../src/world/Presets';
-import { TmxObject } from '@eversource/tmx-parser';
+import { TiledObject } from '../../common/tiled/interfaces';
 
 const zoneId = 'zone' as ZoneId;
 
-function createMapLoader(objects: TmxObject[] = []) {
+function createMapLoader(objects: TiledObject[] = []) {
     return {
         load: sinon.mock().returns(Promise.resolve<MapData>({
             grid: {} as Grid,
@@ -65,10 +65,10 @@ describe('World', function () {
                 x: 320,
                 y: 320,
                 properties: {},
-            } as TmxObject,
+            } as TiledObject,
             {
                 properties: {}
-            } as TmxObject
+            } as TiledObject
         ]);
         const presets: Presets = {
             orc: {

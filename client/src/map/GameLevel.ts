@@ -1,16 +1,16 @@
 import { Chunk } from './Chunk';
 import { X, Y } from '../../../common/domain/Location';
-import { Map as TmxMap } from '@eversource/tmx-parser';
 import { TexturedTileSet } from './TexturedTileset';
 import * as PIXI from 'pixi.js';
 import { Opaque } from '../../../common/util/Opaque';
 import { GameObject, ObjectId, Position } from '../../../common/GameObject';
 import { TextureLoader } from './TextureLoader';
-import ResourceDictionary = PIXI.loaders.ResourceDictionary;
 import { Character } from '../game/Character';
-import DisplayObject = PIXI.DisplayObject;
 import { CancellableProcess } from '../../../common/util/CancellableProcess';
 import { Diff } from '../../../common/protocol/Diff';
+import { LoadedMap } from '../../../common/tiled/TiledResolver';
+import ResourceDictionary = PIXI.loaders.ResourceDictionary;
+import DisplayObject = PIXI.DisplayObject;
 
 const CHUNK_WIDTH = 16;
 const CHUNK_HEIGHT = 16;
@@ -30,14 +30,14 @@ export class GameLevel {
     private readonly process = new CancellableProcess();
     private readonly textureLoader = new TextureLoader(this.process);
 
-    constructor(readonly map: TmxMap, images: ResourceDictionary) {
+    constructor(readonly map: LoadedMap, images: ResourceDictionary) {
         this.tileSet = map.tileSets.map(tileset => new TexturedTileSet(tileset, images));
         this.container.addChild(this.chunkBaseContainer);
         this.container.addChild(this.objectContainer);
         this.container.addChild(this.chunkAboveContainer);
 
-        for (let chunkX = 0; chunkX < map.width; chunkX += CHUNK_WIDTH) {
-            for (let chunkY = 0; chunkY <= map.height; chunkY += CHUNK_HEIGHT) {
+        for (let chunkX = 0; chunkX < map.map.width; chunkX += CHUNK_WIDTH) {
+            for (let chunkY = 0; chunkY <= map.map.height; chunkY += CHUNK_HEIGHT) {
                 const chunk = new Chunk(this.map, this.tileSet, chunkX as X, chunkY as Y, CHUNK_WIDTH, CHUNK_HEIGHT);
                 this.chunks.set(chunkPosition(chunkX as X, chunkY as Y), chunk);
             }
@@ -45,7 +45,7 @@ export class GameLevel {
     }
 
     updateObjects(diffs: Diff[]) {
-        const { tileWidth, tileHeight } = this.map;
+        const { tilewidth, tileheight } = this.map.map;
 
         const updateCharacterPosition = (character: Character, changes: Partial<GameObject>) => {
             if (!changes.position) {
@@ -54,10 +54,10 @@ export class GameLevel {
 
             const { x, y } = this.round(changes.position);
 
-            character.x = x - 16 / tileWidth; // TODO read from file?
-            character.y = y - 40 / tileHeight;
-            character.scale.x = 1 / tileWidth;
-            character.scale.y = 1 / tileHeight;
+            character.x = x - 16 / tilewidth; // TODO read from file?
+            character.y = y - 40 / tileheight;
+            character.scale.x = 1 / tilewidth;
+            character.scale.y = 1 / tileheight;
         };
 
         for (const diff of diffs) {
@@ -88,11 +88,11 @@ export class GameLevel {
     }
 
     round(position: Position): Position {
-        const { tileWidth, tileHeight } = this.map;
+        const { tilewidth, tileheight } = this.map.map;
 
         return {
-            x: Math.round(position.x * tileWidth) / tileWidth as X,
-            y: Math.round(position.y * tileHeight) / tileHeight as Y,
+            x: Math.round(position.x * tilewidth) / tilewidth as X,
+            y: Math.round(position.y * tileheight) / tileheight as Y,
         }
     }
 

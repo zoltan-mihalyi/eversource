@@ -12,7 +12,7 @@ describe('MapLoader', function () {
 
         const grid = (await mapLoader.load('test' as ZoneId)).grid;
 
-        [X, X, X, X, X, X, _, X, X, X, _, _, X, X, X, X, X, _, _, _].forEach((block, x) => {
+        [X, X, X, X, X, X, _, X, X, X, _, _, X, X, X, X, X, _, X, _].forEach((block, x) => {
             assert(grid.hasBlock(x, 0) === block, `${x}, 0, ${block}`);
             assert(grid.hasBlock(x, 1) === block, `${x}, 1, ${block}`);
         });

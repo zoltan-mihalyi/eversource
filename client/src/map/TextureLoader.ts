@@ -1,11 +1,12 @@
 import * as PIXI from 'pixi.js';
 import { BaseTexture, Rectangle, Texture } from 'pixi.js';
-import { Loader, TileSet } from '@eversource/tmx-parser';
 import { pixiLoader } from '../utils';
 import { CancellableProcess } from '../../../common/util/CancellableProcess';
 import { Palettes } from '../game/Palettes';
 import { AsyncLoader } from './AsyncLoader';
 import { MultiColorReplaceFilter } from '@pixi/filter-multi-color-replace'
+import { TileSet } from '../../../common/tiled/interfaces';
+import { loadTileSet, mergeTileData } from '../../../common/tiled/TiledResolver';
 
 interface Animations {
     [key: string]: Texture[];
@@ -16,30 +17,27 @@ class TileSetDetails {
     private texturedAnimations = new Map<string, Animations>();
 
     constructor(private baseDir: string, tileSet: TileSet) {
-        const { image, tiles, tileWidth, tileHeight } = tileSet;
+        const { columns, tilewidth, tileheight } = tileSet;
 
-        const columns = image!.width / tileWidth; // TODO offset, margin
+        const tiles = mergeTileData(tileSet);
 
-        tiles.forEach((tile, index) => {
-            if (!tile) {
-                return;
+        for (const tileId of Object.keys(tiles)) {
+            const tile = tiles[+tileId]!;
+            const name = tile.properties.name;
+            if (typeof name !== 'string') {
+                continue;
             }
-            const name = (tile.properties as any).name;
-            if (!name) {
-                return;
-            }
-
-            const tileAnimations = tile.animations.length === 0 ?
-                [tileFrame(index)] :
-                tile.animations.map(anim => tileFrame(anim.tileId));
+            const tileAnimations = tile.animation ?
+                tile.animation.map(anim => tileFrame(anim.tileid)) :
+                [tileFrame(+tileId)];
 
             this.animations.set(name, tileAnimations);
-        });
+        }
 
         function tileFrame(index: number): Rectangle {
             const x = index % columns;
             const y = Math.floor(index / columns);
-            return new Rectangle(x * tileWidth, y * tileHeight, tileWidth, tileHeight);
+            return new Rectangle(x * tilewidth, y * tileheight, tilewidth, tileheight);
         }
     }
 
@@ -110,24 +108,17 @@ abstract class AbstractLoader<T> extends AsyncLoader<T> {
 
 class TileSetDetailsLoader extends AbstractLoader<TileSetDetails> {
     protected load(tileSet: string, cb: (details: TileSetDetails) => void) {
-        new Loader(pixiLoader).parseFile(`${this.baseDir}/${tileSet}.xml`, this.process.run((error, result) => {
-            if (error) {
-                throw error;
-            }
-            const details = new TileSetDetails(this.baseDir, result as TileSet);
-            cb(details);
+        loadTileSet(pixiLoader, `${this.baseDir}/${tileSet}.json`).then(this.process.run((result) => {
+            cb(new TileSetDetails(this.baseDir, result));
         }));
     }
 }
 
 class PalettesLoader extends AbstractLoader<Palettes> {
     protected load(key: string, cb: (paletes: Palettes) => void): void {
-        pixiLoader(`${this.baseDir}/${key}/palettes.json`, (err, data) => {
-            if (err) {
-                throw err;
-            }
-            cb(JSON.parse(data));
-        })
+        pixiLoader(`${this.baseDir}/${key}/palettes.json`).then(this.process.run(result => {
+            cb(JSON.parse(result));
+        }));
     }
 }
 
