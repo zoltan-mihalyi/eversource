@@ -1,20 +1,27 @@
-import { Map, NodeLoader, TileLayer } from '@eversource/tmx-parser';
+import { Map, NodeLoader, TileLayer, TmxObject } from '@eversource/tmx-parser';
 import { ZoneId } from '../../../common/domain/Location';
 import { Grid } from '../../../common/Grid';
 
-export interface GridLoader {
-    load(zoneId: ZoneId): Promise<Grid>;
+export interface MapData {
+    grid: Grid;
+    objects: TmxObject[];
+    tileWidth: number;
+    tileHeight: number;
+}
+
+export interface MapLoader {
+    load(zoneId: ZoneId): Promise<MapData>;
 }
 
 const tmxLoader = new NodeLoader();
 
-export class TmxGridLoader implements GridLoader {
+export class TmxMapLoader implements MapLoader {
     constructor(private basePath: string) {
     }
 
-    async load(zoneId: ZoneId): Promise<Grid> {
+    async load(zoneId: ZoneId): Promise<MapData> {
         const map = await this.loadMap(zoneId);
-        return this.createGrid(map);
+        return this.createMapData(map);
     }
 
     private loadMap(zoneId: ZoneId): Promise<Map> {
@@ -29,6 +36,22 @@ export class TmxGridLoader implements GridLoader {
         }));
     }
 
+    private createMapData(map: Map): MapData {
+        const objects: TmxObject[] = [];
+        for (const layer of map.layers) {
+            if (layer.type === 'object') {
+                objects.push(...layer.objects);
+            }
+        }
+
+        return {
+            tileWidth: map.tileWidth,
+            tileHeight: map.tileHeight,
+            grid: this.createGrid(map),
+            objects,
+        };
+    }
+
     private createGrid(map: Map): Grid {
         const start = new Date();
         const { width, height, layers } = map;
@@ -39,7 +62,7 @@ export class TmxGridLoader implements GridLoader {
             return tile.terrain.find(terrain => terrain.properties.block) !== void 0;
         });
 
-        const topLayer = layers.find(layer => layer.name === 'Top') as TileLayer;
+        const topLayer = layers.find(layer => layer.name === 'Top') as TileLayer | undefined;
         if (topLayer) {
             topLayer.tiles.forEach((tile, index) => {
                 if (!(tile.properties as any).type) {

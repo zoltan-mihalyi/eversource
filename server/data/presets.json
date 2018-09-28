@@ -1,0 +1,185 @@
+{
+  "orc": {
+    "appearance": {
+      "sex": "male",
+      "body": [
+        "orc"
+      ],
+      "eyes": [],
+      "ears": [],
+      "hair": [],
+      "nose": []
+    },
+    "equipment": {
+      "chest": [],
+      "shirt": [],
+      "feet": [
+        "shoes",
+        "black"
+      ],
+      "head": [],
+      "legs": [
+        "pants",
+        "brown"
+      ]
+    }
+  },
+  "diana": {
+    "appearance": {
+      "sex": "female",
+      "body": [
+        "darkelf2"
+      ],
+      "eyes": [
+        "purple"
+      ],
+      "ears": [
+        "elvenears"
+      ],
+      "hair": [
+        "princess",
+        "pink2"
+      ],
+      "nose": []
+    },
+    "equipment": {
+      "chest": [],
+      "shirt": [
+        "teal"
+      ],
+      "feet": [
+        "shoes",
+        "black"
+      ],
+      "head": [],
+      "legs": [
+        "robe_skirt",
+        "teal"
+      ]
+    }
+  },
+  "cacal": {
+    "appearance": {
+      "sex": "female",
+      "body": [
+        "dark2"
+      ],
+      "eyes": [
+        "blue"
+      ],
+      "ears": [],
+      "hair": [
+        "jewfro",
+        "brown"
+      ],
+      "nose": []
+    },
+    "equipment": {
+      "chest": [],
+      "shirt": [
+        "maroon"
+      ],
+      "feet": [
+        "shoes",
+        "white"
+      ],
+      "head": [],
+      "legs": [
+        "pants",
+        "brown"
+      ]
+    }
+  },
+  "priest": {
+    "appearance": {
+      "sex": "male",
+      "body": [
+        "light"
+      ],
+      "nose": [
+        "straightnose"
+      ],
+      "hair": [
+        "bangs"
+      ],
+      "eyes": [
+        "brown"
+      ],
+      "ears": []
+    },
+    "equipment": {
+      "shirt": [
+        "white"
+      ],
+      "legs": [
+        "robe_skirt",
+        "white"
+      ],
+      "head": [
+        "cloth_hood",
+        "white"
+      ],
+      "feet": [],
+      "chest": []
+    }
+  },
+  "mage": {
+    "appearance": {
+      "sex": "female",
+      "body": [
+        "tanned"
+      ],
+      "nose": [],
+      "hair": [],
+      "eyes": [],
+      "ears": []
+    },
+    "equipment": {
+      "shirt": [
+        "maroon"
+      ],
+      "legs": [
+        "robe_skirt",
+        "red"
+      ],
+      "head": [
+        "cloth_hood",
+        "red"
+      ],
+      "feet": [
+        "shoes",
+        "black"
+      ],
+      "chest": []
+    }
+  },
+  "monk": {
+    "appearance": {
+      "sex": "male",
+      "body": [
+        "tanned2"
+      ],
+      "nose": [
+        "bignose"
+      ],
+      "hair": [],
+      "eyes": [
+        "brown"
+      ],
+      "ears": []
+    },
+    "equipment": {
+      "shirt": [
+        "brown"
+      ],
+      "legs": [
+        "robe_skirt"
+      ],
+      "head": [
+        "cloth_hood"
+      ],
+      "feet": [],
+      "chest": []
+    }
+  }
+}

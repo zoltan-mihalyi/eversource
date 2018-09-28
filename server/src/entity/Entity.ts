@@ -2,8 +2,12 @@ import { GameObject, ObjectId, Position } from '../../../common/GameObject';
 import { Grid } from '../../../common/Grid';
 import { X, Y } from '../../../common/domain/Location';
 
+let nextId = 0;
+
 export abstract class Entity<O extends GameObject = GameObject> {
-    protected constructor(readonly id: ObjectId, protected state: O) {
+    readonly id: ObjectId = nextId++ as ObjectId;
+
+    protected constructor(protected state: O) {
     }
 
     protected set<K extends keyof O>(partial: Pick<O, K>) {
@@ -13,7 +17,7 @@ export abstract class Entity<O extends GameObject = GameObject> {
         };
     }
 
-    protected setSingle<K extends keyof O>(key: K, value: O[K]) {
+    setSingle<K extends keyof O>(key: K, value: O[K]) {
         if (value !== this.state[key]) {
             this.state = {
                 ...this.state as any,

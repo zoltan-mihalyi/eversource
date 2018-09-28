@@ -1,15 +1,15 @@
 import * as PIXI from 'pixi.js';
-import { Appearance, CharacterAnimation, Direction, Equipment, GameObject } from '../../../common/GameObject';
+import { Appearance, ColoredImage, Direction, Equipment, GameObject } from '../../../common/GameObject';
 import { TextureLoader } from '../map/TextureLoader';
 
-const PARTS: (keyof Appearance | keyof Equipment)[] = [
+const PARTS = [
     'body',
     'eyes',
     'nose',
     'shirt',
-    'chest',
     'feet',
     'legs',
+    'chest',
     'hair',
     'ears',
     'head',
@@ -25,11 +25,13 @@ class CharacterContainer extends PIXI.Container {
 
         for (const part of PARTS) {
             const holder = appearance.hasOwnProperty(part) ? appearance : equipment;
-            const value = (holder as Appearance & Equipment)[part];
-            if (value === null) {
+            const fullValue = (holder as any)[part] as ColoredImage;
+            if (fullValue.length === 0) {
                 continue;
             }
-            if (equipment.head) {
+            const [value, color] = fullValue;
+
+            if (equipment.head[0]) {
                 if (part === 'hair' || part === 'ears') {
                     continue;
                 }
@@ -40,7 +42,7 @@ class CharacterContainer extends PIXI.Container {
             switch (part) {
                 case 'ears':
                 case 'nose':
-                    image = `character/body/${appearance.sex}/${part}/${value}_${appearance.body}`;
+                    image = `character/body/${appearance.sex}/${part}/${value}_${appearance.body[0]}`;
                     break;
                 case 'eyes':
                     image = `character/body/${appearance.sex}/${part}/${value}`;
@@ -49,7 +51,9 @@ class CharacterContainer extends PIXI.Container {
                     image = `character/${part}/${appearance.sex}/${value}`;
             }
 
-            this.addChild(textureLoader.createCustomAnimatedSprite('character', image, name));
+
+            const paletteFile = `character/${getPaletteFile(part, value)}`;
+            this.addChild(textureLoader.createCustomAnimatedSprite('character', image, name, paletteFile, color));
         }
         this.updateAnimationSpeed();
     }
@@ -120,7 +124,7 @@ export class Character extends PIXI.Container {
             directionSprite.destroy({ children: true });
             this.characterContainer = this.createCharacterContainer({
                 ...directionSprite.gameObject,
-                ...changes
+                ...changes,
             });
         } else {
             Object.assign(this.characterContainer.gameObject, changes);
@@ -143,5 +147,14 @@ function directionToName(direction: Direction): string {
             return 'left';
         case 'R':
             return 'right';
+    }
+}
+
+export function getPaletteFile(part: string, value: string) {
+    switch (part) {
+        case 'hair':
+            return part;
+        default:
+            return `${part}/${value}`;
     }
 }

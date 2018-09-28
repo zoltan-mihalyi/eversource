@@ -1,0 +1,92 @@
+.exit{
+    position: absolute;
+    right: 0;
+}
+
+button.big {
+    font-size: xx-large;
+}
+
+input.big {
+    font-size: xx-large;
+}
+
+.menu ul {
+    padding: 0;
+}
+
+.menu li a {
+    margin-left: 10px;
+    color: black;
+    font-size: xx-large;
+    text-decoration: none;
+}
+
+.menu li a.selected {
+    color: #335700;
+}
+
+.menu li a:hover {
+    color: #ccbd7b;
+}
+
+.content {
+    position: absolute;
+    left: 320px;
+}
+
+.prop-table {
+    display: inline-block;
+    vertical-align: top;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.config {
+    font-size: x-large;
+}
+
+.config select {
+    font-size: large;
+}
+
+.display {
+    margin-top: 20px;
+    zoom: 400%;
+    image-rendering: pixelated;
+    text-align: center;
+}
+
+.prop-name {
+    font-weight: bold;
+}
+
+.prop-value select {
+    width: 130px;
+}
+
+.config select {
+    vertical-align: top;
+}
+
+.character-name {
+    display: inline-block;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.palettes .color{
+    width: 30px;
+    height: 30px;
+    display: inline-block;
+}
+
+.palettes h1{
+    word-break: break-all;
+}
+
+.palettes h3{
+    display: inline-block;
+    margin-bottom: 0;
+    margin-left: 10px;
+}
