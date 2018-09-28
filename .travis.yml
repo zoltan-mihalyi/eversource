@@ -8,4 +8,5 @@ after_success:
 env:
   - TEST_DIR=client
   - TEST_DIR=server
+before_install: if [[ `npm -v` != 6* ]]; then npm i -g npm@6; fi
 script: cd $TEST_DIR && npm install && npm test
