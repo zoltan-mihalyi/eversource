@@ -1,8 +1,8 @@
-import { GameObject, ObjectId } from '../GameObject';
+import { EntityData, EntityId } from '../domain/EntityData';
 
 interface BaseDiff {
     type: string;
-    id: ObjectId;
+    id: EntityId;
 }
 
 interface Remove extends BaseDiff {
@@ -11,13 +11,13 @@ interface Remove extends BaseDiff {
 
 interface Change extends BaseDiff {
     type: 'change';
-    changes: Partial<GameObject>;
+    changes: Partial<EntityData>;
 }
 
 interface Create extends BaseDiff {
     type: 'create';
     self: boolean;
-    object: GameObject;
+    data: EntityData;
 }
 
 export type Diff = Remove | Change | Create;

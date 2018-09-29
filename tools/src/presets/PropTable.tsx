@@ -3,9 +3,10 @@ import * as path from 'path';
 import * as React from 'react';
 import { wwwDir } from '../Utils';
 import { SimpleSelect } from './SimpleSelect';
-import { Appearance, ColoredImage, Equipment } from '../../../common/GameObject';
-import { getPaletteFile } from '../../../client/src/game/Character';
 import { Palettes } from '../../../client/src/game/Palettes';
+import { ColoredImage } from '../../../common/domain/ColoredImage';
+import { Appearance, Equipment } from '../../../common/domain/HumanoidEntityData';
+import { getPaletteFile } from '../../../client/src/display/HumanoidDisplay';
 
 interface Properties {
     [key: string]: ColoredImage | string;

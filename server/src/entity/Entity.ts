@@ -1,11 +1,11 @@
-import { GameObject, ObjectId, Position } from '../../../common/GameObject';
 import { Grid } from '../../../common/Grid';
-import { X, Y } from '../../../common/domain/Location';
+import { Position, X, Y } from '../../../common/domain/Location';
+import { EntityData, EntityId } from '../../../common/domain/EntityData';
 
 let nextId = 0;
 
-export abstract class Entity<O extends GameObject = GameObject> {
-    readonly id: ObjectId = nextId++ as ObjectId;
+export abstract class Entity<O extends EntityData = EntityData> {
+    readonly id = nextId++ as EntityId;
 
     protected constructor(protected state: O) {
     }

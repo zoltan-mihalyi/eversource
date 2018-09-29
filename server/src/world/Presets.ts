@@ -1,4 +1,4 @@
-import { Appearance, Equipment } from '../../../common/GameObject';
+import { Appearance, Equipment } from '../../../common/domain/HumanoidEntityData';
 
 export interface Preset {
     appearance: Appearance;
