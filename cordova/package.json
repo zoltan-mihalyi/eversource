@@ -7,24 +7,22 @@
     "scripts": {
         "prepare": "cordova prepare",
         "build": "cordova build",
-        "browser": "cordova run browser -- --live-reload",
+        "browser": "cordova run browser",
         "android": "cordova run android",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
     "author": "Zoltan Mihalyi",
     "license": "MIT",
     "dependencies": {
-        "cordova": "^8.0.0",
+        "cordova": "^8.1.1",
         "cordova-android": "^7.0.0",
         "cordova-browser": "^5.0.4",
-        "cordova-plugin-browsersync": "^1.1.0",
         "cordova-plugin-headercolor": "^1.0.0",
         "cordova-plugin-whitelist": "^1.3.3"
     },
     "cordova": {
         "plugins": {
             "cordova-plugin-whitelist": {},
-            "cordova-plugin-browsersync": {},
             "cordova-plugin-headercolor": {}
         },
         "platforms": [
