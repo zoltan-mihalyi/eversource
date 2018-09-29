@@ -4,11 +4,8 @@ import { BaseCreatureEntityData, CreatureEntityData, Direction } from '../../../
 import { HumanoidEntityData } from '../../../common/domain/HumanoidEntityData';
 import { Omit } from '../../../common/util/Omit';
 import { MonsterEntityData } from '../../../common/domain/MonsterEntityData';
+import { Controller } from './controller/Controller';
 
-export interface Moving {
-    x: number;
-    y: number;
-}
 
 type BaseHumanoid = Omit<HumanoidEntityData, 'position' | 'appearance' | 'equipment'>;
 
@@ -35,36 +32,36 @@ type BaseMonster = Omit<MonsterEntityData, 'position' | 'image'>;
 
 export const BASE_MONSTER: BaseMonster = {
     ...BASE_CREATURE,
-    kind:'monster',
+    kind: 'monster',
     palette: null,
 };
 
 export class CreatureEntity extends Entity<CreatureEntityData> {
-    private moving: Moving = { x: 0, y: 0 };
 
-    constructor(data: CreatureEntityData) {
+    constructor(data: CreatureEntityData, private controller: Controller = new Controller()) {
         super(data);
     }
 
     update(grid: Grid, delta: number) {
         const mul = this.getSpeed() / 1000 * delta;
 
-        const { x, y } = this.state.position;
-        super.tryMove(grid, this.moving.x * mul, this.moving.y * mul);
-        const newPosition = this.state.position;
-        const speed = length(newPosition.x - x, newPosition.y - y) * 1000 / delta;
-        this.setSingle('activitySpeed', speed);
-    }
+        this.controller.update(this, delta);
 
-    setMoving(x: number, y: number) {
+        const { x, y } = this.state.position;
+        const moving = this.controller.getMoving();
+        super.tryMove(grid, moving.x * mul, moving.y * mul);
+
+        const newPosition = this.state.position;
+        const dx = newPosition.x - x;
+        const dy = newPosition.y - y;
 
         let direction: Direction | null = null;
-        const xLarger = Math.abs(x) > Math.abs(y);
+        const xLarger = Math.abs(dx) > Math.abs(dy);
         if (xLarger) {
-            direction = x > 0 ? 'right' : 'left';
-        } else if (y < 0) {
+            direction = dx > 0 ? 'right' : 'left';
+        } else if (dy < 0) {
             direction = 'up';
-        } else if (y > 0) {
+        } else if (dy > 0) {
             direction = 'down';
         }
         if (direction) {
@@ -74,7 +71,8 @@ export class CreatureEntity extends Entity<CreatureEntityData> {
             this.setSingle('activity', 'standing');
         }
 
-        this.moving = { x, y };
+        const speed = length(dx, dy) * 1000 / delta;
+        this.setSingle('activitySpeed', speed);
     }
 
     private getSpeed() {

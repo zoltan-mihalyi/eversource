@@ -5,10 +5,12 @@ import { Diff } from '../../../common/protocol/Diff';
 import { Entity } from '../entity/Entity';
 import { CreatureEntity } from '../entity/CreatureEntity';
 import { EntityData } from '../../../common/domain/EntityData';
+import { PlayerController } from '../entity/controller/PlayerController';
 
 export interface PlayerData {
     zone: Zone;
     character: CreatureEntity;
+    controller: PlayerController;
 }
 
 export class PlayingRequestHandler extends ClientState<PlayerData> {
@@ -31,17 +33,12 @@ export class PlayingRequestHandler extends ClientState<PlayerData> {
                 if (split.length !== 2) {
                     return;
                 }
-                let sX = parseFloat(split[0]);
-                let sY = parseFloat(split[1]);
+                const sX = parseFloat(split[0]);
+                const sY = parseFloat(split[1]);
                 if (!validNumber(sX) || !validNumber(sY)) {
                     return;
                 }
-                const len = Math.sqrt(sX * sX + sY * sY);
-                if (len > 1) {
-                    sX /= len;
-                    sY /= len;
-                }
-                this.data.character.setMoving(sX, sY);
+                this.data.controller.move(sX, sY);
             }
         }
     }

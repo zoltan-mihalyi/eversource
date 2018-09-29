@@ -4,6 +4,7 @@ import { Zone } from './Zone';
 import { Presets } from './Presets';
 import { BASE_HUMANOID, BASE_MONSTER, CreatureEntity } from '../entity/CreatureEntity';
 import { Direction } from '../../../common/domain/CreatureEntityData';
+import { WalkingController } from '../entity/controller/WalkingController';
 
 export interface World {
     getZone(zoneId: ZoneId): Promise<Zone>;
@@ -48,7 +49,7 @@ export class WorldImpl implements World {
                 x: object.x / mapData.tileWidth as X,
                 y: object.y / mapData.tileHeight as Y,
             };
-            const properties = object.properties||{};
+            const properties = object.properties || {};
             if (object.type === 'npc') {
                 const npc = this.presets[object.name!];
                 const { appearance, equipment } = npc;
@@ -56,13 +57,14 @@ export class WorldImpl implements World {
                 const directionProp = properties.direction as Direction | undefined;
 
                 const direction = typeof directionProp === 'string' ? directionProp : 'down';
+                const controller = properties.controller === 'walking' ? new WalkingController(position) : void 0;
                 const characterEntity = new CreatureEntity({
                     ...BASE_HUMANOID,
                     position,
                     direction,
                     appearance,
                     equipment,
-                });
+                }, controller);
                 zone.addEntity(characterEntity);
             } else if (object.type === 'monster') {
                 zone.addEntity(new CreatureEntity({
@@ -70,7 +72,7 @@ export class WorldImpl implements World {
                     position,
                     image: object.name,
                     palette: (properties.palette as string | undefined) || null,
-                }))
+                }, new WalkingController(position)))
             }
         }
 

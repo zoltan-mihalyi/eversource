@@ -5,8 +5,8 @@ export type Y = Opaque<number, 'Y'>;
 export type ZoneId = Opaque<string, 'ZoneId'>;
 
 export interface Position {
-    x: X;
-    y: Y;
+    readonly x: X;
+    readonly y: Y;
 }
 
 export interface Location {
