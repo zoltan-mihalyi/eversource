@@ -112,6 +112,58 @@
                  "width":32,
                  "x":3840,
                  "y":7072
+                }, 
+                {
+                 "height":32,
+                 "id":9,
+                 "name":"slime",
+                 "rotation":0,
+                 "type":"monster",
+                 "visible":true,
+                 "width":32,
+                 "x":3392,
+                 "y":6912
+                }, 
+                {
+                 "height":32,
+                 "id":10,
+                 "name":"slime",
+                 "properties":
+                    {
+                     "palette":"lava-rock"
+                    },
+                 "propertytypes":
+                    {
+                     "palette":"string"
+                    },
+                 "rotation":0,
+                 "type":"monster",
+                 "visible":true,
+                 "width":32,
+                 "x":3200,
+                 "y":6912
+                }, 
+                {
+                 "height":32,
+                 "id":11,
+                 "name":"slime",
+                 "rotation":0,
+                 "type":"monster",
+                 "visible":true,
+                 "width":32,
+                 "x":3296,
+                 "y":6976
+                }, 
+                {
+                 "height":32,
+                 "id":12,
+                 "name":"slime",
+                 "rotation":0,
+                 "type":"monster",
+                 "visible":true,
+                 "width":32,
+                 "x":3264,
+                 "y":6848
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -119,7 +171,7 @@
          "x":0,
          "y":0
         }],
- "nextobjectid":9,
+ "nextobjectid":13,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.1.6",

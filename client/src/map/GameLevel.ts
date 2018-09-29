@@ -12,6 +12,7 @@ import { UpdatableDisplay } from '../display/UpdatableDisplay';
 import { HumanoidDisplay } from '../display/HumanoidDisplay';
 import ResourceDictionary = PIXI.loaders.ResourceDictionary;
 import DisplayObject = PIXI.DisplayObject;
+import { MonsterDisplay } from '../display/MonsterDisplay';
 
 const CHUNK_WIDTH = 16;
 const CHUNK_HEIGHT = 16;
@@ -136,7 +137,12 @@ export class GameLevel {
     private createDisplay(data: EntityData): UpdatableDisplay<any> {
         switch (data.type) {
             case 'creature':
-                return new HumanoidDisplay(this.textureLoader, data);
+                switch (data.kind) {
+                    case 'humanoid':
+                        return new HumanoidDisplay(this.textureLoader, data);
+                    case 'monster':
+                        return new MonsterDisplay(this.textureLoader, data);
+                }
         }
         throw new Error('Unknown entity!');
     }

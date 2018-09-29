@@ -1,33 +1,49 @@
 import { Entity } from './Entity';
 import { Grid } from '../../../common/Grid';
-import { CreatureEntityData, Direction } from '../../../common/domain/CreatureEntityData';
-import { Position } from '../../../common/domain/Location';
-import { Appearance, Equipment } from '../../../common/domain/HumanoidEntityData';
+import { BaseCreatureEntityData, CreatureEntityData, Direction } from '../../../common/domain/CreatureEntityData';
+import { HumanoidEntityData } from '../../../common/domain/HumanoidEntityData';
+import { Omit } from '../../../common/util/Omit';
+import { MonsterEntityData } from '../../../common/domain/MonsterEntityData';
 
 export interface Moving {
     x: number;
     y: number;
 }
 
+type BaseHumanoid = Omit<HumanoidEntityData, 'position' | 'appearance' | 'equipment'>;
+
+const BASE_CREATURE: Omit<BaseCreatureEntityData, 'position'> = {
+    type: 'creature',
+    activity: 'standing',
+    activitySpeed: 0,
+    direction: 'down',
+    level: 1,
+    hp: 100,
+    maxHp: 100,
+    kind: '?',
+    player: false,
+    interaction: [],
+};
+
+export const BASE_HUMANOID: BaseHumanoid = {
+    ...BASE_CREATURE,
+    kind: 'humanoid',
+    player: false,
+};
+
+type BaseMonster = Omit<MonsterEntityData, 'position' | 'image'>;
+
+export const BASE_MONSTER: BaseMonster = {
+    ...BASE_CREATURE,
+    kind:'monster',
+    palette: null,
+};
+
 export class CreatureEntity extends Entity<CreatureEntityData> {
     private moving: Moving = { x: 0, y: 0 };
 
-    constructor(position: Position, direction: Direction, appearance: Appearance, equipment: Equipment) {
-        super({
-            position,
-            type: 'creature',
-            kind: 'humanoid',
-            direction: 'down',
-            player: false,
-            interaction: [],
-            level: 1,
-            hp: 100,
-            maxHp: 100,
-            appearance,
-            equipment,
-            activity: 'standing',
-            activitySpeed: 0,
-        });
+    constructor(data: CreatureEntityData) {
+        super(data);
     }
 
     update(grid: Grid, delta: number) {

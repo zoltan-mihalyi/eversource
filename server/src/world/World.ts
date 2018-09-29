@@ -1,8 +1,8 @@
-import { Position, X, Y, ZoneId } from '../../../common/domain/Location';
+import { X, Y, ZoneId } from '../../../common/domain/Location';
 import { MapLoader } from './MapLoader';
 import { Zone } from './Zone';
 import { Presets } from './Presets';
-import { CreatureEntity } from '../entity/CreatureEntity';
+import { BASE_HUMANOID, BASE_MONSTER, CreatureEntity } from '../entity/CreatureEntity';
 import { Direction } from '../../../common/domain/CreatureEntityData';
 
 export interface World {
@@ -44,17 +44,33 @@ export class WorldImpl implements World {
         const zone = new Zone(mapData.grid);
 
         for (const object of mapData.objects) {
+            const position = {
+                x: object.x / mapData.tileWidth as X,
+                y: object.y / mapData.tileHeight as Y,
+            };
+            const properties = object.properties||{};
             if (object.type === 'npc') {
                 const npc = this.presets[object.name!];
-                const position: Position = {
-                    x: object.x / mapData.tileWidth as X,
-                    y: object.y / mapData.tileHeight as Y,
-                };
-                const directionProp = object.properties && object.properties.direction as Direction | undefined;
+                const { appearance, equipment } = npc;
+
+                const directionProp = properties.direction as Direction | undefined;
 
                 const direction = typeof directionProp === 'string' ? directionProp : 'down';
-                const characterEntity = new CreatureEntity(position, direction, npc.appearance, npc.equipment);
+                const characterEntity = new CreatureEntity({
+                    ...BASE_HUMANOID,
+                    position,
+                    direction,
+                    appearance,
+                    equipment,
+                });
                 zone.addEntity(characterEntity);
+            } else if (object.type === 'monster') {
+                zone.addEntity(new CreatureEntity({
+                    ...BASE_MONSTER,
+                    position,
+                    image: object.name,
+                    palette: (properties.palette as string | undefined) || null,
+                }))
             }
         }
 

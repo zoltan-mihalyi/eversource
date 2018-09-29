@@ -1,7 +1,6 @@
-import * as PIXI from 'pixi.js';
 import { ColoredImage } from '../../../common/domain/ColoredImage';
 import { HumanoidEntityData } from '../../../common/domain/HumanoidEntityData';
-import { UpdatableDisplay } from './UpdatableDisplay';
+import { CreatureDisplay } from './CreatureDisplay';
 
 const PARTS = [
     'body',
@@ -23,15 +22,13 @@ const DISPLAYED_PROPERTIES: (keyof HumanoidEntityData)[] = [
     'activity',
 ];
 
-export class HumanoidDisplay extends UpdatableDisplay<HumanoidEntityData> {
+export class HumanoidDisplay extends CreatureDisplay<HumanoidEntityData> {
+    protected displayedProperties = DISPLAYED_PROPERTIES;
+
     protected build() {
-        const shadow = this.textureLoader.createAnimatedSprite('misc', 'shadow');
-        shadow.blendMode = PIXI.BLEND_MODES.MULTIPLY;
-        this.addChild(shadow);
+        super.build();
 
-        const { appearance, equipment, direction, activity } = this.data;
-
-        const animation = activity + ':' + direction;
+        const { appearance, equipment } = this.data;
 
         for (const part of PARTS) {
             const holder = appearance.hasOwnProperty(part) ? appearance : equipment;
@@ -62,35 +59,7 @@ export class HumanoidDisplay extends UpdatableDisplay<HumanoidEntityData> {
             }
 
             const paletteFile = `character/${getPaletteFile(part, value)}`;
-            const sprite = this.textureLoader.createCustomAnimatedSprite('character', image, animation, paletteFile, color);
-            this.addChild(sprite);
-        }
-    }
-
-    protected matches(changes: Partial<HumanoidEntityData>): boolean {
-        for (const property of DISPLAYED_PROPERTIES) {
-            if (changes.hasOwnProperty(property) && changes[property] !== this.data[property]) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    protected softUpdate() {
-        const speed = this.calculateAnimationSpeed();
-        for (const child of this.children) {
-            (child as PIXI.extras.AnimatedSprite).animationSpeed = speed;
-        }
-    }
-
-    private calculateAnimationSpeed(): number {
-        switch (this.data.activity) {
-            case 'standing':
-                return 0.25;
-            case 'walking':
-                return this.data.activitySpeed / 20;
-            case 'casting':
-                return 0.25;
+            this.addChild(this.createAnimatedSprite('character', image, paletteFile, color));
         }
     }
 }

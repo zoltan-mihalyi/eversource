@@ -1,5 +1,6 @@
 import { HumanoidEntityData } from './HumanoidEntityData';
 import { BaseEntityData } from './EntityData';
+import { MonsterEntityData } from './MonsterEntityData';
 
 export type Direction = 'up' | 'down' | 'left' | 'right';
 export type CreatureEntityInteraction = 'trade' | 'quest';
@@ -18,4 +19,4 @@ export interface BaseCreatureEntityData extends BaseEntityData {
     activitySpeed: number;
 }
 
-export type CreatureEntityData = HumanoidEntityData;
+export type CreatureEntityData = HumanoidEntityData | MonsterEntityData;
