@@ -25,7 +25,7 @@ export class FakeUserDao implements UserDao {
                 nose: ['bignose'],
             },
             equipment: {
-                shirt: ['white'],
+                shirt: ['simple', 'white'],
                 head: ['bandana'],
                 chest: [],
                 legs: ['pants'],
