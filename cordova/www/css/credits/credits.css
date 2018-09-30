@@ -1,0 +1,33 @@
+.credits {
+    text-align: center;
+    position: absolute;
+    top: 0;
+    bottom: 30px;
+    left: 0;
+    right: 0;
+    overflow: auto;
+}
+
+.credits.container {
+    width: auto;
+    margin-top: 0;
+}
+
+.credits a {
+    color: #986a20;
+}
+
+.credits p {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+}
+
+.credits ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.credits-back {
+    position: absolute;
+    bottom: 0;
+}

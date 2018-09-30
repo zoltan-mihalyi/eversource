@@ -1,5 +1,4 @@
-
-ul {
+ul.limited {
     margin: 0;
     list-style-type: none;
     padding-left: 0;
@@ -8,7 +7,7 @@ ul {
 
 }
 
-li button {
+.limited li button {
     opacity: 1;
     text-align: left;
     padding: 2px 6px;
@@ -18,7 +17,7 @@ li button {
     word-wrap: break-word;
 }
 
-li button:hover{
+.limited li button:hover{
     background-color: #86603a;
 }
 

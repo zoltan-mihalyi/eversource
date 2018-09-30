@@ -2,6 +2,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as rimraf from 'rimraf';
 import * as pako from 'pako';
+import * as marked from 'marked';
 import { LargeToSmallMapping } from './TileMapping';
 import { Layer, TileId, TileLayer, TileMap, TileSet, TileSetRef } from '../../../../common/tiled/interfaces';
 
@@ -134,3 +135,7 @@ copy('plants.json');
 copy('plants.png');
 copy('terrain-v7.json');
 copy('terrain-v7.png');
+
+const renderer = new marked.Renderer();
+renderer.link = ( href, title, text ) => `<a target="_blank" href="${ href }" title="${ title }">${ text }</a>`;
+fs.writeFileSync('../cordova/www/dist/authors.html', marked(fs.readFileSync('../AUTHORS.md', 'utf-8'), { renderer }));

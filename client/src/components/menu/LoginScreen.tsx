@@ -3,6 +3,7 @@ import { Button } from '../gui/Button';
 
 interface Props {
     onSubmit: (username: string, password: string) => void;
+    showCredits: () => void;
     loginState: LoginState;
 }
 
@@ -24,6 +25,7 @@ export type LoginState = SimpleState<'initial'>
 export class LoginScreen extends React.Component<Props> {
     private usernameInput = React.createRef<HTMLInputElement>();
     private passwordInput = React.createRef<HTMLInputElement>();
+
     render() {
         return (
             <div className="gui">
@@ -34,26 +36,32 @@ export class LoginScreen extends React.Component<Props> {
     }
 
     private renderContent() {
-        const { loginState } = this.props;
+        const { loginState, showCredits } = this.props;
 
         switch (loginState.type) {
             case  'initial':
             case 'error':
                 return (
-                    <form className="container" onSubmit={this.onSubmit}>
-                        {loginState.type === 'error' ? (
-                            <p>Error: {loginState.message}</p>
-                        ) : null}
+                    <>
+                        <form className="container" onSubmit={this.onSubmit}>
+                            {loginState.type === 'error' ? (
+                                <p>Error: {loginState.message}</p>
+                            ) : null}
+                            <div className="center">
+                                <input name="username" placeholder="username" ref={this.usernameInput}/>
+                            </div>
+                            <div className="center">
+                                <input type="password" name="password" placeholder="password" ref={this.passwordInput}/>
+                            </div>
+                            <div className="center">
+                                <Button>Log in</Button>
+                            </div>
+                        </form>
+
                         <div className="center">
-                            <input name="username" placeholder="username" ref={this.usernameInput}/>
+                            <Button onClick={showCredits}>Credits</Button>
                         </div>
-                        <div className="center">
-                            <input type="password" name="password" placeholder="password" ref={this.passwordInput}/>
-                        </div>
-                        <div className="center">
-                            <Button>Log in</Button>
-                        </div>
-                    </form>
+                    </>
                 );
             case 'connecting':
                 return (
@@ -72,7 +80,7 @@ export class LoginScreen extends React.Component<Props> {
 
     private onSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const {usernameInput, passwordInput} = this;
+        const { usernameInput, passwordInput } = this;
         this.props.onSubmit(usernameInput.current!.value, passwordInput.current!.value);
     };
 

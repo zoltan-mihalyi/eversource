@@ -10,10 +10,14 @@ import { PROTOCOL_VERSION } from '../../common/protocol/Messages';
 import { GameApplication } from './map/GameApplication';
 import { Display } from './protocol/Display';
 import { NetworkHandler } from './protocol/NetworkHandler';
+import { CreditsScreen } from './components/menu/CreditsScreen';
 
 type ShowLoginScreen = {
-    type: 'login'
-    state: LoginState
+    type: 'login';
+    state: LoginState;
+}
+type ShowCreditsScreen = {
+    type: 'credits';
 }
 type ShowCharacterSelectionScreen = {
     type: 'characters';
@@ -31,7 +35,12 @@ type ShowGameScreen = {
     enterCharacterSelection: () => void;
 }
 
-type ShowScreen = ShowLoginScreen | ShowCharacterSelectionScreen | ShowLoadingScreen | ShowGameScreen;
+type ShowScreen =
+    ShowLoginScreen
+    | ShowCreditsScreen
+    | ShowCharacterSelectionScreen
+    | ShowLoadingScreen
+    | ShowGameScreen;
 
 interface State {
     screen: ShowScreen;
@@ -49,7 +58,12 @@ export class App extends React.Component<{}, State> {
         switch (screen.type) {
             case 'login':
                 return (
-                    <LoginScreen onSubmit={this.onSubmitLogin} loginState={screen.state}/>
+                    <LoginScreen onSubmit={this.onSubmitLogin} showCredits={this.showCredits}
+                                 loginState={screen.state}/>
+                );
+            case 'credits':
+                return (
+                    <CreditsScreen onExit={this.showLogin}/>
                 );
             case 'characters':
                 return (
@@ -109,7 +123,7 @@ export class App extends React.Component<{}, State> {
                 this.setState({
                     screen: {
                         type: 'loading',
-                        zoneId
+                        zoneId,
                     },
                 });
             },
@@ -122,7 +136,7 @@ export class App extends React.Component<{}, State> {
                         game,
                     },
                 });
-            }
+            },
         };
 
         new NetworkHandler(ws, display);
@@ -132,6 +146,20 @@ export class App extends React.Component<{}, State> {
                 type: 'login',
                 state: { type: 'connecting' }, // TODO onEnter?
             },
+        });
+    };
+
+    private showCredits = () => {
+        this.setState({
+            screen: {
+                type: 'credits',
+            },
+        });
+    };
+
+    private showLogin = () => {
+        this.setState({
+            screen: { type: 'login', state: { type: 'initial' } },
         });
     };
 }
