@@ -54,10 +54,10 @@ export class FakeUserDao implements UserDao {
             },
             equipment: {
                 shirt: [],
-                head: ['golden_helm'],
-                chest: ['golden_chest'],
-                legs: ['golden_greaves'],
-                feet: ['golden_boots'],
+                head: ['ornate_metal_helm'],
+                chest: ['ornate_metal_chest'],
+                legs: ['ornate_metal_greaves'],
+                feet: ['ornate_metal_boots'],
             },
         },
         {

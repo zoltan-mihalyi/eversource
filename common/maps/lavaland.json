@@ -583,8 +583,8 @@
                  "type":"npc",
                  "visible":true,
                  "width":32,
-                 "x":3146,
-                 "y":6809.33333333333
+                 "x":3200,
+                 "y":6432
                 }, 
                 {
                  "height":32,
@@ -602,8 +602,135 @@
                  "type":"npc",
                  "visible":true,
                  "width":32,
-                 "x":3072,
+                 "x":3168,
+                 "y":6496
+                }, 
+                {
+                 "height":32,
+                 "id":69,
+                 "name":"skeleton_lava_warrior",
+                 "properties":
+                    {
+                     "controller":"walking"
+                    },
+                 "propertytypes":
+                    {
+                     "controller":"string"
+                    },
+                 "rotation":0,
+                 "type":"npc",
+                 "visible":true,
+                 "width":32,
+                 "x":3232,
+                 "y":6528
+                }, 
+                {
+                 "height":32,
+                 "id":70,
+                 "name":"skeleton_priest",
+                 "properties":
+                    {
+                     "controller":"walking"
+                    },
+                 "propertytypes":
+                    {
+                     "controller":"string"
+                    },
+                 "rotation":0,
+                 "type":"npc",
+                 "visible":true,
+                 "width":32,
+                 "x":3136,
+                 "y":6432
+                }, 
+                {
+                 "height":32,
+                 "id":71,
+                 "name":"skeleton_punk",
+                 "properties":
+                    {
+                     "controller":"walking"
+                    },
+                 "propertytypes":
+                    {
+                     "controller":"string"
+                    },
+                 "rotation":0,
+                 "type":"npc",
+                 "visible":true,
+                 "width":32,
+                 "x":3232,
+                 "y":6464
+                }, 
+                {
+                 "height":32,
+                 "id":72,
+                 "name":"protector",
+                 "rotation":0,
+                 "type":"npc",
+                 "visible":true,
+                 "width":32,
+                 "x":4096,
+                 "y":6784
+                }, 
+                {
+                 "height":32,
+                 "id":73,
+                 "name":"bronze",
+                 "properties":
+                    {
+                     "direction":"right"
+                    },
+                 "propertytypes":
+                    {
+                     "direction":"string"
+                    },
+                 "rotation":0,
+                 "type":"npc",
+                 "visible":true,
+                 "width":32,
+                 "x":4064,
                  "y":6848
+                }, 
+                {
+                 "height":32,
+                 "id":74,
+                 "name":"dark",
+                 "properties":
+                    {
+                     "controller":"walking",
+                     "direction":"right"
+                    },
+                 "propertytypes":
+                    {
+                     "controller":"string",
+                     "direction":"string"
+                    },
+                 "rotation":0,
+                 "type":"npc",
+                 "visible":true,
+                 "width":32,
+                 "x":4160,
+                 "y":6880
+                }, 
+                {
+                 "height":32,
+                 "id":75,
+                 "name":"silver",
+                 "properties":
+                    {
+                     "controller":"walking"
+                    },
+                 "propertytypes":
+                    {
+                     "controller":"string"
+                    },
+                 "rotation":0,
+                 "type":"npc",
+                 "visible":true,
+                 "width":32,
+                 "x":4064,
+                 "y":6912
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -611,7 +738,7 @@
          "x":0,
          "y":0
         }],
- "nextobjectid":69,
+ "nextobjectid":76,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.1.6",

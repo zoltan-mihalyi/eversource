@@ -453,7 +453,8 @@
     "appearance": {
       "sex": "male",
       "body": [
-        "skeleton"
+        "skeleton",
+        "dark"
       ],
       "nose": [],
       "hair": [],
@@ -472,6 +473,210 @@
       "feet": [],
       "chest": [
         "leather_chest"
+      ]
+    }
+  },
+  "skeleton_lava_warrior": {
+    "appearance": {
+      "sex": "male",
+      "body": [
+        "skeleton",
+        "lava"
+      ],
+      "nose": [],
+      "hair": [],
+      "eyes": [],
+      "ears": []
+    },
+    "equipment": {
+      "shirt": [],
+      "legs": [
+        "metal_greaves"
+      ],
+      "head": [
+        "chain_hood"
+      ],
+      "feet": [
+        "metal_boots"
+      ],
+      "chest": [
+        "plate_chest"
+      ]
+    }
+  },
+  "skeleton_punk": {
+    "appearance": {
+      "sex": "male",
+      "body": [
+        "skeleton",
+        "dark"
+      ],
+      "nose": [],
+      "hair": [
+        "mohawk",
+        "green2"
+      ],
+      "eyes": [],
+      "ears": []
+    },
+    "equipment": {
+      "shirt": [],
+      "legs": [],
+      "head": [],
+      "feet": [],
+      "chest": []
+    }
+  },
+  "skeleton_priest": {
+    "appearance": {
+      "sex": "male",
+      "body": [
+        "skeleton",
+        "dark"
+      ],
+      "nose": [],
+      "hair": [],
+      "eyes": [],
+      "ears": []
+    },
+    "equipment": {
+      "shirt": [],
+      "legs": [
+        "robe_skirt",
+        "white"
+      ],
+      "head": [
+        "cloth_hood",
+        "white"
+      ],
+      "feet": [],
+      "chest": []
+    }
+  },
+  "protector": {
+    "appearance": {
+      "sex": "male",
+      "body": [
+        "tanned"
+      ],
+      "nose": [
+        "buttonnose"
+      ],
+      "hair": [],
+      "eyes": [
+        "blue"
+      ],
+      "ears": [
+        "elvenears"
+      ]
+    },
+    "equipment": {
+      "shirt": [],
+      "legs": [
+        "metal_greaves"
+      ],
+      "head": [
+        "chainhat",
+        "blue"
+      ],
+      "feet": [
+        "metal_boots"
+      ],
+      "chest": [
+        "plate_chest"
+      ]
+    }
+  },
+  "bronze": {
+    "appearance": {
+      "sex": "female",
+      "body": [
+        "tanned"
+      ],
+      "nose": [],
+      "hair": [],
+      "eyes": [],
+      "ears": []
+    },
+    "equipment": {
+      "shirt": [],
+      "legs": [
+        "ornate_metal_greaves",
+        "bronze"
+      ],
+      "head": [
+        "ornate_metal_helm",
+        "bronze"
+      ],
+      "feet": [
+        "ornate_metal_boots",
+        "bronze"
+      ],
+      "chest": [
+        "ornate_metal_chest",
+        "bronze"
+      ]
+    }
+  },
+  "dark": {
+    "appearance": {
+      "sex": "male",
+      "body": [
+        "dark2"
+      ],
+      "nose": [],
+      "hair": [],
+      "eyes": [],
+      "ears": []
+    },
+    "equipment": {
+      "shirt": [],
+      "legs": [
+        "ornate_metal_greaves",
+        "dark"
+      ],
+      "head": [
+        "ornate_metal_helm",
+        "dark"
+      ],
+      "feet": [
+        "ornate_metal_boots",
+        "dark"
+      ],
+      "chest": [
+        "ornate_metal_chest",
+        "dark"
+      ]
+    }
+  },
+  "silver": {
+    "appearance": {
+      "sex": "female",
+      "body": [
+        "light"
+      ],
+      "nose": [],
+      "hair": [],
+      "eyes": [],
+      "ears": []
+    },
+    "equipment": {
+      "shirt": [],
+      "legs": [
+        "ornate_metal_greaves",
+        "silver"
+      ],
+      "head": [
+        "ornate_metal_helm",
+        "silver"
+      ],
+      "feet": [
+        "ornate_metal_boots",
+        "silver"
+      ],
+      "chest": [
+        "ornate_metal_chest",
+        "silver"
       ]
     }
   }
