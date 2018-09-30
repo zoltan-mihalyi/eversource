@@ -87,26 +87,25 @@ function convert(map: string, large: string, small: string, out: string) {
 
     const newLayers: Layer[] = [];
     for (const layer of tileMap.layers) {
-        if (layer.type === 'tilelayer') {
-            const data = readData(layer);
-            if (hasTerrain(data, begin!, largeTileSet.tilecount)) {
-                newLayers.push(...splitLayers(layer, data, mapping, begin!, largeTileSet.tilecount, shift));
-            } else {
-                newLayers.push({
-                    ...layer,
-                    data: encodeData(data.map(packedId => {
-                        if (packedId < begin) {
-                            return packedId;
-                        }
-                        if (packedId >= begin + largeTileSet.tilecount) {
-                            return packedId + shift;
-                        }
-                        throw new Error('!!!');
-                    })),
-                });
-            }
+        if (layer.type !== 'tilelayer') {
+            continue;
+        }
+        const data = readData(layer);
+        if (hasTerrain(data, begin!, largeTileSet.tilecount)) {
+            newLayers.push(...splitLayers(layer, data, mapping, begin!, largeTileSet.tilecount, shift));
         } else {
-            newLayers.push(layer);
+            newLayers.push({
+                ...layer,
+                data: encodeData(data.map(packedId => {
+                    if (packedId < begin) {
+                        return packedId;
+                    }
+                    if (packedId >= begin + largeTileSet.tilecount) {
+                        return packedId + shift;
+                    }
+                    throw new Error('!!!');
+                })),
+            });
         }
     }
 

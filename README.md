@@ -17,14 +17,14 @@ Install dependencies in `client` and `server` directories:
 npm install
 ```
  
- Build `client`:
+Build in `client`:
  ```sh
 npm run webpack
 ```
 
-Build `server`:
+Build in `server`:
 ```sh
-npm run tsc
+npm run build
 ```
 
 Run the `server`:
@@ -34,7 +34,7 @@ npm run start
 Open `localhost:8000` in a browser!
 
 ## Run Tools
-**Eversource Tools** is an nw.js application which has a preset (npc appearance) and a palette editor. 
+**Eversource Tools** is an nw.js application which can edit presets (npc appearance) and palettes. 
 
 Install nw.js (`tools/runner`) and Tools (`tools`) dependencies: 
 ```sh

@@ -9,6 +9,7 @@
     "start": "node dist/server/src/index.js",
     "dev": "ts-node-dev --project src/tsconfig.json src/index.ts",
     "convert": "ts-node --project src/tsconfig.json src/scripts/map/convert.ts",
+    "build": "npm run tsc && npm run convert",
     "test": "cd test && mocha -r ts-node/register **/*Test.ts"
   },
   "author": "",
