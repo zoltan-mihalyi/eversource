@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<canvas id="canvas" width="1600" height="800" style="image-rendering: pixelated"></canvas>
+<script src="terrain.js"></script>
+<script>
+    var terrainNoise = new Noise(0.914651964);
+    var moistureNoise = new Noise(0.154839537);
+    var temperatureNoise = new Noise(0.741764194);
+
+    // noise.seed(0.914651964);
+    // noise.seed(Math.random());
+
+    var canvas = document.getElementById('canvas');
+    var ctx = canvas.getContext('2d');
+
+    var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+    var data = imageData.data;
+
+    let zoom = 1;
+    const octaves=4
+
+    const w2 = canvas.width / 2;
+    const h2 = canvas.height / 2;
+
+    function draw() {
+        // zoom *= 1.2;
+
+        for (var x = 0; x < canvas.width; x++) {
+            for (var y = 0; y < canvas.height; y++) {
+                // All noise functions return values in the range of -1 to 1.
+
+                // noise.simplex2 and noise.perlin2 for 2d noise
+
+
+                const ind = (x + y * canvas.width) * 4;
+
+                const height = octaved(terrainNoise, 1024, x, y) * 128;
+                const temperature = octaved(temperatureNoise, 512, x, y) * 128;
+                const hardness = octaved(moistureNoise, 512, x, y);
+
+                const x1 = (octaved(terrainNoise, 32, x,y)+1) * 60;
+                const z = (octaved(terrainNoise, 512, x,y)+1);
+                const x2 = z * 60;
+                const color = Math.max(Math.floor(x1*hardness +x2), 0);
+
+                // let color = 0;
+
+
+                // if (moisture - height > 140) { // deep
+                //     color = 0x000066;
+                // } else if (moisture - height > 100) { // water
+                //     color = 0x000099;
+                // } else if (moisture - height > 60) { //shallow
+                //     color = 0x0000ff;
+                // } else if (temperature > 200 && height > 170) { // lava
+                //     color = 0xff0000
+                // } else if (height > 200 && temperature < 150) { // mountain top
+                //     color = 0xffffff
+                // } else if (height > 150) { //mountain
+                //     color = 0x666666
+                // } else if (moisture > 100) { // jungle
+                //     color = 0x009900;
+                // } else if (moisture > 60) { //grass
+                //     color = 0x44aa00;
+                // } else if (moisture >= 0) { //savanna
+                //     color = 0x666600;
+                // }
+
+                data[ind] = color >> 16;
+                data[ind + 1] = (color >> 8) & 255;
+                data[ind + 2] = color & 255;
+                data[ind + 3] = 255;
+
+                // image[x][y].r = Math.abs(value) * 256; // Or whatever. Open demo.html to see it used with canvas.
+            }
+        }
+
+        ctx.putImageData(imageData, 0, 0);
+        // requestAnimationFrame(draw);
+    }
+
+
+    function octaved(noise, scale, x, y) {
+        var value = 0;
+        for (var i = 0; i < octaves; i++) {
+
+            const ratio = Math.pow(2, i);
+            value += noise.simplex2(x / scale / zoom * ratio, y / scale / zoom * ratio) / Math.pow(2, i);
+        }
+        return value / 1.5;
+    }
+
+
+    requestAnimationFrame(draw);
+</script>
+</body>
+</html>
