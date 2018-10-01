@@ -21,7 +21,9 @@
       "legs": [
         "pants",
         "brown"
-      ]
+      ],
+      "hands": [],
+      "arms": []
     }
   },
   "diana": {
@@ -56,7 +58,9 @@
       "legs": [
         "robe_skirt",
         "teal"
-      ]
+      ],
+      "hands": [],
+      "arms": []
     }
   },
   "cacal": {
@@ -89,7 +93,9 @@
       "legs": [
         "pants",
         "brown"
-      ]
+      ],
+      "hands": [],
+      "arms": []
     }
   },
   "priest": {
@@ -126,7 +132,9 @@
         "shoes",
         "white"
       ],
-      "chest": []
+      "chest": [],
+      "hands": [],
+      "arms": []
     }
   },
   "warlock": {
@@ -163,7 +171,9 @@
         "shoes",
         "black"
       ],
-      "chest": []
+      "chest": [],
+      "hands": [],
+      "arms": []
     }
   },
   "mage": {
@@ -194,7 +204,9 @@
         "shoes",
         "black"
       ],
-      "chest": []
+      "chest": [],
+      "hands": [],
+      "arms": []
     }
   },
   "monk": {
@@ -223,7 +235,9 @@
         "cloth_hood"
       ],
       "feet": [],
-      "chest": []
+      "chest": [],
+      "hands": [],
+      "arms": []
     }
   },
   "knight": {
@@ -250,6 +264,12 @@
       ],
       "chest": [
         "plate_chest"
+      ],
+      "hands": [
+        "metal_gloves"
+      ],
+      "arms": [
+        "metal_arms"
       ]
     }
   },
@@ -275,12 +295,15 @@
         "chain_hood"
       ],
       "feet": [
-        "shoes",
-        "black"
+        "metal_boots"
       ],
       "chest": [
         "mail"
-      ]
+      ],
+      "hands": [
+        "metal_gloves"
+      ],
+      "arms": []
     }
   },
   "kumas": {
@@ -317,7 +340,9 @@
         "shoes",
         "maroon"
       ],
-      "chest": []
+      "chest": [],
+      "hands": [],
+      "arms": []
     }
   },
   "nefag": {
@@ -354,7 +379,9 @@
       "chest": [
         "leather_chest",
         "green"
-      ]
+      ],
+      "hands": [],
+      "arms": []
     }
   },
   "bandit": {
@@ -386,7 +413,9 @@
         "shoes",
         "black"
       ],
-      "chest": []
+      "chest": [],
+      "hands": [],
+      "arms": []
     }
   },
   "bandit_dock": {
@@ -421,7 +450,9 @@
         "shoes",
         "black"
       ],
-      "chest": []
+      "chest": [],
+      "hands": [],
+      "arms": []
     }
   },
   "skeleton_warlock": {
@@ -446,7 +477,9 @@
         "black"
       ],
       "feet": [],
-      "chest": []
+      "chest": [],
+      "hands": [],
+      "arms": []
     }
   },
   "skeleton_hunter": {
@@ -473,7 +506,9 @@
       "feet": [],
       "chest": [
         "leather_chest"
-      ]
+      ],
+      "hands": [],
+      "arms": []
     }
   },
   "skeleton_lava_warrior": {
@@ -501,7 +536,9 @@
       ],
       "chest": [
         "plate_chest"
-      ]
+      ],
+      "hands": [],
+      "arms": []
     }
   },
   "skeleton_punk": {
@@ -524,7 +561,9 @@
       "legs": [],
       "head": [],
       "feet": [],
-      "chest": []
+      "chest": [],
+      "hands": [],
+      "arms": []
     }
   },
   "skeleton_priest": {
@@ -550,7 +589,9 @@
         "white"
       ],
       "feet": [],
-      "chest": []
+      "chest": [],
+      "hands": [],
+      "arms": []
     }
   },
   "protector": {
@@ -584,6 +625,10 @@
       ],
       "chest": [
         "plate_chest"
+      ],
+      "hands": [],
+      "arms": [
+        "metal_arms"
       ]
     }
   },
@@ -614,6 +659,14 @@
       ],
       "chest": [
         "ornate_metal_chest",
+        "bronze"
+      ],
+      "hands": [
+        "ornate_metal_gloves",
+        "bronze"
+      ],
+      "arms": [
+        "ornate_metal_arms",
         "bronze"
       ]
     }
@@ -646,6 +699,14 @@
       "chest": [
         "ornate_metal_chest",
         "dark"
+      ],
+      "hands": [
+        "ornate_metal_gloves",
+        "dark"
+      ],
+      "arms": [
+        "ornate_metal_arms",
+        "dark"
       ]
     }
   },
@@ -676,6 +737,14 @@
       ],
       "chest": [
         "ornate_metal_chest",
+        "silver"
+      ],
+      "hands": [
+        "ornate_metal_gloves",
+        "silver"
+      ],
+      "arms": [
+        "ornate_metal_arms",
         "silver"
       ]
     }

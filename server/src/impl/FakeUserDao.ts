@@ -27,8 +27,10 @@ export class FakeUserDao implements UserDao {
             equipment: {
                 shirt: ['simple', 'white'],
                 head: ['bandana'],
+                arms: [],
                 chest: [],
                 legs: ['pants'],
+                hands: [],
                 feet: ['shoes', 'black'],
             },
         },
@@ -55,8 +57,10 @@ export class FakeUserDao implements UserDao {
             equipment: {
                 shirt: [],
                 head: ['ornate_metal_helm'],
+                arms: ['ornate_metal_arms'],
                 chest: ['ornate_metal_chest'],
                 legs: ['ornate_metal_greaves'],
+                hands: ['ornate_metal_gloves'],
                 feet: ['ornate_metal_boots'],
             },
         },
@@ -83,8 +87,10 @@ export class FakeUserDao implements UserDao {
             equipment: {
                 shirt: [],
                 head: ['chain_hood'],
+                arms: [],
                 chest: ['mail'],
                 legs: [],
+                hands: [],
                 feet: ['shoes', 'maroon'],
             },
         },

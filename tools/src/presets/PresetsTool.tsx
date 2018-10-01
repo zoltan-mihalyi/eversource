@@ -125,6 +125,8 @@ export class PresetsTool extends React.Component<Props, State> {
                 shirt: [],
                 legs: [],
                 head: [],
+                arms: [],
+                hands: [],
                 feet: [],
                 chest: [],
             },
