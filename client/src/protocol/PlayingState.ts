@@ -1,12 +1,11 @@
 import { NetworkingContext, NetworkingState } from './NetworkingState';
 import { GameLevel } from '../map/GameLevel';
-import { CharacterSelectionState } from './CharacterSelectionState';
 import { LoadingCharactersState } from './LoadingCharactersState';
 import { GameApplication } from '../map/GameApplication';
-import { Position } from '../../../common/GameObject';
 import { StateManager } from '../../../common/util/StateManager';
 import { cleanupTextures } from '../utils';
 import { Diff } from '../../../common/protocol/Diff';
+import { Position } from '../../../common/domain/Location';
 
 interface PlayingStateData {
     gameLevel: GameLevel;

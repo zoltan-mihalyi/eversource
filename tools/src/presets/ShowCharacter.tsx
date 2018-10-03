@@ -3,12 +3,13 @@ import * as path from 'path';
 import * as PIXI from 'pixi.js';
 import { Preset } from '../../../server/src/world/Presets';
 import { PropTable } from './PropTable';
-import { Character } from '../../../client/src/game/Character';
 import { TextureLoader } from '../../../client/src/map/TextureLoader';
 import { CancellableProcess } from '../../../common/util/CancellableProcess';
-import { CharacterAnimation, Direction, GameObject } from '../../../common/GameObject';
 import { X, Y } from '../../../common/domain/Location';
 import { wwwDir } from '../Utils';
+import { CreatureActivity, Direction } from '../../../common/domain/CreatureEntityData';
+import { HumanoidEntityData } from '../../../common/domain/HumanoidEntityData';
+import { HumanoidDisplay } from '../../../client/src/display/HumanoidDisplay';
 
 interface Props {
     name: string;
@@ -19,12 +20,12 @@ interface Props {
 
 interface State {
     preset: Preset;
-    animation: CharacterAnimation;
+    activity: CreatureActivity;
     direction: Direction;
 }
 
 const process = new CancellableProcess();
-const textureLoader = new TextureLoader(process, 'file://' + path.join(wwwDir, 'spritesheets'));
+const textureLoader = new TextureLoader(process, 32, 'file://' + path.join(wwwDir, 'spritesheets'));
 
 export class ShowCharacter extends React.Component<Props, State> {
     private app: PIXI.Application;
@@ -35,12 +36,12 @@ export class ShowCharacter extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
         this.state = {
-            animation: 'walking',
-            direction: 'D',
+            activity: 'walking',
+            direction: 'down',
             preset: props.originalPreset,
         };
 
-        this.app = new PIXI.Application({ width: 128, height: 128 });
+        this.app = new PIXI.Application({ width: 128, height: 128, backgroundColor: 0xffffff });
         this.updateCharacter();
     }
 
@@ -59,16 +60,16 @@ export class ShowCharacter extends React.Component<Props, State> {
                 <div className="config">
                     <PropTable data={preset.appearance as {}} onChange={this.onChangeAppearance}/>
                     <PropTable data={preset.equipment as {}} onChange={this.onChangeEquipment}/>
-                    <select onChange={this.changeAnim} value={this.state.animation} size={3}>
+                    <select onChange={this.changeAnim} value={this.state.activity} size={3}>
                         <option value="standing">Standing</option>
                         <option value="walking">Walking</option>
                         <option value="casting">Casting</option>
                     </select>
                     <select onChange={this.changeDir} value={this.state.direction} size={4}>
-                        <option value="L">Left</option>
-                        <option value="U">Up</option>
-                        <option value="R">Right</option>
-                        <option value="D">Down</option>
+                        <option value="left">Left</option>
+                        <option value="up">Up</option>
+                        <option value="right">Right</option>
+                        <option value="down">Down</option>
                     </select>
                 </div>
                 <div className="display" ref={this.containerRef}/>
@@ -96,21 +97,27 @@ export class ShowCharacter extends React.Component<Props, State> {
         this.app.stage.removeChildren();
 
 
-        const { preset, animation, direction } = this.state;
+        const { preset, activity, direction } = this.state;
 
-        const gameObject: GameObject = {
-            type: 'character',
+        const entityData: HumanoidEntityData = {
+            type: 'creature',
+            kind: 'humanoid',
+            level: 1,
+            hp: 100,
+            maxHp: 100,
+            player: false,
+            interaction: [],
             position: { x: 0 as X, y: 0 as Y },
-            speed: 3,
-            animation,
+            activity,
+            activitySpeed: 3,
             appearance: preset.appearance,
             equipment: preset.equipment,
             direction,
         };
 
-        const character = new Character(textureLoader, gameObject);
-        character.x = 32;
-        character.y = 32;
+        const character = new HumanoidDisplay(textureLoader, entityData);
+        character.x = 48;
+        character.y = 64;
         this.app.stage.addChild(character);
     }
 
@@ -123,7 +130,7 @@ export class ShowCharacter extends React.Component<Props, State> {
 
     private changeAnim = (event: React.SyntheticEvent<HTMLSelectElement>) => {
         this.setState({
-            animation: event.currentTarget.value as CharacterAnimation,
+            activity: event.currentTarget.value as CreatureActivity,
         });
     };
     private changeDir = (event: React.SyntheticEvent<HTMLSelectElement>) => {

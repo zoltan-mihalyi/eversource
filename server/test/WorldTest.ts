@@ -6,6 +6,7 @@ import { MapData, MapLoader } from '../src/world/MapLoader';
 import { Grid } from '../../common/Grid';
 import { Presets } from '../src/world/Presets';
 import { TiledObject } from '../../common/tiled/interfaces';
+import { HumanoidEntityData } from '../../common/domain/HumanoidEntityData';
 
 const zoneId = 'zone' as ZoneId;
 
@@ -94,8 +95,8 @@ describe('World', function () {
 
         const entities = zone.query(10, 10, 10, 10);
         assert.strictEqual(entities.length, 1);
-        const gameObject = entities[0].get();
-        assert.strictEqual(gameObject.appearance, presets.orc.appearance);
+        const entityData = entities[0].get();
+        assert.strictEqual((entityData as HumanoidEntityData).appearance, presets.orc.appearance);
 
     });
 });

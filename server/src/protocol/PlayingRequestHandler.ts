@@ -1,18 +1,18 @@
 import { ClientState } from './ClientState';
 import { Zone } from '../world/Zone';
 import { CharacterSelectionRequestHandler } from './CharacterSelectionRequestHandler';
-import { CharacterEntity } from '../entity/CharacterEntity';
 import { Diff } from '../../../common/protocol/Diff';
-import { GameObject } from '../../../common/GameObject';
 import { Entity } from '../entity/Entity';
+import { CreatureEntity } from '../entity/CreatureEntity';
+import { EntityData } from '../../../common/domain/EntityData';
 
 export interface PlayerData {
     zone: Zone;
-    character: CharacterEntity;
+    character: CreatureEntity;
 }
 
 export class PlayingRequestHandler extends ClientState<PlayerData> {
-    private lastSent: Map<Entity, GameObject> | null = null;
+    private lastSent: Map<Entity, EntityData> | null = null;
     private detectionDistance = 15;
 
     leave() {
@@ -82,8 +82,8 @@ export class PlayingRequestHandler extends ClientState<PlayerData> {
                     diffs.push(this.createDiff(entity));
                 } else {
                     let hasDiff = false;
-                    const changes: Partial<GameObject> = {};
-                    for (const key of Object.keys(object) as (keyof GameObject)[]) {
+                    const changes: Partial<EntityData> = {};
+                    for (const key of Object.keys(object) as (keyof EntityData)[]) {
                         if (object[key] !== previousObject[key]) {
                             hasDiff = true;
                             changes[key] = object[key];
@@ -114,7 +114,7 @@ export class PlayingRequestHandler extends ClientState<PlayerData> {
             id: entity.id,
             type: 'create',
             self: entity === this.data.character,
-            object: entity.get(),
+            data: entity.get(),
         };
     }
 }
@@ -123,8 +123,8 @@ function validNumber(num: number): boolean {
     return !isNaN(num) && isFinite(num);
 }
 
-function indexEntities(entities: Entity[]): Map<Entity, GameObject> {
-    const result = new Map<Entity, GameObject>();
+function indexEntities(entities: Entity[]): Map<Entity, EntityData> {
+    const result = new Map<Entity, EntityData>();
     for (const entity of entities) {
         result.set(entity, entity.get());
     }

@@ -1,9 +1,9 @@
-import { X, Y, ZoneId } from '../../../common/domain/Location';
+import { Position, X, Y, ZoneId } from '../../../common/domain/Location';
 import { MapLoader } from './MapLoader';
 import { Zone } from './Zone';
-import { CharacterEntity } from '../entity/CharacterEntity';
-import { Direction, Position } from '../../../common/GameObject';
 import { Presets } from './Presets';
+import { CreatureEntity } from '../entity/CreatureEntity';
+import { Direction } from '../../../common/domain/CreatureEntityData';
 
 export interface World {
     getZone(zoneId: ZoneId): Promise<Zone>;
@@ -50,11 +50,10 @@ export class WorldImpl implements World {
                     x: object.x / mapData.tileWidth as X,
                     y: object.y / mapData.tileHeight as Y,
                 };
-                const characterEntity = new CharacterEntity(position, npc.appearance, npc.equipment);
-                const direction = object.properties && object.properties.direction;
-                if (typeof direction === 'string') {
-                    characterEntity.setSingle('direction', nameToDirection(direction));
-                }
+                const directionProp = object.properties && object.properties.direction as Direction | undefined;
+
+                const direction = typeof directionProp === 'string' ? directionProp : 'down';
+                const characterEntity = new CreatureEntity(position, direction, npc.appearance, npc.equipment);
                 zone.addEntity(characterEntity);
             }
         }
@@ -68,17 +67,4 @@ export class WorldImpl implements World {
             zone.update(INTERVAL);
         });
     };
-}
-
-function nameToDirection(name: string): Direction {
-    switch (name) {
-        case 'up':
-            return 'U';
-        case 'left':
-            return 'L';
-        case 'right':
-            return 'R';
-        default:
-            return 'D';
-    }
 }

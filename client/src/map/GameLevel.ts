@@ -1,14 +1,15 @@
 import { Chunk } from './Chunk';
-import { X, Y } from '../../../common/domain/Location';
+import { Position, X, Y } from '../../../common/domain/Location';
 import { TexturedTileSet } from './TexturedTileset';
 import * as PIXI from 'pixi.js';
 import { Opaque } from '../../../common/util/Opaque';
-import { GameObject, ObjectId, Position } from '../../../common/GameObject';
 import { TextureLoader } from './TextureLoader';
-import { Character } from '../game/Character';
 import { CancellableProcess } from '../../../common/util/CancellableProcess';
 import { Diff } from '../../../common/protocol/Diff';
 import { LoadedMap } from '../../../common/tiled/TiledResolver';
+import { EntityData, EntityId } from '../../../common/domain/EntityData';
+import { UpdatableDisplay } from '../display/UpdatableDisplay';
+import { HumanoidDisplay } from '../display/HumanoidDisplay';
 import ResourceDictionary = PIXI.loaders.ResourceDictionary;
 import DisplayObject = PIXI.DisplayObject;
 
@@ -23,12 +24,12 @@ export class GameLevel {
     readonly visibleChunks = new Set<Chunk>();
     readonly container = new PIXI.Container();
     readonly chunkBaseContainer = new PIXI.Container();
-    private characters = new Map<ObjectId, Character>();
+    private entityDisplays = new Map<EntityId, UpdatableDisplay<any>>();
     readonly objectContainer = new PIXI.Container();
     readonly chunkAboveContainer = new PIXI.Container();
     private readonly tileSet: TexturedTileSet[];
     private readonly process = new CancellableProcess();
-    private readonly textureLoader = new TextureLoader(this.process);
+    private readonly textureLoader = new TextureLoader(this.process, this.map.map.tileheight);
 
     constructor(readonly map: LoadedMap, images: ResourceDictionary) {
         this.tileSet = map.tileSets.map(tileset => new TexturedTileSet(tileset, images));
@@ -47,37 +48,38 @@ export class GameLevel {
     updateObjects(diffs: Diff[]) {
         const { tilewidth, tileheight } = this.map.map;
 
-        const updateCharacterPosition = (character: Character, changes: Partial<GameObject>) => {
-            if (!changes.position) {
+        const updateDisplayPosition = <T extends EntityData>(display: UpdatableDisplay<T>, changes: Partial<T>) => {
+            const position = changes.position;
+            if (!position) {
                 return;
             }
 
-            const { x, y } = this.round(changes.position);
+            const { x, y } = this.round(position);
 
-            character.x = x - 16 / tilewidth; // TODO read from file?
-            character.y = y - 40 / tileheight;
-            character.scale.x = 1 / tilewidth;
-            character.scale.y = 1 / tileheight;
+            display.x = x;
+            display.y = y;
+            display.scale.x = 1 / tilewidth;
+            display.scale.y = 1 / tileheight;
         };
 
         for (const diff of diffs) {
             switch (diff.type) {
                 case 'create': {
-                    const character = new Character(this.textureLoader, diff.object);
-                    this.characters.set(diff.id, character);
-                    this.objectContainer.addChild(character);
-                    updateCharacterPosition(character, diff.object);
+                    const display = this.createDisplay(diff.data);
+                    this.entityDisplays.set(diff.id, display);
+                    this.objectContainer.addChild(display);
+                    updateDisplayPosition(display, diff.data);
                     break;
                 }
                 case 'change': {
-                    const character = this.characters.get(diff.id)!;
+                    const character = this.entityDisplays.get(diff.id)!;
                     character.update(diff.changes);
-                    updateCharacterPosition(character, diff.changes);
+                    updateDisplayPosition(character, diff.changes);
                     break;
                 }
                 case 'remove': {
-                    const character = this.characters.get(diff.id)!;
-                    this.characters.delete(diff.id);
+                    const character = this.entityDisplays.get(diff.id)!;
+                    this.entityDisplays.delete(diff.id);
                     this.objectContainer.removeChild(character);
                     break;
                 }
@@ -129,6 +131,14 @@ export class GameLevel {
 
     destroy() {
         this.process.stop();
+    }
+
+    private createDisplay(data: EntityData): UpdatableDisplay<any> {
+        switch (data.type) {
+            case 'creature':
+                return new HumanoidDisplay(this.textureLoader, data);
+        }
+        throw new Error('Unknown entity!');
     }
 }
 

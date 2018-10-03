@@ -23,6 +23,11 @@ export interface Tile {
     animation?: Animation[];
 }
 
+export interface TileOffset {
+    x: number;
+    y: number;
+}
+
 export interface TileSet {
     columns: number;
     image: string; // TODO relative???
@@ -34,8 +39,9 @@ export interface TileSet {
     terrains?: Terrain[];
     tilecount: number;
     tileheight: number;
+    tileoffset?: TileOffset;
     tiles?: { [key: string]: Tile | undefined };
-    tileproperties?: { [key: string]: TiledProperties |undefined };
+    tileproperties?: { [key: string]: TiledProperties | undefined };
     tilewidth: number;
     type: 'tileset';
 }

@@ -1,24 +1,32 @@
 import { Entity } from './Entity';
-import { Appearance, CharacterGameObject, Direction, Equipment, ObjectId, Position } from '../../../common/GameObject';
 import { Grid } from '../../../common/Grid';
+import { CreatureEntityData, Direction } from '../../../common/domain/CreatureEntityData';
+import { Position } from '../../../common/domain/Location';
+import { Appearance, Equipment } from '../../../common/domain/HumanoidEntityData';
 
 export interface Moving {
     x: number;
     y: number;
 }
 
-export class CharacterEntity extends Entity<CharacterGameObject> {
+export class CreatureEntity extends Entity<CreatureEntityData> {
     private moving: Moving = { x: 0, y: 0 };
 
-    constructor(position: Position, appearance: Appearance, equipment: Equipment) {
+    constructor(position: Position, direction: Direction, appearance: Appearance, equipment: Equipment) {
         super({
             position,
-            type: 'character',
-            direction: 'D',
-            animation: 'standing',
+            type: 'creature',
+            kind: 'humanoid',
+            direction: 'down',
+            player: false,
+            interaction: [],
+            level: 1,
+            hp: 100,
+            maxHp: 100,
             appearance,
             equipment,
-            speed: 0,
+            activity: 'standing',
+            activitySpeed: 0,
         });
     }
 
@@ -29,7 +37,7 @@ export class CharacterEntity extends Entity<CharacterGameObject> {
         super.tryMove(grid, this.moving.x * mul, this.moving.y * mul);
         const newPosition = this.state.position;
         const speed = length(newPosition.x - x, newPosition.y - y) * 1000 / delta;
-        this.setSingle('speed', speed);
+        this.setSingle('activitySpeed', speed);
     }
 
     setMoving(x: number, y: number) {
@@ -37,17 +45,17 @@ export class CharacterEntity extends Entity<CharacterGameObject> {
         let direction: Direction | null = null;
         const xLarger = Math.abs(x) > Math.abs(y);
         if (xLarger) {
-            direction = x > 0 ? 'R' : 'L';
+            direction = x > 0 ? 'right' : 'left';
         } else if (y < 0) {
-            direction = 'U';
+            direction = 'up';
         } else if (y > 0) {
-            direction = 'D';
+            direction = 'down';
         }
         if (direction) {
             this.setSingle('direction', direction);
-            this.setSingle('animation', 'walking');
+            this.setSingle('activity', 'walking');
         } else {
-            this.setSingle('animation', 'standing');
+            this.setSingle('activity', 'standing');
         }
 
         this.moving = { x, y };

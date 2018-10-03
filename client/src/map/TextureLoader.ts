@@ -5,19 +5,23 @@ import { CancellableProcess } from '../../../common/util/CancellableProcess';
 import { Palettes } from '../game/Palettes';
 import { AsyncLoader } from './AsyncLoader';
 import { MultiColorReplaceFilter } from '@pixi/filter-multi-color-replace'
-import { TileSet } from '../../../common/tiled/interfaces';
+import { TileMap, TileSet } from '../../../common/tiled/interfaces';
 import { loadTileSet, mergeTileData } from '../../../common/tiled/TiledResolver';
 
 interface Animations {
     [key: string]: Texture[];
 }
 
+const NO_OFFSET = { x: 0, y: 0 };
+
 class TileSetDetails {
+    readonly tileSet: TileSet;
     private animations = new Map<string, Rectangle[]>();
     private texturedAnimations = new Map<string, Animations>();
 
     constructor(private baseDir: string, tileSet: TileSet) {
         const { columns, tilewidth, tileheight } = tileSet;
+        this.tileSet = tileSet;
 
         const tiles = mergeTileData(tileSet);
 
@@ -63,23 +67,28 @@ export class TextureLoader {
     private tileSetLoader = new TileSetDetailsLoader(this.process, this.baseDir);
     private palettesLoader = new PalettesLoader(this.process, this.baseDir);
 
-    private tileSetDetails = new Map<string, TileSetDetails>();
-    private loadingTileSets = new Map<string, Set<(details: TileSetDetails) => void>>();
-
-    constructor(private readonly process: CancellableProcess, private baseDir = 'spritesheets') {
+    constructor(private readonly process: CancellableProcess, private tileHeight: number,
+                private baseDir = 'spritesheets') {
     }
 
-    createAnimatedSprite(image: string, name: string): PIXI.extras.AnimatedSprite {
-        return this.createCustomAnimatedSprite(image, image, name, '');
+    createAnimatedSprite(image: string, animation: string): PIXI.extras.AnimatedSprite {
+        return this.createCustomAnimatedSprite(image, image, animation, '');
     }
 
-    createCustomAnimatedSprite(tileSet: string, image: string, name: string,
+    createCustomAnimatedSprite(tileSet: string, image: string, animation: string,
                                palettesFile: string, color?: string): PIXI.extras.AnimatedSprite {
 
         const sprite = new PIXI.extras.AnimatedSprite([Texture.EMPTY]);
 
         const tileSetReq = this.tileSetLoader.get(tileSet, (details: TileSetDetails) => {
-            sprite.textures = details.getAnimations(image)[name];
+            const { tileSet } = details;
+            const tileoffset = tileSet.tileoffset || NO_OFFSET;
+            sprite.anchor.set(
+                -tileoffset.x / tileSet.tilewidth,
+                1 - ((this.tileHeight + tileoffset.y) / tileSet.tileheight)
+            );
+
+            sprite.textures = details.getAnimations(image)[animation];
             sprite.play();
         });
         const palettesReq = !color ? null : this.palettesLoader.get(palettesFile!, (palettes) => {
