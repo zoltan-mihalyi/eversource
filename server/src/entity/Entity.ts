@@ -1,4 +1,4 @@
-import { Grid } from '../../../common/Grid';
+import { Grid, GridBlock } from '../../../common/Grid';
 import { Position, X, Y } from '../../../common/domain/Location';
 import { EntityData, EntityId } from '../../../common/domain/EntityData';
 
@@ -44,8 +44,12 @@ export abstract class Entity<O extends EntityData = EntityData> {
             const side = dir === 1 ? 1 : 0;
 
             for (let i = Math.floor(x); i * dir <= Math.floor(newX) * dir; i += dir) {
-                if (grid.hasBlock(i + side, Math.floor(y)) || grid.hasBlock(i + side, Math.ceil(y))) {
-                    newX = i + 1 - side;
+                const edge1 = getHorizontalEdge(grid.getBlock(i + side, Math.floor(y)), 1 - side, y % 1);
+                const edge2 = getHorizontalEdge(grid.getBlock(i + side, Math.floor(y)), 1 - side, 1);
+                const edge3 = getHorizontalEdge(grid.getBlock(i + side, Math.ceil(y)), 1 - side, y % 1);
+                const closestEdge = Math.min(edge1 * dir, edge2 * dir, edge3 * dir) * dir;
+                if ((newX * dir) > (i + closestEdge) * dir) {
+                    newX = (i + closestEdge);
                     break;
                 }
             }
@@ -55,8 +59,12 @@ export abstract class Entity<O extends EntityData = EntityData> {
             const side = dir === 1 ? 1 : 0;
 
             for (let i = Math.floor(y); i * dir <= Math.floor(newY) * dir; i += dir) {
-                if (grid.hasBlock(Math.floor(x), i + side) || grid.hasBlock(Math.ceil(x), i + side)) {
-                    newY = i + 1 - side;
+                const edge1 = getVerticalEdge(grid.getBlock(Math.floor(newX), i + side), 1 - side, newX % 1);
+                const edge2 = getVerticalEdge(grid.getBlock(Math.floor(newX), i + side), 1 - side, 1);
+                const edge3 = getVerticalEdge(grid.getBlock(Math.ceil(newX), i + side), 1 - side, newX % 1);
+                const closestEdge = Math.min(edge1 * dir, edge2 * dir, edge3 * dir) * dir;
+                if ((newY * dir) > (i + closestEdge) * dir) {
+                    newY = (i + closestEdge);
                     break;
                 }
             }
@@ -69,3 +77,39 @@ export abstract class Entity<O extends EntityData = EntityData> {
         }
     }
 }
+
+
+function getHorizontalEdge(block: GridBlock, side: number, y: number) {
+    switch (block) {
+        case GridBlock.EMPTY:
+            return side === 0 ? Infinity : -Infinity;
+        case GridBlock.TOP_LEFT:
+            return side === 0 ? 0 : 1 - y;
+        case GridBlock.TOP_RIGHT:
+            return side === 1 ? 1 : y;
+        case GridBlock.BOTTOM_LEFT:
+            return side === 0 ? 0 : y;
+        case GridBlock.BOTTOM_RIGHT:
+            return side === 1 ? 1 : 1 - y;
+        default:
+            return side;
+    }
+}
+
+function getVerticalEdge(block: GridBlock, side: number, x: number) {
+    switch (block) {
+        case GridBlock.EMPTY:
+            return side === 0 ? Infinity : -Infinity;
+        case GridBlock.TOP_LEFT:
+            return side === 0 ? 0 : 1 - x;
+        case GridBlock.TOP_RIGHT:
+            return side === 0 ? 0 : x;
+        case GridBlock.BOTTOM_LEFT:
+            return side === 1 ? 1 : x;
+        case GridBlock.BOTTOM_RIGHT:
+            return side === 1 ? 1 : 1 - x;
+        default:
+            return side;
+    }
+}
+
