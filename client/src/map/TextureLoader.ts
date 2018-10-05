@@ -3,9 +3,9 @@ import { BaseTexture, Rectangle, Texture } from 'pixi.js';
 import { pixiLoader } from '../utils';
 import { CancellableProcess } from '../../../common/util/CancellableProcess';
 import { Palettes } from '../game/Palettes';
-import { AsyncLoader } from './AsyncLoader';
+import { AsyncLoader, Request } from './AsyncLoader';
 import { MultiColorReplaceFilter } from '@pixi/filter-multi-color-replace'
-import { TileMap, TileSet } from '../../../common/tiled/interfaces';
+import { TileSet } from '../../../common/tiled/interfaces';
 import { loadTileSet, mergeTileData } from '../../../common/tiled/TiledResolver';
 
 interface Animations {
@@ -71,6 +71,10 @@ export class TextureLoader {
                 private baseDir = 'spritesheets') {
     }
 
+    loadDetails(requestHolder: PIXI.Container, tileSet: string, callback: (details: TileSetDetails) => void) {
+        addRequestToContainer(requestHolder, this.tileSetLoader.get(tileSet, callback));
+    }
+
     createAnimatedSprite(image: string, animation: string): PIXI.extras.AnimatedSprite {
         return this.createCustomAnimatedSprite(image, image, animation, '');
     }
@@ -80,30 +84,26 @@ export class TextureLoader {
 
         const sprite = new PIXI.extras.AnimatedSprite([Texture.EMPTY]);
 
-        const tileSetReq = this.tileSetLoader.get(tileSet, (details: TileSetDetails) => {
+        this.loadDetails(sprite, tileSet, (details: TileSetDetails) => {
             const { tileSet } = details;
             const tileoffset = tileSet.tileoffset || NO_OFFSET;
             sprite.anchor.set(
                 -tileoffset.x / tileSet.tilewidth,
-                1 - ((this.tileHeight + tileoffset.y) / tileSet.tileheight)
+                1 - ((this.tileHeight + tileoffset.y) / tileSet.tileheight),
             );
 
             sprite.textures = details.getAnimations(image)[animation];
             sprite.play();
         });
-        const palettesReq = !color ? null : this.palettesLoader.get(palettesFile!, (palettes) => {
-            const palette = palettes.variations[color];
-            sprite.filters = [new MultiColorReplaceFilter(
-                palettes.base.map((baseColorInfo, i) => [string2hex(baseColorInfo.color), string2hex(palette[i])]),
-            )];
-        });
-        sprite.destroy = (options) => {
-            PIXI.extras.AnimatedSprite.prototype.destroy.call(sprite, options);
-            tileSetReq.stop();
-            if (palettesReq) {
-                palettesReq.stop();
-            }
-        };
+
+        if (color) {
+            addRequestToContainer(sprite, this.palettesLoader.get(palettesFile!, (palettes) => {
+                const palette = palettes.variations[color];
+                sprite.filters = [new MultiColorReplaceFilter(
+                    palettes.base.map((baseColorInfo, i) => [string2hex(baseColorInfo.color), string2hex(palette[i])]),
+                )];
+            }));
+        }
 
         return sprite;
     }
@@ -129,6 +129,27 @@ class PalettesLoader extends AbstractLoader<Palettes> {
             cb(JSON.parse(result));
         }));
     }
+}
+
+interface RequestHolder extends PIXI.Container {
+    _requests: Request[];
+}
+
+function addRequestToContainer(container: PIXI.Container, request: Request): void {
+    let requests = (container as RequestHolder)._requests;
+    if (!requests) {
+        requests = [];
+        (container as RequestHolder)._requests = requests;
+    }
+
+    requests.push(request);
+
+    container.destroy = (options) => {
+        container.constructor.prototype.destroy.call(container, options);
+        for (const r of requests) {
+            r.stop();
+        }
+    };
 }
 
 function string2hex(color: string): number {

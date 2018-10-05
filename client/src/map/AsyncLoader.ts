@@ -1,6 +1,6 @@
 type Callback<T> = (data: T) => void;
 
-interface Request {
+export interface Request {
     stop(): void;
 }
 
