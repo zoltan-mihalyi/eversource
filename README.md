@@ -12,22 +12,17 @@ A HTML5-based 2D MMORPG with LPC style pixel graphics.
 
 ## How to run
 
-Install dependencies in `client` and `server` directories:
+Install dependencies:
 ```sh
 npm install
 ```
  
-Build in `client`:
+Build:
  ```sh
-npm run webpack
-```
-
-Build in `server`:
-```sh
 npm run build
 ```
 
-Run the `server`:
+Run:
 ```sh
 npm run start
 ```

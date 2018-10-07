@@ -1,0 +1,16 @@
+{
+  "name": "eversource",
+  "version": "0.1.0",
+  "scripts": {
+    "install": "npm run install-client && npm run install-server",
+    "install-client": "cd client && npm i",
+    "install-server": "cd server && npm i",
+    "build": "npm run build-client && npm run build-server",
+    "build-client": "cd client && npm run webpack",
+    "build-server": "cd server && npm run build",
+    "run": "cd server && npm run start",
+    "test": "npm run test-server && npm run test-client",
+    "test-client": "cd client && npm test",
+    "test-server": "cd server && npm run build && npm test"
+  }
+}

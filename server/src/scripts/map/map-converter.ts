@@ -1,8 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
-import * as rimraf from 'rimraf';
 import * as pako from 'pako';
-import * as marked from 'marked';
 import { LargeToSmallMapping } from './TileMapping';
 import { Layer, TileId, TileLayer, TileMap, TileSet, TileSetRef } from '../../../../common/tiled/interfaces';
 
@@ -63,7 +61,7 @@ function splitLayers(original: TileLayer, data: number[], mapping: LargeToSmallM
 
 }
 
-function convert(map: string, large: string, small: string, out: string) {
+export function convertMap(map: string, large: string, small: string, out: string) {
     const tileMap = JSON.parse(fs.readFileSync(map, 'utf-8')) as TileMap;
     const mapDir = path.dirname(map);
     const largeTileSet = JSON.parse(fs.readFileSync(path.resolve(mapDir, large), 'utf-8')) as TileSet;
@@ -118,24 +116,3 @@ function convert(map: string, large: string, small: string, out: string) {
 
     fs.writeFileSync(out, JSON.stringify(outMap), 'utf-8');
 }
-
-const CLIENT_MAPS = '../cordova/www/dist/maps';
-const BASE_MAPS = '../common/maps';
-
-function copy(file: string) {
-    fs.copyFileSync(path.join(BASE_MAPS, file), path.join(CLIENT_MAPS, file));
-}
-
-rimraf.sync(CLIENT_MAPS);
-fs.mkdirSync(CLIENT_MAPS);
-convert(path.join(BASE_MAPS, 'lavaland.json'), 'terrain-map-v7.json', 'terrain-v7.json', path.join(CLIENT_MAPS, 'lavaland.json'));
-copy('adobe-2.json');
-copy('adobe-2-dark.png');
-copy('plants.json');
-copy('plants.png');
-copy('terrain-v7.json');
-copy('terrain-v7.png');
-
-const renderer = new marked.Renderer();
-renderer.link = ( href, title, text ) => `<a target="_blank" href="${ href }" title="${ title }">${ text }</a>`;
-fs.writeFileSync('../cordova/www/dist/authors.html', marked(fs.readFileSync('../AUTHORS.md', 'utf-8'), { renderer }));
