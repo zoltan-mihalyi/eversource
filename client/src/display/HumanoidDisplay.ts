@@ -53,9 +53,6 @@ export class HumanoidDisplay extends CreatureDisplay<HumanoidEntityData> {
                 case 'nose':
                     image = `character/body/${appearance.sex}/${part}/${value}_${appearance.body[0]}`;
                     break;
-                case 'eyes':
-                    image = `character/body/${appearance.sex}/${part}/${value}`;
-                    break;
                 default:
                     image = `character/${part}/${appearance.sex}/${value}`;
             }

@@ -21,7 +21,7 @@ export class FakeUserDao implements UserDao {
                 body: ['dark'],
                 hair: ['messy1'],
                 ears: [],
-                eyes: ['red'],
+                eyes: ['normal', 'red'],
                 nose: ['bignose'],
             },
             equipment: {
@@ -81,7 +81,7 @@ export class FakeUserDao implements UserDao {
                 body: ['light'],
                 hair: ['xlongknot'],
                 ears: ['elvenears'],
-                eyes: ['blue'],
+                eyes: ['normal'],
                 nose: ['buttonnose'],
             },
             equipment: {
