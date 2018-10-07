@@ -10,9 +10,9 @@ import { LoadedMap } from '../../../common/tiled/TiledResolver';
 import { EntityData, EntityId } from '../../../common/domain/EntityData';
 import { UpdatableDisplay } from '../display/UpdatableDisplay';
 import { HumanoidDisplay } from '../display/HumanoidDisplay';
+import { MonsterDisplay } from '../display/MonsterDisplay';
 import ResourceDictionary = PIXI.loaders.ResourceDictionary;
 import DisplayObject = PIXI.DisplayObject;
-import { MonsterDisplay } from '../display/MonsterDisplay';
 
 const CHUNK_WIDTH = 16;
 const CHUNK_HEIGHT = 16;
@@ -26,6 +26,7 @@ export class GameLevel {
     readonly container = new PIXI.Container();
     readonly chunkBaseContainer = new PIXI.Container();
     private entityDisplays = new Map<EntityId, UpdatableDisplay<any>>();
+    private displayIds = new Map<DisplayObject, EntityId>();
     readonly objectContainer = new PIXI.Container();
     readonly chunkAboveContainer = new PIXI.Container();
     private readonly tileSet: TexturedTileSet[];
@@ -69,6 +70,7 @@ export class GameLevel {
                     const display = this.createDisplay(diff.data);
                     display.init();
                     this.entityDisplays.set(diff.id, display);
+                    this.displayIds.set(display, diff.id);
                     this.objectContainer.addChild(display);
                     updateDisplayPosition(display, diff.data);
                     break;
@@ -80,15 +82,22 @@ export class GameLevel {
                     break;
                 }
                 case 'remove': {
-                    const character = this.entityDisplays.get(diff.id)!;
+                    const display = this.entityDisplays.get(diff.id)!;
                     this.entityDisplays.delete(diff.id);
-                    this.objectContainer.removeChild(character);
+                    this.displayIds.delete(display);
+                    this.objectContainer.removeChild(display);
                     break;
                 }
             }
         }
 
-        this.objectContainer.children.sort(zIndexSorter);
+        this.objectContainer.children.sort((a: DisplayObject, b: DisplayObject) => {
+            const difference = a.position.y - b.position.y;
+            if (difference === 0) {
+                return this.displayIds.get(a)! - this.displayIds.get(b)!;
+            }
+            return difference;
+        });
     }
 
     round(position: Position): Position {
@@ -135,7 +144,7 @@ export class GameLevel {
         this.process.stop();
     }
 
-    private createDisplay(data: EntityData): UpdatableDisplay<any> {
+    private createDisplay(data: EntityData): UpdatableDisplay<EntityData> {
         switch (data.type) {
             case 'creature':
                 switch (data.kind) {
@@ -151,8 +160,4 @@ export class GameLevel {
 
 function chunkPosition(x: X, y: Y): ChunkPosition {
     return (x / CHUNK_WIDTH) + ':' + (y / CHUNK_HEIGHT) as ChunkPosition;
-}
-
-function zIndexSorter(a: DisplayObject, b: DisplayObject): number {
-    return a.position.y - b.position.y;
 }
