@@ -3,8 +3,6 @@ import { ServerOptions } from 'ws';
 import { PROTOCOL_VERSION } from '../../common/protocol/Messages';
 import { World } from './world/World';
 import { NetworkLoop } from './NetworkLoop';
-import * as url from 'url';
-import * as http from 'http';
 import { Dao, Password, User, UserName } from './dao/Dao';
 import { ErrorCode } from '../../common/protocol/ErrorCode';
 import { WebsocketCommandStream } from './protocol/WebsocketCommandStream';
@@ -28,35 +26,52 @@ export class Server {
         this.server.close();
     }
 
-    private onConnection = async (connection: ws, request: http.IncomingMessage) => {
-        const commandStream = new WebsocketCommandStream(connection);
-
-        const result = await this.verifyClient(request);
-        if (typeof result === 'number') {
-            commandStream.sendCommand('error', result);
+    private onConnection = async (connection: ws) => {
+        const timeoutTimer = setTimeout(() => {
             connection.close();
-            return;
-        }
+        }, 5000);
 
-        console.log(`User connected! Playing: ${this.server.clients.size}`);
+        connection.once('message', async (message: ws.Data) => {
+            clearTimeout(timeoutTimer);
 
-        const userDao = this.dao.getUserDao(result);
+            const commandStream = new WebsocketCommandStream(connection);
 
-        const handler = new ConnectionHandler(userDao, this.world, this.networkLoop, commandStream);
-        connection.on('close', () => {
-            console.log(`User disconnected! Playing: ${this.server.clients.size}`);
-            handler.close();
+            const result = await this.verifyClient(message);
+            if (typeof result === 'number') {
+                commandStream.sendCommand('error', result);
+                connection.close();
+                return;
+            }
+
+            console.log(`User connected! Playing: ${this.server.clients.size}`);
+
+            const userDao = this.dao.getUserDao(result);
+
+            const handler = new ConnectionHandler(userDao, this.world, this.networkLoop, commandStream);
+            connection.on('close', () => {
+                console.log(`User disconnected! Playing: ${this.server.clients.size}`);
+                handler.close();
+            });
         });
     };
 
-    private async verifyClient(request: http.IncomingMessage): Promise<ErrorCode | User> {
-        const queryParams = url.parse(request.url!, true).query;
-        const { v, username, password } = queryParams;
-        if (v !== PROTOCOL_VERSION.toString()) {
+    private async verifyClient(message: ws.Data): Promise<ErrorCode | User> {
+        if (typeof message !== 'string') {
+            return ErrorCode.INVALID_REQUEST;
+        }
+        let request;
+        try {
+            request = JSON.parse(message);
+        } catch (e) {
+            return ErrorCode.INVALID_REQUEST;
+        }
+        const { v, username, password } = request;
+
+        if (v !== PROTOCOL_VERSION) {
             return ErrorCode.VERSION_MISMATCH;
         }
         if (typeof username !== 'string' || typeof password !== 'string') {
-            return ErrorCode.MISSING_PARAMETERS;
+            return ErrorCode.INVALID_REQUEST;
         }
 
         const user = await this.dao.verifyUser(username as UserName, password as Password);

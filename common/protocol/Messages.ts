@@ -24,4 +24,4 @@ export interface ResponseTypes {
 
 export type ResponseCommand = keyof ResponseTypes;
 
-export const PROTOCOL_VERSION = 9;
+export const PROTOCOL_VERSION = 10;

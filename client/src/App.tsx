@@ -82,7 +82,15 @@ export class App extends React.Component<{}, State> {
     }
 
     private onSubmitLogin = (username: string, password: string) => {
-        const ws = new WebSocket(`${wsUri}?v=${PROTOCOL_VERSION}&username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`);
+        const ws = new WebSocket(wsUri);
+
+        ws.onopen = () => {
+            ws.send(JSON.stringify({
+                v: PROTOCOL_VERSION,
+                username: username,
+                password: password,
+            }));
+        };
 
         const display: Display = {
             showLogin: () => {

@@ -17,7 +17,7 @@ export interface NetworkingContext {
 
 const errorMessages: { [P in ErrorCode]: string } = {
     [ErrorCode.VERSION_MISMATCH]: 'Version mismatch',
-    [ErrorCode.MISSING_PARAMETERS]: 'Missing parameters',
+    [ErrorCode.INVALID_REQUEST]: 'Invalid request',
     [ErrorCode.INVALID_CREDENTIALS]: 'Invalid credentials',
 };
 
