@@ -12,6 +12,8 @@ const PARTS = [
     'chest',
     'hair',
     'ears',
+    'arms',
+    'hands',
     'head',
 ];
 

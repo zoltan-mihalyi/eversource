@@ -25,7 +25,7 @@ export abstract class CreatureDisplay<T extends CreatureEntityData> extends Upda
         }
     }
 
-    private calculateAnimationSpeed(): number {
+    protected calculateAnimationSpeed(): number {
         switch (this.data.activity) {
             case 'standing':
                 return 0.08;

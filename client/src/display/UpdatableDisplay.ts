@@ -4,6 +4,9 @@ import { TextureLoader } from '../map/TextureLoader';
 export abstract class UpdatableDisplay<T> extends PIXI.Container {
     constructor(protected textureLoader: TextureLoader, protected data: T) {
         super();
+    }
+
+    init() { // build and softUpdate can use child fields which are not initialized in parent constructor
         this.build();
         this.softUpdate();
     }

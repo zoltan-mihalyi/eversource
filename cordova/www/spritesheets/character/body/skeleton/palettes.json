@@ -1,0 +1,100 @@
+{
+  "base": [
+    {
+      "color": "#1e131d",
+      "coordinates": [
+        27,
+        16
+      ]
+    },
+    {
+      "color": "#b49897",
+      "coordinates": [
+        27,
+        17
+      ]
+    },
+    {
+      "color": "#c2b69d",
+      "coordinates": [
+        28,
+        17
+      ]
+    },
+    {
+      "color": "#e4e6c9",
+      "coordinates": [
+        27,
+        18
+      ]
+    },
+    {
+      "color": "#ecefeb",
+      "coordinates": [
+        29,
+        19
+      ]
+    },
+    {
+      "color": "#706b7c",
+      "coordinates": [
+        331,
+        25
+      ]
+    },
+    {
+      "color": "#3c3846",
+      "coordinates": [
+        330,
+        26
+      ]
+    },
+    {
+      "color": "#4c4a5e",
+      "coordinates": [
+        331,
+        27
+      ]
+    },
+    {
+      "color": "#2e2534",
+      "coordinates": [
+        331,
+        31
+      ]
+    },
+    {
+      "color": "#a7a490",
+      "coordinates": [
+        20,
+        166
+      ]
+    }
+  ],
+  "variations": {
+    "lava": [
+      "#1b0b14",
+      "#cd453a",
+      "#d84f3a",
+      "#ef7d37",
+      "#f4a033",
+      "#7a3939",
+      "#38202b",
+      "#492a34",
+      "#2a1522",
+      "#c2483a"
+    ],
+    "dark": [
+      "#0c0f0a",
+      "#37433f",
+      "#39454a",
+      "#4f586f",
+      "#79767c",
+      "#2f2f2b",
+      "#21211b",
+      "#282722",
+      "#181a13",
+      "#35393d"
+    ]
+  }
+}

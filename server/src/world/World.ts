@@ -57,7 +57,7 @@ export class WorldImpl implements World {
                 const directionProp = properties.direction as Direction | undefined;
 
                 const direction = typeof directionProp === 'string' ? directionProp : 'down';
-                const controller = properties.controller === 'walking' ? new WalkingController(position) : void 0;
+                const controller = properties.controller === 'walking' ? new WalkingController(position, properties) : void 0;
                 const characterEntity = new CreatureEntity({
                     ...BASE_HUMANOID,
                     position,
@@ -72,7 +72,7 @@ export class WorldImpl implements World {
                     position,
                     image: object.name,
                     palette: (properties.palette as string | undefined) || null,
-                }, new WalkingController(position)))
+                }, new WalkingController(position, properties)))
             }
         }
 

@@ -35,6 +35,7 @@ export interface TileSet {
     imagewidth: number;
     margin: number;
     name: string;
+    properties?: TiledProperties;
     spacing: number;
     terrains?: Terrain[];
     tilecount: number;

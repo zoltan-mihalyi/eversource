@@ -67,6 +67,7 @@ export class GameLevel {
             switch (diff.type) {
                 case 'create': {
                     const display = this.createDisplay(diff.data);
+                    display.init();
                     this.entityDisplays.set(diff.id, display);
                     this.objectContainer.addChild(display);
                     updateDisplayPosition(display, diff.data);

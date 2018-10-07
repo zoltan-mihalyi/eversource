@@ -86,6 +86,8 @@ describe('World', function () {
                     "shirt": [],
                     "feet": ["brown_shoes"],
                     "head": [],
+                    "arms": [],
+                    "hands": [],
                     "legs": ["maroon_pants"]
                 }
             }
