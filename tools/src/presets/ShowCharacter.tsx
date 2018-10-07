@@ -116,6 +116,7 @@ export class ShowCharacter extends React.Component<Props, State> {
         };
 
         const character = new HumanoidDisplay(textureLoader, entityData);
+        character.init();
         character.x = 48;
         character.y = 64;
         this.app.stage.addChild(character);
