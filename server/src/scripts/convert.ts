@@ -3,7 +3,7 @@ import * as path from 'path';
 import * as rimraf from 'rimraf';
 import * as marked from 'marked';
 import { convertMap } from './map/map-converter';
-import mkdirp = require('mkdirp');
+import * as mkdirp from 'mkdirp';
 
 const CLIENT_MAPS = '../cordova/www/dist/maps';
 const BASE_MAPS = '../common/maps';

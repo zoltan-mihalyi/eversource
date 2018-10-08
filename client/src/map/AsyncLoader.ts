@@ -1,3 +1,5 @@
+import * as PIXI from 'pixi.js';
+
 type Callback<T> = (data: T) => void;
 
 export interface Request {
@@ -7,6 +9,11 @@ export interface Request {
 export abstract class AsyncLoader<T> {
     private loaded = new Map<string, T>();
     private loading = new Map<string, Set<Callback<T>>>();
+
+    getForContainer(container: PIXI.Container, key: string, cb: Callback<T>) {
+        const request = this.get(key, cb);
+        container.on('removed', () => request.stop());
+    }
 
     get(key: string, cb: Callback<T>): Request {
         const data = this.loaded.get(key);

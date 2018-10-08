@@ -3,7 +3,7 @@ import { BaseTexture, Rectangle, Texture } from 'pixi.js';
 import { pixiLoader } from '../utils';
 import { CancellableProcess } from '../../../common/util/CancellableProcess';
 import { Palettes } from '../game/Palettes';
-import { AsyncLoader, Request } from './AsyncLoader';
+import { AsyncLoader } from './AsyncLoader';
 import { MultiColorReplaceFilter } from '@pixi/filter-multi-color-replace'
 import { TileSet } from '../../../common/tiled/interfaces';
 import { loadTileSet, mergeTileData } from '../../../common/tiled/TiledResolver';
@@ -71,8 +71,8 @@ export class TextureLoader {
                 private baseDir = 'spritesheets') {
     }
 
-    loadDetails(requestHolder: PIXI.Container, tileSet: string, callback: (details: TileSetDetails) => void) {
-        addRequestToContainer(requestHolder, this.tileSetLoader.get(tileSet, callback));
+    loadDetails(container: PIXI.Container, tileSet: string, callback: (details: TileSetDetails) => void) {
+        this.tileSetLoader.getForContainer(container, tileSet, callback);
     }
 
     createAnimatedSprite(image: string, animation: string): PIXI.extras.AnimatedSprite {
@@ -97,12 +97,12 @@ export class TextureLoader {
         });
 
         if (color) {
-            addRequestToContainer(sprite, this.palettesLoader.get(palettesFile!, (palettes) => {
+            this.palettesLoader.getForContainer(sprite, palettesFile!, (palettes) => {
                 const palette = palettes.variations[color];
                 sprite.filters = [new MultiColorReplaceFilter(
                     palettes.base.map((baseColorInfo, i) => [string2hex(baseColorInfo.color), string2hex(palette[i])]),
                 )];
-            }));
+            });
         }
 
         return sprite;
@@ -129,27 +129,6 @@ class PalettesLoader extends AbstractLoader<Palettes> {
             cb(JSON.parse(result));
         }));
     }
-}
-
-interface RequestHolder extends PIXI.Container {
-    _requests: Request[];
-}
-
-function addRequestToContainer(container: PIXI.Container, request: Request): void {
-    let requests = (container as RequestHolder)._requests;
-    if (!requests) {
-        requests = [];
-        (container as RequestHolder)._requests = requests;
-    }
-
-    requests.push(request);
-
-    container.destroy = (options) => {
-        container.constructor.prototype.destroy.call(container, options);
-        for (const r of requests) {
-            r.stop();
-        }
-    };
 }
 
 function string2hex(color: string): number {
