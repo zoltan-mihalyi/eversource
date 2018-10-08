@@ -754,5 +754,44 @@
         "silver"
       ]
     }
+  },
+  "dark_open": {
+    "appearance": {
+      "sex": "male",
+      "body": [
+        "tanned"
+      ],
+      "nose": [],
+      "hair": [],
+      "eyes": [],
+      "ears": []
+    },
+    "equipment": {
+      "shirt": [],
+      "legs": [
+        "ornate_metal_greaves",
+        "dark"
+      ],
+      "head": [
+        "ornate_metal_helm_open",
+        "dark"
+      ],
+      "feet": [
+        "ornate_metal_boots",
+        "dark"
+      ],
+      "chest": [
+        "ornate_metal_chest",
+        "dark"
+      ],
+      "hands": [
+        "ornate_metal_gloves",
+        "dark"
+      ],
+      "arms": [
+        "ornate_metal_arms",
+        "dark"
+      ]
+    }
   }
 }
