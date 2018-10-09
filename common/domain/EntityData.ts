@@ -5,10 +5,11 @@ import { ObjectEntityData } from './ObjectEntityData';
 
 export type EntityId = Opaque<number, 'EntityId'>;
 
+export type EntityInteraction = 'trade' | 'quest' | 'pickup' | 'use';
 
 export interface BaseEntityData {
-    type: string;
     position: Position;
+    interaction?: EntityInteraction[];
 }
 
 export interface EffectEntityData extends BaseEntityData {

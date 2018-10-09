@@ -10,29 +10,25 @@ import { Controller } from './controller/Controller';
 type BaseHumanoid = Omit<HumanoidEntityData, 'position' | 'appearance' | 'equipment'>;
 
 const BASE_CREATURE: Omit<BaseCreatureEntityData, 'position'> = {
-    type: 'creature',
     activity: 'standing',
     activitySpeed: 0,
     direction: 'down',
     level: 1,
     hp: 100,
     maxHp: 100,
-    kind: '?',
     player: false,
-    interaction: [],
 };
 
 export const BASE_HUMANOID: BaseHumanoid = {
     ...BASE_CREATURE,
-    kind: 'humanoid',
-    player: false,
+    type: 'humanoid',
 };
 
 type BaseMonster = Omit<MonsterEntityData, 'position' | 'image'>;
 
 export const BASE_MONSTER: BaseMonster = {
     ...BASE_CREATURE,
-    kind: 'monster',
+    type: 'monster',
     palette: null,
 };
 

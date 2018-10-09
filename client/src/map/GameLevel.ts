@@ -146,13 +146,10 @@ export class GameLevel {
 
     private createDisplay(data: EntityData): UpdatableDisplay<EntityData> {
         switch (data.type) {
-            case 'creature':
-                switch (data.kind) {
-                    case 'humanoid':
-                        return new HumanoidDisplay(this.textureLoader, data);
-                    case 'monster':
-                        return new MonsterDisplay(this.textureLoader, data);
-                }
+            case 'humanoid':
+                return new HumanoidDisplay(this.textureLoader, data);
+            case 'monster':
+                return new MonsterDisplay(this.textureLoader, data);
         }
         throw new Error('Unknown entity!');
     }

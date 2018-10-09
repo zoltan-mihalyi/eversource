@@ -100,8 +100,7 @@ export class ShowCharacter extends React.Component<Props, State> {
         const { preset, activity, direction } = this.state;
 
         const entityData: HumanoidEntityData = {
-            type: 'creature',
-            kind: 'humanoid',
+            type: 'humanoid',
             level: 1,
             hp: 100,
             maxHp: 100,

@@ -21,7 +21,7 @@ export interface Equipment {
 }
 
 export interface HumanoidEntityData extends BaseCreatureEntityData {
-    kind: 'humanoid';
+    type: 'humanoid';
     appearance: Appearance;
     equipment: Equipment;
 }
