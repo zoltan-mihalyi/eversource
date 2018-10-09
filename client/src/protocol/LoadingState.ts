@@ -3,15 +3,14 @@ import { cleanupTextures, pixiLoader } from '../utils';
 import * as PIXI from 'pixi.js';
 import * as path from 'path';
 import * as pako from 'pako';
-import { GameLevel } from '../map/GameLevel';
 import { Location } from '../../../common/domain/Location';
 import { PlayingState } from './PlayingState';
-import { loadMap } from '../../../common/tiled/TiledResolver';
+import { LoadedMap, loadMap } from '../../../common/tiled/TiledResolver';
 
 const basePath = './dist/maps';
 
 export class LoadingState extends NetworkingState<Location> {
-    private gameLevel: GameLevel | null = null;
+    private map: LoadedMap | null = null;
     private aborted = false;
     private textureLoader = new PIXI.loaders.Loader();
 
@@ -33,17 +32,19 @@ export class LoadingState extends NetworkingState<Location> {
                 cleanupTextures();
                 return;
             }
-            this.gameLevel = new GameLevel(map, this.textureLoader.resources);
+            this.map = map;
             this.context.ws.send('ready');
         });
     }
 
     ready() {
-        if (this.gameLevel) {
+        const { map } = this;
+        if (map) {
             const { position } = this.data;
             this.manager.enter(PlayingState, {
                 position,
-                gameLevel: this.gameLevel,
+                map,
+                resources: this.textureLoader.resources,
             });
         }
     }

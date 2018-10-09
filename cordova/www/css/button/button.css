@@ -41,3 +41,18 @@ td.button-right {
     background-image: url('right.png');
     width: 8px;
 }
+
+button.close {
+    opacity: 1;
+    text-align: center;
+    border: 1px solid #986a20;
+    width: 18px;
+    height: 18px;
+    display: block;
+    margin: 1px 1px 1px auto;
+}
+
+
+button.close:hover{
+    background-color: #86603a;
+}

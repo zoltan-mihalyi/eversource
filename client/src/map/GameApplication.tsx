@@ -4,7 +4,8 @@ import { GameLevel } from './GameLevel';
 import { InputManager, MovementIntent } from '../input/InputManager';
 import { Diff } from '../../../common/protocol/Diff';
 import { EntityId } from '../../../common/domain/EntityData';
-import { PlayingNetworkApi } from '../protocol/PlayingState';
+import { registerCursors } from '../display/Cursors';
+import { PlayingNetworkApi, PlayingStateData } from '../protocol/PlayingState';
 
 export class GameApplication extends PIXI.Application {
     private viewContainer = new PIXI.Container();
@@ -14,14 +15,18 @@ export class GameApplication extends PIXI.Application {
     readonly inputManager: InputManager;
     private lastMovementIntent: MovementIntent = { x: 0, y: 0 };
     private entityId: EntityId | null = null;
+    private gameLevel: GameLevel;
 
-    constructor(readonly gameLevel: GameLevel, position: Position, private playingNetworkApi: PlayingNetworkApi) {
+    constructor(data: PlayingStateData, private playingNetworkApi: PlayingNetworkApi) {
         super();
 
-        const { map } = gameLevel.map;
+        const { map, resources, position } = data;
 
-        this.viewContainer.scale.x = map.tilewidth;
-        this.viewContainer.scale.y = map.tileheight;
+        const gameLevel = new GameLevel(playingNetworkApi, map, resources);
+        this.gameLevel = gameLevel;
+
+        this.viewContainer.scale.x = map.map.tilewidth;
+        this.viewContainer.scale.y = map.map.tileheight;
 
         this.timer = requestAnimationFrame(this.update);
 
@@ -31,6 +36,8 @@ export class GameApplication extends PIXI.Application {
         this.setViewCenter(position);
 
         this.inputManager = new InputManager();
+
+        registerCursors(this.renderer.plugins.interaction.cursorStyles);
     }
 
     destroy() {

@@ -4,6 +4,7 @@ import { ErrorCode } from '../../../common/protocol/ErrorCode';
 import { CharacterInfo } from '../../../common/domain/CharacterInfo';
 import { Display } from './Display';
 import { Diff } from '../../../common/protocol/Diff';
+import { PlayerState } from '../../../common/protocol/PlayerState';
 
 export type ResponseHandler = {
     [P in ResponseCommand]: (data: ResponseTypes[P]) => void;
@@ -27,7 +28,7 @@ export abstract class NetworkingState<T> extends State<NetworkingContext, T> imp
     onOpen(){
     }
 
-    onClose(){
+    onClose() {
         this.context.display.showConnectionError(CONNECTION_CLOSED);
         this.abort();
     }
@@ -50,6 +51,9 @@ export abstract class NetworkingState<T> extends State<NetworkingContext, T> imp
     diffs(diffs: Diff[]) {
     }
 
-    protected abort(){
+    playerState(playerState: Partial<PlayerState>) {
+    }
+
+    protected abort() {
     }
 }

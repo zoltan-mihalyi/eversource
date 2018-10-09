@@ -10,6 +10,7 @@ import { wwwDir } from '../Utils';
 import { CreatureActivity, Direction } from '../../../common/domain/CreatureEntityData';
 import { HumanoidEntityData } from '../../../common/domain/HumanoidEntityData';
 import { HumanoidDisplay } from '../../../client/src/display/HumanoidDisplay';
+import { GameContext } from '../../../client/src/game/GameContext';
 
 interface Props {
     name: string;
@@ -26,6 +27,11 @@ interface State {
 
 const process = new CancellableProcess();
 const textureLoader = new TextureLoader(process, 32, 'file://' + path.join(wwwDir, 'spritesheets'));
+const gameContext: GameContext = {
+    textureLoader,
+    onInteract: () => {
+    },
+};
 
 export class ShowCharacter extends React.Component<Props, State> {
     private app: PIXI.Application;
@@ -105,7 +111,7 @@ export class ShowCharacter extends React.Component<Props, State> {
             hp: 100,
             maxHp: 100,
             player: false,
-            interaction: [],
+            interaction: null,
             position: { x: 0 as X, y: 0 as Y },
             activity,
             activitySpeed: 3,
@@ -114,7 +120,7 @@ export class ShowCharacter extends React.Component<Props, State> {
             direction,
         };
 
-        const character = new HumanoidDisplay(textureLoader, entityData);
+        const character = new HumanoidDisplay(gameContext , entityData);
         character.init();
         character.x = 48;
         character.y = 64;

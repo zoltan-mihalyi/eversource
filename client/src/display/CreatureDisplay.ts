@@ -6,7 +6,12 @@ export abstract class CreatureDisplay<T extends CreatureEntityData> extends Upda
     protected abstract displayedProperties: (keyof T)[];
 
     protected build() {
-        const shadow = this.textureLoader.createAnimatedSprite('misc', 'shadow');
+        this.createShadow();
+        super.build();
+    }
+
+    protected createShadow() {
+        const shadow = this.context.textureLoader.createAnimatedSprite('misc', 'shadow');
         shadow.blendMode = PIXI.BLEND_MODES.MULTIPLY;
         this.addChild(shadow);
     }
@@ -15,7 +20,7 @@ export abstract class CreatureDisplay<T extends CreatureEntityData> extends Upda
         const { direction, activity } = this.data;
         const animation = activity + ':' + direction;
 
-        return this.textureLoader.createCustomAnimatedSprite(tileSet, image, animation, paletteFile, color);
+        return this.context.textureLoader.createCustomAnimatedSprite(tileSet, image, animation, paletteFile, color);
     }
 
     protected softUpdate() {
@@ -37,6 +42,9 @@ export abstract class CreatureDisplay<T extends CreatureEntityData> extends Upda
     }
 
     protected matches(changes: Partial<T>): boolean {
+        if (!super.matches(changes)) {
+            return false;
+        }
         for (const property of this.displayedProperties) {
             if (changes.hasOwnProperty(property) && changes[property] !== this.data[property]) {
                 return false;

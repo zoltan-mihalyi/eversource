@@ -1,5 +1,4 @@
 import { NetworkingContext, NetworkingState } from './NetworkingState';
-import { GameLevel } from '../map/GameLevel';
 import { LoadingCharactersState } from './LoadingCharactersState';
 import { GameApplication } from '../map/GameApplication';
 import { StateManager } from '../../../common/util/StateManager';
@@ -7,9 +6,15 @@ import { cleanupTextures } from '../utils';
 import { Diff } from '../../../common/protocol/Diff';
 import { Position } from '../../../common/domain/Location';
 import { GameScreen } from '../components/game/GameScreen';
+import { LoadedMap } from '../../../common/tiled/TiledResolver';
+import { EntityId } from '../../../common/domain/EntityData';
+import { PlayerState } from '../../../common/protocol/PlayerState';
+import { QuestId } from '../../../common/domain/InteractionTable';
+import ResourceDictionary = PIXI.loaders.ResourceDictionary;
 
-interface PlayingStateData {
-    gameLevel: GameLevel;
+export interface PlayingStateData {
+    map: LoadedMap;
+    resources: ResourceDictionary;
     position: Position;
 }
 
@@ -17,6 +22,14 @@ export interface PlayingNetworkApi {
     leaveGame(): void;
 
     move(x: number, y: number): void;
+
+    interact(id: EntityId): void;
+
+    acceptQuest(id: QuestId): void;
+
+    completeQuest(id: QuestId): void;
+
+    closeInteraction(): void;
 }
 
 export class PlayingState extends NetworkingState<PlayingStateData> implements PlayingNetworkApi {
@@ -25,8 +38,7 @@ export class PlayingState extends NetworkingState<PlayingStateData> implements P
 
     constructor(manager: StateManager<any, NetworkingContext>, context: NetworkingContext, data: PlayingStateData) {
         super(manager, context, data);
-        const { gameLevel, position } = data;
-        this.game = new GameApplication(gameLevel, position, this);
+        this.game = new GameApplication(data, this);
     }
 
     onEnter() {
@@ -37,6 +49,10 @@ export class PlayingState extends NetworkingState<PlayingStateData> implements P
 
     diffs(diffs: Diff[]) {
         this.game.updateState(diffs);
+    }
+
+    playerState(playerState: Partial<PlayerState>) {
+        this.gameScreen.updatePlayerState(playerState);
     }
 
     protected abort() {
@@ -56,5 +72,21 @@ export class PlayingState extends NetworkingState<PlayingStateData> implements P
 
     move(x: number, y: number) {
         this.context.ws.send('command:move:' + x + ',' + y);
+    }
+
+    interact(id: EntityId) {
+        this.context.ws.send(`command:interact:${id}`);
+    }
+
+    acceptQuest(id: QuestId) {
+        this.context.ws.send(`command:accept-quest:${id}`);
+    }
+
+    completeQuest(id: QuestId) {
+        this.context.ws.send(`command:complete-quest:${id}`);
+    }
+
+    closeInteraction() {
+        this.context.ws.send(`command:interact-end`);
     }
 }

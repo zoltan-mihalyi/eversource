@@ -5,6 +5,8 @@ import { UserDao } from '../src/dao/UserDao';
 import * as sinon from 'sinon';
 import * as assert from 'assert';
 import { NetworkLoop } from '../src/NetworkLoop';
+import { CharacterDetails, QuestStatus } from '../src/character/CharacterDetails';
+import { QuestId } from '../../common/domain/InteractionTable';
 
 function tick(): Promise<void> {
     return new Promise<void>(resolve => setTimeout(resolve, 1));
@@ -43,16 +45,21 @@ const characters: CharacterInfo[] = [
     },
 ];
 
+const characterDetails: CharacterDetails = {
+    info: characters[0],
+    quests: new Map<QuestId, QuestStatus>(),
+};
+
 class FakeUserDao implements UserDao {
     getCharacters(): CharacterInfo[] {
         return characters;
     }
 
-    getCharacterIfExists(id: string): CharacterInfo | null {
+    getCharacterIfExists(id: string): CharacterDetails | null {
         if (id !== '1') {
             return null;
         }
-        return characters[0];
+        return characterDetails;
     }
 }
 

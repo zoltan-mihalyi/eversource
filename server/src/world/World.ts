@@ -5,6 +5,10 @@ import { Presets } from './Presets';
 import { BASE_HUMANOID, BASE_MONSTER, CreatureEntity } from '../entity/CreatureEntity';
 import { Direction } from '../../../common/domain/CreatureEntityData';
 import { WalkingController } from '../entity/controller/WalkingController';
+import { TiledObject } from '../../../common/tiled/interfaces';
+import { HiddenEntityData } from '../entity/Entity';
+import { quests } from '../../data/quests';
+import { groupBy } from '../utils';
 
 export interface World {
     getZone(zoneId: ZoneId): Promise<Zone>;
@@ -12,6 +16,16 @@ export interface World {
 
 const FPS = 50;
 const INTERVAL = 1000 / FPS;
+
+const questStarts = groupBy(quests, 'startsAt');
+const questEnds = groupBy(quests, 'endsAt');
+
+function getHidden(object: TiledObject): HiddenEntityData {
+    return {
+        quests: questStarts[object.name] || [],
+        questCompletions: questEnds[object.name] || [],
+    };
+}
 
 export class WorldImpl implements World {
     private readonly zonePromises = new Map<ZoneId, Promise<Zone>>();
@@ -64,7 +78,7 @@ export class WorldImpl implements World {
                     direction,
                     appearance,
                     equipment,
-                }, controller);
+                }, getHidden(object), controller);
                 zone.addEntity(characterEntity);
             } else if (object.type === 'monster') {
                 zone.addEntity(new CreatureEntity({
@@ -72,7 +86,7 @@ export class WorldImpl implements World {
                     position,
                     image: object.name,
                     palette: (properties.palette as string | undefined) || null,
-                }, new WalkingController(position, properties)))
+                }, getHidden(object), new WalkingController(position, properties)))
             }
         }
 

@@ -11,6 +11,8 @@ import { EntityData, EntityId } from '../../../common/domain/EntityData';
 import { UpdatableDisplay } from '../display/UpdatableDisplay';
 import { HumanoidDisplay } from '../display/HumanoidDisplay';
 import { MonsterDisplay } from '../display/MonsterDisplay';
+import { GameContext } from '../game/GameContext';
+import { PlayingNetworkApi } from '../protocol/PlayingState';
 import ResourceDictionary = PIXI.loaders.ResourceDictionary;
 import DisplayObject = PIXI.DisplayObject;
 
@@ -31,9 +33,15 @@ export class GameLevel {
     readonly chunkAboveContainer = new PIXI.Container();
     private readonly tileSet: TexturedTileSet[];
     private readonly process = new CancellableProcess();
-    private readonly textureLoader = new TextureLoader(this.process, this.map.map.tileheight);
 
-    constructor(readonly map: LoadedMap, images: ResourceDictionary) {
+    private context: GameContext = {
+        onInteract: (display: UpdatableDisplay<any>) => {
+            this.playingNetworkApi.interact(this.displayIds.get(display)!);
+        },
+        textureLoader: new TextureLoader(this.process, this.map.map.tileheight),
+    };
+
+    constructor(private playingNetworkApi: PlayingNetworkApi, readonly map: LoadedMap, images: ResourceDictionary) {
         this.tileSet = map.tileSets.map(tileset => new TexturedTileSet(tileset, images));
         this.container.addChild(this.chunkBaseContainer);
         this.container.addChild(this.objectContainer);
@@ -65,25 +73,26 @@ export class GameLevel {
         };
 
         for (const diff of diffs) {
+            const id = diff.id;
             switch (diff.type) {
                 case 'create': {
                     const display = this.createDisplay(diff.data);
                     display.init();
-                    this.entityDisplays.set(diff.id, display);
-                    this.displayIds.set(display, diff.id);
+                    this.entityDisplays.set(id, display);
+                    this.displayIds.set(display, id);
                     this.objectContainer.addChild(display);
                     updateDisplayPosition(display, diff.data);
                     break;
                 }
                 case 'change': {
-                    const character = this.entityDisplays.get(diff.id)!;
+                    const character = this.entityDisplays.get(id)!;
                     character.update(diff.changes);
                     updateDisplayPosition(character, diff.changes);
                     break;
                 }
                 case 'remove': {
-                    const display = this.entityDisplays.get(diff.id)!;
-                    this.entityDisplays.delete(diff.id);
+                    const display = this.entityDisplays.get(id)!;
+                    this.entityDisplays.delete(id);
                     this.displayIds.delete(display);
                     this.objectContainer.removeChild(display);
                     break;
@@ -147,9 +156,9 @@ export class GameLevel {
     private createDisplay(data: EntityData): UpdatableDisplay<EntityData> {
         switch (data.type) {
             case 'humanoid':
-                return new HumanoidDisplay(this.textureLoader, data);
+                return new HumanoidDisplay(this.context, data);
             case 'monster':
-                return new MonsterDisplay(this.textureLoader, data);
+                return new MonsterDisplay(this.context, data);
         }
         throw new Error('Unknown entity!');
     }

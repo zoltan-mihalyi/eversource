@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@pixi/filter-multi-color-replace": "^2.5.0",
+    "@pixi/filter-outline": "^2.6.0",
     "nipplejs": "^0.7.1",
     "pako": "^1.0.6",
     "pixi.js": "^4.8.1",

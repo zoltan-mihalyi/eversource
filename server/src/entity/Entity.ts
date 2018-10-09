@@ -1,13 +1,36 @@
 import { Grid, GridBlock } from '../../../common/Grid';
 import { Position, X, Y } from '../../../common/domain/Location';
-import { EntityData, EntityId } from '../../../common/domain/EntityData';
+import { EntityData, EntityId, EntityInteraction, EntityInteractions } from '../../../common/domain/EntityData';
+import { CharacterDetails, QuestStatus } from '../character/CharacterDetails';
+import { Quest } from '../quest/Quest';
+import { InteractionTable, QuestId, QuestInfo } from '../../../common/domain/InteractionTable';
 
 let nextId = 0;
+
+export interface HiddenPlayerInfo {
+    state: HiddenPlayerState;
+    details: CharacterDetails;
+}
+
+export interface HiddenPlayerState {
+    interacting?: Entity;
+}
+
+export interface HiddenEntityData {
+    quests: Quest[];
+    questCompletions: Quest[];
+    player?: HiddenPlayerInfo;
+}
+
+const EMPTY_HIDDEN_ENTITY_DATA: HiddenEntityData = {
+    quests: [],
+    questCompletions: [],
+};
 
 export abstract class Entity<O extends EntityData = EntityData> {
     readonly id = nextId++ as EntityId;
 
-    protected constructor(protected state: O) {
+    protected constructor(protected state: Readonly<O>, protected hidden: HiddenEntityData = EMPTY_HIDDEN_ENTITY_DATA) {
     }
 
     protected set<K extends keyof O>(partial: Pick<O, K>) {
@@ -28,6 +51,51 @@ export abstract class Entity<O extends EntityData = EntityData> {
 
     get(): O {
         return this.state;
+    }
+
+    getInteractionsFor(details: CharacterDetails): InteractionTable {
+        const acceptable: QuestInfo[] = [];
+        const completable: QuestInfo[] = [];
+
+        const playerQuests = details.quests;
+        for (const quest of this.hidden.quests) {
+            const questStatus = playerQuests.get(quest.id);
+            if (questStatus === void 0 && canAcceptQuest(details.quests, quest)) {
+                acceptable.push(questInfo(quest));
+            }
+        }
+
+        for (const quest of this.hidden.questCompletions) {
+            const questStatus = playerQuests.get(quest.id);
+            if (questStatus !== void 0 && questStatus !== 'done') {
+                completable.push(questInfo(quest)); // TODO check task
+            }
+        }
+
+        return { entityId: this.id, acceptable, completable }
+    }
+
+    getFor(details: CharacterDetails): EntityData {
+        const entityData = this.get();
+
+        const { completable, acceptable } = this.getInteractionsFor(details);
+
+        const interactions: EntityInteraction[] = [];
+        if (acceptable.length !== 0) {
+            interactions.push('quest');
+        }
+        if (completable.length !== 0) {
+            interactions.push('quest-complete');
+        }
+
+        if (interactions.length !== 0) {
+            return {
+                ...entityData as any,
+                interaction: extendInteraction(entityData.interaction, interactions as EntityInteractions),
+            };
+        }
+
+        return entityData;
     }
 
     update(grid: Grid, delta: number) {
@@ -78,6 +146,33 @@ export abstract class Entity<O extends EntityData = EntityData> {
     }
 }
 
+const questInfoMap = new Map<QuestId, QuestInfo>(); // TODO
+
+function questInfo(quest: Quest): QuestInfo {
+    let qi = questInfoMap.get(quest.id);
+    if (!qi) {
+        qi = {
+            id: quest.id,
+            name: quest.name,
+        };
+        questInfoMap.set(quest.id, qi);
+    }
+    return qi;
+
+}
+
+function canAcceptQuest(quests: Map<QuestId, QuestStatus>, quest: Quest) { // TODO refactor this
+    for (const requirement of quest.requires) {
+        if (quests.get(requirement) !== 'done') {
+            return false;
+        }
+    }
+    return true;
+}
+
+function extendInteraction(base: EntityInteractions | null, extra: EntityInteractions): EntityInteractions {
+    return Array.from(new Set([...base || [], ...extra])) as EntityInteractions;
+}
 
 function getHorizontalEdge(block: GridBlock, side: number, y: number) {
     switch (block) {
