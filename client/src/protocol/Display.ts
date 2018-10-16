@@ -5,6 +5,8 @@ import { GameApplication } from '../map/GameApplication';
 export interface Display {
     showLogin(): void;
 
+    showConnecting(): void;
+
     showCharacterLoading(): void;
 
     showConnectionError(message: string): void;

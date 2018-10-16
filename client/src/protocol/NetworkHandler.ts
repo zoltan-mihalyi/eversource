@@ -1,37 +1,36 @@
 import { StateManager } from '../../../common/util/StateManager';
 import { parseCommand } from '../utils';
 import { ResponseCommand } from '../../../common/protocol/Messages';
-import { NetworkingContext, NetworkingState } from './NetworkingState';
-import { LoadingCharactersState } from './LoadingCharactersState';
+import { ConnectingState } from './ConnectingState';
 import { Display } from './Display';
 
-export class NetworkHandler {
-    private st: StateManager<NetworkingState<any>, NetworkingContext>;
+export function connect(display: Display, wsUri: string, username: string, password: string) {
+    const ws = new WebSocket(wsUri);
 
-    constructor(ws: WebSocket, display: Display) {
-        const context = {
-            ws,
-            display,
-            closeConnection: () => {
-                ws.onmessage = null;
-                ws.onclose = null;
-                ws.close();
-            }
-        };
-        this.st = StateManager.create(context, LoadingCharactersState, void 0);
+    const context = {
+        ws,
+        display,
+        closeConnection: () => {
+            ws.onmessage = null;
+            ws.onclose = null;
+            ws.close();
+        }
+    };
 
-        ws.onmessage = this.onMessage;
-        ws.onclose = this.onClose;
-    }
+    const stateManager = StateManager.create(context, ConnectingState, { username, password });
 
-    private onMessage = (evt: MessageEvent) => {
+    ws.onopen = () => {
+        stateManager.getCurrentState().onOpen();
+    };
+
+    ws.onmessage = (evt) => {
         const command = parseCommand(evt.data);
 
-        const state = this.st.getCurrentState();
+        const state = stateManager.getCurrentState();
         (state[command.command as ResponseCommand] as (data: any) => void)(command.data)
     };
 
-    private onClose = () => {
-        this.st.getCurrentState().onClose();
+    ws.onclose = () => {
+        stateManager.getCurrentState().onClose();
     };
 }

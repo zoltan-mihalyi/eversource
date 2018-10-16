@@ -24,6 +24,9 @@ const errorMessages: { [P in ErrorCode]: string } = {
 const CONNECTION_CLOSED = 'Connection closed';
 
 export abstract class NetworkingState<T> extends State<NetworkingContext, T> implements ResponseHandler {
+    onOpen(){
+    }
+
     onClose(){
         this.context.display.showConnectionError(CONNECTION_CLOSED);
         this.abort();
