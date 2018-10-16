@@ -10,6 +10,7 @@ import { GameApplication } from './map/GameApplication';
 import { Display } from './protocol/Display';
 import { connect } from './protocol/NetworkHandler';
 import { CreditsScreen } from './components/menu/CreditsScreen';
+import { PlayingNetworkApi } from './protocol/PlayingState';
 
 type ShowLoginScreen = {
     type: 'login';
@@ -31,7 +32,8 @@ type ShowLoadingScreen = {
 type ShowGameScreen = {
     type: 'game';
     game: GameApplication;
-    enterCharacterSelection: () => void;
+    onMount: (gameScreen: GameScreen) => void;
+    playingNetworkApi: PlayingNetworkApi;
 }
 
 type ShowScreen =
@@ -75,7 +77,7 @@ export class App extends React.Component<{}, State> implements Display {
                 );
             case 'game':
                 return (
-                    <GameScreen game={screen.game} enterCharacterSelection={screen.enterCharacterSelection}/>
+                    <GameScreen game={screen.game} onMount={screen.onMount} playingNetworkApi={screen.playingNetworkApi}/>
                 );
         }
     }
@@ -148,11 +150,12 @@ export class App extends React.Component<{}, State> implements Display {
         });
     }
 
-    showGame(game: GameApplication, enterCharacterSelection: () => void) {
+    showGame(game: GameApplication, onMount: (gameScreen: GameScreen) => void, playingNetworkApi: PlayingNetworkApi) {
         this.setState({
             screen: {
                 type: 'game',
-                enterCharacterSelection,
+                onMount,
+                playingNetworkApi,
                 game,
             },
         });

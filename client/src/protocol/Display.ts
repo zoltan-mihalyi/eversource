@@ -1,6 +1,8 @@
 import { CharacterInfo } from '../../../common/domain/CharacterInfo';
 import { ZoneId } from '../../../common/domain/Location';
 import { GameApplication } from '../map/GameApplication';
+import { GameScreen } from '../components/game/GameScreen';
+import { PlayingNetworkApi } from './PlayingState';
 
 export interface Display {
     showLogin(): void;
@@ -15,5 +17,5 @@ export interface Display {
 
     showLoading(zoneId: ZoneId): void;
 
-    showGame(game: GameApplication, enterCharacterSelection: () => void): void;
+    showGame(game: GameApplication, onMount: (gameScreen: GameScreen) => void, playingNetworkApi: PlayingNetworkApi): void;
 }

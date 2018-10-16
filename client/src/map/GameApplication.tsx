@@ -4,6 +4,7 @@ import { GameLevel } from './GameLevel';
 import { InputManager, MovementIntent } from '../input/InputManager';
 import { Diff } from '../../../common/protocol/Diff';
 import { EntityId } from '../../../common/domain/EntityData';
+import { PlayingNetworkApi } from '../protocol/PlayingState';
 
 export class GameApplication extends PIXI.Application {
     private viewContainer = new PIXI.Container();
@@ -14,10 +15,10 @@ export class GameApplication extends PIXI.Application {
     private lastMovementIntent: MovementIntent = { x: 0, y: 0 };
     private entityId: EntityId | null = null;
 
-    constructor(readonly gameLevel: GameLevel, position: Position, private ws: WebSocket) {
+    constructor(readonly gameLevel: GameLevel, position: Position, private playingNetworkApi: PlayingNetworkApi) {
         super();
 
-        const {map} = gameLevel.map;
+        const { map } = gameLevel.map;
 
         this.viewContainer.scale.x = map.tilewidth;
         this.viewContainer.scale.y = map.tileheight;
@@ -83,7 +84,7 @@ export class GameApplication extends PIXI.Application {
         const { x, y } = this.inputManager.getMovementIntent();
 
         if (x !== this.lastMovementIntent.x || y !== this.lastMovementIntent.y) {
-            this.ws.send('command:move:' + x + ',' + y);
+            this.playingNetworkApi.move(x, y);
         }
         this.lastMovementIntent.x = x;
         this.lastMovementIntent.y = y;

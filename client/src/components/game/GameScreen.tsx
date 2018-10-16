@@ -1,10 +1,12 @@
 import * as React from 'react';
 import { GameApplication } from '../../map/GameApplication';
 import { Button } from '../gui/Button';
+import { PlayingNetworkApi } from '../../protocol/PlayingState';
 
 interface Props {
     game: GameApplication;
-    enterCharacterSelection: () => void;
+    onMount: (gameScreen: GameScreen) => void;
+    playingNetworkApi: PlayingNetworkApi;
 }
 
 interface ImageStyle extends CSSStyleDeclaration {
@@ -19,11 +21,15 @@ export class GameScreen extends React.Component<Props> {
             <div>
                 <div ref={this.containerRef}/>
                 <div className="gui bottom">
-                    <Button onClick={this.props.enterCharacterSelection}>Leave</Button>
+                    <Button onClick={this.leave}>Leave</Button>
                 </div>
                 <div ref={this.joystickContainerRef}/>
             </div>
         );
+    }
+
+    componentDidMount() {
+        this.props.onMount(this);
     }
 
     private joystickContainerRef = (div: HTMLDivElement | null) => {
@@ -89,6 +95,10 @@ export class GameScreen extends React.Component<Props> {
 
     private onContextMenu = (event: Event) => {
         event.preventDefault();
+    };
+
+    private leave = () => {
+        this.props.playingNetworkApi.leaveGame();
     };
 }
 
