@@ -6,6 +6,7 @@ import { Omit } from '../../../common/util/Omit';
 import { MonsterEntityData } from '../../../common/domain/MonsterEntityData';
 import { Controller } from './controller/Controller';
 import { canInteract } from '../../../common/game/Interaction';
+import { questsById } from '../quest/QuestIndexer';
 
 type BaseHumanoid = Omit<HumanoidEntityData, 'position' | 'appearance' | 'equipment'>;
 
@@ -72,6 +73,25 @@ export class CreatureEntity extends Entity<CreatureEntityData> {
         this.setSingle('activitySpeed', speed);
 
         this.updatePlayerState();
+    }
+
+    emit(eventType: string, payload?: any) {
+        const { player } = this.hidden;
+        if (!player) {
+            return;
+        }
+        player.state.questLog.forEach((q, questId) => {
+            if (q === 'failed') {
+                return;
+            }
+            const quest = questsById[questId]!;
+
+            quest.tasks.forEach((task, i) => {
+                if (task.type === 'visit' && eventType === 'area' && task.name === payload) {
+                    q[i] = 1;
+                }
+            });
+        });
     }
 
     private updatePlayerState() {

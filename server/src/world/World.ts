@@ -7,8 +7,7 @@ import { Direction } from '../../../common/domain/CreatureEntityData';
 import { WalkingController } from '../entity/controller/WalkingController';
 import { TiledObject } from '../../../common/tiled/interfaces';
 import { HiddenEntityData } from '../entity/Entity';
-import { quests } from '../../data/quests';
-import { groupBy } from '../utils';
+import { questEnds, questStarts } from '../quest/QuestIndexer';
 
 export interface World {
     getZone(zoneId: ZoneId): Promise<Zone>;
@@ -17,8 +16,6 @@ export interface World {
 const FPS = 50;
 const INTERVAL = 1000 / FPS;
 
-const questStarts = groupBy(quests, 'startsAt');
-const questEnds = groupBy(quests, 'endsAt');
 
 function getHidden(object: TiledObject): HiddenEntityData {
     return {
@@ -87,6 +84,14 @@ export class WorldImpl implements World {
                     image: object.name,
                     palette: (properties.palette as string | undefined) || null,
                 }, getHidden(object), new WalkingController(position, properties)))
+            } else if (object.type === 'area') {
+                zone.addArea(
+                    object.x / mapData.tileWidth as X,
+                    object.y / mapData.tileHeight as Y,
+                    object.width / mapData.tileWidth,
+                    object.height / mapData.tileHeight,
+                    object.name,
+                );
             }
         }
 

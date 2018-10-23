@@ -43,10 +43,12 @@ export const quests: Quest[] = [{
     tasks: [],
 }, {
     id: 6 as QuestId,
-    name: 'To arms!',
+    name: 'Strange guests',
     startsAt: 'dark',
     endsAt: 'protector',
-    description: 'Kill the orcs!',
+    description: 'Investigate the lava slimes!',
     requires: [],
-    tasks: [],
+    tasks: [
+        { count: 1, type: 'visit', name: 'slimes' },
+    ],
 }];

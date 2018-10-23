@@ -4,6 +4,7 @@ import { EntityData, EntityId, EntityInteraction, EntityInteractions } from '../
 import { CharacterDetails, QuestStatus } from '../character/CharacterDetails';
 import { Quest } from '../quest/Quest';
 import { InteractionTable, QuestId, QuestInfo } from '../../../common/domain/InteractionTable';
+import { questsById } from '../quest/QuestIndexer';
 
 let nextId = 0;
 
@@ -14,6 +15,7 @@ export interface HiddenPlayerInfo {
 
 export interface HiddenPlayerState {
     interacting?: Entity;
+    questLog: Map<QuestId, QuestStatus>;
 }
 
 export interface HiddenEntityData {
@@ -57,17 +59,17 @@ export abstract class Entity<O extends EntityData = EntityData> {
         const acceptable: QuestInfo[] = [];
         const completable: QuestInfo[] = [];
 
-        const playerQuests = details.quests;
+        const { questsDone, questLog } = details;
         for (const quest of this.hidden.quests) {
-            const questStatus = playerQuests.get(quest.id);
-            if (questStatus === void 0 && canAcceptQuest(details.quests, quest)) {
+            const isNewQuest = !questsDone.has(quest.id) && !questLog.has(quest.id);
+            if (isNewQuest && canAcceptQuest(questsDone, quest)) {
                 acceptable.push(questInfo(quest));
             }
         }
 
         for (const quest of this.hidden.questCompletions) {
-            const questStatus = playerQuests.get(quest.id);
-            if (questStatus !== void 0 && questStatus !== 'done') {
+            const questStatus = questLog.get(quest.id);
+            if (questStatus !== void 0 && questStatus !== 'failed' && allTaskComplete(quest, questStatus)) {
                 completable.push(questInfo(quest)); // TODO check task
             }
         }
@@ -99,6 +101,9 @@ export abstract class Entity<O extends EntityData = EntityData> {
     }
 
     update(grid: Grid, delta: number) {
+    }
+
+    emit(eventType: string, payload?: any) {
     }
 
     tryMove(grid: Grid, dx: number, dy: number) {
@@ -161,9 +166,9 @@ function questInfo(quest: Quest): QuestInfo {
 
 }
 
-function canAcceptQuest(quests: Map<QuestId, QuestStatus>, quest: Quest) { // TODO refactor this
+function canAcceptQuest(done: Set<QuestId>, quest: Quest) { // TODO refactor this
     for (const requirement of quest.requires) {
-        if (quests.get(requirement) !== 'done') {
+        if (!done.has(requirement)) {
             return false;
         }
     }
@@ -208,3 +213,11 @@ function getVerticalEdge(block: GridBlock, side: number, x: number) {
     }
 }
 
+function allTaskComplete(quest: Quest, questStatus: QuestStatus): boolean {
+    for (let i = 0; i < quest.tasks.length; i++) {
+        if (questStatus[i] !== quest.tasks[i].count) {
+            return false;
+        }
+    }
+    return true;
+}

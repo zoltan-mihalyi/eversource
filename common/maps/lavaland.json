@@ -750,6 +750,28 @@
                  "width":32,
                  "x":4160,
                  "y":6944
+                }, 
+                {
+                 "height":370.666666666666,
+                 "id":77,
+                 "name":"slimes",
+                 "rotation":0,
+                 "type":"area",
+                 "visible":true,
+                 "width":404,
+                 "x":4410.66666666667,
+                 "y":6425.33333333333
+                }, 
+                {
+                 "height":160,
+                 "id":81,
+                 "name":"dead_grass",
+                 "rotation":0,
+                 "type":"area",
+                 "visible":true,
+                 "width":128,
+                 "x":3616,
+                 "y":7072
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -757,7 +779,7 @@
          "x":0,
          "y":0
         }],
- "nextobjectid":77,
+ "nextobjectid":82,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.1.6",

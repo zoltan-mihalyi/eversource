@@ -24,7 +24,9 @@ export class LoadingRequestHandler extends ClientState<CharacterDetails> {
 
         const controller = new PlayerController();
         const player: HiddenPlayerInfo = {
-            state: {},
+            state: {
+                questLog: this.data.questLog,
+            },
             details: this.data,
         };
         const hidden = { player, quests: [], questCompletions: [] };

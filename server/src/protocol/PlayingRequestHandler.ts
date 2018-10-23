@@ -9,6 +9,7 @@ import { PlayerController } from '../entity/controller/PlayerController';
 import { canInteract } from '../../../common/game/Interaction';
 import { PlayerState } from '../../../common/protocol/PlayerState';
 import { QuestId, QuestInfo } from '../../../common/domain/InteractionTable';
+import { questsById } from '../quest/QuestIndexer';
 
 export interface PlayerData {
     zone: Zone;
@@ -72,7 +73,7 @@ export class PlayingRequestHandler extends ClientState<PlayerData> {
                 if (!quest) {
                     return;
                 }
-                player.details.quests.set(quest.id, []);
+                player.details.questLog.set(quest.id, questsById[quest.id]!.tasks.map(() => 0));
                 break;
             }
             case 'complete-quest': {
@@ -80,7 +81,8 @@ export class PlayingRequestHandler extends ClientState<PlayerData> {
                 if (!quest) {
                     return;
                 }
-                player.details.quests.set(quest.id, 'done');
+                player.details.questLog.delete(quest.id);
+                player.details.questsDone.add(quest.id);
                 break;
             }
         }

@@ -47,7 +47,8 @@ const characters: CharacterInfo[] = [
 
 const characterDetails: CharacterDetails = {
     info: characters[0],
-    quests: new Map<QuestId, QuestStatus>(),
+    questsDone: new Set<QuestId>(),
+    questLog: new Map<QuestId, QuestStatus>(),
 };
 
 class FakeUserDao implements UserDao {

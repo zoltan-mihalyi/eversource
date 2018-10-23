@@ -16,4 +16,14 @@ export function groupBy<T extends { [P in K]: string }, K extends keyof T>(array
     return result;
 }
 
+type Indexed<T> = {
+    [key: string]: T | undefined;
+};
 
+export function indexBy<T extends { [P in K]: string | number }, K extends keyof T>(array: T[], property: K): Indexed<T> {
+    const result: Indexed<T> = {};
+    for (const item of array) {
+        result[item[property]] = item;
+    }
+    return result;
+}

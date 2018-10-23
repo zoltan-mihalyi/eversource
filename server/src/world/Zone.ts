@@ -1,14 +1,19 @@
 import { Grid } from '../../../common/Grid';
 import { Entity } from '../entity/Entity';
 import * as rbush from 'rbush';
-import BBox = rbush.BBox;
 import { EntityId } from '../../../common/domain/EntityData';
+import { X, Y } from '../../../common/domain/Location';
 
 interface EntityBox extends rbush.BBox {
     entity: Entity;
 }
 
+interface AreaBox extends rbush.BBox {
+    name: string;
+}
+
 export class Zone {
+    private areas = rbush<AreaBox>();
     private entities = new Map<EntityId, EntityBox>();
     private entityIndex = rbush<EntityBox>();
 
@@ -19,6 +24,10 @@ export class Zone {
         const bBox = entityBBox(entity);
         this.entities.set(entity.id, bBox);
         this.entityIndex.insert(bBox);
+    }
+
+    addArea(x: X, y: Y, width: number, height: number, name: string) {
+        this.areas.insert({ minX: x, minY: y, maxX: x + width, maxY: y + height, name });
     }
 
     getEntity(id: EntityId): Entity | null {
@@ -43,6 +52,10 @@ export class Zone {
             entity.update(this.grid, interval);
             if (entity.get().position !== lastPosition) {
                 this.handlePositionChange(entity);
+            }
+
+            for (const area of this.areas.search(entityBox)) {
+                entity.emit('area', area.name);
             }
         });
     }

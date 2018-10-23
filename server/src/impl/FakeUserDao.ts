@@ -6,7 +6,8 @@ import { CharacterDetails } from '../character/CharacterDetails';
 export class FakeUserDao implements UserDao {
     private characters: CharacterDetails[] = [
         {
-            quests: new Map(),
+            questsDone: new Set(),
+            questLog: new Map(),
             info:
                 {
                     id: '1' as CharacterId,
@@ -40,7 +41,8 @@ export class FakeUserDao implements UserDao {
                 },
         },
         {
-            quests: new Map(),
+            questsDone: new Set(),
+            questLog: new Map(),
             info: {
                 id: '2' as CharacterId,
                 name: 'Robin' as CharacterName,
@@ -73,7 +75,8 @@ export class FakeUserDao implements UserDao {
             },
         },
         {
-            quests: new Map(),
+            questsDone: new Set(),
+            questLog: new Map(),
             info: {
                 id: '3' as CharacterId,
                 name: 'Unimaginable' as CharacterName,

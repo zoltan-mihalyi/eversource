@@ -3,9 +3,10 @@ import { QuestId } from '../../../common/domain/InteractionTable';
 
 type QuestProgression = number[];
 
-export type QuestStatus = 'done' | 'failed' | QuestProgression;
+export type QuestStatus = 'failed' | QuestProgression;
 
 export interface CharacterDetails {
     info: CharacterInfo;
-    quests: Map<QuestId, QuestStatus>;
+    questsDone: Set<QuestId>;
+    questLog: Map<QuestId, QuestStatus>;
 }
