@@ -14,13 +14,17 @@ export type RequestCommand = keyof RequestTypes;
 
 export type LeaveReason = 'leave' | 'timeout'
 
+export type PlayerStateDiff = {
+    [P in keyof PlayerState]?: Partial<PlayerState[P]>;
+}
+
 export interface ResponseTypes {
     error: ErrorCode;
     leaved: LeaveReason;
     characters: CharacterInfo[];
     ready: void;
     diffs: Diff[];
-    playerState: Partial<PlayerState>;
+    playerState: PlayerStateDiff;
 }
 
 export type ResponseCommand = keyof ResponseTypes;

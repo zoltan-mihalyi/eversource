@@ -1,10 +1,9 @@
-import { ResponseCommand, ResponseTypes } from '../../../common/protocol/Messages';
+import { PlayerStateDiff, ResponseCommand, ResponseTypes } from '../../../common/protocol/Messages';
 import { State } from '../../../common/util/StateManager';
 import { ErrorCode } from '../../../common/protocol/ErrorCode';
 import { CharacterInfo } from '../../../common/domain/CharacterInfo';
 import { Display } from './Display';
 import { Diff } from '../../../common/protocol/Diff';
-import { PlayerState } from '../../../common/protocol/PlayerState';
 
 export type ResponseHandler = {
     [P in ResponseCommand]: (data: ResponseTypes[P]) => void;
@@ -51,7 +50,7 @@ export abstract class NetworkingState<T> extends State<NetworkingContext, T> imp
     diffs(diffs: Diff[]) {
     }
 
-    playerState(playerState: Partial<PlayerState>) {
+    playerState(playerState: PlayerStateDiff) {
     }
 
     protected abort() {

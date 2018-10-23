@@ -2,9 +2,10 @@ import * as React from 'react';
 import { GameApplication } from '../../map/GameApplication';
 import { Button } from '../gui/Button';
 import { PlayingNetworkApi } from '../../protocol/PlayingState';
-import { InteractionTable, QuestId } from '../../../../common/domain/InteractionTable';
+import { QuestId } from '../../../../common/domain/InteractionTable';
 import { InteractionTableGui } from './InteractionTableGui';
 import { PlayerState } from '../../../../common/protocol/PlayerState';
+import { PlayerStateDiff } from '../../../../common/protocol/Messages';
 
 interface Props {
     game: GameApplication;
@@ -13,7 +14,7 @@ interface Props {
 }
 
 interface State {
-    interactions: InteractionTable | null;
+    playerState: PlayerState;
 }
 
 interface ImageStyle extends CSSStyleDeclaration {
@@ -23,17 +24,18 @@ interface ImageStyle extends CSSStyleDeclaration {
 export class GameScreen extends React.Component<Props, State> {
     private canvas: HTMLCanvasElement | null = null;
 
-    state: State = { interactions: null };
+    state: State = { playerState: { interaction: null } };
 
     render() {
-        const { interactions } = this.state;
+        const { interaction } = this.state.playerState;
+
         return (
             <div>
                 <div ref={this.containerRef}/>
                 <div className="gui bottom">
                     {
-                        interactions &&
-                        <InteractionTableGui interactions={interactions} onAcceptQuest={this.acceptQuest}
+                        interaction &&
+                        <InteractionTableGui interactions={interaction} onAcceptQuest={this.acceptQuest}
                                              onCompleteQuest={this.completeQuest} onClose={this.closeInteraction}/>
                     }
                     <Button onClick={this.leave}>Leave</Button>
@@ -47,12 +49,27 @@ export class GameScreen extends React.Component<Props, State> {
         this.props.onMount(this);
     }
 
-    updatePlayerState(playerState: Partial<PlayerState>): void { // TODO interface
-        if (playerState.interaction !== void 0) {
-            this.setState({
-                interactions: playerState.interaction
-            });
+    updatePlayerState(playerStateDiff: PlayerStateDiff): void { // TODO interface
+        const { playerState } = this.state;
+
+        const newPlayerState: PlayerState = { ...playerState };
+        for (const key of Object.keys(playerStateDiff) as (keyof PlayerState)[]) {
+            const valueDiff = playerStateDiff[key] as PlayerState[keyof PlayerState];
+            let newValue: PlayerState[keyof PlayerState];
+            if (valueDiff === null) {
+                newValue = null;
+            } else {
+                if (playerState[key]) {
+                    newValue = { ...playerState[key], ...valueDiff };
+                } else {
+                    newValue = valueDiff;
+                }
+            }
+
+            newPlayerState[key] = newValue;
         }
+
+        this.setState({ playerState: newPlayerState });
     }
 
     private joystickContainerRef = (div: HTMLDivElement | null) => {
