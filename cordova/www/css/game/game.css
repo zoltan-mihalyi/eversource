@@ -1,0 +1,15 @@
+.quest-log-item {
+    margin-bottom: 5px;
+}
+
+ul.task-status {
+    padding-left: 20px;
+}
+
+li.complete {
+    color: wheat;
+}
+
+li.failed {
+    color: firebrick;
+}

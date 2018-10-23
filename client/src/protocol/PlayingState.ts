@@ -11,6 +11,7 @@ import { EntityData, EntityId } from '../../../common/domain/EntityData';
 import { PlayerStateDiff } from '../../../common/protocol/Messages';
 import { QuestId } from '../../../common/domain/InteractionTable';
 import ResourceDictionary = PIXI.loaders.ResourceDictionary;
+import { QuestLogItem } from '../../../common/protocol/QuestLogItem';
 
 export interface PlayingStateData {
     map: LoadedMap;
@@ -54,6 +55,10 @@ export class PlayingState extends NetworkingState<PlayingStateData> implements P
     playerState(playerState: PlayerStateDiff) {
         this.game.updatePlayerState(playerState);
         this.gameScreen.updatePlayerState(playerState);
+    }
+
+    questLog(diffs: Diff<QuestId, QuestLogItem>[]){
+        this.gameScreen.updateQuestLog(diffs);
     }
 
     protected abort() {

@@ -80,15 +80,16 @@ export class CreatureEntity extends Entity<CreatureEntityData> {
         if (!player) {
             return;
         }
-        player.state.questLog.forEach((q, questId) => {
+        const { questLog } = player.state;
+        questLog.forEach((q, questId) => {
             if (q === 'failed') {
                 return;
             }
             const quest = questsById[questId]!;
 
             quest.tasks.forEach((task, i) => {
-                if (task.type === 'visit' && eventType === 'area' && task.name === payload) {
-                    q[i] = 1;
+                if (task.type === 'visit' && eventType === 'area' && task.areaName === payload) {
+                    questLog.set(questId, q.map((num, id) => id == i ? 1 : num));
                 }
             });
         });

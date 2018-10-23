@@ -20,7 +20,7 @@ export class QuestItem extends React.Component<Props> {
 
         return (
             <li>
-                <button onClick={this.onSelect}>{icon} {quest.name}</button>
+                <button className="item" onClick={this.onSelect}>{icon} {quest.name}</button>
             </li>
         );
     }

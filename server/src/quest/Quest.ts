@@ -2,11 +2,12 @@ import { QuestId } from '../../../common/domain/InteractionTable';
 
 interface BaseTask {
     count: number;
+    title: string;
 }
 
 interface VisitAreaTask extends BaseTask {
     type: 'visit';
-    name: string;
+    areaName: string;
 }
 
 interface KillTask extends BaseTask {

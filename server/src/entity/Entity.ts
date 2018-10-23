@@ -4,7 +4,7 @@ import { EntityData, EntityId, EntityInteraction, EntityInteractions } from '../
 import { CharacterDetails, QuestStatus } from '../character/CharacterDetails';
 import { Quest } from '../quest/Quest';
 import { InteractionTable, QuestId, QuestInfo } from '../../../common/domain/InteractionTable';
-import { questsById } from '../quest/QuestIndexer';
+import { questInfoMap } from '../quest/QuestIndexer';
 
 let nextId = 0;
 
@@ -63,14 +63,14 @@ export abstract class Entity<O extends EntityData = EntityData> {
         for (const quest of this.hidden.quests) {
             const isNewQuest = !questsDone.has(quest.id) && !questLog.has(quest.id);
             if (isNewQuest && canAcceptQuest(questsDone, quest)) {
-                acceptable.push(questInfo(quest));
+                acceptable.push(questInfoMap.get(quest.id)!);
             }
         }
 
         for (const quest of this.hidden.questCompletions) {
             const questStatus = questLog.get(quest.id);
             if (questStatus !== void 0 && questStatus !== 'failed' && allTaskComplete(quest, questStatus)) {
-                completable.push(questInfo(quest)); // TODO check task
+                completable.push(questInfoMap.get(quest.id)!);
             }
         }
 
@@ -149,21 +149,6 @@ export abstract class Entity<O extends EntityData = EntityData> {
             });
         }
     }
-}
-
-const questInfoMap = new Map<QuestId, QuestInfo>(); // TODO
-
-function questInfo(quest: Quest): QuestInfo {
-    let qi = questInfoMap.get(quest.id);
-    if (!qi) {
-        qi = {
-            id: quest.id,
-            name: quest.name,
-        };
-        questInfoMap.set(quest.id, qi);
-    }
-    return qi;
-
 }
 
 function canAcceptQuest(done: Set<QuestId>, quest: Quest) { // TODO refactor this

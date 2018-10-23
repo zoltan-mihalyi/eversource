@@ -49,6 +49,6 @@ export const quests: Quest[] = [{
     description: 'Investigate the lava slimes!',
     requires: [],
     tasks: [
-        { count: 1, type: 'visit', name: 'slimes' },
+        { count: 1, type: 'visit', areaName: 'slimes', title: 'Visit eastern slimes' },
     ],
 }];

@@ -5,7 +5,10 @@ import { PlayingNetworkApi } from '../../protocol/PlayingState';
 import { QuestId } from '../../../../common/domain/InteractionTable';
 import { InteractionTableGui } from './InteractionTableGui';
 import { PlayerState } from '../../../../common/protocol/PlayerState';
+import { QuestLog } from './QuestLog';
 import { PlayerStateDiff } from '../../../../common/protocol/Messages';
+import { QuestLogItem } from '../../../../common/protocol/QuestLogItem';
+import { Diff } from '../../../../common/protocol/Diff';
 
 interface Props {
     game: GameApplication;
@@ -15,6 +18,7 @@ interface Props {
 
 interface State {
     playerState: PlayerState;
+    questLog: Map<QuestId, QuestLogItem>;
 }
 
 interface ImageStyle extends CSSStyleDeclaration {
@@ -24,14 +28,20 @@ interface ImageStyle extends CSSStyleDeclaration {
 export class GameScreen extends React.Component<Props, State> {
     private canvas: HTMLCanvasElement | null = null;
 
-    state: State = { playerState: { interaction: null, character: null } };
+    state: State = {
+        playerState: { interaction: null, character: null },
+        questLog: new Map<QuestId, QuestLogItem>(),
+    };
 
     render() {
-        const { interaction } = this.state.playerState;
+        const { playerState: { interaction }, questLog } = this.state
 
         return (
             <div>
                 <div ref={this.containerRef}/>
+                <div className="gui top">
+                    <QuestLog questLog={questLog}/>
+                </div>
                 <div className="gui bottom">
                     {
                         interaction &&
@@ -70,6 +80,28 @@ export class GameScreen extends React.Component<Props, State> {
         }
 
         this.setState({ playerState: newPlayerState });
+    }
+
+    updateQuestLog(diffs: Diff<QuestId, QuestLogItem>[]) {
+        const oldQuestLog = this.state.questLog;
+        const questLog = new Map(oldQuestLog);
+
+        for (const diff of diffs) {
+            switch (diff.type) {
+                case 'create':
+                    questLog.set(diff.id, diff.data);
+                    break;
+                case 'change':
+                    questLog.set(diff.id, { ...questLog.get(diff.id)!, ...diff.changes });
+                    break;
+                case 'remove':
+                    questLog.delete(diff.id);
+            }
+        }
+
+        this.setState({
+            questLog,
+        });
     }
 
     private joystickContainerRef = (div: HTMLDivElement | null) => {

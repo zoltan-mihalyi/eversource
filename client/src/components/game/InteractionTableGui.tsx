@@ -15,13 +15,11 @@ export class InteractionTableGui extends React.Component<Props> {
         const { acceptable, completable } = this.props.interactions;
 
         return (
-            <div className="container">
+            <div className="panel size-medium">
                 <CloseButton onClose={this.props.onClose}/>
-                <ul className="limited">
+                <ul>
                     {acceptable.map((q, i) => <QuestItem key={i} state={QuestItemState.ACCEPTABLE} quest={q}
                                                          onSelect={this.props.onAcceptQuest}/>)}
-                </ul>
-                <ul className="limited">
                     {completable.map((q, i) => <QuestItem key={i} state={QuestItemState.COMPLETABLE} quest={q}
                                                           onSelect={this.props.onCompleteQuest}/>)}
                 </ul>

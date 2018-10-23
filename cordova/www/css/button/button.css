@@ -16,6 +16,22 @@ button:focus {
     outline: 0;
 }
 
+button.item {
+    text-align: left;
+    padding: 2px 6px;
+}
+
+button.item, button.close {
+    opacity: 1;
+    border: 1px solid #986a20;
+    margin: 1px;
+    word-wrap: break-word;
+}
+
+button.item:hover, button.close:hover {
+    background-color: #86603a;
+}
+
 table.button {
     border-spacing: 0;
     height: 23px;
@@ -43,16 +59,9 @@ td.button-right {
 }
 
 button.close {
-    opacity: 1;
     text-align: center;
-    border: 1px solid #986a20;
     width: 18px;
     height: 18px;
     display: block;
-    margin: 1px 1px 1px auto;
-}
-
-
-button.close:hover{
-    background-color: #86603a;
+    margin-left: auto;
 }

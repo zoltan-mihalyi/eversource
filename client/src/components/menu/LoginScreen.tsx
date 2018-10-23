@@ -43,7 +43,7 @@ export class LoginScreen extends React.Component<Props> {
             case 'error':
                 return (
                     <>
-                        <form className="container" onSubmit={this.onSubmit}>
+                        <form className="container panel" onSubmit={this.onSubmit}>
                             {loginState.type === 'error' ? (
                                 <p>Error: {loginState.message}</p>
                             ) : null}
@@ -65,13 +65,13 @@ export class LoginScreen extends React.Component<Props> {
                 );
             case 'connecting':
                 return (
-                    <div className="container">
+                    <div className="container panel">
                         <h2>Connecting...</h2>
                     </div>
                 );
             case 'characters':
                 return (
-                    <div className="container">
+                    <div className="container panel">
                         <h2>Loading characters...</h2>
                     </div>
                 );
