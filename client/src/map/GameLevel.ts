@@ -55,7 +55,7 @@ export class GameLevel {
         }
     }
 
-    updateObjects(diffs: Diff[]) {
+    updateObjects(diffs: Diff<EntityId, EntityData>[]) {
         const { tilewidth, tileheight } = this.map.map;
 
         const updateDisplayPosition = <T extends EntityData>(display: UpdatableDisplay<T>, changes: Partial<T>) => {

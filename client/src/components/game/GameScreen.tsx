@@ -24,7 +24,7 @@ interface ImageStyle extends CSSStyleDeclaration {
 export class GameScreen extends React.Component<Props, State> {
     private canvas: HTMLCanvasElement | null = null;
 
-    state: State = { playerState: { interaction: null } };
+    state: State = { playerState: { interaction: null, character: null } };
 
     render() {
         const { interaction } = this.state.playerState;

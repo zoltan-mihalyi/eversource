@@ -1,16 +1,16 @@
 import { ClientState } from './ClientState';
 import { Zone } from '../world/Zone';
 import { CharacterSelectionRequestHandler } from './CharacterSelectionRequestHandler';
-import { Diff } from '../../../common/protocol/Diff';
 import { Entity, HiddenEntityData, HiddenPlayerInfo } from '../entity/Entity';
 import { CreatureEntity } from '../entity/CreatureEntity';
 import { EntityData, EntityId } from '../../../common/domain/EntityData';
 import { PlayerController } from '../entity/controller/PlayerController';
 import { canInteract } from '../../../common/game/Interaction';
 import { PlayerState } from '../../../common/protocol/PlayerState';
-import { DiffableEntities, DiffablePlayerState } from './Diffable';
 import { QuestId, QuestInfo } from '../../../common/domain/InteractionTable';
 import { questsById } from '../quest/QuestIndexer';
+import { DynamicDiffable } from './diffable/DynamicDiffable';
+import { DiffablePlayerState } from './diffable/DiffablePlayerState';
 
 export interface PlayerData {
     zone: Zone;
@@ -20,7 +20,7 @@ export interface PlayerData {
 }
 
 export class PlayingRequestHandler extends ClientState<PlayerData> {
-    private readonly worldDiff = new DiffableEntities(this.data.character);
+    private readonly worldDiff = new DynamicDiffable<EntityId, EntityData>();
     private readonly playerStateDiff = new DiffablePlayerState();
     private detectionDistance = 15;
 
@@ -70,7 +70,7 @@ export class PlayingRequestHandler extends ClientState<PlayerData> {
                 break;
             }
             case 'accept-quest': {
-                const quest = findQuest(player,params, 'acceptable');
+                const quest = findQuest(player, params, 'acceptable');
                 if (!quest) {
                     return;
                 }
@@ -104,10 +104,10 @@ export class PlayingRequestHandler extends ClientState<PlayerData> {
         zone.removeEntity(character);
     }
 
-    private indexEntities(entities: Entity[]): Map<Entity, EntityData> {
-        const result = new Map<Entity, EntityData>();
+    private indexEntities(entities: Entity[]): Map<EntityId, EntityData> {
+        const result = new Map<EntityId, EntityData>();
         for (const entity of entities) {
-            result.set(entity, entity.getFor(this.data.hidden.player!.details));
+            result.set(entity.id, entity.getFor(this.data.hidden.player!.details));
         }
         return result;
     }
@@ -118,6 +118,9 @@ export class PlayingRequestHandler extends ClientState<PlayerData> {
         let { interacting } = state;
         const playerState: PlayerState = {
             interaction: !interacting ? null : interacting.getInteractionsFor(details),
+            character: {
+                id: this.data.character.id,
+            },
         };
 
         const diffs = this.playerStateDiff.update(playerState);
@@ -138,7 +141,7 @@ export class PlayingRequestHandler extends ClientState<PlayerData> {
         const diffs = this.worldDiff.update(entityMap);
 
         if (diffs !== null) {
-            this.context.sendCommand('diffs', diffs);
+            this.context.sendCommand('world', diffs);
         }
     }
 

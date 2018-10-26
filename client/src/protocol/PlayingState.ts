@@ -7,7 +7,7 @@ import { Diff } from '../../../common/protocol/Diff';
 import { Position } from '../../../common/domain/Location';
 import { GameScreen } from '../components/game/GameScreen';
 import { LoadedMap } from '../../../common/tiled/TiledResolver';
-import { EntityId } from '../../../common/domain/EntityData';
+import { EntityData, EntityId } from '../../../common/domain/EntityData';
 import { PlayerStateDiff } from '../../../common/protocol/Messages';
 import { QuestId } from '../../../common/domain/InteractionTable';
 import ResourceDictionary = PIXI.loaders.ResourceDictionary;
@@ -47,11 +47,12 @@ export class PlayingState extends NetworkingState<PlayingStateData> implements P
         }, this);
     }
 
-    diffs(diffs: Diff[]) {
+    world(diffs: Diff<EntityId, EntityData>[]) {
         this.game.updateState(diffs);
     }
 
     playerState(playerState: PlayerStateDiff) {
+        this.game.updatePlayerState(playerState);
         this.gameScreen.updatePlayerState(playerState);
     }
 

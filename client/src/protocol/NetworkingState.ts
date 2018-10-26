@@ -4,6 +4,7 @@ import { ErrorCode } from '../../../common/protocol/ErrorCode';
 import { CharacterInfo } from '../../../common/domain/CharacterInfo';
 import { Display } from './Display';
 import { Diff } from '../../../common/protocol/Diff';
+import { EntityData, EntityId } from '../../../common/domain/EntityData';
 
 export type ResponseHandler = {
     [P in ResponseCommand]: (data: ResponseTypes[P]) => void;
@@ -47,7 +48,7 @@ export abstract class NetworkingState<T> extends State<NetworkingContext, T> imp
     characters(characters: CharacterInfo[]) {
     }
 
-    diffs(diffs: Diff[]) {
+    world(diffs: Diff<EntityId, EntityData>[]) {
     }
 
     playerState(playerState: PlayerStateDiff) {

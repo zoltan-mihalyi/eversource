@@ -2,6 +2,7 @@ import { CharacterInfo } from '../domain/CharacterInfo';
 import { ErrorCode } from './ErrorCode';
 import { Diff } from './Diff';
 import { PlayerState } from './PlayerState';
+import { EntityData, EntityId } from '../domain/EntityData';
 
 export interface RequestTypes {
     enter: string;
@@ -23,10 +24,10 @@ export interface ResponseTypes {
     leaved: LeaveReason;
     characters: CharacterInfo[];
     ready: void;
-    diffs: Diff[];
+    world: Diff<EntityId, EntityData>[];
     playerState: PlayerStateDiff;
 }
 
 export type ResponseCommand = keyof ResponseTypes;
 
-export const PROTOCOL_VERSION = 11;
+export const PROTOCOL_VERSION = 12;

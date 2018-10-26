@@ -1,23 +1,20 @@
-import { EntityData, EntityId } from '../domain/EntityData';
-
-interface BaseDiff {
+interface BaseDiff<ID> {
     type: string;
-    id: EntityId;
+    id: ID;
 }
 
-interface Remove extends BaseDiff {
+interface Remove<ID> extends BaseDiff<ID> {
     type: 'remove';
 }
 
-interface Change extends BaseDiff {
+interface Change<ID, DATA> extends BaseDiff<ID> {
     type: 'change';
-    changes: Partial<EntityData>;
+    changes: Partial<DATA>;
 }
 
-interface Create extends BaseDiff {
+interface Create<ID, DATA> extends BaseDiff<ID> {
     type: 'create';
-    self: boolean;
-    data: EntityData;
+    data: DATA;
 }
 
-export type Diff = Remove | Change | Create;
+export type Diff<ID, DATA> = Remove<ID> | Change<ID, DATA> | Create<ID, DATA>;

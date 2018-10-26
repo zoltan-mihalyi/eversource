@@ -3,9 +3,10 @@ import { Position, X, Y } from '../../../common/domain/Location';
 import { GameLevel } from './GameLevel';
 import { InputManager, MovementIntent } from '../input/InputManager';
 import { Diff } from '../../../common/protocol/Diff';
-import { EntityId } from '../../../common/domain/EntityData';
+import { EntityData, EntityId } from '../../../common/domain/EntityData';
 import { registerCursors } from '../display/Cursors';
 import { PlayingNetworkApi, PlayingStateData } from '../protocol/PlayingState';
+import { PlayerStateDiff } from '../../../common/protocol/Messages';
 
 export class GameApplication extends PIXI.Application {
     private viewContainer = new PIXI.Container();
@@ -47,17 +48,24 @@ export class GameApplication extends PIXI.Application {
         super.destroy();
     }
 
-    updateState(diffs: Diff[]) {
+    updateState(diffs: Diff<EntityId, EntityData>[]) {
         for (const diff of diffs) {
-            if (diff.type === 'create' && diff.self) {
-                this.entityId = diff.id;
-                this.setViewCenter(diff.data.position);
-            } else if (diff.type === 'change' && diff.id === this.entityId && diff.changes.position) {
-                this.setViewCenter(diff.changes.position);
+            if (diff.id === this.entityId) {
+                if (diff.type === 'create') {
+                    this.setViewCenter(diff.data.position);
+                } else if (diff.type === 'change' && diff.changes.position) {
+                    this.setViewCenter(diff.changes.position);
+                }
             }
         }
 
         this.gameLevel.updateObjects(diffs);
+    }
+
+    updatePlayerState(state: PlayerStateDiff) {
+        if (state.character && state.character.id !== void 0) {
+            this.entityId = state.character.id;
+        }
     }
 
     private setViewCenter(position: Position) {
