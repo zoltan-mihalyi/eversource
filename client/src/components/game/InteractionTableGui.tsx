@@ -1,7 +1,9 @@
 import * as React from 'react';
 import { InteractionTable, QuestId, QuestInfo } from '../../../../common/domain/InteractionTable';
-import { QuestItem, QuestItemState } from './QuestItem';
+import { QuestItem } from './QuestItem';
 import { CloseButton } from '../gui/CloseButton';
+import { QuestInteractionTable } from './QuestInteractionTable';
+import { QuestItemState } from './QuestItemState';
 
 interface Props {
     interactions: InteractionTable;
@@ -12,10 +14,11 @@ interface Props {
 
 interface State {
     selectedId: QuestId | null;
+    selectedLater: boolean;
 }
 
 export class InteractionTableGui extends React.PureComponent<Props, State> {
-    state: State = { selectedId: null };
+    state: State = { selectedId: null, selectedLater: false };
 
     static getDerivedStateFromProps(props: Props, state: State): Partial<State> | null {
         const { selectedId } = state;
@@ -23,69 +26,52 @@ export class InteractionTableGui extends React.PureComponent<Props, State> {
             return null;
         }
 
-        const { acceptable, completable } = props.interactions;
-        if (!findQuest(acceptable, selectedId) && !findQuest(completable, selectedId)) {
+        const questInfo = findQuest(props.interactions, selectedId);
+        if (!questInfo) {
             return {
                 selectedId: null,
             };
+        }
+
+        // selected quest become 'later'
+        if (!state.selectedLater && props.interactions.completableLater.indexOf(questInfo) !== -1) {
+            return {
+                selectedId: null,
+            }
         }
         return null;
     }
 
     render() {
-        const { acceptable, completable } = this.props.interactions;
-        const selected = this.getSelected();
+        const { acceptable, completable, completableLater } = this.props.interactions;
+        const { selectedId } = this.state;
+        const selected = selectedId === null ? null : findQuest(this.props.interactions, selectedId)!;
 
-        const completed = selected !== null && completable.indexOf(selected) !== -1;
         return (
             <div className="panel size-medium">
                 <CloseButton onClose={this.props.onClose}/>
                 {selected ? (
-                    <>
-                        <h2>{selected.name}</h2>
-                        <p>{completed ? selected.completion : selected.description}</p>
-
-                        {selected.tasks.length === 0 || completed ? null : (
-                            <>
-                                <h3>Completion</h3>
-                                <ul className="task-status">
-                                    {selected.tasks.map((task, i) => (
-                                        <li key={i}>{task.count !== 1 ? task.count + ' ' : ''}{task.title}</li>
-                                    ))}
-                                </ul>
-                            </>
-                        )}
-
-                        <button className="item" onClick={this.clearSelection}>Back</button>
-                        {!completed ? (
-                            <button className="item" onClick={this.onAccept}>Accept</button>
-                        ) : (
-                            <button className="item" onClick={this.onComplete}>Complete</button>
-                        )}
-                    </>
+                    <QuestInteractionTable info={selected} state={getQuestState(this.props.interactions, selected)}
+                                           onAccept={this.onAccept} onComplete={this.onComplete}
+                                           onBack={this.clearSelection}/>
                 ) : (
                     <ul>
                         {acceptable.map((q, i) => <QuestItem key={i} state={QuestItemState.ACCEPTABLE} quest={q}
                                                              onSelect={this.onSelect}/>)}
                         {completable.map((q, i) => <QuestItem key={i} state={QuestItemState.COMPLETABLE} quest={q}
                                                               onSelect={this.onSelect}/>)}
+                        {completableLater.map((q, i) => <QuestItem key={i} state={QuestItemState.COMPLETABLE_LATER}
+                                                                   quest={q}
+                                                                   onSelect={this.onSelect}/>)}
                     </ul>
                 )}
             </div>
         );
     }
 
-    private getSelected(): QuestInfo | null {
-        const { selectedId } = this.state;
-        if (selectedId === null) {
-            return null;
-        }
-        const { acceptable, completable } = this.props.interactions;
-        return findQuest(acceptable, selectedId) || findQuest(completable, selectedId)!;
-    }
-
     private onSelect = (quest: QuestInfo) => {
-        this.setState({ selectedId: quest.id });
+        const selectedLater = this.props.interactions.completableLater.indexOf(quest) !== -1;
+        this.setState({ selectedId: quest.id, selectedLater });
     };
 
     private clearSelection = () => {
@@ -101,6 +87,22 @@ export class InteractionTableGui extends React.PureComponent<Props, State> {
     };
 }
 
-function findQuest(list: QuestInfo[], questId: QuestId): QuestInfo | undefined {
+function getQuestState(interactions: InteractionTable, quest: QuestInfo): QuestItemState {
+    if (interactions.acceptable.indexOf(quest) !== -1) {
+        return QuestItemState.ACCEPTABLE;
+    } else if (interactions.completable.indexOf(quest) !== -1) {
+        return QuestItemState.COMPLETABLE;
+    } else {
+        return QuestItemState.COMPLETABLE_LATER;
+    }
+}
+
+function findQuest(interactions: InteractionTable, questId: QuestId): QuestInfo | undefined {
+    const list = [
+        ...interactions.acceptable,
+        ...interactions.completable,
+        ...interactions.completableLater,
+    ];
+
     return list.find(item => item.id === questId);
 }

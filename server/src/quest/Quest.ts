@@ -1,4 +1,5 @@
 import { QuestId } from '../../../common/domain/InteractionTable';
+import { NonEmptyArray } from '../../../common/util/NonEmptyArray';
 
 interface BaseTask {
     count: number;
@@ -20,13 +21,19 @@ interface ItemTask extends BaseTask {
 
 type Task = VisitAreaTask | KillTask | ItemTask;
 
+export interface Tasks {
+    progress: string;
+    list: NonEmptyArray<Task>;
+}
+
 export interface Quest {
     id: QuestId;
     name: string;
     startsAt: string;
     endsAt: string;
     description: string;
+    taskDescription: string;
     completion: string;
     requires: QuestId[];
-    tasks: Task[];
+    tasks?: Tasks;
 }

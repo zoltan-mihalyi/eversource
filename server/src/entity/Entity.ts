@@ -58,6 +58,7 @@ export abstract class Entity<O extends EntityData = EntityData> {
     getInteractionsFor(details: CharacterDetails): InteractionTable {
         const acceptable: QuestInfo[] = [];
         const completable: QuestInfo[] = [];
+        const completableLater: QuestInfo[] = [];
 
         const { questsDone, questLog } = details;
         for (const quest of this.hidden.quests) {
@@ -69,18 +70,24 @@ export abstract class Entity<O extends EntityData = EntityData> {
 
         for (const quest of this.hidden.questCompletions) {
             const questStatus = questLog.get(quest.id);
-            if (questStatus !== void 0 && questStatus !== 'failed' && allTaskComplete(quest, questStatus)) {
-                completable.push(questInfoMap.get(quest.id)!);
+            if (questStatus === void 0) {
+                continue;
+            }
+            const questInfo = questInfoMap.get(quest.id)!;
+            if (questStatus !== 'failed' && allTaskComplete(quest, questStatus)) {
+                completable.push(questInfo);
+            }else {
+                completableLater.push(questInfo);
             }
         }
 
-        return { entityId: this.id, acceptable, completable }
+        return { entityId: this.id, acceptable, completable, completableLater }
     }
 
     getFor(details: CharacterDetails): EntityData {
         const entityData = this.get();
 
-        const { completable, acceptable } = this.getInteractionsFor(details);
+        const { completable, completableLater, acceptable } = this.getInteractionsFor(details);
 
         const interactions: EntityInteraction[] = [];
         if (acceptable.length !== 0) {
@@ -88,6 +95,9 @@ export abstract class Entity<O extends EntityData = EntityData> {
         }
         if (completable.length !== 0) {
             interactions.push('quest-complete');
+        }
+        if (completableLater.length !== 0) {
+            interactions.push('quest-complete-later');
         }
 
         if (interactions.length !== 0) {
@@ -199,8 +209,13 @@ function getVerticalEdge(block: GridBlock, side: number, x: number) {
 }
 
 function allTaskComplete(quest: Quest, questStatus: QuestStatus): boolean {
-    for (let i = 0; i < quest.tasks.length; i++) {
-        if (questStatus[i] !== quest.tasks[i].count) {
+    const tasks = quest.tasks;
+    if (!tasks) {
+        return true;
+    }
+
+    for (let i = 0; i < tasks.list.length; i++) {
+        if (questStatus[i] !== tasks.list[i].count) {
             return false;
         }
     }

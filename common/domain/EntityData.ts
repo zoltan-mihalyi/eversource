@@ -6,7 +6,7 @@ import { NonEmptyArray } from '../util/NonEmptyArray';
 
 export type EntityId = Opaque<number, 'EntityId'>;
 
-export type EntityInteraction = 'trade' | 'quest' | 'quest-complete' | 'pickup' | 'use';
+export type EntityInteraction = 'trade' | 'quest' | 'quest-complete' | 'quest-complete-later' | 'pickup' | 'use';
 
 export type EntityInteractions = NonEmptyArray<EntityInteraction>;
 

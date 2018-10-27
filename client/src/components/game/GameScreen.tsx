@@ -39,15 +39,17 @@ export class GameScreen extends React.Component<Props, State> {
         return (
             <div>
                 <div ref={this.containerRef}/>
-                <div className="gui top">
+                <div className="gui top right">
                     <QuestLog questLog={questLog}/>
                 </div>
-                <div className="gui bottom">
+                <div className="gui top">
                     {
                         interaction &&
                         <InteractionTableGui interactions={interaction} onAcceptQuest={this.acceptQuest}
                                              onCompleteQuest={this.completeQuest} onClose={this.closeInteraction}/>
                     }
+                </div>
+                <div className="gui bottom">
                     <Button onClick={this.leave}>Leave</Button>
                 </div>
                 <div ref={this.joystickContainerRef}/>

@@ -11,8 +11,6 @@ import { QuestId, QuestInfo } from '../../../common/domain/InteractionTable';
 import { questInfoMap, questsById } from '../quest/QuestIndexer';
 import { DynamicDiffable } from './diffable/DynamicDiffable';
 import { DiffablePlayerState } from './diffable/DiffablePlayerState';
-import { QuestStatus } from '../character/CharacterDetails';
-import { Quest } from '../quest/Quest';
 import { QuestLogItem } from '../../../common/protocol/QuestLogItem';
 
 export interface PlayerData {
@@ -78,7 +76,9 @@ export class PlayingRequestHandler extends ClientState<PlayerData> {
                 if (!quest) {
                     return;
                 }
-                player.details.questLog.set(quest.id, questsById[quest.id]!.tasks.map(() => 0));
+                const tasks = questsById[quest.id]!.tasks;
+                const progression = tasks ? tasks.list.map(() => 0) : [];
+                player.details.questLog.set(quest.id, progression);
                 break;
             }
             case 'complete-quest': {

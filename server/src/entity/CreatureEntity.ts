@@ -85,9 +85,12 @@ export class CreatureEntity extends Entity<CreatureEntityData> {
             if (q === 'failed') {
                 return;
             }
-            const quest = questsById[questId]!;
+            const tasks = questsById[questId]!.tasks;
+            if (!tasks) {
+                return;
+            }
 
-            quest.tasks.forEach((task, i) => {
+            tasks.list.forEach((task, i) => {
                 if (task.type === 'visit' && eventType === 'area' && task.areaName === payload) {
                     questLog.set(questId, q.map((num, id) => id == i ? 1 : num));
                 }

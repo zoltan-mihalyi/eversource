@@ -8,11 +8,18 @@ export const questsById = indexBy(quests, 'id');
 
 export const questInfoMap = new Map<QuestId, QuestInfo>();
 for (const quest of quests) {
-    questInfoMap.set(quest.id, {
+    const questTasks = quest.tasks;
+    const tasks = questTasks ? questTasks.list.map(({ title, count }) => ({ title, count })) : [];
+    const questInfo: QuestInfo = {
         id: quest.id,
         name: quest.name,
         description: quest.description,
+        taskDescription: quest.taskDescription,
         completion: quest.completion,
-        tasks: quest.tasks.map(({ title, count }) => ({ title, count })),
-    });
+        tasks,
+    };
+    if (questTasks) {
+        questInfo.progress = questTasks.progress;
+    }
+    questInfoMap.set(quest.id, questInfo);
 }

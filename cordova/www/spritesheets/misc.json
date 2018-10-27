@@ -1,11 +1,11 @@
 { "columns":3,
  "image":"misc.png",
- "imageheight":32,
+ "imageheight":64,
  "imagewidth":96,
  "margin":0,
  "name":"misc",
  "spacing":0,
- "tilecount":3,
+ "tilecount":6,
  "tileheight":32,
  "tileproperties":
     {
@@ -20,6 +20,14 @@
      "2":
         {
          "name":"quest-complete"
+        },
+     "4":
+        {
+         "name":"quest-later"
+        },
+     "5":
+        {
+         "name":"quest-complete-later"
         }
     },
  "tilepropertytypes":
@@ -33,6 +41,14 @@
          "name":"string"
         },
      "2":
+        {
+         "name":"string"
+        },
+     "4":
+        {
+         "name":"string"
+        },
+     "5":
         {
          "name":"string"
         }

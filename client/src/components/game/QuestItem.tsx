@@ -1,10 +1,6 @@
 import * as React from 'react';
 import { QuestInfo } from '../../../../common/domain/InteractionTable';
-
-export const enum QuestItemState {
-    ACCEPTABLE,
-    COMPLETABLE
-}
+import { QuestItemState } from './QuestItemState';
 
 interface Props {
     state: QuestItemState;
@@ -12,15 +8,34 @@ interface Props {
     onSelect: (id: QuestInfo) => void;
 }
 
+
+const QuestItemIcon: React.SFC<{ state: QuestItemState }> = ({ state }) => {
+    switch (state) {
+        case QuestItemState.ACCEPTABLE:
+            return (
+                <span className="quest-icon-acceptable">! </span>
+            );
+        case QuestItemState.COMPLETABLE:
+            return (
+                <span className="quest-icon-completable">? </span>
+            );
+        case QuestItemState.COMPLETABLE_LATER:
+            return (
+                <span className="quest-icon-completable-later">? </span>
+            );
+    }
+};
+
 export class QuestItem extends React.Component<Props> {
     render() {
         const { state, quest } = this.props;
 
-        const icon = state === QuestItemState.ACCEPTABLE ? '!' : '?';
-
         return (
             <li>
-                <button className="item" onClick={this.onSelect}>{icon} {quest.name}</button>
+                <button className="item" onClick={this.onSelect}>
+                    <QuestItemIcon state={state}/>
+                    {quest.name}
+                </button>
             </li>
         );
     }

@@ -13,3 +13,11 @@ li.complete {
 li.failed {
     color: firebrick;
 }
+
+.quest-icon-acceptable, .quest-icon-completable {
+    color: #ffff00;
+}
+
+.quest-icon-completable-later{
+    color: #c0c0c0;
+}

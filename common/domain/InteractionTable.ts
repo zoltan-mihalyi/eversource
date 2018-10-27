@@ -12,7 +12,9 @@ export interface QuestInfo {
     id: QuestId;
     name: string;
     description: string;
+    taskDescription: string;
     completion: string;
+    progress?: string;
     tasks: TaskInfo[];
 }
 
@@ -20,4 +22,5 @@ export interface InteractionTable {
     entityId: EntityId;
     acceptable: QuestInfo[];
     completable: QuestInfo[];
+    completableLater: QuestInfo[];
 }

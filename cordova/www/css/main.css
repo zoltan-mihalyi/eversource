@@ -40,6 +40,9 @@ input, button {
 .gui.top {
     position: absolute;
     top: 0;
+}
+
+.gui.right {
     right: 0;
 }
 
