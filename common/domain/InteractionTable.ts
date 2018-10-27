@@ -11,6 +11,8 @@ export interface TaskInfo {
 export interface QuestInfo {
     id: QuestId;
     name: string;
+    description: string;
+    completion: string;
     tasks: TaskInfo[];
 }
 

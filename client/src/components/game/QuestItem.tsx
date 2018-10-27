@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { QuestId, QuestInfo } from '../../../../common/domain/InteractionTable';
+import { QuestInfo } from '../../../../common/domain/InteractionTable';
 
 export const enum QuestItemState {
     ACCEPTABLE,
@@ -9,7 +9,7 @@ export const enum QuestItemState {
 interface Props {
     state: QuestItemState;
     quest: QuestInfo;
-    onSelect: (id: QuestId) => void;
+    onSelect: (id: QuestInfo) => void;
 }
 
 export class QuestItem extends React.Component<Props> {
@@ -26,6 +26,6 @@ export class QuestItem extends React.Component<Props> {
     }
 
     private onSelect = () => {
-        this.props.onSelect(this.props.quest.id);
+        this.props.onSelect(this.props.quest);
     };
 }

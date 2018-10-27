@@ -34,7 +34,7 @@ export class GameScreen extends React.Component<Props, State> {
     };
 
     render() {
-        const { playerState: { interaction }, questLog } = this.state
+        const { playerState: { interaction }, questLog } = this.state;
 
         return (
             <div>

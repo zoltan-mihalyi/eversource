@@ -14,7 +14,11 @@ interface KillTask extends BaseTask {
     type: 'kill';
 }
 
-type Task = VisitAreaTask;
+interface ItemTask extends BaseTask {
+    type: 'item';
+}
+
+type Task = VisitAreaTask | KillTask | ItemTask;
 
 export interface Quest {
     id: QuestId;
@@ -22,6 +26,7 @@ export interface Quest {
     startsAt: string;
     endsAt: string;
     description: string;
+    completion: string;
     requires: QuestId[];
     tasks: Task[];
 }

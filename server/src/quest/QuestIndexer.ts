@@ -11,6 +11,8 @@ for (const quest of quests) {
     questInfoMap.set(quest.id, {
         id: quest.id,
         name: quest.name,
+        description: quest.description,
+        completion: quest.completion,
         tasks: quest.tasks.map(({ title, count }) => ({ title, count })),
     });
 }
