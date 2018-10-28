@@ -9,8 +9,10 @@ export class LoadingScreen extends React.Component<Props> {
         return (
             <div className="gui">
                 <div className="container panel">
-                    <h2>Loading...</h2>
-                    <h3 className="secondary">{this.props.zone}</h3>
+                    <div className="content">
+                        <h2>Loading...</h2>
+                        <h3 className="secondary">{this.props.zone}</h3>
+                    </div>
                 </div>
             </div>
         );

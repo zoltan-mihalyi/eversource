@@ -9,24 +9,26 @@ interface Props {
 export const QuestLog: React.SFC<Props> = ({ questLog }: Props) => {
     return (
         <div className="panel size-medium">
-            <h2>Quest log</h2>
-            <ul className="limited">
-                {Array.from(questLog).map(([key, item]) => (
-                    <li key={key} className={[...questClass(item), 'quest-log-item'].join(' ')}>
-                        <div className="">
-                            {item.info.name}
+            <div className="content">
+                <h2>Quest log</h2>
+                <ul className="limited">
+                    {Array.from(questLog).map(([key, item]) => (
+                        <li key={key} className={[...questClass(item), 'quest-log-item'].join(' ')}>
+                            <div className="">
+                                {item.info.name}
 
-                            {item.status === 'failed' ? 'Failed' : (
-                                <ul className="task-status">
-                                    {item.info.tasks.map((task, i) => (
-                                        <li key={i}>{task.title} ({item.status[i]} / {task.count})</li>
-                                    ))}
-                                </ul>
-                            )}
-                        </div>
-                    </li>
-                ))}
-            </ul>
+                                {item.status === 'failed' ? 'Failed' : (
+                                    <ul className="task-status">
+                                        {item.info.tasks.map((task, i) => (
+                                            <li key={i}>{task.title} ({item.status[i]} / {task.count})</li>
+                                        ))}
+                                    </ul>
+                                )}
+                            </div>
+                        </li>
+                    ))}
+                </ul>
+            </div>
         </div>
     );
 };

@@ -48,22 +48,27 @@ export class InteractionTableGui extends React.PureComponent<Props, State> {
         const selected = selectedId === null ? null : findQuest(this.props.interactions, selectedId)!;
 
         return (
-            <div className="panel size-medium">
-                <CloseButton onClose={this.props.onClose}/>
+            <div className="panel interaction size-medium">
+                <div className="toolbar">
+                    <h2>Interaction</h2>
+                    <CloseButton onClose={this.props.onClose}/>
+                </div>
                 {selected ? (
                     <QuestInteractionTable info={selected} state={getQuestState(this.props.interactions, selected)}
                                            onAccept={this.onAccept} onComplete={this.onComplete}
                                            onBack={this.clearSelection}/>
                 ) : (
-                    <ul>
-                        {acceptable.map((q, i) => <QuestItem key={i} state={QuestItemState.ACCEPTABLE} quest={q}
-                                                             onSelect={this.onSelect}/>)}
-                        {completable.map((q, i) => <QuestItem key={i} state={QuestItemState.COMPLETABLE} quest={q}
-                                                              onSelect={this.onSelect}/>)}
-                        {completableLater.map((q, i) => <QuestItem key={i} state={QuestItemState.COMPLETABLE_LATER}
-                                                                   quest={q}
-                                                                   onSelect={this.onSelect}/>)}
-                    </ul>
+                    <div className="content">
+                        <ul>
+                            {acceptable.map((q, i) => <QuestItem key={i} state={QuestItemState.ACCEPTABLE} quest={q}
+                                                                 onSelect={this.onSelect}/>)}
+                            {completable.map((q, i) => <QuestItem key={i} state={QuestItemState.COMPLETABLE} quest={q}
+                                                                  onSelect={this.onSelect}/>)}
+                            {completableLater.map((q, i) => <QuestItem key={i} state={QuestItemState.COMPLETABLE_LATER}
+                                                                       quest={q}
+                                                                       onSelect={this.onSelect}/>)}
+                        </ul>
+                    </div>
                 )}
             </div>
         );

@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { QuestInfo } from '../../../../common/domain/InteractionTable';
 import { QuestItemState } from './QuestItemState';
+import { Rewards } from './Rewards';
 
 interface Props {
     info: QuestInfo;
@@ -16,11 +17,15 @@ export class QuestInteractionTable extends React.PureComponent<Props> {
 
         return (
             <>
-                <h2>{info.name}</h2>
-                {this.renderContent()}
+                <div className="content">
+                    <h2>{info.name}</h2>
+                    {this.renderContent()}
+                </div>
 
-                <button className="item" onClick={this.props.onBack}>Back</button>
-                {this.renderButton()}
+                <div className="actions">
+                    <button onClick={this.props.onBack}>Back</button>
+                    {this.renderButton()}
+                </div>
             </>
         );
     }
@@ -41,11 +46,15 @@ export class QuestInteractionTable extends React.PureComponent<Props> {
                                 ))}
                             </ul>
                         )}
+                        <Rewards/>
                     </>
                 );
             case QuestItemState.COMPLETABLE:
                 return (
-                    <p>{info.completion}</p>
+                    <>
+                        <p>{info.completion}</p>
+                        <Rewards/>
+                    </>
                 );
             case QuestItemState.COMPLETABLE_LATER:
                 return (
@@ -59,11 +68,11 @@ export class QuestInteractionTable extends React.PureComponent<Props> {
         switch (state) {
             case QuestItemState.ACCEPTABLE:
                 return (
-                    <button className="item" onClick={this.props.onAccept}>Accept</button>
+                    <button onClick={this.props.onAccept}>Accept</button>
                 );
             case QuestItemState.COMPLETABLE:
                 return (
-                    <button className="item" onClick={this.props.onComplete}>Complete</button>
+                    <button onClick={this.props.onComplete}>Complete</button>
                 );
             case QuestItemState.COMPLETABLE_LATER:
                 return null;

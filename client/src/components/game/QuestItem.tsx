@@ -32,7 +32,7 @@ export class QuestItem extends React.Component<Props> {
 
         return (
             <li>
-                <button className="item" onClick={this.onSelect}>
+                <button className="interaction-item" onClick={this.onSelect}>
                     <QuestItemIcon state={state}/>
                     {quest.name}
                 </button>

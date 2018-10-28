@@ -33,7 +33,9 @@ export class CreditsScreen extends React.Component<Props, State> {
     render() {
         return (
             <div className="gui">
-                <div className="credits container panel" dangerouslySetInnerHTML={{ __html: this.state.content }}/>
+                <div className="credits container panel">
+                    <div className="content" dangerouslySetInnerHTML={{ __html: this.state.content }}/>
+                </div>
                 <div className="credits-back">
                     <Button onClick={this.props.onExit}>Back</Button>
                 </div>
