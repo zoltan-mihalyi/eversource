@@ -19,6 +19,7 @@ export interface QuestInfo {
 }
 
 export interface InteractionTable {
+    name: string;
     entityId: EntityId;
     acceptable: QuestInfo[];
     completable: QuestInfo[];

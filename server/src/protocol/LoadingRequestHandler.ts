@@ -18,7 +18,7 @@ export class LoadingRequestHandler extends ClientState<CharacterDetails> {
 
         const { info } = this.data;
 
-        const { zoneId, position } = info.location;
+        const { name, location: { zoneId, position } } = info;
 
         const zone = await this.process.runPromise(this.context.world.getZone(zoneId));
 
@@ -33,6 +33,7 @@ export class LoadingRequestHandler extends ClientState<CharacterDetails> {
         const character = new CreatureEntity({
             ...BASE_HUMANOID,
             position,
+            name,
             player: true,
             appearance: info.appearance,
             equipment: info.equipment,

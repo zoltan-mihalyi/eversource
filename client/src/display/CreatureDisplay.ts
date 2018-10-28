@@ -52,4 +52,15 @@ export abstract class CreatureDisplay<T extends CreatureEntityData> extends Upda
         }
         return true;
     }
+
+    protected alwaysShowName() {
+        return this.data.player;
+    }
+
+    protected nameColor() {
+        if (this.data.player) {
+            return '#6e96db';
+        }
+        return super.nameColor();
+    }
 }

@@ -43,14 +43,14 @@ export class InteractionTableGui extends React.PureComponent<Props, State> {
     }
 
     render() {
-        const { acceptable, completable, completableLater } = this.props.interactions;
+        const { name, acceptable, completable, completableLater } = this.props.interactions;
         const { selectedId } = this.state;
         const selected = selectedId === null ? null : findQuest(this.props.interactions, selectedId)!;
 
         return (
             <div className="panel interaction size-medium">
                 <div className="toolbar">
-                    <h2>Interaction</h2>
+                    <h2>{name}</h2>
                     <CloseButton onClose={this.props.onClose}/>
                 </div>
                 {selected ? (

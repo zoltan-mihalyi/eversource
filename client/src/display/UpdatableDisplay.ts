@@ -4,16 +4,25 @@ import { OutlineFilter } from '@pixi/filter-outline';
 import { GOLDEN } from './Cursors';
 import { GameContext } from '../game/GameContext';
 
+const properties: (keyof EntityData)[] = [
+    'interaction',
+    'name',
+];
+
 export abstract class UpdatableDisplay<T extends EntityData> extends PIXI.Container {
     private outlineFilter = new OutlineFilter(1, 0xffffff);
     private isMouseOver = false;
+    private text!: PIXI.Text;
 
     constructor(protected context: GameContext, protected data: T) {
         super();
         this.interactive = true;
         this.on('pointerdown', this.onClick);
-        this.on('mouseover', this.onMouseOver);
-        this.on('mouseout', this.onMouseOut);
+        this.on('pointerover', this.onMouseOver);
+        this.on('pointerout', this.onMouseOut);
+        this.on('touchstart', this.onMouseOver);
+        this.on('touchend', this.onMouseOut);
+        this.on('touchendoutside', this.onMouseOut);
     }
 
     init() { // build and softUpdate can use child fields which are not initialized in parent constructor
@@ -38,18 +47,44 @@ export abstract class UpdatableDisplay<T extends EntityData> extends PIXI.Contai
         this.softUpdate();
     }
 
+    protected alwaysShowName(): boolean {
+        return false;
+    }
+
+    protected nameColor(): string {
+        return '#ccbd7b';
+    }
+
     protected matches(changes: Partial<T>): boolean {
-        return !(changes.hasOwnProperty('interaction') && changes.interaction !== this.data.interaction);
+        for (const property of properties) {
+            if (changes.hasOwnProperty(property) && changes[property] !== this.data[property]) {
+                return false;
+            }
+        }
+        return true;
     }
 
     protected build(): void {
-        const { interaction } = this.data;
+        const { name, interaction } = this.data;
+        const text = new PIXI.Text(name, {
+            fontFamily: 'pixel, serif',
+            fontSize: 16,
+            fill: this.nameColor(),
+            stroke: '#000000',
+            strokeThickness: 0.7,
+            align: 'left',
+        });
+        text.x = 32 / 2 - Math.floor(text.width / 2); // avoid blurry text
+        text.y = -50; // TODO
+        text.interactive = false;
+        this.text = this.addChild(text);
+
         if (interaction) {
             const scale = 1 / interaction.length;
             let i = 0;
             for (const entityInteraction of interaction) {
                 const q = this.context.textureLoader.createAnimatedSprite('misc', entityInteraction);
-                q.y = -60; // TODO
+                q.y = -72; // TODO
                 q.x = i * scale * 32;
                 q.scale.set(scale);
                 this.addChild(q);
@@ -60,6 +95,8 @@ export abstract class UpdatableDisplay<T extends EntityData> extends PIXI.Contai
     }
 
     private updateMouseOverEffect() {
+        this.text.visible = this.isMouseOver || this.alwaysShowName();
+
         if (this.isMouseOver && this.data.interaction) {
             this.filters = [this.outlineFilter];
             this.cursor = GOLDEN;

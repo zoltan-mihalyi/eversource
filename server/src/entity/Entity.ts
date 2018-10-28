@@ -76,12 +76,18 @@ export abstract class Entity<O extends EntityData = EntityData> {
             const questInfo = questInfoMap.get(quest.id)!;
             if (questStatus !== 'failed' && allTaskComplete(quest, questStatus)) {
                 completable.push(questInfo);
-            }else {
+            } else {
                 completableLater.push(questInfo);
             }
         }
 
-        return { entityId: this.id, acceptable, completable, completableLater }
+        return {
+            name: this.state.name,
+            entityId: this.id,
+            acceptable,
+            completable,
+            completableLater,
+        };
     }
 
     getFor(details: CharacterDetails): EntityData {

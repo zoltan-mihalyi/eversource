@@ -113,6 +113,7 @@ export class PresetsTool extends React.Component<Props, State> {
 
     private add = () => {
         const preset: Preset = {
+            name: 'Fill Me',
             appearance: {
                 sex: 'female',
                 body: ['tanned'],

@@ -12,6 +12,7 @@ export type EntityInteractions = NonEmptyArray<EntityInteraction>;
 
 export interface BaseEntityData {
     position: Position;
+    name: string;
     interaction: EntityInteractions | null;
 }
 
