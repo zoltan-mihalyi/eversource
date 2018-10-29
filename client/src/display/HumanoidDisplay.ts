@@ -27,9 +27,7 @@ const DISPLAYED_PROPERTIES: (keyof HumanoidEntityData)[] = [
 export class HumanoidDisplay extends CreatureDisplay<HumanoidEntityData> {
     protected displayedProperties = DISPLAYED_PROPERTIES;
 
-    protected build() {
-        super.build();
-
+    protected buildSprite() {
         const { appearance, equipment } = this.data;
 
         for (const part of PARTS) {
@@ -58,7 +56,7 @@ export class HumanoidDisplay extends CreatureDisplay<HumanoidEntityData> {
             }
 
             const paletteFile = `character/${getPaletteFile(part, value)}`;
-            this.addChild(this.createAnimatedSprite('character', image, paletteFile, color));
+            this.spriteContainer.addChild(this.createAnimatedSprite('character', image, paletteFile, color));
         }
     }
 }

@@ -5,15 +5,10 @@ import * as PIXI from "pixi.js";
 export abstract class CreatureDisplay<T extends CreatureEntityData> extends UpdatableDisplay<T> {
     protected abstract displayedProperties: (keyof T)[];
 
-    protected build() {
-        this.createShadow();
-        super.build();
-    }
-
-    protected createShadow() {
+    protected buildShadow() {
         const shadow = this.context.textureLoader.createAnimatedSprite('misc', 'shadow');
         shadow.blendMode = PIXI.BLEND_MODES.MULTIPLY;
-        this.addChild(shadow);
+        this.shadowContainer.addChild(shadow);
     }
 
     protected createAnimatedSprite(tileSet: string, image: string, paletteFile: string, color?: string) {
@@ -25,7 +20,7 @@ export abstract class CreatureDisplay<T extends CreatureEntityData> extends Upda
 
     protected softUpdate() {
         const speed = this.calculateAnimationSpeed();
-        for (const child of this.children) {
+        for (const child of this.spriteContainer.children) {
             (child as PIXI.extras.AnimatedSprite).animationSpeed = speed;
         }
     }

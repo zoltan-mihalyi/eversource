@@ -9,12 +9,11 @@ const properties: (keyof EntityData)[] = [
     'name',
 ];
 
-export abstract class UpdatableDisplay<T extends EntityData> extends PIXI.Container {
-    private outlineFilter = new OutlineFilter(1, 0xffffff);
+class SpriteContainer extends PIXI.Container {
     private isMouseOver = false;
-    private text!: PIXI.Text;
+    private outlineFilter = new OutlineFilter(1, 0xffff55);
 
-    constructor(protected context: GameContext, protected data: T) {
+    constructor(protected updatableDisplay: UpdatableDisplay<any>) {
         super();
         this.interactive = true;
         this.on('pointerdown', this.onClick);
@@ -25,6 +24,50 @@ export abstract class UpdatableDisplay<T extends EntityData> extends PIXI.Contai
         this.on('touchendoutside', this.onMouseOut);
     }
 
+    private onClick() {
+        this.updatableDisplay.onClick();
+    }
+
+    private onMouseOver() {
+        this.isMouseOver = true;
+        this.updateMouseOverEffect();
+    }
+
+    private onMouseOut() {
+        this.isMouseOver = false;
+        this.updateMouseOverEffect();
+    }
+
+    updateMouseOverEffect() {
+        this.updatableDisplay.updateMouseOverEffect(this.isMouseOver);
+
+        if (this.isMouseOver && this.updatableDisplay.hasInteraction()) {
+            this.filters = [this.outlineFilter];
+            this.cursor = GOLDEN;
+        } else {
+            this.filters = [];
+            this.cursor = '';
+        }
+    }
+}
+
+export abstract class UpdatableDisplay<T extends EntityData> extends PIXI.Container {
+    protected readonly shadowContainer = new PIXI.Container();
+    protected readonly spriteContainer: SpriteContainer;
+    protected readonly textContainer = new PIXI.Container();
+    protected readonly interactionContainer = new PIXI.Container();
+
+    constructor(protected context: GameContext, protected data: T) {
+        super();
+        this.spriteContainer = new SpriteContainer(this);
+        this.addChild(
+            this.shadowContainer,
+            this.spriteContainer,
+            this.textContainer,
+            this.interactionContainer,
+        );
+    }
+
     init() { // build and softUpdate can use child fields which are not initialized in parent constructor
         this.build();
         this.softUpdate();
@@ -32,10 +75,20 @@ export abstract class UpdatableDisplay<T extends EntityData> extends PIXI.Contai
 
     update(changes: Partial<T>) {
         if (!this.matches(changes)) {
-            for (const child of this.children) {
-                child.destroy();
+            const containers = [
+                this.shadowContainer,
+                this.spriteContainer,
+                this.textContainer,
+                this.interactionContainer,
+            ];
+            for (const container of containers) {
+                for (const child of container.children) {
+                    child.destroy();
+                }
+
+                container.removeChildren();
             }
-            this.removeChildren();
+
             this.data = {
                 ...this.data as any,
                 ...changes as any,
@@ -64,8 +117,18 @@ export abstract class UpdatableDisplay<T extends EntityData> extends PIXI.Contai
         return true;
     }
 
-    protected build(): void {
-        const { name, interaction } = this.data;
+    private build(): void {
+
+        this.buildShadow();
+        this.buildSprite();
+        this.buildText();
+        this.buildInteraction();
+
+        this.spriteContainer.updateMouseOverEffect();
+    }
+
+    private buildText() {
+        const { name } = this.data;
         const text = new PIXI.Text(name, {
             fontFamily: 'pixel, serif',
             fontSize: 16,
@@ -76,48 +139,42 @@ export abstract class UpdatableDisplay<T extends EntityData> extends PIXI.Contai
         });
         text.x = 32 / 2 - Math.floor(text.width / 2); // avoid blurry text
         text.y = -50; // TODO
-        text.interactive = false;
-        this.text = this.addChild(text);
-
-        if (interaction) {
-            const scale = 1 / interaction.length;
-            let i = 0;
-            for (const entityInteraction of interaction) {
-                const q = this.context.textureLoader.createAnimatedSprite('misc', entityInteraction);
-                q.y = -72; // TODO
-                q.x = i * scale * 32;
-                q.scale.set(scale);
-                this.addChild(q);
-                i++;
-            }
-        }
-        this.updateMouseOverEffect();
+        this.textContainer.addChild(text);
     }
 
-    private updateMouseOverEffect() {
-        this.text.visible = this.isMouseOver || this.alwaysShowName();
+    protected buildShadow() {
+    }
 
-        if (this.isMouseOver && this.data.interaction) {
-            this.filters = [this.outlineFilter];
-            this.cursor = GOLDEN;
-        } else {
-            this.filters = [];
-            this.cursor = '';
+    protected buildInteraction() {
+        const { interaction } = this.data;
+        if (!interaction) {
+            return;
         }
+        const scale = 1 / interaction.length;
+        let i = 0;
+        for (const entityInteraction of interaction) {
+            const q = this.context.textureLoader.createAnimatedSprite('misc', entityInteraction);
+            q.y = -72; // TODO
+            q.x = i * scale * 32;
+            q.scale.set(scale);
+            this.interactionContainer.addChild(q);
+            i++;
+        }
+    }
+
+    protected buildSprite() {
+    }
+
+    hasInteraction(): boolean {
+        return this.data.interaction !== null;
+    }
+
+    updateMouseOverEffect(mouseOver: boolean) {
+        this.textContainer.visible = mouseOver || this.alwaysShowName();
     }
 
     onClick() {
         this.context.onInteract(this);
-    }
-
-    private onMouseOver() {
-        this.isMouseOver = true;
-        this.updateMouseOverEffect();
-    }
-
-    private onMouseOut() {
-        this.isMouseOver = false;
-        this.updateMouseOverEffect();
     }
 
     protected abstract softUpdate(): void;

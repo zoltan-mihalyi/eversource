@@ -13,9 +13,9 @@ export class MonsterDisplay extends CreatureDisplay<MonsterEntityData> {
     protected displayedProperties = DISPLAYED_PROPERTIES;
     private fixAnimationSpeed: number | null = null;
 
-    protected createShadow() {
+    protected buildShadow() {
         const shadowContainer = new PIXI.Container();
-        this.addChild(shadowContainer);
+        this.shadowContainer.addChild(shadowContainer);
         const { textureLoader } = this.context;
         textureLoader.loadDetails(shadowContainer, this.getDirectoryAndFileName()[1], (details) => {
             const { tileSet } = details;
@@ -35,14 +35,13 @@ export class MonsterDisplay extends CreatureDisplay<MonsterEntityData> {
         });
     }
 
-    protected build() {
-        super.build();
+    protected buildSprite() {
 
         const { palette } = this.data;
 
         const [directory, fileName] = this.getDirectoryAndFileName();
 
-        this.addChild(this.createAnimatedSprite(fileName, fileName, directory, palette || void 0));
+        this.spriteContainer.addChild(this.createAnimatedSprite(fileName, fileName, directory, palette || void 0));
     }
 
     protected calculateAnimationSpeed(): number {
