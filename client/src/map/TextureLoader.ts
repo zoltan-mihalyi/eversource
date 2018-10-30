@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js';
-import { BaseTexture, Rectangle, Texture } from 'pixi.js';
+import { Rectangle, Texture } from 'pixi.js';
 import { pixiLoader } from '../utils';
 import { CancellableProcess } from '../../../common/util/CancellableProcess';
 import { Palettes } from '../game/Palettes';
@@ -7,6 +7,7 @@ import { AsyncLoader, Request } from './AsyncLoader';
 import { MultiColorReplaceFilter } from '@pixi/filter-multi-color-replace'
 import { TileSet } from '../../../common/tiled/interfaces';
 import { loadTileSet, mergeTileData } from '../../../common/tiled/TiledResolver';
+import { SplitTextureSource } from '../texture/SplitTextureSource';
 
 interface Animations {
     [key: string]: Texture[];
@@ -48,15 +49,16 @@ class TileSetDetails {
     getAnimations(image: string): Animations {
         let animations = this.texturedAnimations.get(image);
         if (!animations) {
-            const baseTexture = BaseTexture.fromImage(`${this.baseDir}/${image}.png`);
+            const splitTextureSource = new SplitTextureSource();
 
             animations = {};
             this.animations.forEach((animation, key) => {
-                animations![key] = animation.map(rect => new Texture(baseTexture, rect));
+                animations![key] = animation.map(rect => splitTextureSource.getTexture(rect));
             });
 
             this.texturedAnimations.set(image, animations);
 
+            splitTextureSource.loadFrom(`${this.baseDir}/${image}.png`);
         }
 
         return animations;
