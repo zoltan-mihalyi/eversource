@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as React from 'react';
 import { ShowCharacter } from './ShowCharacter';
-import { Preset, Presets } from '../../../server/src/world/Presets';
+import { HumanoidPreset, HumanoidPresets } from '../../../server/src/world/Presets';
 
 const PRESETS_JSON = '../server/data/presets.json';
 
@@ -10,7 +10,7 @@ interface Props {
 }
 
 interface State {
-    presets: Presets;
+    presets: HumanoidPresets;
     selected: string | null;
     modified: boolean;
 }
@@ -53,7 +53,7 @@ export class PresetsTool extends React.Component<Props, State> {
         );
     }
 
-    private savePreset = (preset: Preset) => {
+    private savePreset = (preset: HumanoidPreset) => {
         const { presets, selected } = this.state;
         this.setState({
             presets: {
@@ -101,7 +101,7 @@ export class PresetsTool extends React.Component<Props, State> {
             return;
         }
 
-        const presets:Presets = {};
+        const presets: HumanoidPresets = {};
         for (const key of Object.keys(this.state.presets)) {
             presets[key === name ? newName : key] = this.state.presets[key];
         }
@@ -112,7 +112,7 @@ export class PresetsTool extends React.Component<Props, State> {
     }
 
     private add = () => {
-        const preset: Preset = {
+        const preset: HumanoidPreset = {
             name: 'Fill Me',
             appearance: {
                 sex: 'female',

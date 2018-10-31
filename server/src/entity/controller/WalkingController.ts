@@ -3,6 +3,13 @@ import { Position, X, Y } from '../../../../common/domain/Location';
 import { CreatureEntity } from '../CreatureEntity';
 import { TiledProperties } from '../../../../common/tiled/interfaces';
 
+export interface MovementConfig {
+    speed?: number;
+    interval?: number;
+    radiusX?: number;
+    radiusY?: number;
+}
+
 export class WalkingController extends Controller {
     private nextMoveTime = 0;
     private target: Position = this.initialPosition;
@@ -11,13 +18,13 @@ export class WalkingController extends Controller {
     private readonly radiusX: number;
     private readonly radiusY: number;
 
-    constructor(private initialPosition: Position, properties: TiledProperties) {
+    constructor(private initialPosition: Position, config: MovementConfig = {}) {
         super();
-        this.speed = (properties['walking:speed'] || 0.3) as number;
-        this.interval = (properties['walking:interval'] || 10) as number;
+        this.speed = (config.speed || 0.3) as number;
+        this.interval = (config.interval || 10) as number;
 
-        const radiusX = properties['walking:radius-x'];
-        const radiusY = properties['walking:radius-y'];
+        const radiusX = config.radiusX;
+        const radiusY = config.radiusY;
         this.radiusX = typeof radiusX === 'number' ? radiusX : 6;
         this.radiusY = typeof radiusY === 'number' ? radiusY : 5;
     }

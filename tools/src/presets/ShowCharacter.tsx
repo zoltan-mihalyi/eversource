@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as path from 'path';
 import * as PIXI from 'pixi.js';
-import { Preset } from '../../../server/src/world/Presets';
+import { HumanoidPreset, HumanoidPresets } from '../../../server/src/world/Presets';
 import { PropTable } from './PropTable';
 import { TextureLoader } from '../../../client/src/map/TextureLoader';
 import { CancellableProcess } from '../../../common/util/CancellableProcess';
@@ -14,13 +14,13 @@ import { GameContext } from '../../../client/src/game/GameContext';
 
 interface Props {
     name: string;
-    originalPreset: Preset;
-    save: (preset: Preset) => void;
+    originalPreset: HumanoidPreset;
+    save: (preset: HumanoidPreset) => void;
     exit: () => void;
 }
 
 interface State {
-    preset: Preset;
+    preset: HumanoidPreset;
     activity: CreatureActivity;
     direction: Direction;
 }
@@ -106,8 +106,8 @@ export class ShowCharacter extends React.Component<Props, State> {
         });
     };
 
-    private createOnChangeHandler<K extends keyof Preset>(key: K) {
-        return (value: Preset[K]) => {
+    private createOnChangeHandler<K extends keyof HumanoidPreset>(key: K) {
+        return (value: HumanoidPreset[K]) => {
             this.setState({
                 preset: {
                     ...this.state.preset,

@@ -86,7 +86,7 @@
                 {
                  "height":32,
                  "id":13,
-                 "name":"slime",
+                 "name":"slime_lava",
                  "rotation":0,
                  "type":"monster",
                  "visible":true,
@@ -97,7 +97,7 @@
                 {
                  "height":32,
                  "id":14,
-                 "name":"slime",
+                 "name":"slime_lava",
                  "rotation":0,
                  "type":"monster",
                  "visible":true,
@@ -108,7 +108,7 @@
                 {
                  "height":32,
                  "id":17,
-                 "name":"slime",
+                 "name":"slime_lava",
                  "rotation":0,
                  "type":"monster",
                  "visible":true,
@@ -119,7 +119,7 @@
                 {
                  "height":32,
                  "id":19,
-                 "name":"slime",
+                 "name":"slime_lava",
                  "rotation":0,
                  "type":"monster",
                  "visible":true,
@@ -130,7 +130,7 @@
                 {
                  "height":32,
                  "id":21,
-                 "name":"slime",
+                 "name":"slime_lava",
                  "rotation":0,
                  "type":"monster",
                  "visible":true,
@@ -141,7 +141,7 @@
                 {
                  "height":32,
                  "id":22,
-                 "name":"slime",
+                 "name":"slime_lava_rock",
                  "properties":
                     {
                      "palette":"lava-rock"
@@ -160,15 +160,7 @@
                 {
                  "height":32,
                  "id":23,
-                 "name":"slime",
-                 "properties":
-                    {
-                     "palette":"lava-rock"
-                    },
-                 "propertytypes":
-                    {
-                     "palette":"string"
-                    },
+                 "name":"slime_lava_rock",
                  "rotation":0,
                  "type":"monster",
                  "visible":true,
@@ -179,7 +171,7 @@
                 {
                  "height":32,
                  "id":24,
-                 "name":"slime",
+                 "name":"slime_lava",
                  "rotation":0,
                  "type":"monster",
                  "visible":true,
@@ -190,15 +182,7 @@
                 {
                  "height":32,
                  "id":25,
-                 "name":"slime",
-                 "properties":
-                    {
-                     "palette":"lava-rock"
-                    },
-                 "propertytypes":
-                    {
-                     "palette":"string"
-                    },
+                 "name":"slime_lava_rock",
                  "rotation":0,
                  "type":"monster",
                  "visible":true,
@@ -209,7 +193,7 @@
                 {
                  "height":32,
                  "id":26,
-                 "name":"slime",
+                 "name":"slime_lava",
                  "rotation":0,
                  "type":"monster",
                  "visible":true,
@@ -220,7 +204,7 @@
                 {
                  "height":32,
                  "id":27,
-                 "name":"slime",
+                 "name":"slime_lava",
                  "rotation":0,
                  "type":"monster",
                  "visible":true,
@@ -231,7 +215,7 @@
                 {
                  "height":32,
                  "id":28,
-                 "name":"slime",
+                 "name":"slime_lava",
                  "rotation":0,
                  "type":"monster",
                  "visible":true,
@@ -242,7 +226,7 @@
                 {
                  "height":32,
                  "id":29,
-                 "name":"slime",
+                 "name":"slime_lava",
                  "rotation":0,
                  "type":"monster",
                  "visible":true,
@@ -253,7 +237,7 @@
                 {
                  "height":32,
                  "id":30,
-                 "name":"slime",
+                 "name":"slime_lava",
                  "rotation":0,
                  "type":"monster",
                  "visible":true,
@@ -777,20 +761,6 @@
                  "height":32,
                  "id":82,
                  "name":"bee",
-                 "properties":
-                    {
-                     "walking:interval":1,
-                     "walking:radius-x":1,
-                     "walking:radius-y":1,
-                     "walking:speed":1
-                    },
-                 "propertytypes":
-                    {
-                     "walking:interval":"float",
-                     "walking:radius-x":"float",
-                     "walking:radius-y":"float",
-                     "walking:speed":"float"
-                    },
                  "rotation":0,
                  "type":"monster",
                  "visible":true,
@@ -802,20 +772,6 @@
                  "height":32,
                  "id":83,
                  "name":"bee",
-                 "properties":
-                    {
-                     "walking:interval":2,
-                     "walking:radius-x":1,
-                     "walking:radius-y":1,
-                     "walking:speed":1
-                    },
-                 "propertytypes":
-                    {
-                     "walking:interval":"float",
-                     "walking:radius-x":"float",
-                     "walking:radius-y":"float",
-                     "walking:speed":"float"
-                    },
                  "rotation":0,
                  "type":"monster",
                  "visible":true,
@@ -827,20 +783,6 @@
                  "height":32,
                  "id":84,
                  "name":"bee",
-                 "properties":
-                    {
-                     "walking:interval":2,
-                     "walking:radius-x":1,
-                     "walking:radius-y":1,
-                     "walking:speed":1
-                    },
-                 "propertytypes":
-                    {
-                     "walking:interval":"float",
-                     "walking:radius-x":"float",
-                     "walking:radius-y":"float",
-                     "walking:speed":"float"
-                    },
                  "rotation":0,
                  "type":"monster",
                  "visible":true,
@@ -851,21 +793,7 @@
                 {
                  "height":32,
                  "id":85,
-                 "name":"bee",
-                 "properties":
-                    {
-                     "palette":"lava",
-                     "walking:interval":5,
-                     "walking:radius-y":0,
-                     "walking:speed":0.5
-                    },
-                 "propertytypes":
-                    {
-                     "palette":"string",
-                     "walking:interval":"float",
-                     "walking:radius-y":"float",
-                     "walking:speed":"float"
-                    },
+                 "name":"bee_lava",
                  "rotation":0,
                  "type":"monster",
                  "visible":true,
@@ -876,19 +804,7 @@
                 {
                  "height":32,
                  "id":86,
-                 "name":"bee",
-                 "properties":
-                    {
-                     "palette":"emerald",
-                     "walking:interval":5,
-                     "walking:speed":1
-                    },
-                 "propertytypes":
-                    {
-                     "palette":"string",
-                     "walking:interval":"float",
-                     "walking:speed":"float"
-                    },
+                 "name":"bee_emerald",
                  "rotation":0,
                  "type":"monster",
                  "visible":true,
@@ -899,19 +815,7 @@
                 {
                  "height":32,
                  "id":87,
-                 "name":"bee",
-                 "properties":
-                    {
-                     "palette":"gold",
-                     "walking:interval":5,
-                     "walking:speed":1
-                    },
-                 "propertytypes":
-                    {
-                     "palette":"string",
-                     "walking:interval":"float",
-                     "walking:speed":"float"
-                    },
+                 "name":"bee_queen",
                  "rotation":0,
                  "type":"monster",
                  "visible":true,
@@ -922,25 +826,24 @@
                 {
                  "height":32,
                  "id":88,
-                 "name":"bee",
-                 "properties":
-                    {
-                     "palette":"night",
-                     "walking:interval":5,
-                     "walking:speed":1
-                    },
-                 "propertytypes":
-                    {
-                     "palette":"string",
-                     "walking:interval":"float",
-                     "walking:speed":"float"
-                    },
+                 "name":"bee_night",
                  "rotation":0,
                  "type":"monster",
                  "visible":true,
                  "width":32,
                  "x":3584,
                  "y":7168
+                }, 
+                {
+                 "height":32,
+                 "id":89,
+                 "name":"bee_pink",
+                 "rotation":0,
+                 "type":"monster",
+                 "visible":true,
+                 "width":32,
+                 "x":3862.66666666667,
+                 "y":6430.66666666667
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -948,7 +851,7 @@
          "x":0,
          "y":0
         }],
- "nextobjectid":89,
+ "nextobjectid":90,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.1.6",
