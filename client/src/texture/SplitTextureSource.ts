@@ -1,7 +1,10 @@
 import { BaseTexture, Rectangle, Texture } from 'pixi.js';
+import { TaskQueue } from './TaskQueue';
 
 const SPLIT_W = 256;
 const SPLIT_H = 256;
+
+const taskQueue = new TaskQueue(8);
 
 class SplitBaseTexture extends BaseTexture {
     constructor(private x: number, private y: number) {
@@ -17,7 +20,7 @@ class SplitBaseTexture extends BaseTexture {
 
         ctx.drawImage(img, this.x * SPLIT_W, this.y * SPLIT_H, SPLIT_W, SPLIT_H, 0, 0, SPLIT_W, SPLIT_H);
 
-        this.loadSource(canvas);
+        taskQueue.enqueue(() => this.loadSource(canvas));
     }
 }
 
