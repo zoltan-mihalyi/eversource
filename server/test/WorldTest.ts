@@ -73,6 +73,7 @@ describe('World', function () {
         ]);
         const presets: Presets = {
             orc: {
+                "name": "orc",
                 "appearance": {
                     "sex": "female",
                     "body": ["orc"],

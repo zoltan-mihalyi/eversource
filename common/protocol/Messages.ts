@@ -3,6 +3,8 @@ import { ErrorCode } from './ErrorCode';
 import { Diff } from './Diff';
 import { PlayerState } from './PlayerState';
 import { EntityData, EntityId } from '../domain/EntityData';
+import { QuestId } from '../domain/InteractionTable';
+import { QuestLogItem } from './QuestLogItem';
 
 export interface RequestTypes {
     enter: string;
@@ -26,6 +28,7 @@ export interface ResponseTypes {
     ready: void;
     world: Diff<EntityId, EntityData>[];
     playerState: PlayerStateDiff;
+    questLog: Diff<QuestId, QuestLogItem>[];
 }
 
 export type ResponseCommand = keyof ResponseTypes;

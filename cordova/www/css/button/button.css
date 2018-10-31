@@ -16,6 +16,49 @@ button:focus {
     outline: 0;
 }
 
+.actions button {
+    opacity: 1;
+    background-color: #6e4d31;
+    border: 1px solid #986a20;
+    color: #eae2bc;
+    padding: 2px;
+    width: 80px;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.actions button:hover {
+    background-color: #9a0000;
+}
+
+button.interaction-item {
+    opacity: 1;
+    text-align: left;
+    width: 100%;
+    margin: 0;
+    padding: 2px;
+}
+
+button.interaction-item:hover {
+    background-color: rgba(255, 255, 160, 0.4);
+}
+
+button.item {
+    text-align: left;
+    padding: 2px 6px;
+}
+
+button.item {
+    opacity: 1;
+    border: 1px solid #986a20;
+    margin: 1px;
+    word-wrap: break-word;
+}
+
+button.item:hover {
+    background-color: #86603a;
+}
+
 table.button {
     border-spacing: 0;
     height: 23px;
@@ -43,16 +86,13 @@ td.button-right {
 }
 
 button.close {
-    opacity: 1;
     text-align: center;
-    border: 1px solid #986a20;
     width: 18px;
     height: 18px;
-    display: block;
-    margin: 1px 1px 1px auto;
+    position: absolute;
+    right: 5px;
 }
 
-
-button.close:hover{
-    background-color: #86603a;
+button.close:hover {
+    color: #9a0000;
 }

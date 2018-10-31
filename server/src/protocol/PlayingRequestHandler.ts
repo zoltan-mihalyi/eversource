@@ -8,9 +8,10 @@ import { PlayerController } from '../entity/controller/PlayerController';
 import { canInteract } from '../../../common/game/Interaction';
 import { PlayerState } from '../../../common/protocol/PlayerState';
 import { QuestId, QuestInfo } from '../../../common/domain/InteractionTable';
-import { questsById } from '../quest/QuestIndexer';
+import { questInfoMap, questsById } from '../quest/QuestIndexer';
 import { DynamicDiffable } from './diffable/DynamicDiffable';
 import { DiffablePlayerState } from './diffable/DiffablePlayerState';
+import { QuestLogItem } from '../../../common/protocol/QuestLogItem';
 
 export interface PlayerData {
     zone: Zone;
@@ -22,6 +23,7 @@ export interface PlayerData {
 export class PlayingRequestHandler extends ClientState<PlayerData> {
     private readonly worldDiff = new DynamicDiffable<EntityId, EntityData>();
     private readonly playerStateDiff = new DiffablePlayerState();
+    private readonly questLogDiff = new DynamicDiffable<QuestId, QuestLogItem>();
     private detectionDistance = 15;
 
     leave() {
@@ -74,7 +76,9 @@ export class PlayingRequestHandler extends ClientState<PlayerData> {
                 if (!quest) {
                     return;
                 }
-                player.details.questLog.set(quest.id, questsById[quest.id]!.tasks.map(() => 0));
+                const tasks = questsById[quest.id]!.tasks;
+                const progression = tasks ? tasks.list.map(() => 0) : [];
+                player.details.questLog.set(quest.id, progression);
                 break;
             }
             case 'complete-quest': {
@@ -130,6 +134,20 @@ export class PlayingRequestHandler extends ClientState<PlayerData> {
         }
     }
 
+    private sendQuestLog() {
+        const questLog = this.data.hidden.player!.details.questLog;
+
+        const qLogByQ = new Map<QuestId, QuestLogItem>();
+
+        questLog.forEach((status, id) => qLogByQ.set(id, { info: questInfoMap.get(id)!, status }));
+
+        const diffs = this.questLogDiff.update(qLogByQ);
+
+        if (diffs !== null) {
+            this.context.sendCommand('questLog', diffs);
+        }
+    }
+
     private sendWorldData() {
         const { character, zone } = this.data;
 
@@ -147,6 +165,7 @@ export class PlayingRequestHandler extends ClientState<PlayerData> {
 
     private networkUpdate = () => {
         this.sendPlayerData();
+        this.sendQuestLog();
         this.sendWorldData();
     };
 }

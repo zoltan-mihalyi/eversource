@@ -63,7 +63,7 @@ export class WorldImpl implements World {
             const properties = object.properties || {};
             if (object.type === 'npc') {
                 const npc = this.presets[object.name!];
-                const { appearance, equipment } = npc;
+                const { name, appearance, equipment } = npc;
 
                 const directionProp = properties.direction as Direction | undefined;
 
@@ -72,6 +72,7 @@ export class WorldImpl implements World {
                 const characterEntity = new CreatureEntity({
                     ...BASE_HUMANOID,
                     position,
+                    name,
                     direction,
                     appearance,
                     equipment,
@@ -81,6 +82,7 @@ export class WorldImpl implements World {
                 zone.addEntity(new CreatureEntity({
                     ...BASE_MONSTER,
                     position,
+                    name: object.name, // TODO
                     image: object.name,
                     palette: (properties.palette as string | undefined) || null,
                 }, getHidden(object), new WalkingController(position, properties)))

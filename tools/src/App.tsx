@@ -20,6 +20,7 @@ export class App extends React.Component<{}, State> {
             case null:
                 return (
                     <div>
+                        <header>Eversource Tools</header>
                         <div>
                             <button className="big" onClick={this.showPresets}>Presets</button>
                         </div>

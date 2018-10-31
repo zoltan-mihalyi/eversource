@@ -24,7 +24,8 @@
       ],
       "hands": [],
       "arms": []
-    }
+    },
+    "name": "Orc"
   },
   "diana": {
     "appearance": {
@@ -62,7 +63,8 @@
       ],
       "hands": [],
       "arms": []
-    }
+    },
+    "name": "Diana"
   },
   "cacal": {
     "appearance": {
@@ -97,7 +99,8 @@
       ],
       "hands": [],
       "arms": []
-    }
+    },
+    "name": "Cacal"
   },
   "priest": {
     "appearance": {
@@ -137,7 +140,8 @@
       "chest": [],
       "hands": [],
       "arms": []
-    }
+    },
+    "name": "Priest"
   },
   "warlock": {
     "appearance": {
@@ -177,7 +181,8 @@
       "chest": [],
       "hands": [],
       "arms": []
-    }
+    },
+    "name": "Warlock"
   },
   "mage": {
     "appearance": {
@@ -210,7 +215,8 @@
       "chest": [],
       "hands": [],
       "arms": []
-    }
+    },
+    "name": "Mage"
   },
   "monk": {
     "appearance": {
@@ -242,7 +248,8 @@
       "chest": [],
       "hands": [],
       "arms": []
-    }
+    },
+    "name": "Monk"
   },
   "knight": {
     "appearance": {
@@ -275,7 +282,8 @@
       "arms": [
         "metal_arms"
       ]
-    }
+    },
+    "name": "Knight"
   },
   "knight_mail": {
     "appearance": {
@@ -308,7 +316,8 @@
         "metal_gloves"
       ],
       "arms": []
-    }
+    },
+    "name": "Lieutenant Murova"
   },
   "kumas": {
     "appearance": {
@@ -348,7 +357,8 @@
       "chest": [],
       "hands": [],
       "arms": []
-    }
+    },
+    "name": "Kumas"
   },
   "nefag": {
     "appearance": {
@@ -387,7 +397,8 @@
       ],
       "hands": [],
       "arms": []
-    }
+    },
+    "name": "Forester Nefag"
   },
   "bandit": {
     "appearance": {
@@ -421,7 +432,8 @@
       "chest": [],
       "hands": [],
       "arms": []
-    }
+    },
+    "name": "Bandit"
   },
   "bandit_dock": {
     "appearance": {
@@ -459,7 +471,8 @@
       "chest": [],
       "hands": [],
       "arms": []
-    }
+    },
+    "name": "Apprentice Bandit"
   },
   "skeleton_warlock": {
     "appearance": {
@@ -486,7 +499,8 @@
       "chest": [],
       "hands": [],
       "arms": []
-    }
+    },
+    "name": "Skeleton Warlock"
   },
   "skeleton_hunter": {
     "appearance": {
@@ -515,7 +529,8 @@
       ],
       "hands": [],
       "arms": []
-    }
+    },
+    "name": "Skeleton Hunter"
   },
   "skeleton_lava_warrior": {
     "appearance": {
@@ -545,7 +560,8 @@
       ],
       "hands": [],
       "arms": []
-    }
+    },
+    "name": "Skeleton Lava Warrior"
   },
   "skeleton_punk": {
     "appearance": {
@@ -570,7 +586,8 @@
       "chest": [],
       "hands": [],
       "arms": []
-    }
+    },
+    "name": "Skeleton Punk"
   },
   "skeleton_priest": {
     "appearance": {
@@ -598,7 +615,8 @@
       "chest": [],
       "hands": [],
       "arms": []
-    }
+    },
+    "name": "Skeleton Priest"
   },
   "protector": {
     "appearance": {
@@ -636,7 +654,8 @@
       "arms": [
         "metal_arms"
       ]
-    }
+    },
+    "name": "Protector Treguna"
   },
   "bronze": {
     "appearance": {
@@ -675,7 +694,8 @@
         "ornate_metal_arms",
         "bronze"
       ]
-    }
+    },
+    "name": "Bronze Champion"
   },
   "dark": {
     "appearance": {
@@ -714,7 +734,8 @@
         "ornate_metal_arms",
         "dark"
       ]
-    }
+    },
+    "name": "Dark Champion"
   },
   "silver": {
     "appearance": {
@@ -753,7 +774,8 @@
         "ornate_metal_arms",
         "silver"
       ]
-    }
+    },
+    "name": "Silver Champion"
   },
   "dark_open": {
     "appearance": {
@@ -792,6 +814,7 @@
         "ornate_metal_arms",
         "dark"
       ]
-    }
+    },
+    "name": "Dark George"
   }
 }

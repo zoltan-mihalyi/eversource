@@ -1,31 +1,46 @@
 import * as React from 'react';
-import { QuestId, QuestInfo } from '../../../../common/domain/InteractionTable';
-
-export const enum QuestItemState {
-    ACCEPTABLE,
-    COMPLETABLE
-}
+import { QuestInfo } from '../../../../common/domain/InteractionTable';
+import { QuestItemState } from './QuestItemState';
 
 interface Props {
     state: QuestItemState;
     quest: QuestInfo;
-    onSelect: (id: QuestId) => void;
+    onSelect: (id: QuestInfo) => void;
 }
+
+
+const QuestItemIcon: React.SFC<{ state: QuestItemState }> = ({ state }) => {
+    switch (state) {
+        case QuestItemState.ACCEPTABLE:
+            return (
+                <span className="quest-icon-acceptable">! </span>
+            );
+        case QuestItemState.COMPLETABLE:
+            return (
+                <span className="quest-icon-completable">? </span>
+            );
+        case QuestItemState.COMPLETABLE_LATER:
+            return (
+                <span className="quest-icon-completable-later">? </span>
+            );
+    }
+};
 
 export class QuestItem extends React.Component<Props> {
     render() {
         const { state, quest } = this.props;
 
-        const icon = state === QuestItemState.ACCEPTABLE ? '!' : '?';
-
         return (
             <li>
-                <button onClick={this.onSelect}>{icon} {quest.name}</button>
+                <button className="interaction-item" onClick={this.onSelect}>
+                    <QuestItemIcon state={state}/>
+                    {quest.name}
+                </button>
             </li>
         );
     }
 
     private onSelect = () => {
-        this.props.onSelect(this.props.quest.id);
+        this.props.onSelect(this.props.quest);
     };
 }

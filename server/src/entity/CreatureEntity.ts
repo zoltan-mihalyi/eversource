@@ -8,9 +8,9 @@ import { Controller } from './controller/Controller';
 import { canInteract } from '../../../common/game/Interaction';
 import { questsById } from '../quest/QuestIndexer';
 
-type BaseHumanoid = Omit<HumanoidEntityData, 'position' | 'appearance' | 'equipment'>;
+type BaseHumanoid = Omit<HumanoidEntityData, 'position' | 'name' | 'appearance' | 'equipment'>;
 
-const BASE_CREATURE: Omit<BaseCreatureEntityData, 'position'> = {
+const BASE_CREATURE: Omit<BaseCreatureEntityData, 'position' | 'name'> = {
     activity: 'standing',
     activitySpeed: 0,
     direction: 'down',
@@ -26,7 +26,7 @@ export const BASE_HUMANOID: BaseHumanoid = {
     type: 'humanoid',
 };
 
-type BaseMonster = Omit<MonsterEntityData, 'position' | 'image'>;
+type BaseMonster = Omit<MonsterEntityData, 'position' | 'name' | 'image'>;
 
 export const BASE_MONSTER: BaseMonster = {
     ...BASE_CREATURE,
@@ -80,15 +80,19 @@ export class CreatureEntity extends Entity<CreatureEntityData> {
         if (!player) {
             return;
         }
-        player.state.questLog.forEach((q, questId) => {
+        const { questLog } = player.state;
+        questLog.forEach((q, questId) => {
             if (q === 'failed') {
                 return;
             }
-            const quest = questsById[questId]!;
+            const tasks = questsById[questId]!.tasks;
+            if (!tasks) {
+                return;
+            }
 
-            quest.tasks.forEach((task, i) => {
-                if (task.type === 'visit' && eventType === 'area' && task.name === payload) {
-                    q[i] = 1;
+            tasks.list.forEach((task, i) => {
+                if (task.type === 'visit' && eventType === 'area' && task.areaName === payload) {
+                    questLog.set(questId, q.map((num, id) => id == i ? 1 : num));
                 }
             });
         });

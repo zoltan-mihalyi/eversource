@@ -5,6 +5,8 @@ import { CharacterInfo } from '../../../common/domain/CharacterInfo';
 import { Display } from './Display';
 import { Diff } from '../../../common/protocol/Diff';
 import { EntityData, EntityId } from '../../../common/domain/EntityData';
+import { QuestId } from '../../../common/domain/InteractionTable';
+import { QuestLogItem } from '../../../common/protocol/QuestLogItem';
 
 export type ResponseHandler = {
     [P in ResponseCommand]: (data: ResponseTypes[P]) => void;
@@ -25,7 +27,7 @@ const errorMessages: { [P in ErrorCode]: string } = {
 const CONNECTION_CLOSED = 'Connection closed';
 
 export abstract class NetworkingState<T> extends State<NetworkingContext, T> implements ResponseHandler {
-    onOpen(){
+    onOpen() {
     }
 
     onClose() {
@@ -52,6 +54,9 @@ export abstract class NetworkingState<T> extends State<NetworkingContext, T> imp
     }
 
     playerState(playerState: PlayerStateDiff) {
+    }
+
+    questLog(diffs: Diff<QuestId, QuestLogItem>[]) {
     }
 
     protected abort() {

@@ -43,18 +43,21 @@ export class LoginScreen extends React.Component<Props> {
             case 'error':
                 return (
                     <>
-                        <form className="container" onSubmit={this.onSubmit}>
-                            {loginState.type === 'error' ? (
-                                <p>Error: {loginState.message}</p>
-                            ) : null}
-                            <div className="center">
-                                <input name="username" placeholder="username" ref={this.usernameInput}/>
-                            </div>
-                            <div className="center">
-                                <input type="password" name="password" placeholder="password" ref={this.passwordInput}/>
-                            </div>
-                            <div className="center">
-                                <Button>Log in</Button>
+                        <form className="container panel" onSubmit={this.onSubmit}>
+                            <div className="content">
+                                {loginState.type === 'error' ? (
+                                    <p>Error: {loginState.message}</p>
+                                ) : null}
+                                <div className="center">
+                                    <input name="username" placeholder="username" ref={this.usernameInput}/>
+                                </div>
+                                <div className="center">
+                                    <input type="password" name="password" placeholder="password"
+                                           ref={this.passwordInput}/>
+                                </div>
+                                <div className="center">
+                                    <Button>Log in</Button>
+                                </div>
                             </div>
                         </form>
 
@@ -65,14 +68,18 @@ export class LoginScreen extends React.Component<Props> {
                 );
             case 'connecting':
                 return (
-                    <div className="container">
-                        <h2>Connecting...</h2>
+                    <div className="container panel">
+                        <div className="content">
+                            <h2>Connecting...</h2>
+                        </div>
                     </div>
                 );
             case 'characters':
                 return (
-                    <div className="container">
-                        <h2>Loading characters...</h2>
+                    <div className="container panel">
+                        <div className="content">
+                            <h2>Loading characters...</h2>
+                        </div>
                     </div>
                 );
         }

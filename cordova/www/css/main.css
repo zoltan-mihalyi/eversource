@@ -17,7 +17,6 @@ input, button {
 }
 
 .gui {
-    zoom: 200%;
     /*noinspection CssOverwrittenProperties*/
     image-rendering: pixelated;
     /*noinspection CssOverwrittenProperties*/
@@ -33,14 +32,29 @@ input, button {
     user-select: none;
 }
 
-.gui.bottom{
+.gui.bottom {
     position: absolute;
     bottom: 0;
 }
 
-@media screen and (max-width: 400px) {
+.gui.top {
+    position: absolute;
+    top: 0;
+}
+
+.gui.right {
+    right: 0;
+}
+
+@media screen and (min-width: 1200px) {
     .gui {
         zoom: 150%;
+    }
+}
+
+@media screen and (min-width: 1800px) {
+    .gui {
+        zoom: 200%;
     }
 }
 
@@ -61,16 +75,26 @@ h1 {
     text-align: center;
 }
 
+.scrollable {
+    overflow-y: auto;
+}
+
+.panel {
+    font-size: 12px;
+    background-color: #573726;
+    border: 1px solid #b78c41;
+}
+
+.panel.size-medium {
+    width: 180px;
+}
+
 .container {
-    width: 110px;
+    width: 120px;
     margin-left: auto;
     margin-right: auto;
 
     margin-top: 16px;
-    padding: 5px;
-
-    background-color: #573726;
-    border: 1px solid #b78c41;
 }
 
 ::-webkit-scrollbar {
