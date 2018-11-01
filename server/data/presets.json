@@ -327,7 +327,10 @@
         "metal_gloves"
       ],
       "arms": [],
-      "cape": []
+      "cape": [
+        "bordered",
+        "maroon"
+      ]
     },
     "name": "Lieutenant Murova"
   },
