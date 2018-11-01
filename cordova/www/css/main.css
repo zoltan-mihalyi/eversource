@@ -7,6 +7,14 @@ html {
     cursor: url('../cursors/default.png'), auto;
 }
 
+::selection {
+    background: #986a20;
+}
+
+::-moz-selection {
+    background: #986a20;
+}
+
 body {
     margin: 0;
     background-color: #2b2b2b;
