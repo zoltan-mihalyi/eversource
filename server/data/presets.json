@@ -23,7 +23,8 @@
         "brown"
       ],
       "hands": [],
-      "arms": []
+      "arms": [],
+      "cape": []
     },
     "name": "Orc"
   },
@@ -62,7 +63,8 @@
         "teal"
       ],
       "hands": [],
-      "arms": []
+      "arms": [],
+      "cape": []
     },
     "name": "Diana"
   },
@@ -98,7 +100,8 @@
         "brown"
       ],
       "hands": [],
-      "arms": []
+      "arms": [],
+      "cape": []
     },
     "name": "Cacal"
   },
@@ -139,7 +142,11 @@
       ],
       "chest": [],
       "hands": [],
-      "arms": []
+      "arms": [],
+      "cape": [
+        "normal",
+        "white"
+      ]
     },
     "name": "Priest"
   },
@@ -180,7 +187,8 @@
       ],
       "chest": [],
       "hands": [],
-      "arms": []
+      "arms": [],
+      "cape": []
     },
     "name": "Warlock"
   },
@@ -214,7 +222,8 @@
       ],
       "chest": [],
       "hands": [],
-      "arms": []
+      "arms": [],
+      "cape": []
     },
     "name": "Mage"
   },
@@ -247,7 +256,8 @@
       "feet": [],
       "chest": [],
       "hands": [],
-      "arms": []
+      "arms": [],
+      "cape": []
     },
     "name": "Monk"
   },
@@ -281,7 +291,8 @@
       ],
       "arms": [
         "metal_arms"
-      ]
+      ],
+      "cape": []
     },
     "name": "Knight"
   },
@@ -315,7 +326,8 @@
       "hands": [
         "metal_gloves"
       ],
-      "arms": []
+      "arms": [],
+      "cape": []
     },
     "name": "Lieutenant Murova"
   },
@@ -356,7 +368,8 @@
       ],
       "chest": [],
       "hands": [],
-      "arms": []
+      "arms": [],
+      "cape": []
     },
     "name": "Kumas"
   },
@@ -396,7 +409,8 @@
         "green"
       ],
       "hands": [],
-      "arms": []
+      "arms": [],
+      "cape": []
     },
     "name": "Forester Nefag"
   },
@@ -431,7 +445,8 @@
       ],
       "chest": [],
       "hands": [],
-      "arms": []
+      "arms": [],
+      "cape": []
     },
     "name": "Bandit"
   },
@@ -470,7 +485,8 @@
       ],
       "chest": [],
       "hands": [],
-      "arms": []
+      "arms": [],
+      "cape": []
     },
     "name": "Apprentice Bandit"
   },
@@ -498,7 +514,8 @@
       "feet": [],
       "chest": [],
       "hands": [],
-      "arms": []
+      "arms": [],
+      "cape": []
     },
     "name": "Skeleton Warlock"
   },
@@ -528,7 +545,8 @@
         "leather_chest"
       ],
       "hands": [],
-      "arms": []
+      "arms": [],
+      "cape": []
     },
     "name": "Skeleton Hunter"
   },
@@ -559,7 +577,11 @@
         "plate_chest"
       ],
       "hands": [],
-      "arms": []
+      "arms": [],
+      "cape": [
+        "tattered",
+        "maroon"
+      ]
     },
     "name": "Skeleton Lava Warrior"
   },
@@ -585,7 +607,8 @@
       "feet": [],
       "chest": [],
       "hands": [],
-      "arms": []
+      "arms": [],
+      "cape": []
     },
     "name": "Skeleton Punk"
   },
@@ -614,7 +637,8 @@
       "feet": [],
       "chest": [],
       "hands": [],
-      "arms": []
+      "arms": [],
+      "cape": []
     },
     "name": "Skeleton Priest"
   },
@@ -653,6 +677,10 @@
       "hands": [],
       "arms": [
         "metal_arms"
+      ],
+      "cape": [
+        "normal",
+        "blue"
       ]
     },
     "name": "Protector Treguna"
@@ -693,6 +721,10 @@
       "arms": [
         "ornate_metal_arms",
         "bronze"
+      ],
+      "cape": [
+        "normal",
+        "blue"
       ]
     },
     "name": "Bronze Champion"
@@ -733,7 +765,8 @@
       "arms": [
         "ornate_metal_arms",
         "dark"
-      ]
+      ],
+      "cape": []
     },
     "name": "Dark Champion"
   },
@@ -773,6 +806,10 @@
       "arms": [
         "ornate_metal_arms",
         "silver"
+      ],
+      "cape": [
+        "normal",
+        "green"
       ]
     },
     "name": "Silver Champion"
@@ -813,6 +850,10 @@
       "arms": [
         "ornate_metal_arms",
         "dark"
+      ],
+      "cape": [
+        "normal",
+        "black"
       ]
     },
     "name": "Dark George"

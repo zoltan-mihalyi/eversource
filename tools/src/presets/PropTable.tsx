@@ -33,6 +33,7 @@ const possibleValues: { [P in keyof PropData]: string[] } = {
     ears: ['bigears', 'elvenears'],
     eyes: filesInDir('eyes/female'),
     nose: ['bignose', 'buttonnose', 'straightnose'],
+    cape: filesInDir('cape/female'),
     chest: filesInDir('chest/female'),
     feet: filesInDir('feet/female'),
     hair: filesInDir('hair/female'),

@@ -90,7 +90,8 @@ describe('World', function () {
                     "head": [],
                     "arms": [],
                     "hands": [],
-                    "legs": ["maroon_pants"]
+                    "legs": ["maroon_pants"],
+                    "cape": [],
                 }
             }
         };
