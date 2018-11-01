@@ -92,6 +92,7 @@ describe('World', function () {
                     "hands": [],
                     "legs": ["maroon_pants"],
                     "cape": [],
+                    "belt":[],
                 }
             }
         };
