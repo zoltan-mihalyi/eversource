@@ -49,10 +49,11 @@
       "nose": []
     },
     "equipment": {
-      "chest": [],
+      "chest": [
+        "vest"
+      ],
       "shirt": [
-        "simple",
-        "teal"
+        "underdress"
       ],
       "feet": [
         "shoes",
@@ -66,7 +67,9 @@
       "hands": [],
       "arms": [],
       "cape": [],
-      "belt": []
+      "belt": [
+        "overskirt"
+      ]
     },
     "name": "Diana"
   },
@@ -890,5 +893,40 @@
       "belt": []
     },
     "name": "Dark George"
+  },
+  "mia_rak": {
+    "name": "Mia Rak",
+    "appearance": {
+      "sex": "female",
+      "body": [
+        "tanned"
+      ],
+      "nose": [],
+      "hair": [
+        "xlong",
+        "brunette"
+      ],
+      "eyes": [],
+      "ears": []
+    },
+    "equipment": {
+      "shirt": [
+        "simple",
+        "white"
+      ],
+      "legs": [],
+      "head": [],
+      "cape": [],
+      "belt": [],
+      "arms": [],
+      "hands": [],
+      "feet": [
+        "shoes",
+        "white"
+      ],
+      "chest": [
+        "dress_with_sash"
+      ]
+    }
   }
 }
