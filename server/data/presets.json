@@ -426,7 +426,9 @@
         "leather_chest",
         "green"
       ],
-      "hands": [],
+      "hands": [
+        "gloves"
+      ],
       "arms": [],
       "cape": [],
       "belt": []
@@ -742,7 +744,7 @@
         "bronze"
       ],
       "hands": [
-        "ornate_metal_gloves",
+        "gloves",
         "bronze"
       ],
       "arms": [
@@ -787,7 +789,7 @@
         "dark"
       ],
       "hands": [
-        "ornate_metal_gloves",
+        "gloves",
         "dark"
       ],
       "arms": [
@@ -829,7 +831,7 @@
         "silver"
       ],
       "hands": [
-        "ornate_metal_gloves",
+        "gloves",
         "silver"
       ],
       "arms": [
@@ -874,7 +876,7 @@
         "dark"
       ],
       "hands": [
-        "ornate_metal_gloves",
+        "gloves",
         "dark"
       ],
       "arms": [

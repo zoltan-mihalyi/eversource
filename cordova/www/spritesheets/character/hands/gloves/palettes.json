@@ -8,49 +8,49 @@
       ]
     },
     {
-      "color": "#4f2313",
+      "color": "#311210",
       "coordinates": [
         332,
         24
       ]
     },
     {
-      "color": "#ffffff",
+      "color": "#aa8550",
       "coordinates": [
         330,
         25
       ]
     },
     {
-      "color": "#ffc95a",
+      "color": "#704325",
       "coordinates": [
         330,
         26
       ]
     },
     {
-      "color": "#ffffdf",
+      "color": "#9a6f37",
       "coordinates": [
         331,
         26
       ]
     },
     {
-      "color": "#dc6f35",
+      "color": "#411e05",
       "coordinates": [
         329,
         28
       ]
     },
     {
-      "color": "#ffff61",
+      "color": "#75502d",
       "coordinates": [
         331,
         29
       ]
     },
     {
-      "color": "#ff7d2c",
+      "color": "#4b2b13",
       "coordinates": [
         45,
         47
@@ -58,6 +58,16 @@
     }
   ],
   "variations": {
+    "gold": [
+      "#1e0c08",
+      "#4f2313",
+      "#ffffff",
+      "#ffc95a",
+      "#ffffdf",
+      "#dc6f35",
+      "#ffff61",
+      "#ff7d2c"
+    ],
     "bronze": [
       "#15090c",
       "#36181d",
