@@ -928,5 +928,83 @@
         "dress_with_sash"
       ]
     }
+  },
+  "kia_rak": {
+    "name": "Kia Rak",
+    "appearance": {
+      "sex": "female",
+      "body": [
+        "tanned"
+      ],
+      "nose": [],
+      "hair": [
+        "xlong",
+        "brown"
+      ],
+      "eyes": [
+        "normal",
+        "brown"
+      ],
+      "ears": []
+    },
+    "equipment": {
+      "shirt": [
+        "simple"
+      ],
+      "legs": [],
+      "head": [],
+      "cape": [],
+      "belt": [],
+      "arms": [],
+      "hands": [],
+      "feet": [
+        "shoes",
+        "green"
+      ],
+      "chest": [
+        "dress_with_sash"
+      ]
+    }
+  },
+  "tia_rak": {
+    "name": "Tia Rak",
+    "appearance": {
+      "sex": "female",
+      "body": [
+        "tanned2"
+      ],
+      "nose": [],
+      "hair": [
+        "long",
+        "brunette2"
+      ],
+      "eyes": [],
+      "ears": []
+    },
+    "equipment": {
+      "shirt": [
+        "sara"
+      ],
+      "legs": [
+        "pants",
+        "teal"
+      ],
+      "head": [
+        "tiara",
+        "silver"
+      ],
+      "cape": [
+        "normal",
+        "gray"
+      ],
+      "belt": [],
+      "arms": [],
+      "hands": [],
+      "feet": [
+        "shoes",
+        "white"
+      ],
+      "chest": []
+    }
   }
 }

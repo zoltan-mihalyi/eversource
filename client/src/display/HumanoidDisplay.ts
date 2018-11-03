@@ -42,7 +42,7 @@ export class HumanoidDisplay extends CreatureDisplay<HumanoidEntityData> {
                 continue;
             }
 
-            if (equipment.head[0]) {
+            if (equipment.head[0] && equipment.head[0] !== 'tiara') {
                 if (part === 'hair' || part === 'ears') {
                     continue;
                 }
