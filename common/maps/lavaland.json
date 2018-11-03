@@ -953,6 +953,50 @@
                  "width":32,
                  "x":1472,
                  "y":6944
+                }, 
+                {
+                 "height":32,
+                 "id":97,
+                 "name":"smith_sam",
+                 "rotation":0,
+                 "type":"npc",
+                 "visible":true,
+                 "width":32,
+                 "x":3392,
+                 "y":6656
+                }, 
+                {
+                 "height":32,
+                 "id":98,
+                 "name":"miller_mike",
+                 "rotation":0,
+                 "type":"npc",
+                 "visible":true,
+                 "width":32,
+                 "x":3872,
+                 "y":6880
+                }, 
+                {
+                 "height":32,
+                 "id":99,
+                 "name":"butcher_bob",
+                 "rotation":0,
+                 "type":"npc",
+                 "visible":true,
+                 "width":32,
+                 "x":3968,
+                 "y":6880
+                }, 
+                {
+                 "height":32,
+                 "id":100,
+                 "name":"fishmonger_filomena",
+                 "rotation":0,
+                 "type":"npc",
+                 "visible":true,
+                 "width":32,
+                 "x":4256,
+                 "y":7104
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -960,7 +1004,7 @@
          "x":0,
          "y":0
         }],
- "nextobjectid":97,
+ "nextobjectid":101,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.1.6",

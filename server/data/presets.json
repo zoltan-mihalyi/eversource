@@ -1124,5 +1124,175 @@
         "brass"
       ]
     }
+  },
+  "butcher_bob": {
+    "name": "Butcher Bob",
+    "appearance": {
+      "sex": "male",
+      "body": [
+        "tanned"
+      ],
+      "nose": [
+        "buttonnose"
+      ],
+      "hair": [],
+      "eyes": [],
+      "ears": []
+    },
+    "equipment": {
+      "shirt": [],
+      "legs": [
+        "pants"
+      ],
+      "head": [],
+      "cape": [],
+      "belt": [
+        "cloth",
+        "brown"
+      ],
+      "arms": [],
+      "hands": [
+        "gloves",
+        "white"
+      ],
+      "feet": [
+        "shoes"
+      ],
+      "chest": [
+        "apron"
+      ]
+    }
+  },
+  "smith_sam": {
+    "name": "Smith Sam",
+    "appearance": {
+      "sex": "male",
+      "body": [
+        "dark"
+      ],
+      "nose": [],
+      "hair": [],
+      "eyes": [
+        "normal",
+        "brown"
+      ],
+      "ears": []
+    },
+    "equipment": {
+      "shirt": [
+        "simple",
+        "black"
+      ],
+      "legs": [
+        "pants",
+        "brown"
+      ],
+      "head": [],
+      "cape": [],
+      "belt": [],
+      "arms": [],
+      "hands": [
+        "gloves",
+        "gray"
+      ],
+      "feet": [
+        "shoes",
+        "black"
+      ],
+      "chest": [
+        "apron",
+        "gray"
+      ]
+    }
+  },
+  "miller_mike": {
+    "name": "Miller Mike",
+    "appearance": {
+      "sex": "male",
+      "body": [
+        "tanned2"
+      ],
+      "nose": [
+        "straightnose"
+      ],
+      "hair": [],
+      "eyes": [
+        "normal",
+        "green"
+      ],
+      "ears": []
+    },
+    "equipment": {
+      "shirt": [],
+      "legs": [
+        "pants",
+        "white"
+      ],
+      "head": [
+        "bandana",
+        "bright"
+      ],
+      "cape": [],
+      "belt": [],
+      "arms": [],
+      "hands": [
+        "gloves",
+        "white"
+      ],
+      "feet": [
+        "shoes",
+        "white"
+      ],
+      "chest": [
+        "apron",
+        "bright"
+      ]
+    }
+  },
+  "fishmonger_filomena": {
+    "name": "Fishmonger Filomena",
+    "appearance": {
+      "sex": "female",
+      "body": [
+        "tanned2"
+      ],
+      "nose": [
+        "buttonnose"
+      ],
+      "hair": [
+        "bangs",
+        "dark-blonde"
+      ],
+      "eyes": [
+        "normal",
+        "orange"
+      ],
+      "ears": []
+    },
+    "equipment": {
+      "shirt": [
+        "simple",
+        "white"
+      ],
+      "legs": [
+        "pants",
+        "green"
+      ],
+      "head": [],
+      "cape": [],
+      "belt": [
+        "cloth",
+        "brown"
+      ],
+      "arms": [],
+      "hands": [],
+      "feet": [
+        "shoes"
+      ],
+      "chest": [
+        "apron",
+        "brown"
+      ]
+    }
   }
 }
