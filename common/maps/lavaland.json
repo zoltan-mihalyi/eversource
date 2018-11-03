@@ -893,6 +893,66 @@
                  "width":32,
                  "x":3456,
                  "y":5248
+                }, 
+                {
+                 "height":32,
+                 "id":93,
+                 "name":"cactus_bonus",
+                 "properties":
+                    {
+                     "controller":"walking"
+                    },
+                 "propertytypes":
+                    {
+                     "controller":"string"
+                    },
+                 "rotation":0,
+                 "type":"npc",
+                 "visible":true,
+                 "width":32,
+                 "x":1280,
+                 "y":6784
+                }, 
+                {
+                 "height":32,
+                 "id":94,
+                 "name":"obelus",
+                 "properties":
+                    {
+                     "controller":"walking"
+                    },
+                 "propertytypes":
+                    {
+                     "controller":"string"
+                    },
+                 "rotation":0,
+                 "type":"npc",
+                 "visible":true,
+                 "width":32,
+                 "x":1664,
+                 "y":7040
+                }, 
+                {
+                 "height":32,
+                 "id":95,
+                 "name":"legionary",
+                 "rotation":0,
+                 "type":"npc",
+                 "visible":true,
+                 "width":32,
+                 "x":1568,
+                 "y":6944
+                }, 
+                {
+                 "height":32,
+                 "id":96,
+                 "name":"legionary",
+                 "rotation":0,
+                 "type":"npc",
+                 "visible":true,
+                 "width":32,
+                 "x":1472,
+                 "y":6944
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -900,7 +960,7 @@
          "x":0,
          "y":0
         }],
- "nextobjectid":93,
+ "nextobjectid":97,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.1.6",

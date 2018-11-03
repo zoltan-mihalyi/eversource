@@ -1006,5 +1006,123 @@
       ],
       "chest": []
     }
+  },
+  "cactus_bonus": {
+    "name": "Cactus Bonus",
+    "appearance": {
+      "sex": "male",
+      "body": [
+        "tanned2"
+      ],
+      "nose": [],
+      "hair": [],
+      "eyes": [
+        "normal",
+        "brown"
+      ],
+      "ears": []
+    },
+    "equipment": {
+      "shirt": [],
+      "legs": [
+        "legion_skirt"
+      ],
+      "head": [
+        "legion3",
+        "brass"
+      ],
+      "cape": [
+        "normal",
+        "red"
+      ],
+      "belt": [],
+      "arms": [
+        "legion",
+        "brass"
+      ],
+      "hands": [],
+      "feet": [
+        "sandals"
+      ],
+      "chest": [
+        "plate_chest",
+        "brass"
+      ]
+    }
+  },
+  "obelus": {
+    "name": "Obelus",
+    "appearance": {
+      "sex": "male",
+      "body": [
+        "tanned"
+      ],
+      "nose": [],
+      "hair": [],
+      "eyes": [],
+      "ears": []
+    },
+    "equipment": {
+      "shirt": [],
+      "legs": [
+        "legion_skirt",
+        "red"
+      ],
+      "head": [
+        "legion1",
+        "steel"
+      ],
+      "cape": [],
+      "belt": [],
+      "arms": [
+        "legion",
+        "steel"
+      ],
+      "hands": [],
+      "feet": [
+        "sandals"
+      ],
+      "chest": [
+        "legion",
+        "steel"
+      ]
+    }
+  },
+  "legionary": {
+    "name": "Legionary",
+    "appearance": {
+      "sex": "male",
+      "body": [
+        "tanned"
+      ],
+      "nose": [],
+      "hair": [],
+      "eyes": [],
+      "ears": []
+    },
+    "equipment": {
+      "shirt": [],
+      "legs": [
+        "legion_skirt"
+      ],
+      "head": [
+        "legion1",
+        "brass"
+      ],
+      "cape": [],
+      "belt": [],
+      "arms": [
+        "legion",
+        "brass"
+      ],
+      "hands": [],
+      "feet": [
+        "sandals"
+      ],
+      "chest": [
+        "legion",
+        "brass"
+      ]
+    }
   }
 }
