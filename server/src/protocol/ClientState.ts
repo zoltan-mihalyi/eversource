@@ -33,9 +33,6 @@ export class ClientState<T> extends State<ClientStateContext, T> {
     handleExit() {
     }
 
-    protected characters() {
-    }
-
     protected enter(data: string) {
     }
 

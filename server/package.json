@@ -5,6 +5,7 @@
   "main": "dist/server/index.js",
   "scripts": {
     "tsc": "tsc -p src",
+    "throttle-proxy": "throttle-proxy -p 8001 -s 8000",
     "tsc-watch": "tsc -w -p src",
     "start": "node dist/server/src/index.js",
     "dev": "ts-node-dev --project src/tsconfig.json src/index.ts",
