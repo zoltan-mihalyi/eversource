@@ -17,7 +17,7 @@ export class FakeUserDao implements UserDao {
                     location: {
                         position: {
                             x: 106 as X,
-                            y: 214 as Y,
+                            y: 165 as Y,
                         },
                         zoneId: 'lavaland' as ZoneId,
                     },
@@ -32,6 +32,8 @@ export class FakeUserDao implements UserDao {
                     equipment: {
                         shirt: ['simple', 'white'],
                         head: ['bandana'],
+                        cape: [],
+                        belt: ['cloth'],
                         arms: [],
                         chest: [],
                         legs: ['pants'],
@@ -66,10 +68,12 @@ export class FakeUserDao implements UserDao {
                 equipment: {
                     shirt: [],
                     head: ['ornate_metal_helm'],
+                    cape: ['normal', 'red'],
+                    belt: [],
                     arms: ['ornate_metal_arms'],
                     chest: ['ornate_metal_chest'],
                     legs: ['ornate_metal_greaves'],
-                    hands: ['ornate_metal_gloves'],
+                    hands: ['gloves', 'gold'],
                     feet: ['ornate_metal_boots'],
                 },
             },
@@ -84,7 +88,7 @@ export class FakeUserDao implements UserDao {
 
                 location: {
                     position: {
-                        x: 106 as X,
+                        x: 41 as X,
                         y: 210 as Y,
                     },
                     zoneId: 'lavaland' as ZoneId,
@@ -100,6 +104,8 @@ export class FakeUserDao implements UserDao {
                 equipment: {
                     shirt: [],
                     head: ['chain_hood'],
+                    cape: ['normal'],
+                    belt: [],
                     arms: [],
                     chest: ['mail'],
                     legs: [],

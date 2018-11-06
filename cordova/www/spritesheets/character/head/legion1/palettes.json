@@ -1,0 +1,64 @@
+{
+  "base": [
+    {
+      "color": "#1e0c08",
+      "coordinates": [
+        27,
+        15
+      ]
+    },
+    {
+      "color": "#ffff61",
+      "coordinates": [
+        27,
+        16
+      ]
+    },
+    {
+      "color": "#dc6f35",
+      "coordinates": [
+        29,
+        16
+      ]
+    },
+    {
+      "color": "#4f2313",
+      "coordinates": [
+        33,
+        16
+      ]
+    },
+    {
+      "color": "#ffffdf",
+      "coordinates": [
+        26,
+        17
+      ]
+    },
+    {
+      "color": "#ffc95a",
+      "coordinates": [
+        30,
+        18
+      ]
+    }
+  ],
+  "variations": {
+    "brass": [
+      "#1e1400",
+      "#e7a820",
+      "#966600",
+      "#6d4a00",
+      "#fbe3b0",
+      "#bf8200"
+    ],
+    "steel": [
+      "#1d131e",
+      "#867e7f",
+      "#4d4a5d",
+      "#2e2533",
+      "#c4b59f",
+      "#726b7e"
+    ]
+  }
+}

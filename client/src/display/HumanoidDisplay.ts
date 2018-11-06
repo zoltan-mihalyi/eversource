@@ -3,18 +3,21 @@ import { HumanoidEntityData } from '../../../common/domain/HumanoidEntityData';
 import { CreatureDisplay } from './CreatureDisplay';
 
 const PARTS = [
+    'cape_back',
     'body',
     'eyes',
     'nose',
-    'shirt',
     'feet',
     'legs',
+    'shirt',
     'chest',
+    'belt',
     'hair',
     'ears',
     'arms',
     'hands',
     'head',
+    'cape',
 ];
 
 const DISPLAYED_PROPERTIES: (keyof HumanoidEntityData)[] = [
@@ -31,13 +34,15 @@ export class HumanoidDisplay extends CreatureDisplay<HumanoidEntityData> {
         const { appearance, equipment } = this.data;
 
         for (const part of PARTS) {
-            const holder = appearance.hasOwnProperty(part) ? appearance : equipment;
-            const fullValue = (holder as any)[part] as ColoredImage;
+            const partProperty = part === 'cape_back' ? 'cape' : part;
+
+            const holder = appearance.hasOwnProperty(partProperty) ? appearance : equipment;
+            const fullValue = (holder as any)[partProperty] as ColoredImage;
             if (fullValue.length === 0) {
                 continue;
             }
 
-            if (equipment.head[0]) {
+            if (equipment.head[0] && equipment.head[0] !== 'tiara') {
                 if (part === 'hair' || part === 'ears') {
                     continue;
                 }

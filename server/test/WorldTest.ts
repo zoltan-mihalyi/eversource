@@ -4,9 +4,10 @@ import * as assert from 'assert';
 import { ZoneId } from '../../common/domain/Location';
 import { MapData, MapLoader } from '../src/world/MapLoader';
 import { Grid } from '../../common/Grid';
-import { Presets } from '../src/world/Presets';
+import { HumanoidPresets, MonsterPresets } from '../src/world/Presets';
 import { TiledObject } from '../../common/tiled/interfaces';
 import { HumanoidEntityData } from '../../common/domain/HumanoidEntityData';
+import { MonsterEntityData } from '../../common/domain/MonsterEntityData';
 
 const zoneId = 'zone' as ZoneId;
 
@@ -23,8 +24,8 @@ function createMapLoader(objects: TiledObject[] = []) {
 
 const runningWorlds = new Set<WorldImpl>();
 
-function newWorld(mapLoader: MapLoader, presets = {}) {
-    const world = new WorldImpl(mapLoader, presets);
+function newWorld(mapLoader: MapLoader, humanoidPresets: HumanoidPresets = {}, monsterPresets: MonsterPresets = {}) {
+    const world = new WorldImpl(mapLoader, humanoidPresets, monsterPresets);
     runningWorlds.add(world);
     return world;
 }
@@ -71,7 +72,7 @@ describe('World', function () {
                 properties: {}
             } as TiledObject
         ]);
-        const presets: Presets = {
+        const presets: HumanoidPresets = {
             orc: {
                 "name": "orc",
                 "appearance": {
@@ -89,7 +90,9 @@ describe('World', function () {
                     "head": [],
                     "arms": [],
                     "hands": [],
-                    "legs": ["maroon_pants"]
+                    "legs": ["maroon_pants"],
+                    "cape": [],
+                    "belt":[],
                 }
             }
         };
@@ -100,6 +103,34 @@ describe('World', function () {
         assert.strictEqual(entities.length, 1);
         const entityData = entities[0].get();
         assert.strictEqual((entityData as HumanoidEntityData).appearance, presets.orc.appearance);
+    });
 
+    it('should add monsters', async function () {
+        const mapLoader = createMapLoader([
+            {
+                type: 'monster',
+                name: 'lava_slime',
+                x: 320,
+                y: 320,
+                properties: {},
+            } as TiledObject,
+            {
+                properties: {}
+            } as TiledObject
+        ]);
+        const presets: MonsterPresets = {
+            lava_slime: {
+                "name": "Lava Slime",
+                "image": "slime",
+                "palette": "lava",
+            }
+        };
+        const world = newWorld(mapLoader, void 0, presets);
+        const zone = await world.getZone(zoneId);
+
+        const entities = zone.query(10, 10, 10, 10);
+        assert.strictEqual(entities.length, 1);
+        const entityData = entities[0].get();
+        assert.strictEqual((entityData as MonsterEntityData).image, presets.lava_slime.image);
     });
 });

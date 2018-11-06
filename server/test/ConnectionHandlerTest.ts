@@ -41,6 +41,8 @@ const characters: CharacterInfo[] = [
             shirt: [],
             arms: [],
             hands: [],
+            cape: [],
+            belt: [],
         },
     },
 ];

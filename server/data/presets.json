@@ -23,7 +23,9 @@
         "brown"
       ],
       "hands": [],
-      "arms": []
+      "arms": [],
+      "cape": [],
+      "belt": []
     },
     "name": "Orc"
   },
@@ -47,10 +49,11 @@
       "nose": []
     },
     "equipment": {
-      "chest": [],
+      "chest": [
+        "vest"
+      ],
       "shirt": [
-        "simple",
-        "teal"
+        "underdress"
       ],
       "feet": [
         "shoes",
@@ -62,7 +65,11 @@
         "teal"
       ],
       "hands": [],
-      "arms": []
+      "arms": [],
+      "cape": [],
+      "belt": [
+        "overskirt"
+      ]
     },
     "name": "Diana"
   },
@@ -98,7 +105,9 @@
         "brown"
       ],
       "hands": [],
-      "arms": []
+      "arms": [],
+      "cape": [],
+      "belt": []
     },
     "name": "Cacal"
   },
@@ -139,7 +148,12 @@
       ],
       "chest": [],
       "hands": [],
-      "arms": []
+      "arms": [],
+      "cape": [
+        "normal",
+        "white"
+      ],
+      "belt": []
     },
     "name": "Priest"
   },
@@ -180,7 +194,9 @@
       ],
       "chest": [],
       "hands": [],
-      "arms": []
+      "arms": [],
+      "cape": [],
+      "belt": []
     },
     "name": "Warlock"
   },
@@ -214,7 +230,9 @@
       ],
       "chest": [],
       "hands": [],
-      "arms": []
+      "arms": [],
+      "cape": [],
+      "belt": []
     },
     "name": "Mage"
   },
@@ -247,7 +265,11 @@
       "feet": [],
       "chest": [],
       "hands": [],
-      "arms": []
+      "arms": [],
+      "cape": [],
+      "belt": [
+        "cloth"
+      ]
     },
     "name": "Monk"
   },
@@ -281,7 +303,9 @@
       ],
       "arms": [
         "metal_arms"
-      ]
+      ],
+      "cape": [],
+      "belt": []
     },
     "name": "Knight"
   },
@@ -315,7 +339,12 @@
       "hands": [
         "metal_gloves"
       ],
-      "arms": []
+      "arms": [],
+      "cape": [
+        "bordered",
+        "maroon"
+      ],
+      "belt": []
     },
     "name": "Lieutenant Murova"
   },
@@ -356,7 +385,12 @@
       ],
       "chest": [],
       "hands": [],
-      "arms": []
+      "arms": [],
+      "cape": [],
+      "belt": [
+        "cloth",
+        "teal"
+      ]
     },
     "name": "Kumas"
   },
@@ -395,8 +429,12 @@
         "leather_chest",
         "green"
       ],
-      "hands": [],
-      "arms": []
+      "hands": [
+        "gloves"
+      ],
+      "arms": [],
+      "cape": [],
+      "belt": []
     },
     "name": "Forester Nefag"
   },
@@ -431,7 +469,9 @@
       ],
       "chest": [],
       "hands": [],
-      "arms": []
+      "arms": [],
+      "cape": [],
+      "belt": []
     },
     "name": "Bandit"
   },
@@ -470,7 +510,9 @@
       ],
       "chest": [],
       "hands": [],
-      "arms": []
+      "arms": [],
+      "cape": [],
+      "belt": []
     },
     "name": "Apprentice Bandit"
   },
@@ -498,7 +540,9 @@
       "feet": [],
       "chest": [],
       "hands": [],
-      "arms": []
+      "arms": [],
+      "cape": [],
+      "belt": []
     },
     "name": "Skeleton Warlock"
   },
@@ -528,7 +572,9 @@
         "leather_chest"
       ],
       "hands": [],
-      "arms": []
+      "arms": [],
+      "cape": [],
+      "belt": []
     },
     "name": "Skeleton Hunter"
   },
@@ -559,7 +605,12 @@
         "plate_chest"
       ],
       "hands": [],
-      "arms": []
+      "arms": [],
+      "cape": [
+        "tattered",
+        "maroon"
+      ],
+      "belt": []
     },
     "name": "Skeleton Lava Warrior"
   },
@@ -585,7 +636,9 @@
       "feet": [],
       "chest": [],
       "hands": [],
-      "arms": []
+      "arms": [],
+      "cape": [],
+      "belt": []
     },
     "name": "Skeleton Punk"
   },
@@ -614,7 +667,9 @@
       "feet": [],
       "chest": [],
       "hands": [],
-      "arms": []
+      "arms": [],
+      "cape": [],
+      "belt": []
     },
     "name": "Skeleton Priest"
   },
@@ -653,7 +708,12 @@
       "hands": [],
       "arms": [
         "metal_arms"
-      ]
+      ],
+      "cape": [
+        "normal",
+        "blue"
+      ],
+      "belt": []
     },
     "name": "Protector Treguna"
   },
@@ -687,13 +747,18 @@
         "bronze"
       ],
       "hands": [
-        "ornate_metal_gloves",
+        "gloves",
         "bronze"
       ],
       "arms": [
         "ornate_metal_arms",
         "bronze"
-      ]
+      ],
+      "cape": [
+        "normal",
+        "blue"
+      ],
+      "belt": []
     },
     "name": "Bronze Champion"
   },
@@ -727,13 +792,15 @@
         "dark"
       ],
       "hands": [
-        "ornate_metal_gloves",
+        "gloves",
         "dark"
       ],
       "arms": [
         "ornate_metal_arms",
         "dark"
-      ]
+      ],
+      "cape": [],
+      "belt": []
     },
     "name": "Dark Champion"
   },
@@ -767,13 +834,18 @@
         "silver"
       ],
       "hands": [
-        "ornate_metal_gloves",
+        "gloves",
         "silver"
       ],
       "arms": [
         "ornate_metal_arms",
         "silver"
-      ]
+      ],
+      "cape": [
+        "normal",
+        "green"
+      ],
+      "belt": []
     },
     "name": "Silver Champion"
   },
@@ -807,14 +879,419 @@
         "dark"
       ],
       "hands": [
-        "ornate_metal_gloves",
+        "gloves",
         "dark"
       ],
       "arms": [
         "ornate_metal_arms",
         "dark"
-      ]
+      ],
+      "cape": [
+        "normal",
+        "black"
+      ],
+      "belt": []
     },
     "name": "Dark George"
+  },
+  "mia_rak": {
+    "name": "Mia Rak",
+    "appearance": {
+      "sex": "female",
+      "body": [
+        "tanned"
+      ],
+      "nose": [],
+      "hair": [
+        "xlong",
+        "brunette"
+      ],
+      "eyes": [],
+      "ears": []
+    },
+    "equipment": {
+      "shirt": [
+        "simple",
+        "white"
+      ],
+      "legs": [],
+      "head": [],
+      "cape": [],
+      "belt": [],
+      "arms": [],
+      "hands": [],
+      "feet": [
+        "shoes",
+        "white"
+      ],
+      "chest": [
+        "dress_with_sash"
+      ]
+    }
+  },
+  "kia_rak": {
+    "name": "Kia Rak",
+    "appearance": {
+      "sex": "female",
+      "body": [
+        "tanned"
+      ],
+      "nose": [],
+      "hair": [
+        "xlong",
+        "brown"
+      ],
+      "eyes": [
+        "normal",
+        "brown"
+      ],
+      "ears": []
+    },
+    "equipment": {
+      "shirt": [
+        "simple"
+      ],
+      "legs": [],
+      "head": [],
+      "cape": [],
+      "belt": [],
+      "arms": [],
+      "hands": [],
+      "feet": [
+        "shoes",
+        "green"
+      ],
+      "chest": [
+        "dress_with_sash"
+      ]
+    }
+  },
+  "tia_rak": {
+    "name": "Tia Rak",
+    "appearance": {
+      "sex": "female",
+      "body": [
+        "tanned2"
+      ],
+      "nose": [],
+      "hair": [
+        "long",
+        "brunette2"
+      ],
+      "eyes": [],
+      "ears": []
+    },
+    "equipment": {
+      "shirt": [
+        "sara"
+      ],
+      "legs": [
+        "pants",
+        "teal"
+      ],
+      "head": [
+        "tiara",
+        "silver"
+      ],
+      "cape": [
+        "normal",
+        "gray"
+      ],
+      "belt": [],
+      "arms": [],
+      "hands": [],
+      "feet": [
+        "shoes",
+        "white"
+      ],
+      "chest": []
+    }
+  },
+  "cactus_bonus": {
+    "name": "Cactus Bonus",
+    "appearance": {
+      "sex": "male",
+      "body": [
+        "tanned2"
+      ],
+      "nose": [],
+      "hair": [],
+      "eyes": [
+        "normal",
+        "brown"
+      ],
+      "ears": []
+    },
+    "equipment": {
+      "shirt": [],
+      "legs": [
+        "legion_skirt"
+      ],
+      "head": [
+        "legion3",
+        "brass"
+      ],
+      "cape": [
+        "normal",
+        "red"
+      ],
+      "belt": [],
+      "arms": [
+        "legion",
+        "brass"
+      ],
+      "hands": [],
+      "feet": [
+        "sandals"
+      ],
+      "chest": [
+        "plate_chest",
+        "brass"
+      ]
+    }
+  },
+  "obelus": {
+    "name": "Obelus",
+    "appearance": {
+      "sex": "male",
+      "body": [
+        "tanned"
+      ],
+      "nose": [],
+      "hair": [],
+      "eyes": [],
+      "ears": []
+    },
+    "equipment": {
+      "shirt": [],
+      "legs": [
+        "legion_skirt",
+        "red"
+      ],
+      "head": [
+        "legion1",
+        "steel"
+      ],
+      "cape": [],
+      "belt": [],
+      "arms": [
+        "legion",
+        "steel"
+      ],
+      "hands": [],
+      "feet": [
+        "sandals"
+      ],
+      "chest": [
+        "legion",
+        "steel"
+      ]
+    }
+  },
+  "legionary": {
+    "name": "Legionary",
+    "appearance": {
+      "sex": "male",
+      "body": [
+        "tanned"
+      ],
+      "nose": [],
+      "hair": [],
+      "eyes": [],
+      "ears": []
+    },
+    "equipment": {
+      "shirt": [],
+      "legs": [
+        "legion_skirt"
+      ],
+      "head": [
+        "legion1",
+        "brass"
+      ],
+      "cape": [],
+      "belt": [],
+      "arms": [
+        "legion",
+        "brass"
+      ],
+      "hands": [],
+      "feet": [
+        "sandals"
+      ],
+      "chest": [
+        "legion",
+        "brass"
+      ]
+    }
+  },
+  "butcher_bob": {
+    "name": "Butcher Bob",
+    "appearance": {
+      "sex": "male",
+      "body": [
+        "tanned"
+      ],
+      "nose": [
+        "buttonnose"
+      ],
+      "hair": [],
+      "eyes": [],
+      "ears": []
+    },
+    "equipment": {
+      "shirt": [],
+      "legs": [
+        "pants"
+      ],
+      "head": [],
+      "cape": [],
+      "belt": [
+        "leather"
+      ],
+      "arms": [],
+      "hands": [
+        "gloves",
+        "white"
+      ],
+      "feet": [
+        "shoes"
+      ],
+      "chest": [
+        "apron"
+      ]
+    }
+  },
+  "smith_sam": {
+    "name": "Smith Sam",
+    "appearance": {
+      "sex": "male",
+      "body": [
+        "dark"
+      ],
+      "nose": [],
+      "hair": [],
+      "eyes": [
+        "normal",
+        "brown"
+      ],
+      "ears": []
+    },
+    "equipment": {
+      "shirt": [
+        "simple",
+        "black"
+      ],
+      "legs": [
+        "pants",
+        "brown"
+      ],
+      "head": [],
+      "cape": [],
+      "belt": [],
+      "arms": [],
+      "hands": [
+        "gloves",
+        "gray"
+      ],
+      "feet": [
+        "shoes",
+        "black"
+      ],
+      "chest": [
+        "apron",
+        "gray"
+      ]
+    }
+  },
+  "miller_mike": {
+    "name": "Miller Mike",
+    "appearance": {
+      "sex": "male",
+      "body": [
+        "tanned2"
+      ],
+      "nose": [
+        "straightnose"
+      ],
+      "hair": [],
+      "eyes": [
+        "normal",
+        "green"
+      ],
+      "ears": []
+    },
+    "equipment": {
+      "shirt": [],
+      "legs": [
+        "pants",
+        "white"
+      ],
+      "head": [
+        "bandana",
+        "bright"
+      ],
+      "cape": [],
+      "belt": [],
+      "arms": [],
+      "hands": [
+        "gloves",
+        "white"
+      ],
+      "feet": [
+        "shoes",
+        "white"
+      ],
+      "chest": [
+        "apron",
+        "bright"
+      ]
+    }
+  },
+  "fishmonger_filomena": {
+    "name": "Fishmonger Filomena",
+    "appearance": {
+      "sex": "female",
+      "body": [
+        "tanned2"
+      ],
+      "nose": [
+        "buttonnose"
+      ],
+      "hair": [
+        "bangs",
+        "dark-blonde"
+      ],
+      "eyes": [
+        "normal",
+        "orange"
+      ],
+      "ears": []
+    },
+    "equipment": {
+      "shirt": [
+        "simple",
+        "white"
+      ],
+      "legs": [
+        "pants",
+        "green"
+      ],
+      "head": [],
+      "cape": [],
+      "belt": [
+        "cloth",
+        "brown"
+      ],
+      "arms": [],
+      "hands": [],
+      "feet": [
+        "shoes"
+      ],
+      "chest": [
+        "apron",
+        "brown"
+      ]
+    }
   }
 }

@@ -1,0 +1,47 @@
+{
+  "base": [
+    {
+      "color": "#a3761c",
+      "coordinates": [
+        31,
+        14
+      ]
+    },
+    {
+      "color": "#deac49",
+      "coordinates": [
+        27,
+        85
+      ]
+    },
+    {
+      "color": "#ebcd92",
+      "coordinates": [
+        27,
+        86
+      ]
+    }
+  ],
+  "variations": {
+    "silver": [
+      "#797979",
+      "#afafaf",
+      "#cfcfcf"
+    ],
+    "bronze": [
+      "#905230",
+      "#c57b52",
+      "#d19776"
+    ],
+    "iron": [
+      "#454545",
+      "#6a6a6a",
+      "#8a8a8a"
+    ],
+    "purple": [
+      "#976ed9",
+      "#b793ea",
+      "#c6b9f4"
+    ]
+  }
+}
