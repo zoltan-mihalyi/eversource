@@ -11,7 +11,7 @@ export class CharacterSelectionState extends NetworkingState<CharacterInfo[]> {
     private selectCharacter = (character: CharacterInfo) => {
         const { id, location } = character;
 
-        this.context.ws.send(`enter:${id}`);
+        this.context.connection.send(`enter:${id}`);
 
         this.manager.enter(LoadingState, location);
     };

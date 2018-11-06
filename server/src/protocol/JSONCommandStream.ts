@@ -1,8 +1,9 @@
 import * as ws from 'ws';
 import { CommandStream } from './CommandStream';
 import { ResponseCommand, ResponseTypes } from '../../../common/protocol/Messages';
+import { Connection } from './net/Connector';
 
-export class WebsocketCommandStream implements CommandStream {
+export class JSONCommandStream implements CommandStream {
     onCommand: (command: string, data: string) => void = () => {
     };
 
@@ -11,7 +12,7 @@ export class WebsocketCommandStream implements CommandStream {
     private ping = 0;
     private pingTimeout!: NodeJS.Timer | null;
 
-    constructor(private connection: ws) {
+    constructor(private connection: Connection) {
         connection.on('message', this.onMessage);
         connection.on('pong', this.onPong);
         this.sendPing();
@@ -24,7 +25,7 @@ export class WebsocketCommandStream implements CommandStream {
     }
 
     sendCommand<T extends ResponseCommand>(command: T, data: ResponseTypes[T]): void {
-        if (this.connection.readyState !== ws.OPEN) {
+        if (this.connection.readyState !== ws.OPEN) { // TODO
             return;
         }
         const suffix = data === void 0

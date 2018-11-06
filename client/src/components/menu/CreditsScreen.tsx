@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Button } from '../gui/Button';
+import { ajax } from '../../utils';
 
 interface Props {
     onExit: () => void;
@@ -18,16 +19,11 @@ export class CreditsScreen extends React.Component<Props, State> {
     }
 
     componentDidMount() {
-        var xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = () => {
-            if (xhttp.readyState == 4 && xhttp.status == 200) {
-                this.setState({
-                    content: xhttp.responseText,
-                });
-            }
-        };
-        xhttp.open('GET', 'dist/authors.html', true);
-        xhttp.send();
+        ajax('dist/authors.html', (responseText) => {
+            this.setState({
+                content: responseText,
+            });
+        });
     }
 
     render() {

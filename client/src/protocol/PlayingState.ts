@@ -72,27 +72,27 @@ export class PlayingState extends NetworkingState<PlayingStateData> implements P
 
     leaveGame() {
         this.cleanup();
-        this.context.ws.send('leave');
+        this.context.connection.send('leave');
         this.manager.enter(LoadingCharactersState, void 0)
     }
 
     move(x: number, y: number) {
-        this.context.ws.send('command:move:' + x + ',' + y);
+        this.context.connection.send('command:move:' + x + ',' + y);
     }
 
     interact(id: EntityId) {
-        this.context.ws.send(`command:interact:${id}`);
+        this.context.connection.send(`command:interact:${id}`);
     }
 
     acceptQuest(id: QuestId) {
-        this.context.ws.send(`command:accept-quest:${id}`);
+        this.context.connection.send(`command:accept-quest:${id}`);
     }
 
     completeQuest(id: QuestId) {
-        this.context.ws.send(`command:complete-quest:${id}`);
+        this.context.connection.send(`command:complete-quest:${id}`);
     }
 
     closeInteraction() {
-        this.context.ws.send(`command:interact-end`);
+        this.context.connection.send(`command:interact-end`);
     }
 }

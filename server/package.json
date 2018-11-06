@@ -18,6 +18,7 @@
   "dependencies": {
     "express": "^4.16.3",
     "rbush": "^2.0.2",
+    "wrtc": "^0.3.0",
     "ws": "^6.0.0"
   },
   "devDependencies": {

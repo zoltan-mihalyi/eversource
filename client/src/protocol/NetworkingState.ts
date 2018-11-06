@@ -7,13 +7,14 @@ import { Diff } from '../../../common/protocol/Diff';
 import { EntityData, EntityId } from '../../../common/domain/EntityData';
 import { QuestId } from '../../../common/domain/InteractionTable';
 import { QuestLogItem } from '../../../common/protocol/QuestLogItem';
+import { AbstractNetConnection } from '../webrtc/WebRTCServerConnection';
 
 export type ResponseHandler = {
     [P in ResponseCommand]: (data: ResponseTypes[P]) => void;
 }
 
 export interface NetworkingContext {
-    ws: WebSocket
+    connection: AbstractNetConnection;
     display: Display;
     closeConnection: () => void;
 }

@@ -23,7 +23,7 @@ export function parseCommand(data: string): ParsedCommand {
     }
 }
 
-export function pixiLoader(file: string):Promise<string>{
+export function pixiLoader(file: string): Promise<string> {
     return new Promise<string>((resolve, reject) => {
         const loader = new PIXI.loaders.Loader()
             .add('file', file)
@@ -46,5 +46,17 @@ function cleanup(textures: { [key: string]: Texture | BaseTexture }) {
         }
         textures[key].destroy();
     }
+
+}
+
+export function ajax(url:string, callback: (response: string) => void) {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = () => {
+        if (xhttp.readyState == 4 && xhttp.status == 200) {
+            callback(xhttp.responseText);
+        }
+    };
+    xhttp.open('GET', url, true);
+    xhttp.send();
 
 }

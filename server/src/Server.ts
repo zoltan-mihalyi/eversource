@@ -1,32 +1,36 @@
 import * as ws from 'ws';
-import { ServerOptions } from 'ws';
 import { PROTOCOL_VERSION } from '../../common/protocol/Messages';
 import { World } from './world/World';
 import { NetworkLoop } from './NetworkLoop';
 import { Dao, Password, User, UserName } from './dao/Dao';
 import { ErrorCode } from '../../common/protocol/ErrorCode';
-import { WebsocketCommandStream } from './protocol/WebsocketCommandStream';
+import { JSONCommandStream } from './protocol/JSONCommandStream';
 import { ConnectionHandler } from './protocol/ConnectionHandler';
+import { Connection, Connector } from './protocol/net/Connector';
 
 export class Server {
-    private readonly server: ws.Server;
     private readonly networkLoop: NetworkLoop;
+    private users: number = 0;
+    private connectors:Connector[] = [];
 
-    constructor(private dao: Dao, private world: World, options: ServerOptions) {
-        this.server = new ws.Server(options);
-
-        this.server.on('connection', this.onConnection);
-
+    constructor(private dao: Dao, private world: World ) {
         this.networkLoop = new NetworkLoop();
         this.networkLoop.start();
     }
 
     close() {
         this.networkLoop.stop();
-        this.server.close();
+        for (const connector of this.connectors) {
+            connector.close();
+        }
     }
 
-    private onConnection = async (connection: ws) => {
+    addConnector(connector:Connector){
+        this.connectors.push(connector);
+        connector.on('connection', this.onConnection);
+    }
+
+    private onConnection = async (connection: Connection) => {
         const timeoutTimer = setTimeout(() => {
             connection.close();
         }, 5000);
@@ -34,7 +38,7 @@ export class Server {
         connection.once('message', async (message: ws.Data) => {
             clearTimeout(timeoutTimer);
 
-            const commandStream = new WebsocketCommandStream(connection);
+            const commandStream = new JSONCommandStream(connection);
 
             const result = await this.verifyClient(message);
             if (typeof result === 'number') {
@@ -43,13 +47,15 @@ export class Server {
                 return;
             }
 
-            console.log(`User connected! Playing: ${this.server.clients.size}`);
+            this.users++;
+            console.log(`User connected! Playing: ${this.users}`);
 
             const userDao = this.dao.getUserDao(result);
 
             const handler = new ConnectionHandler(userDao, this.world, this.networkLoop, commandStream);
             connection.on('close', () => {
-                console.log(`User disconnected! Playing: ${this.server.clients.size}`);
+                this.users--;
+                console.log(`User disconnected! Playing: ${this.users}`);
                 handler.close();
             });
         });

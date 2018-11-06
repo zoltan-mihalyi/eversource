@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>WebRTC</title>
+</head>
+<body>
+CANDIDATE:
+<textarea id="candidate"></textarea><br/>
+DESCRIPTION:
+<textarea id="description"></textarea><br/>
+
+<br/>
+REMOTE DESCRIPTION:
+<textarea id="remote-description"></textarea>
+<button id="remote-description-submit">OK</button>
+<script>
+    const servers = null;
+    const pcConstraint = null;
+
+    const connection = new RTCPeerConnection(); // todo use these? :   servers, pcConstraint
+
+    sendChannel = connection.createDataChannel('sendDataChannel');
+    sendChannel.onopen = (e) => {
+        console.log('OPEN', e);
+        setInterval(() => {
+            sendChannel.send('HELLO FROM CLIENT');
+        }, 1000);
+    }; //onSendChannelStateChange;
+    sendChannel.onclose = (e) => {
+        console.log('CLOSE', e)
+    }; //onSendChannelStateChange;
+    sendChannel.onmessage = (e) => {
+        console.log('MSG', e)
+    };
+
+    connection.onicecandidate = function (event) {
+        if (event.candidate === null) {
+            return; // FINISHED
+        }
+        document.getElementById('candidate').value = JSON.stringify(event.candidate);
+        console.log('CANDIDATE', event);
+    };
+
+    connection.createOffer().then(
+        gotDescription1,
+        onCreateSessionDescriptionError
+    );
+
+    function gotDescription1(desc) {
+        connection.setLocalDescription(desc).then(()=>{
+            document.getElementById('description').value = JSON.stringify(desc);
+        });
+        console.log('Offer from localConnection \n' + desc.sdp)
+    }
+
+    function onCreateSessionDescriptionError(error) {
+        console.error('Failed to create session description: ' + error.toString());
+    }
+
+    document.getElementById('remote-description-submit').onclick = () => {
+        const desc = JSON.parse(document.getElementById('remote-description').value);
+
+        connection.setRemoteDescription(desc);
+    }
+
+</script>
+</body>
+</html>

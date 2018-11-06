@@ -17,7 +17,7 @@ export class ConnectingState extends NetworkingState<ConnectingData> {
     onOpen() {
         const { username, password } = this.data;
 
-        this.context.ws.send(JSON.stringify({
+        this.context.connection.send(JSON.stringify({
             v: PROTOCOL_VERSION,
             username,
             password,

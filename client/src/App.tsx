@@ -47,7 +47,7 @@ interface State {
     screen: ShowScreen;
 }
 
-const wsUri = `ws://${location.hostname}:${location.port}`;
+const url = `${location.hostname}:${location.port}`;
 
 export class App extends React.Component<{}, State> implements Display {
     state: State = {
@@ -83,7 +83,7 @@ export class App extends React.Component<{}, State> implements Display {
     }
 
     private onSubmitLogin = (username: string, password: string) => {
-        connect(this, wsUri, username, password);
+        connect(this, url, username, password);
     };
 
     private showCredits = () => {

@@ -33,7 +33,7 @@ export class LoadingState extends NetworkingState<Location> {
                 return;
             }
             this.map = map;
-            this.context.ws.send('ready');
+            this.context.connection.send('ready');
         });
     }
 

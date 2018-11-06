@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>WebRTC</title>
+</head>
+<body>
+<textarea id="candidate" placeholder="candidate"></textarea>
+<button id="candidate-submit">OK</button>
+<br/>
+<textarea id="description" placeholder="description"></textarea>
+<button id="description-submit">OK</button>
+
+
+<textarea id="server-description"></textarea>
+<script>
+    const connection = new RTCPeerConnection(); // TODO use params? : servers, pcConstraint
+
+    connection.oniceconnectionstatechange = function(e){
+        console.log('ICE STATE', e);
+    };
+
+    connection.onconnectionstatechange = function(event) {
+        console.log('STATE', connection.connectionState);
+        // switch(connection.connectionState) {
+        //     case "connected":
+        //
+        //         break;
+        //     case "disconnected":
+        //     case "failed":
+        //         // One or more transports has terminated unexpectedly or in an error
+        //         break;
+        //     case "closed":
+        //         // The connection has been closed
+        //         break;
+        // }
+    };
+
+
+
+    connection.onicecandidate = function(e) {
+        console.log('onicecandidate', e);
+        // alert(e);
+        // onIceCandidate(remoteConnection, e);
+    };
+    connection.ondatachannel = (e)=>{
+        console.log('DATA channel', e);
+
+        e.channel.onclose = (e)=>{console.log('CLOSE', e)}
+
+        e.channel.onmessage = (e)=>{
+            console.log('MSG',e);
+        };
+
+        setInterval(()=>{e.channel.send('HELLO')}, 1000);
+    };
+
+
+    const candidate = document.getElementById('candidate');
+    document.getElementById('candidate-submit').onclick=()=>{
+        connection.addIceCandidate(JSON.parse(candidate.value))
+            .then(
+                function () {
+                    console.log('ADD ICE SUCCESS!');
+  //                  onAddIceCandidateSuccess();
+                },
+                function (err) {
+                    console.log('onAddIceCandidateError ', err);
+//                    onAddIceCandidateError(err);
+                }
+            );
+
+    };
+
+    document.getElementById('description-submit').onclick=()=>{
+
+        const desc = JSON.parse(document.getElementById('description').value);
+
+        console.log(desc);
+
+        connection.setRemoteDescription(desc);
+        connection.createAnswer().then(
+            gotDescription2,
+            onCreateSessionDescriptionError
+        );
+    };
+
+    function onCreateSessionDescriptionError(error) {
+        console.error('Failed to create session description: ' + error.toString());
+    }
+
+    function gotDescription2(desc) {
+        connection.setLocalDescription(desc);
+        console.log('Answer from remoteConnection \n' + desc.sdp);
+
+        document.getElementById('server-description').value = JSON.stringify(desc);
+    }
+
+
+</script>
+</body>
+</html>
