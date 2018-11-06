@@ -5,9 +5,48 @@ input {
     width: 90px;
     padding-left: 2px;
     padding-right: 2px;
+    font-size: 12px;
 
     margin: 2px;
 }
+
+input[type="checkbox"] {
+    width: 0;
+    margin-right: 16px;
+}
+
+input[type="checkbox"]::before {
+    content: '';
+    opacity: 0.7;
+    display: block;
+    text-align: center;
+    width: 12px;
+    height: 12px;
+    border: 1px solid #85581b;
+}
+
+input[type="checkbox"]:disabled::before{
+    border-color: #c8c5cc;
+}
+
+input[type="checkbox"]:hover::before{
+    opacity: 1;
+}
+
+input:checked::before {
+    content: 'x';
+    color: #ccbd7b;
+    vertical-align: bottom;
+}
+
+input:disabled:checked::before {
+    color: #c8c5cc;
+}
+
+label {
+    cursor: inherit;
+}
+
 input:focus {
     outline: 0;
 }

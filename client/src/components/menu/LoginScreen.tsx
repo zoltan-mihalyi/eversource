@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Button } from '../gui/Button';
+import { settings } from '../../settings/SettingsStore';
 
 interface Props {
     onSubmit: (username: string, password: string) => void;
@@ -21,10 +22,23 @@ export type LoginState = SimpleState<'initial'>
     | SimpleState<'characters'>
     | ErrorState;
 
+interface State {
+    username: string;
+    saveUsername: boolean;
+}
 
-export class LoginScreen extends React.Component<Props> {
-    private usernameInput = React.createRef<HTMLInputElement>();
+export class LoginScreen extends React.Component<Props, State> {
     private passwordInput = React.createRef<HTMLInputElement>();
+
+    constructor(props: Props) {
+        super(props);
+
+        const username = settings.get('username');
+        this.state = {
+            username: username || '',
+            saveUsername: username !== null,
+        };
+    }
 
     render() {
         return (
@@ -38,6 +52,8 @@ export class LoginScreen extends React.Component<Props> {
     private renderContent() {
         const { loginState, showCredits } = this.props;
 
+        const { username, saveUsername } = this.state;
+
         switch (loginState.type) {
             case  'initial':
             case 'error':
@@ -49,7 +65,8 @@ export class LoginScreen extends React.Component<Props> {
                                     <p>Error: {loginState.message}</p>
                                 ) : null}
                                 <div className="center">
-                                    <input name="username" placeholder="username" ref={this.usernameInput}/>
+                                    <input autoFocus={true} name="username" value={username} placeholder="username"
+                                           onChange={this.usernameChanged}/>
                                 </div>
                                 <div className="center">
                                     <input type="password" name="password" placeholder="password"
@@ -57,6 +74,13 @@ export class LoginScreen extends React.Component<Props> {
                                 </div>
                                 <div className="center">
                                     <Button>Log in</Button>
+                                </div>
+                                <div>
+                                    <label>
+                                        <input type="checkbox" id="save-username" onChange={this.saveUsernameChanged}
+                                               disabled={username === ''} checked={saveUsername}/>
+                                        <span>Save user name</span>
+                                    </label>
                                 </div>
                             </div>
                         </form>
@@ -85,10 +109,26 @@ export class LoginScreen extends React.Component<Props> {
         }
     }
 
+    private changeUsernameSave(saveUsername: string | null) {
+        this.setState({
+            saveUsername: saveUsername !== null
+        });
+        settings.set('username', saveUsername);
+    }
+
+    private usernameChanged = (e: React.SyntheticEvent<HTMLInputElement>) => {
+        this.changeUsernameSave(null);
+        this.setState({ username: e.currentTarget.value });
+    };
+
+    private saveUsernameChanged = (e: React.SyntheticEvent<HTMLInputElement>) => {
+        this.changeUsernameSave(e.currentTarget.checked ? this.state.username : null);
+    };
+
     private onSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
         e.preventDefault();
-        const { usernameInput, passwordInput } = this;
-        this.props.onSubmit(usernameInput.current!.value, passwordInput.current!.value);
+        const { passwordInput } = this;
+        this.props.onSubmit(this.state.username, passwordInput.current!.value);
     };
 
 }
