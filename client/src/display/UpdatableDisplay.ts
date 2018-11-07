@@ -82,11 +82,10 @@ export abstract class UpdatableDisplay<T extends EntityData> extends PIXI.Contai
                 this.interactionContainer,
             ];
             for (const container of containers) {
-                for (const child of container.children) {
-                    child.destroy();
+                const removed = container.removeChildren() as PIXI.Container[];
+                for (const child of removed) {
+                    child.destroy({ children: true });
                 }
-
-                container.removeChildren();
             }
 
             this.data = {

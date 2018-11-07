@@ -95,6 +95,7 @@ export class GameLevel {
                     this.entityDisplays.delete(id);
                     this.displayIds.delete(display);
                     this.objectContainer.removeChild(display);
+                    display.destroy({ children: true });
                     break;
                 }
             }
