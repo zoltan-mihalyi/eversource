@@ -997,6 +997,101 @@
                  "width":32,
                  "x":4256,
                  "y":7104
+                }, 
+                {
+                 "height":32,
+                 "id":101,
+                 "name":"gargon_servant",
+                 "properties":
+                    {
+                     "controller":"walking"
+                    },
+                 "propertytypes":
+                    {
+                     "controller":"string"
+                    },
+                 "rotation":0,
+                 "type":"npc",
+                 "visible":true,
+                 "width":32,
+                 "x":2592,
+                 "y":5248
+                }, 
+                {
+                 "height":32,
+                 "id":102,
+                 "name":"gargon_captain",
+                 "properties":
+                    {
+                     "controller":"walking"
+                    },
+                 "propertytypes":
+                    {
+                     "controller":"string"
+                    },
+                 "rotation":0,
+                 "type":"npc",
+                 "visible":true,
+                 "width":32,
+                 "x":2688,
+                 "y":5312
+                }, 
+                {
+                 "height":32,
+                 "id":103,
+                 "name":"gargon_servant",
+                 "properties":
+                    {
+                     "controller":"walking"
+                    },
+                 "propertytypes":
+                    {
+                     "controller":"string"
+                    },
+                 "rotation":0,
+                 "type":"npc",
+                 "visible":true,
+                 "width":32,
+                 "x":2720,
+                 "y":5152
+                }, 
+                {
+                 "height":32,
+                 "id":104,
+                 "name":"gargon_servant",
+                 "properties":
+                    {
+                     "controller":"walking"
+                    },
+                 "propertytypes":
+                    {
+                     "controller":"string"
+                    },
+                 "rotation":0,
+                 "type":"npc",
+                 "visible":true,
+                 "width":32,
+                 "x":2560,
+                 "y":5408
+                }, 
+                {
+                 "height":32,
+                 "id":105,
+                 "name":"gargon_servant",
+                 "properties":
+                    {
+                     "controller":"walking"
+                    },
+                 "propertytypes":
+                    {
+                     "controller":"string"
+                    },
+                 "rotation":0,
+                 "type":"npc",
+                 "visible":true,
+                 "width":32,
+                 "x":2784,
+                 "y":5376
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -1004,7 +1099,7 @@
          "x":0,
          "y":0
         }],
- "nextobjectid":101,
+ "nextobjectid":106,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.1.6",

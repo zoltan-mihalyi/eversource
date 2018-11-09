@@ -47,20 +47,23 @@ export class HumanoidDisplay extends CreatureDisplay<HumanoidEntityData> {
                     continue;
                 }
             }
-            const [value, color] = fullValue;
+            let [value, color] = fullValue;
 
             let image: string;
-
+            let paletteFile: string;
             switch (part) {
                 case 'ears':
                 case 'nose':
-                    image = `character/body/${appearance.sex}/${part}/${value}_${appearance.body[0]}`;
+                    color = appearance.body[1];
+                    image = `character/body/${appearance.sex}/${part}/${value}`;
+                    paletteFile = `character/body/${appearance.body[0]}`;
                     break;
                 default:
                     image = `character/${part}/${appearance.sex}/${value}`;
+                    paletteFile= `character/${getPaletteFile(part, value)}`;
             }
 
-            const paletteFile = `character/${getPaletteFile(part, value)}`;
+
             this.spriteContainer.addChild(this.createAnimatedSprite('character', image, paletteFile, color));
         }
     }

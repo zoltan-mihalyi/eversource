@@ -33,6 +33,7 @@
     "appearance": {
       "sex": "female",
       "body": [
+        "normal",
         "darkelf2"
       ],
       "eyes": [
@@ -77,6 +78,7 @@
     "appearance": {
       "sex": "female",
       "body": [
+        "normal",
         "dark2"
       ],
       "eyes": [
@@ -115,7 +117,7 @@
     "appearance": {
       "sex": "male",
       "body": [
-        "light"
+        "normal"
       ],
       "nose": [
         "straightnose"
@@ -161,7 +163,7 @@
     "appearance": {
       "sex": "male",
       "body": [
-        "light"
+        "normal"
       ],
       "nose": [
         "straightnose"
@@ -204,6 +206,7 @@
     "appearance": {
       "sex": "female",
       "body": [
+        "normal",
         "tanned"
       ],
       "nose": [],
@@ -240,6 +243,7 @@
     "appearance": {
       "sex": "male",
       "body": [
+        "normal",
         "tanned2"
       ],
       "nose": [
@@ -277,6 +281,7 @@
     "appearance": {
       "sex": "male",
       "body": [
+        "normal",
         "tanned"
       ],
       "nose": [],
@@ -313,6 +318,7 @@
     "appearance": {
       "sex": "male",
       "body": [
+        "normal",
         "tanned"
       ],
       "nose": [
@@ -352,6 +358,7 @@
     "appearance": {
       "sex": "male",
       "body": [
+        "normal",
         "dark2"
       ],
       "nose": [
@@ -398,6 +405,7 @@
     "appearance": {
       "sex": "male",
       "body": [
+        "normal",
         "tanned"
       ],
       "nose": [
@@ -442,6 +450,7 @@
     "appearance": {
       "sex": "male",
       "body": [
+        "normal",
         "dark"
       ],
       "nose": [
@@ -479,6 +488,7 @@
     "appearance": {
       "sex": "male",
       "body": [
+        "normal",
         "tanned"
       ],
       "nose": [
@@ -677,6 +687,7 @@
     "appearance": {
       "sex": "male",
       "body": [
+        "normal",
         "tanned"
       ],
       "nose": [
@@ -721,6 +732,7 @@
     "appearance": {
       "sex": "female",
       "body": [
+        "normal",
         "tanned"
       ],
       "nose": [],
@@ -766,6 +778,7 @@
     "appearance": {
       "sex": "male",
       "body": [
+        "normal",
         "dark2"
       ],
       "nose": [],
@@ -808,7 +821,7 @@
     "appearance": {
       "sex": "female",
       "body": [
-        "light"
+        "normal"
       ],
       "nose": [],
       "hair": [],
@@ -853,6 +866,7 @@
     "appearance": {
       "sex": "male",
       "body": [
+        "normal",
         "tanned"
       ],
       "nose": [],
@@ -899,6 +913,7 @@
     "appearance": {
       "sex": "female",
       "body": [
+        "normal",
         "tanned"
       ],
       "nose": [],
@@ -934,6 +949,7 @@
     "appearance": {
       "sex": "female",
       "body": [
+        "normal",
         "tanned"
       ],
       "nose": [],
@@ -971,6 +987,7 @@
     "appearance": {
       "sex": "female",
       "body": [
+        "normal",
         "tanned2"
       ],
       "nose": [],
@@ -1012,6 +1029,7 @@
     "appearance": {
       "sex": "male",
       "body": [
+        "normal",
         "tanned2"
       ],
       "nose": [],
@@ -1055,6 +1073,7 @@
     "appearance": {
       "sex": "male",
       "body": [
+        "normal",
         "tanned"
       ],
       "nose": [],
@@ -1093,6 +1112,7 @@
     "appearance": {
       "sex": "male",
       "body": [
+        "normal",
         "tanned"
       ],
       "nose": [],
@@ -1130,6 +1150,7 @@
     "appearance": {
       "sex": "male",
       "body": [
+        "normal",
         "tanned"
       ],
       "nose": [
@@ -1167,6 +1188,7 @@
     "appearance": {
       "sex": "male",
       "body": [
+        "normal",
         "dark"
       ],
       "nose": [],
@@ -1209,6 +1231,7 @@
     "appearance": {
       "sex": "male",
       "body": [
+        "normal",
         "tanned2"
       ],
       "nose": [
@@ -1253,6 +1276,7 @@
     "appearance": {
       "sex": "female",
       "body": [
+        "normal",
         "tanned2"
       ],
       "nose": [
@@ -1291,6 +1315,84 @@
       "chest": [
         "apron",
         "brown"
+      ]
+    }
+  },
+  "gargon_servant": {
+    "name": "Gargon Servant",
+    "appearance": {
+      "sex": "male",
+      "body": [
+        "normal",
+        "orange"
+      ],
+      "nose": [],
+      "hair": [],
+      "eyes": [
+        "normal",
+        "green"
+      ],
+      "ears": []
+    },
+    "equipment": {
+      "shirt": [
+        "simple",
+        "black"
+      ],
+      "legs": [
+        "pants",
+        "white"
+      ],
+      "head": [],
+      "cape": [],
+      "belt": [],
+      "arms": [],
+      "hands": [],
+      "feet": [
+        "sandals"
+      ],
+      "chest": []
+    }
+  },
+  "gargon_captain": {
+    "name": "Gargon Captain",
+    "appearance": {
+      "sex": "female",
+      "body": [
+        "normal",
+        "orange"
+      ],
+      "nose": [],
+      "hair": [
+        "longhawk",
+        "green2"
+      ],
+      "eyes": [
+        "normal",
+        "yellow"
+      ],
+      "ears": []
+    },
+    "equipment": {
+      "shirt": [
+        "simple"
+      ],
+      "legs": [
+        "metal_greaves"
+      ],
+      "head": [],
+      "cape": [],
+      "belt": [],
+      "arms": [],
+      "hands": [
+        "metal_gloves"
+      ],
+      "feet": [
+        "metal_boots"
+      ],
+      "chest": [
+        "legion",
+        "steel"
       ]
     }
   }

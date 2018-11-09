@@ -23,7 +23,7 @@ export class FakeUserDao implements UserDao {
                     },
                     appearance: {
                         sex: 'male',
-                        body: ['dark'],
+                        body: ['normal','dark'],
                         hair: ['messy1'],
                         ears: [],
                         eyes: ['normal', 'red'],
@@ -59,7 +59,7 @@ export class FakeUserDao implements UserDao {
                 },
                 appearance: {
                     sex: 'male',
-                    body: ['light'],
+                    body: ['normal'],
                     hair: ['bedhead'],
                     ears: [],
                     eyes: [],
@@ -95,7 +95,7 @@ export class FakeUserDao implements UserDao {
                 },
                 appearance: {
                     sex: 'female',
-                    body: ['light'],
+                    body: ['normal'],
                     hair: ['xlongknot'],
                     ears: ['elvenears'],
                     eyes: ['normal'],
