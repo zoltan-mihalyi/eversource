@@ -19,7 +19,7 @@ export class GameApplication extends PIXI.Application {
     private gameLevel: GameLevel;
 
     constructor(data: PlayingStateData, private playingNetworkApi: PlayingNetworkApi) {
-        super();
+        super({preserveDrawingBuffer: true});
 
         const { map, resources, position } = data;
 

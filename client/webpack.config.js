@@ -1,5 +1,5 @@
 module.exports = {
-    entry: "./src/index.tsx",
+    entry: ['es6-shim', './src/index.tsx'],
     output: {
         filename: "bundle.js",
         path: __dirname + "/../cordova/www/dist"
