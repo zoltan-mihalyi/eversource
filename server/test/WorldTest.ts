@@ -81,7 +81,8 @@ describe('World', function () {
                     "eyes": [],
                     "ears": [],
                     "hair": [],
-                    "nose": []
+                    "nose": [],
+                    "facial": [],
                 },
                 "equipment": {
                     "chest": [],

@@ -12,6 +12,7 @@ const PARTS = [
     'shirt',
     'chest',
     'belt',
+    'facial',
     'hair',
     'ears',
     'arms',
@@ -72,7 +73,8 @@ export class HumanoidDisplay extends CreatureDisplay<HumanoidEntityData> {
 export function getPaletteFile(part: string, value: string) {
     switch (part) {
         case 'hair':
-            return part;
+        case 'facial':
+            return 'hair';
         default:
             return `${part}/${value}`;
     }
