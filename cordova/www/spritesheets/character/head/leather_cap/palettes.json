@@ -1,136 +1,101 @@
 {
   "base": [
     {
-      "color": "#281b0e",
+      "color": "#271b0d",
       "coordinates": [
         32,
         12
       ]
     },
     {
-      "color": "#3e2613",
+      "color": "#3f2613",
       "coordinates": [
         32,
         13
       ]
     },
     {
-      "color": "#62351c",
+      "color": "#63351e",
       "coordinates": [
         33,
         13
       ]
     },
     {
-      "color": "#744b30",
+      "color": "#754a2f",
       "coordinates": [
         31,
         14
       ]
     },
     {
-      "color": "#996b4a",
+      "color": "#996a48",
       "coordinates": [
         30,
         18
       ]
     },
     {
-      "color": "#b88751",
+      "color": "#ba8651",
       "coordinates": [
         29,
         20
       ]
     },
     {
-      "color": "#380510",
+      "color": "#37050f",
       "coordinates": [
         39,
         22
       ]
     },
     {
-      "color": "#b14e45",
+      "color": "#af4f43",
       "coordinates": [
         39,
         23
       ]
     },
     {
-      "color": "#691503",
+      "color": "#6a1501",
       "coordinates": [
         39,
         26
       ]
     },
     {
-      "color": "#3d2512",
-      "coordinates": [
-        23,
-        30
-      ]
-    },
-    {
-      "color": "#7c563a",
+      "color": "#80583b",
       "coordinates": [
         30,
         31
       ]
     },
     {
-      "color": "#5a311a",
-      "coordinates": [
-        26,
-        32
-      ]
-    },
-    {
-      "color": "#1d131e",
+      "color": "#1e131d",
       "coordinates": [
         38,
         34
       ]
     },
     {
-      "color": "#c39753",
+      "color": "#c19750",
       "coordinates": [
         36,
         82
       ]
     },
     {
-      "color": "#986a49",
-      "coordinates": [
-        37,
-        82
-      ]
-    },
-    {
-      "color": "#af7f4f",
+      "color": "#b17e4f",
       "coordinates": [
         38,
         84
       ]
     },
     {
-      "color": "#855a3c",
-      "coordinates": [
-        39,
-        85
-      ]
-    },
-    {
-      "color": "#221715",
+      "color": "#221814",
       "coordinates": [
         32,
         86
-      ]
-    },
-    {
-      "color": "#231714",
-      "coordinates": [
-        38,
-        89
       ]
     }
   ],
@@ -145,16 +110,11 @@
       "#380510",
       "#b14e45",
       "#691503",
-      "#323d12",
       "#6d7c3a",
-      "#4f5a1a",
       "#1e1317",
       "#94c353",
-      "#869849",
       "#91af4f",
-      "#75853c",
-      "#222215",
-      "#232314"
+      "#222215"
     ]
   }
 }

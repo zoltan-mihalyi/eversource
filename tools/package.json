@@ -3,7 +3,9 @@
   "main": "index.html",
   "version": "1.0.0",
   "scripts": {
-    "test": "tsc"
+    "test": "tsc",
+    "palette-reducer": "ts-node src/scripts/palette-reducer.ts",
+    "large-palette-finder": "ts-node src/scripts/large-palette-finder.ts"
   },
   "window": {
     "width": 1000,
