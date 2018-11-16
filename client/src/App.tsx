@@ -47,7 +47,9 @@ interface State {
     screen: ShowScreen;
 }
 
-const wsUri = `ws://${location.hostname}:${location.port}`;
+const protocol = location.protocol === 'http:' ? 'ws' : 'wss';
+
+const wsUri = `${protocol}://${location.hostname}:${location.port}`;
 
 export class App extends React.Component<{}, State> implements Display {
     state: State = {
