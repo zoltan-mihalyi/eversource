@@ -59,6 +59,15 @@ License: CC-BY 3.0 / CC-BY-SA 3.0 / GPL 3.0
 https://opengameart.org/content/liberated-pixel-cup-lpc-base-assets-sprites-map-tiles
 
 
+## LPC Spider
+- Artist: Redshrike
+- Contributor: William.Thompsonj
+
+License: CC-BY-SA 3.0 / GPL 3.0
+
+https://opengameart.org/content/lpc-spider
+
+
 ## [LPC] Farming tilesets, magic animations and UI elements
 - Daniel Eddeland (Daneeklu)
 

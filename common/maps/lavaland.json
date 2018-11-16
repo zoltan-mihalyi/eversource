@@ -1092,6 +1092,50 @@
                  "width":32,
                  "x":2784,
                  "y":5376
+                }, 
+                {
+                 "height":32,
+                 "id":110,
+                 "name":"spider",
+                 "rotation":0,
+                 "type":"monster",
+                 "visible":true,
+                 "width":32,
+                 "x":1568,
+                 "y":6624
+                }, 
+                {
+                 "height":32,
+                 "id":111,
+                 "name":"spider",
+                 "rotation":0,
+                 "type":"monster",
+                 "visible":true,
+                 "width":32,
+                 "x":1183,
+                 "y":6535
+                }, 
+                {
+                 "height":32,
+                 "id":112,
+                 "name":"spider",
+                 "rotation":0,
+                 "type":"monster",
+                 "visible":true,
+                 "width":32,
+                 "x":1568,
+                 "y":6560
+                }, 
+                {
+                 "height":32,
+                 "id":113,
+                 "name":"black_widow",
+                 "rotation":0,
+                 "type":"monster",
+                 "visible":true,
+                 "width":32,
+                 "x":1216,
+                 "y":6592
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -1099,7 +1143,7 @@
          "x":0,
          "y":0
         }],
- "nextobjectid":106,
+ "nextobjectid":114,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.1.6",

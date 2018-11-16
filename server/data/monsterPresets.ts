@@ -65,4 +65,14 @@ export const monsterPresets: MonsterPresets = {
         "image": "slime",
         "palette": "lava-rock",
     },
+    "spider": {
+        "name": "Forest Spider",
+        "image": "spider01",
+        "palette": null,
+    },
+    "black_widow": {
+        "name": "Black Widow",
+        "image": "spider01",
+        "palette": "black-widow",
+    },
 };
