@@ -1224,6 +1224,50 @@
                  "width":32,
                  "x":3264,
                  "y":5120
+                }, 
+                {
+                 "height":32,
+                 "id":123,
+                 "name":"golem_stone",
+                 "rotation":0,
+                 "type":"monster",
+                 "visible":true,
+                 "width":32,
+                 "x":1312,
+                 "y":7040
+                }, 
+                {
+                 "height":32,
+                 "id":124,
+                 "name":"golem_stone",
+                 "rotation":0,
+                 "type":"monster",
+                 "visible":true,
+                 "width":32,
+                 "x":1568,
+                 "y":7104
+                }, 
+                {
+                 "height":32,
+                 "id":125,
+                 "name":"golem_forest",
+                 "rotation":0,
+                 "type":"monster",
+                 "visible":true,
+                 "width":32,
+                 "x":3200,
+                 "y":6816
+                }, 
+                {
+                 "height":32,
+                 "id":126,
+                 "name":"golem_emerald",
+                 "rotation":0,
+                 "type":"monster",
+                 "visible":true,
+                 "width":32,
+                 "x":3424,
+                 "y":4992
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -1231,7 +1275,7 @@
          "x":0,
          "y":0
         }],
- "nextobjectid":123,
+ "nextobjectid":127,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.1.6",

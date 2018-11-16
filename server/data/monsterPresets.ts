@@ -100,6 +100,21 @@ export const monsterPresets: MonsterPresets = {
         "image": "golem",
         "palette": "lava",
     },
+    "golem_ice": {
+        "name": "Ice Golem",
+        "image": "golem",
+        "palette": "ice",
+    },
+    "golem_forest": {
+        "name": "Forest Golem",
+        "image": "golem",
+        "palette": "forest",
+    },
+    "golem_stone": {
+        "name": "Stone Golem",
+        "image": "golem",
+        "palette": "stone",
+    },
     "golem_pink": {
         "name": "Tourmaline Golem",
         "image": "golem",
