@@ -1268,6 +1268,39 @@
                  "width":32,
                  "x":3424,
                  "y":4992
+                }, 
+                {
+                 "height":32,
+                 "id":127,
+                 "name":"impling_dark",
+                 "rotation":0,
+                 "type":"monster",
+                 "visible":true,
+                 "width":32,
+                 "x":3973.33333333333,
+                 "y":5756.66666666667
+                }, 
+                {
+                 "height":32,
+                 "id":128,
+                 "name":"impling_void",
+                 "rotation":0,
+                 "type":"monster",
+                 "visible":true,
+                 "width":32,
+                 "x":3744,
+                 "y":5760
+                }, 
+                {
+                 "height":32,
+                 "id":129,
+                 "name":"impling",
+                 "rotation":0,
+                 "type":"monster",
+                 "visible":true,
+                 "width":32,
+                 "x":3616,
+                 "y":5664
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -1275,7 +1308,7 @@
          "x":0,
          "y":0
         }],
- "nextobjectid":127,
+ "nextobjectid":130,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.1.6",

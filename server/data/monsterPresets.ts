@@ -154,5 +154,30 @@ export const monsterPresets: MonsterPresets = {
         "name": "Void Imp",
         "image": "imp",
         "palette": "void",
-    }
+    },
+    "impling": {
+        "name": "Impling",
+        "image": "impling",
+        "palette": null,
+    },
+    "impling_blue": {
+        "name": "Impling Servant",
+        "image": "impling",
+        "palette": "blue",
+    },
+    "impling_green": {
+        "name": "Impling Corruptor",
+        "image": "impling",
+        "palette": "green",
+    },
+    "impling_dark": {
+        "name": "Souleater Impling",
+        "image": "impling",
+        "palette": "dark",
+    },
+    "impling_void": {
+        "name": "Void Impling",
+        "image": "impling",
+        "palette": "void",
+    },
 };
