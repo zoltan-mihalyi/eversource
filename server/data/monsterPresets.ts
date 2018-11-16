@@ -114,5 +114,30 @@ export const monsterPresets: MonsterPresets = {
         "name": "Ruby Golem",
         "image": "golem",
         "palette": "ruby",
+    },
+    "imp": {
+        "name": "Imp",
+        "image": "imp",
+        "palette": null,
+    },
+    "imp_blue": {
+        "name": "Imp Servant",
+        "image": "imp",
+        "palette": "blue",
+    },
+    "imp_green": {
+        "name": "Imp Corruptor",
+        "image": "imp",
+        "palette": "green",
+    },
+    "imp_dark": {
+        "name": "Souleater Imp",
+        "image": "imp",
+        "palette": "dark",
+    },
+    "imp_void": {
+        "name": "Void Imp",
+        "image": "imp",
+        "palette": "void",
     }
 };
