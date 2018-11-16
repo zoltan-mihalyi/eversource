@@ -75,4 +75,44 @@ export const monsterPresets: MonsterPresets = {
         "image": "spider01",
         "palette": "black-widow",
     },
+    "golem": {
+        "name": "Golem",
+        "image": "golem",
+        "palette": null,
+    },
+    "golem_dirt": {
+        "name": "Dirt Golem",
+        "image": "golem",
+        "palette": "dirt",
+    },
+    "golem_emerald": {
+        "name": "Emerald Golem",
+        "image": "golem",
+        "palette": "emerald",
+    },
+    "golem_gold": {
+        "name": "Gold Golem",
+        "image": "golem",
+        "palette": "gold",
+    },
+    "golem_lava": {
+        "name": "Lava Golem",
+        "image": "golem",
+        "palette": "lava",
+    },
+    "golem_pink": {
+        "name": "Tourmaline Golem",
+        "image": "golem",
+        "palette": "pink",
+    },
+    "golem_purple": {
+        "name": "Ametrine Golem",
+        "image": "golem",
+        "palette": "purple",
+    },
+    "golem_ruby": {
+        "name": "Ruby Golem",
+        "image": "golem",
+        "palette": "ruby",
+    }
 };

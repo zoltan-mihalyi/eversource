@@ -1136,6 +1136,39 @@
                  "width":32,
                  "x":1216,
                  "y":6592
+                }, 
+                {
+                 "height":32,
+                 "id":114,
+                 "name":"golem_lava",
+                 "rotation":0,
+                 "type":"monster",
+                 "visible":true,
+                 "width":32,
+                 "x":1280,
+                 "y":6400
+                }, 
+                {
+                 "height":32,
+                 "id":116,
+                 "name":"golem_gold",
+                 "rotation":0,
+                 "type":"monster",
+                 "visible":true,
+                 "width":32,
+                 "x":1920,
+                 "y":7008
+                }, 
+                {
+                 "height":32,
+                 "id":117,
+                 "name":"golem_dirt",
+                 "rotation":0,
+                 "type":"monster",
+                 "visible":true,
+                 "width":32,
+                 "x":1696,
+                 "y":6528
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -1143,7 +1176,7 @@
          "x":0,
          "y":0
         }],
- "nextobjectid":114,
+ "nextobjectid":118,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.1.6",
