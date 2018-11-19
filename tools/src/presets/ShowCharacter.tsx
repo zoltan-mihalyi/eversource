@@ -49,7 +49,7 @@ export class ShowCharacter extends React.Component<Props, State> {
             preset: props.originalPreset,
         };
 
-        this.app = new PIXI.Application({ width: CANVAS_WIDTH, height: 128, backgroundColor: 0x2e8036 });
+        this.app = new PIXI.Application({ width: CANVAS_WIDTH, height: 144, backgroundColor: 0x2e8036 });
         this.updateCharacter();
     }
 
@@ -157,8 +157,8 @@ export class ShowCharacter extends React.Component<Props, State> {
 
         const character = new HumanoidDisplay(gameContext, false, entityData);
         character.init();
-        character.x = CANVAS_WIDTH / 2 - 16;
-        character.y = 80;
+        character.x = CANVAS_WIDTH / 2;
+        character.y = 122;
         this.app.stage.addChild(character);
     }
 

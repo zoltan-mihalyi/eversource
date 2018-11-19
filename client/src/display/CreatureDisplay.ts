@@ -41,13 +41,13 @@ export abstract class CreatureDisplay<T extends CreatureEntityData> extends Upda
             hpGraphics.clear();
 
             hpGraphics.beginFill(0x555555);
-            hpGraphics.drawRect(-HP_BAR_WIDTH / 2 - 1 + 16, -1, HP_BAR_WIDTH + 2, 4 + 2);
+            hpGraphics.drawRect(-HP_BAR_WIDTH / 2 - 1, -1, HP_BAR_WIDTH + 2, 4 + 2);
 
             hpGraphics.beginFill(0x000000);
-            hpGraphics.drawRect(-HP_BAR_WIDTH / 2 + 16, 0, HP_BAR_WIDTH, 4);
+            hpGraphics.drawRect(-HP_BAR_WIDTH / 2, 0, HP_BAR_WIDTH, 4);
 
             hpGraphics.beginFill(attitudeColor(this.self, this.data.attitude));
-            hpGraphics.drawRect(-HP_BAR_WIDTH / 2 + 16, 0, this.data.hp / this.data.maxHp * HP_BAR_WIDTH, 4);
+            hpGraphics.drawRect(-HP_BAR_WIDTH / 2, 0, this.data.hp / this.data.maxHp * HP_BAR_WIDTH, 4);
         }
     }
 

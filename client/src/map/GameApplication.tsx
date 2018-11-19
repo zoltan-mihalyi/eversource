@@ -85,8 +85,8 @@ export class GameApplication extends PIXI.Application {
 
         const { tilewidth, tileheight } = this.gameLevel.map.map;
 
-        viewContainer.x = Math.floor(-this.centerX * viewContainer.scale.x + canvas.width / 2 - tilewidth / 2);
-        viewContainer.y = Math.floor(-this.centerY * viewContainer.scale.y + canvas.height / 2 - tileheight / 2);
+        viewContainer.x = Math.floor(-this.centerX * viewContainer.scale.x + canvas.width / 2);
+        viewContainer.y = Math.floor(-this.centerY * viewContainer.scale.y + canvas.height / 2);
 
         this.gameLevel.setVisibleArea(
             -viewContainer.x / viewContainer.scale.x as X,

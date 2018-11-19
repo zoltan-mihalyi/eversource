@@ -3,7 +3,7 @@ import { MapLoader } from './MapLoader';
 import { Zone } from './Zone';
 import { HumanoidPresets, MonsterPresets, resolvePresetAttitude } from './Presets';
 import { BASE_HUMANOID, BASE_MONSTER, CreatureEntity } from '../entity/CreatureEntity';
-import {  Direction } from '../../../common/domain/CreatureEntityData';
+import { Direction } from '../../../common/domain/CreatureEntityData';
 import { WalkingController } from '../entity/controller/WalkingController';
 import { TiledObject } from '../../../common/tiled/interfaces';
 import { HiddenEntityData } from '../entity/Entity';
@@ -57,8 +57,8 @@ export class WorldImpl implements World {
 
         for (const object of mapData.objects) {
             const position = {
-                x: object.x / mapData.tileWidth as X,
-                y: object.y / mapData.tileHeight as Y,
+                x: (object.x + object.width / 2) / mapData.tileWidth as X,
+                y: (object.y + object.height / 2) / mapData.tileHeight as Y,
             };
             const properties = object.properties || {};
             if (object.type === 'npc') {

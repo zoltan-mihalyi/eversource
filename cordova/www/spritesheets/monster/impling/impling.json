@@ -9,8 +9,8 @@
  "tileheight":64,
  "tileoffset":
     {
-     "x":-16,
-     "y":6
+      "x":-32,
+      "y":-10
     },
  "tileproperties":
     {

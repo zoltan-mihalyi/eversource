@@ -149,15 +149,15 @@ export abstract class UpdatableDisplay<T extends EntityData> extends PIXI.Contai
             strokeThickness: 0.7,
             align: 'left',
         });
-        text.x = 32 / 2 - Math.floor(text.width / 2); // avoid blurry text
+        text.x = -Math.floor(text.width / 2); // avoid blurry text
         this.textContainer.addChild(text);
     }
 
     private updateStackingElementsPosition() {
         const spriteBounds = this.spriteContainer.getLocalBounds();
         this.statusContainer.y = spriteBounds.y - this.statusContainer.height;
-        this.textContainer.y = this.statusContainer.y - 16;
-        this.interactionContainer.y = this.textContainer.y - 20;
+        this.textContainer.y = this.statusContainer.y - 17;
+        this.interactionContainer.y = this.textContainer.y;
     }
 
     protected buildShadow() {
@@ -172,7 +172,8 @@ export abstract class UpdatableDisplay<T extends EntityData> extends PIXI.Contai
         let i = 0;
         for (const entityInteraction of interaction) {
             const q = this.context.textureLoader.createAnimatedSprite('misc', entityInteraction);
-            q.x = i * scale * 32;
+            q.x = (i - (interaction.length - 1) / 2) * scale * 20;
+            q.y = -scale * 6;
             q.scale.set(scale);
             this.interactionContainer.addChild(q);
             i++;

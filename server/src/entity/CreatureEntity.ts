@@ -104,6 +104,10 @@ export class CreatureEntity extends Entity<CreatureEntityData> {
         });
     }
 
+    protected getSize() {
+        return 1;
+    }
+
     private updatePlayerState() {
         const { player } = this.hidden;
         if (!player) {
