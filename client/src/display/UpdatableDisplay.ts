@@ -154,8 +154,8 @@ export abstract class UpdatableDisplay<T extends EntityData> extends PIXI.Contai
     }
 
     private updateStackingElementsPosition() {
-        const spriteBounds = this.spriteContainer.getLocalBounds();
-        this.statusContainer.y = spriteBounds.y - this.statusContainer.height;
+        const spriteTop = this.spriteContainer.scale.y * this.spriteContainer.getLocalBounds().y;
+        this.statusContainer.y = spriteTop - this.statusContainer.height;
         this.textContainer.y = this.statusContainer.y - 17;
         this.interactionContainer.y = this.textContainer.y;
     }

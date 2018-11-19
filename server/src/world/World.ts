@@ -72,16 +72,18 @@ export class WorldImpl implements World {
                     ...BASE_HUMANOID,
                     ...preset,
                     attitude: resolvePresetAttitude(preset.attitude, false),
+                    scale: preset.scale || 1,
                     position,
                     direction,
                 }, getHidden(object), controller);
                 zone.addEntity(characterEntity);
             } else if (object.type === 'monster') {
-                const { name, image, palette, movement, attitude } = this.monsterPresets[object.name];
+                const { name, image, palette, movement, attitude, scale } = this.monsterPresets[object.name];
 
                 zone.addEntity(new CreatureEntity({
                     ...BASE_MONSTER,
                     attitude: resolvePresetAttitude(attitude, true),
+                    scale: scale || 1,
                     name,
                     image,
                     palette,

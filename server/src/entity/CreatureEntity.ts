@@ -8,9 +8,9 @@ import { Controller } from './controller/Controller';
 import { canInteract } from '../../../common/game/Interaction';
 import { questsById } from '../quest/QuestIndexer';
 
-type BaseHumanoid = Omit<HumanoidEntityData, 'position' | 'name' | 'appearance' | 'equipment'>;
+type BaseHumanoid = Omit<HumanoidEntityData, 'position' | 'name' | 'scale' | 'appearance' | 'equipment'>;
 
-const BASE_CREATURE: Omit<BaseCreatureEntityData, 'position' | 'name'> = {
+const BASE_CREATURE: Omit<BaseCreatureEntityData, 'position' | 'name' | 'scale'> = {
     activity: 'standing',
     activitySpeed: 0,
     direction: 'down',
@@ -27,7 +27,7 @@ export const BASE_HUMANOID: BaseHumanoid = {
     type: 'humanoid',
 };
 
-type BaseMonster = Omit<MonsterEntityData, 'position' | 'name' | 'image'>;
+type BaseMonster = Omit<MonsterEntityData, 'position' | 'name' | 'scale' | 'image'>;
 
 export const BASE_MONSTER: BaseMonster = {
     ...BASE_CREATURE,
@@ -105,7 +105,7 @@ export class CreatureEntity extends Entity<CreatureEntityData> {
     }
 
     protected getSize() {
-        return 1;
+        return this.state.scale;
     }
 
     private updatePlayerState() {

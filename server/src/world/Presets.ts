@@ -4,6 +4,8 @@ import { CreatureAttitude } from '../../../common/domain/CreatureEntityData';
 
 interface BasePreset {
     name: string;
+    attitude?: PresetAttitude;
+    scale?: number;
 }
 
 export type PresetAttitude = "friendly" | "neutral" | "hostile";
@@ -11,7 +13,6 @@ export type PresetAttitude = "friendly" | "neutral" | "hostile";
 export interface HumanoidPreset extends BasePreset {
     appearance: Appearance;
     equipment: Equipment;
-    attitude?: PresetAttitude;
 }
 
 export interface HumanoidPresets {
@@ -21,7 +22,6 @@ export interface HumanoidPresets {
 export interface MonsterPreset extends BasePreset {
     image: string;
     palette: string | null;
-    attitude?: PresetAttitude;
     movement?: MovementConfig;
 }
 

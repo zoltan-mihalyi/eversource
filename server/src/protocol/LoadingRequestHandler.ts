@@ -36,6 +36,7 @@ export class LoadingRequestHandler extends ClientState<CharacterDetails> {
             name,
             player: true,
             hp: info.hp,
+            scale: 1,
             appearance: info.appearance,
             equipment: info.equipment,
         }, hidden, controller);

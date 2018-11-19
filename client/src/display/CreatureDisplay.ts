@@ -35,6 +35,9 @@ export abstract class CreatureDisplay<T extends CreatureEntityData> extends Upda
             (child as PIXI.extras.AnimatedSprite).animationSpeed = speed;
         }
 
+        this.spriteContainer.scale.set(this.data.scale);
+        this.shadowContainer.scale.set(this.data.scale);
+
         const hpGraphics = this.statusContainer.children[0] as PIXI.Graphics | undefined;
 
         if (hpGraphics) {
@@ -56,7 +59,7 @@ export abstract class CreatureDisplay<T extends CreatureEntityData> extends Upda
             case 'standing':
                 return 0.08;
             case 'walking':
-                return this.data.activitySpeed / 16;
+                return this.data.activitySpeed / 16 / this.data.scale;
             case 'casting':
                 return 0.25;
         }

@@ -73,11 +73,14 @@ export class ShowCharacter extends React.Component<Props, State> {
                     <div>
                         <span className="prop-name">name </span>
                         <input value={preset.name} onChange={this.changeName}/>
+                        {' '}
                         <select value={preset.attitude} onChange={this.changeAttitude}>
                             <option value="friendly">Friendly</option>
                             <option value="neutral">Neutral</option>
                             <option value="hostile">Hostile</option>
                         </select>
+                        <span className="prop-name">scale </span>
+                        <input type="number" value={preset.scale || 1} step={0.01} min={0.01} onChange={this.changeScale}/>
                     </div>
                     <PropTable data={preset.appearance as {}} onChange={this.onChangeAppearance}/>
                     <PropTable data={preset.equipment as {}} onChange={this.onChangeEquipment}/>
@@ -119,6 +122,14 @@ export class ShowCharacter extends React.Component<Props, State> {
             },
         });
     };
+    private changeScale = (e: React.SyntheticEvent<HTMLInputElement>) => {
+        this.setState({
+            preset: {
+                ...this.state.preset,
+                scale: +e.currentTarget.value || 1,
+            },
+        });
+    };
 
     private createOnChangeHandler<K extends keyof HumanoidPreset>(key: K) {
         return (value: HumanoidPreset[K]) => {
@@ -144,6 +155,7 @@ export class ShowCharacter extends React.Component<Props, State> {
             hp: 100,
             maxHp: 100,
             player: false,
+            scale: preset.scale || 1,
             attitude: resolvePresetAttitude(preset.attitude, false),
             interaction: ['quest'],
             position: { x: 0 as X, y: 0 as Y },

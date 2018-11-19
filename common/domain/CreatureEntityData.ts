@@ -20,6 +20,7 @@ export interface BaseCreatureEntityData extends BaseEntityData {
     activity: CreatureActivity;
     activitySpeed: number;
     attitude: CreatureAttitude;
+    scale: number;
 }
 
 export type CreatureEntityData = HumanoidEntityData | MonsterEntityData;

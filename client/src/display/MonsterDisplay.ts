@@ -23,8 +23,6 @@ export class MonsterDisplay extends CreatureDisplay<MonsterEntityData> {
             const size = (properties.size || 1) as number;
             const shadow = textureLoader.createAnimatedSprite('misc', 'shadow');
             shadow.scale.set(size, size);
-            shadow.x = (1 - size) * tileSet.tilewidth / 2;
-            shadow.y = (1 - size) * tileSet.tileheight / 2;
             shadow.blendMode = PIXI.BLEND_MODES.MULTIPLY;
             shadowContainer.addChild(shadow);
 

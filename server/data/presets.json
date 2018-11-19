@@ -654,7 +654,8 @@
       "belt": []
     },
     "name": "Skeleton Lava Warrior",
-    "attitude": "hostile"
+    "attitude": "hostile",
+    "scale": 2
   },
   "skeleton_punk": {
     "appearance": {

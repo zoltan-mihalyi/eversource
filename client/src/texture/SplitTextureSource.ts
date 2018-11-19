@@ -9,6 +9,8 @@ const taskQueue = new TaskQueue(8);
 class SplitBaseTexture extends BaseTexture {
     constructor(private x: number, private y: number) {
         super();
+        this.mipmap = false;
+        this.scaleMode = PIXI.SCALE_MODES.NEAREST;
     }
 
     imageLoaded(img: HTMLImageElement) {
