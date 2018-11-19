@@ -65,6 +65,7 @@ export class GameApplication extends PIXI.Application {
     updatePlayerState(state: PlayerStateDiff) {
         if (state.character && state.character.id !== void 0) {
             this.entityId = state.character.id;
+            this.gameLevel.setEntityId(this.entityId);
         }
     }
 

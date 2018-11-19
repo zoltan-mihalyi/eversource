@@ -64,6 +64,7 @@ export const monsterPresets: MonsterPresets = {
         "name": "Lava Rock Slime",
         "image": "slime",
         "palette": "lava-rock",
+        "attitude": "neutral",
     },
     "spider": {
         "name": "Forest Spider",
@@ -109,6 +110,7 @@ export const monsterPresets: MonsterPresets = {
         "name": "Forest Golem",
         "image": "golem",
         "palette": "forest",
+        "attitude": "friendly",
     },
     "golem_stone": {
         "name": "Stone Golem",

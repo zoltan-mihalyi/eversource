@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as path from 'path';
 import * as PIXI from 'pixi.js';
-import { HumanoidPreset, HumanoidPresets } from '../../../server/src/world/Presets';
+import { HumanoidPreset, PresetAttitude, resolvePresetAttitude } from '../../../server/src/world/Presets';
 import { PropTable } from './PropTable';
 import { TextureLoader } from '../../../client/src/map/TextureLoader';
 import { CancellableProcess } from '../../../common/util/CancellableProcess';
@@ -73,6 +73,11 @@ export class ShowCharacter extends React.Component<Props, State> {
                     <div>
                         <span className="prop-name">name </span>
                         <input value={preset.name} onChange={this.changeName}/>
+                        <select value={preset.attitude} onChange={this.changeAttitude}>
+                            <option value="friendly">Friendly</option>
+                            <option value="neutral">Neutral</option>
+                            <option value="hostile">Hostile</option>
+                        </select>
                     </div>
                     <PropTable data={preset.appearance as {}} onChange={this.onChangeAppearance}/>
                     <PropTable data={preset.equipment as {}} onChange={this.onChangeEquipment}/>
@@ -106,6 +111,15 @@ export class ShowCharacter extends React.Component<Props, State> {
         });
     };
 
+    private changeAttitude = (e: React.SyntheticEvent<HTMLSelectElement>) => {
+        this.setState({
+            preset: {
+                ...this.state.preset,
+                attitude: e.currentTarget.value as PresetAttitude,
+            },
+        });
+    };
+
     private createOnChangeHandler<K extends keyof HumanoidPreset>(key: K) {
         return (value: HumanoidPreset[K]) => {
             this.setState({
@@ -130,6 +144,7 @@ export class ShowCharacter extends React.Component<Props, State> {
             hp: 100,
             maxHp: 100,
             player: false,
+            attitude: resolvePresetAttitude(preset.attitude, false),
             interaction: ['quest'],
             position: { x: 0 as X, y: 0 as Y },
             activity,
@@ -140,7 +155,7 @@ export class ShowCharacter extends React.Component<Props, State> {
             direction,
         };
 
-        const character = new HumanoidDisplay(gameContext, entityData);
+        const character = new HumanoidDisplay(gameContext, false, entityData);
         character.init();
         character.x = CANVAS_WIDTH / 2 - 16;
         character.y = 80;

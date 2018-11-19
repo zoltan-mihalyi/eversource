@@ -1,11 +1,16 @@
-import { CreatureEntityData } from '../../../common/domain/CreatureEntityData';
+import { CreatureAttitude, CreatureEntityData } from '../../../common/domain/CreatureEntityData';
 import { UpdatableDisplay } from './UpdatableDisplay';
 import * as PIXI from "pixi.js";
+import { GameContext } from '../game/GameContext';
 
 const HP_BAR_WIDTH = 60;
 
 export abstract class CreatureDisplay<T extends CreatureEntityData> extends UpdatableDisplay<T> {
     protected abstract displayedProperties: (keyof T)[];
+
+    constructor(context: GameContext, private self: boolean, data: T) {
+        super(context, data);
+    }
 
     protected buildShadow() {
         const shadow = this.context.textureLoader.createAnimatedSprite('misc', 'shadow');
@@ -35,13 +40,13 @@ export abstract class CreatureDisplay<T extends CreatureEntityData> extends Upda
         if (hpGraphics) {
             hpGraphics.clear();
 
-            hpGraphics.beginFill(0x888888);
+            hpGraphics.beginFill(0x555555);
             hpGraphics.drawRect(-HP_BAR_WIDTH / 2 - 1 + 16, -1, HP_BAR_WIDTH + 2, 4 + 2);
 
             hpGraphics.beginFill(0x000000);
             hpGraphics.drawRect(-HP_BAR_WIDTH / 2 + 16, 0, HP_BAR_WIDTH, 4);
 
-            hpGraphics.beginFill(0x00CC2C);
+            hpGraphics.beginFill(attitudeColor(this.self, this.data.attitude));
             hpGraphics.drawRect(-HP_BAR_WIDTH / 2 + 16, 0, this.data.hp / this.data.maxHp * HP_BAR_WIDTH, 4);
         }
     }
@@ -78,5 +83,19 @@ export abstract class CreatureDisplay<T extends CreatureEntityData> extends Upda
             return '#6e96db';
         }
         return super.nameColor();
+    }
+}
+
+function attitudeColor(self: boolean, attitude: CreatureAttitude): number {
+    if (self) {
+        return 0x00CC2C;
+    }
+    switch (attitude) {
+        case CreatureAttitude.FRIENDLY:
+            return 0x6e96db;
+        case CreatureAttitude.NEUTRAL:
+            return 0xe1e000;
+        case CreatureAttitude.HOSTILE:
+            return 0xcc0000;
     }
 }

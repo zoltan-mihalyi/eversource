@@ -1,6 +1,6 @@
 import { Entity, HiddenEntityData } from './Entity';
 import { Grid } from '../../../common/Grid';
-import { BaseCreatureEntityData, CreatureEntityData, Direction } from '../../../common/domain/CreatureEntityData';
+import { BaseCreatureEntityData, CreatureAttitude, CreatureEntityData, Direction } from '../../../common/domain/CreatureEntityData';
 import { HumanoidEntityData } from '../../../common/domain/HumanoidEntityData';
 import { Omit } from '../../../common/util/Omit';
 import { MonsterEntityData } from '../../../common/domain/MonsterEntityData';
@@ -19,6 +19,7 @@ const BASE_CREATURE: Omit<BaseCreatureEntityData, 'position' | 'name'> = {
     hp: 100,
     maxHp: 100,
     player: false,
+    attitude: CreatureAttitude.FRIENDLY,
 };
 
 export const BASE_HUMANOID: BaseHumanoid = {
@@ -30,6 +31,7 @@ type BaseMonster = Omit<MonsterEntityData, 'position' | 'name' | 'image'>;
 
 export const BASE_MONSTER: BaseMonster = {
     ...BASE_CREATURE,
+    attitude: CreatureAttitude.HOSTILE,
     type: 'monster',
     palette: null,
 };

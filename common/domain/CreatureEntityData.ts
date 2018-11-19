@@ -5,6 +5,12 @@ import { MonsterEntityData } from './MonsterEntityData';
 export type Direction = 'up' | 'down' | 'left' | 'right';
 export type CreatureActivity = 'walking' | 'standing' | 'casting';
 
+export const enum CreatureAttitude {
+    FRIENDLY,
+    NEUTRAL,
+    HOSTILE
+}
+
 export interface BaseCreatureEntityData extends BaseEntityData {
     level: number;
     hp: number;
@@ -13,6 +19,7 @@ export interface BaseCreatureEntityData extends BaseEntityData {
     direction: Direction;
     activity: CreatureActivity;
     activitySpeed: number;
+    attitude: CreatureAttitude;
 }
 
 export type CreatureEntityData = HumanoidEntityData | MonsterEntityData;

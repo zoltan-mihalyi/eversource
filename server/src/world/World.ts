@@ -1,9 +1,9 @@
 import { X, Y, ZoneId } from '../../../common/domain/Location';
 import { MapLoader } from './MapLoader';
 import { Zone } from './Zone';
-import { HumanoidPresets, MonsterPresets } from './Presets';
+import { HumanoidPresets, MonsterPresets, resolvePresetAttitude } from './Presets';
 import { BASE_HUMANOID, BASE_MONSTER, CreatureEntity } from '../entity/CreatureEntity';
-import { Direction } from '../../../common/domain/CreatureEntityData';
+import {  Direction } from '../../../common/domain/CreatureEntityData';
 import { WalkingController } from '../entity/controller/WalkingController';
 import { TiledObject } from '../../../common/tiled/interfaces';
 import { HiddenEntityData } from '../entity/Entity';
@@ -71,15 +71,17 @@ export class WorldImpl implements World {
                 const characterEntity = new CreatureEntity({
                     ...BASE_HUMANOID,
                     ...preset,
+                    attitude: resolvePresetAttitude(preset.attitude, false),
                     position,
                     direction,
                 }, getHidden(object), controller);
                 zone.addEntity(characterEntity);
             } else if (object.type === 'monster') {
-                const { name, image, palette, movement } = this.monsterPresets[object.name];
+                const { name, image, palette, movement, attitude } = this.monsterPresets[object.name];
 
                 zone.addEntity(new CreatureEntity({
                     ...BASE_MONSTER,
+                    attitude: resolvePresetAttitude(attitude, true),
                     name,
                     image,
                     palette,
