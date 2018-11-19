@@ -55,6 +55,7 @@ class SpriteContainer extends PIXI.Container {
 export abstract class UpdatableDisplay<T extends EntityData> extends PIXI.Container {
     protected readonly shadowContainer = new PIXI.Container();
     protected readonly spriteContainer: SpriteContainer;
+    protected readonly statusContainer = new PIXI.Container();
     protected readonly textContainer = new PIXI.Container();
     protected readonly interactionContainer = new PIXI.Container();
 
@@ -64,6 +65,7 @@ export abstract class UpdatableDisplay<T extends EntityData> extends PIXI.Contai
         this.addChild(
             this.shadowContainer,
             this.spriteContainer,
+            this.statusContainer,
             this.textContainer,
             this.interactionContainer,
         );
@@ -85,6 +87,7 @@ export abstract class UpdatableDisplay<T extends EntityData> extends PIXI.Contai
             const containers = [
                 this.shadowContainer,
                 this.spriteContainer,
+                this.statusContainer,
                 this.textContainer,
                 this.interactionContainer,
             ];
@@ -127,6 +130,7 @@ export abstract class UpdatableDisplay<T extends EntityData> extends PIXI.Contai
 
         this.buildShadow();
         this.buildSprite();
+        this.buildStatus();
         this.buildText();
         this.buildInteraction();
 
@@ -151,8 +155,9 @@ export abstract class UpdatableDisplay<T extends EntityData> extends PIXI.Contai
 
     private updateStackingElementsPosition() {
         const spriteBounds = this.spriteContainer.getLocalBounds();
-        this.textContainer.y = spriteBounds.y - 16;
-        this.interactionContainer.y = spriteBounds.y - 36;
+        this.statusContainer.y = spriteBounds.y - this.statusContainer.height;
+        this.textContainer.y = this.statusContainer.y - 16;
+        this.interactionContainer.y = this.textContainer.y - 20;
     }
 
     protected buildShadow() {
@@ -177,12 +182,17 @@ export abstract class UpdatableDisplay<T extends EntityData> extends PIXI.Contai
     protected buildSprite() {
     }
 
+    protected buildStatus() {
+    }
+
     hasInteraction(): boolean {
         return this.data.interaction !== null;
     }
 
     updateMouseOverEffect(mouseOver: boolean) {
-        this.textContainer.visible = mouseOver || this.alwaysShowName();
+        const visible = mouseOver || this.alwaysShowName();
+        this.textContainer.visible = visible;
+        this.statusContainer.visible = visible;
     }
 
     onClick() {

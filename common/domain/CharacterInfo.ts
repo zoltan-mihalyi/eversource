@@ -11,6 +11,7 @@ export interface CharacterInfo {
     name: CharacterName;
     classId: ClassId;
     location: Location;
+    hp: number;
     appearance: Appearance;
     equipment: Equipment;
 }

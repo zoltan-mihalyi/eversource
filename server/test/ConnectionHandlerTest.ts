@@ -17,7 +17,7 @@ const characters: CharacterInfo[] = [
         name: 'John' as CharacterName,
         id: '1' as CharacterId,
         classId: 'warrior' as ClassId,
-
+        hp: 100,
         location: {
             position: {
                 x: 100 as X,

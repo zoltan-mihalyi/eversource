@@ -41,7 +41,9 @@ export class CreatureEntity extends Entity<CreatureEntityData> {
     }
 
     update(grid: Grid, delta: number) {
-        const mul = this.getSpeed() / 1000 * delta;
+        const deltaSec = delta / 1000;
+
+        const mul = this.getSpeed() * deltaSec;
 
         this.controller.update(this, delta);
 
@@ -69,8 +71,10 @@ export class CreatureEntity extends Entity<CreatureEntityData> {
             this.setSingle('activity', 'standing');
         }
 
-        const speed = length(dx, dy) * 1000 / delta;
+        const speed = length(dx, dy) / deltaSec;
         this.setSingle('activitySpeed', speed);
+
+        this.setSingle('hp', Math.min(this.state.maxHp, this.state.hp + this.getHpRegen() * deltaSec));
 
         this.updatePlayerState();
     }
@@ -112,6 +116,10 @@ export class CreatureEntity extends Entity<CreatureEntityData> {
 
     private getSpeed() {
         return 4;
+    }
+
+    private getHpRegen() {
+        return 3;
     }
 }
 
