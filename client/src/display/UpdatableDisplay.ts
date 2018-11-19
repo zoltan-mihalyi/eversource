@@ -3,6 +3,7 @@ import { EntityData } from '../../../common/domain/EntityData';
 import { OutlineFilter } from '@pixi/filter-outline';
 import { GOLDEN } from './Cursors';
 import { GameContext } from '../game/GameContext';
+import DestroyOptions = PIXI.DestroyOptions;
 
 const properties: (keyof EntityData)[] = [
     'interaction',
@@ -66,11 +67,17 @@ export abstract class UpdatableDisplay<T extends EntityData> extends PIXI.Contai
             this.textContainer,
             this.interactionContainer,
         );
+        PIXI.ticker.shared.add(this.updateStackingElementsPosition, this);
     }
 
     init() { // build and softUpdate can use child fields which are not initialized in parent constructor
         this.build();
         this.softUpdate();
+    }
+
+    destroy(options?: DestroyOptions | boolean) {
+        super.destroy(options);
+        PIXI.ticker.shared.remove(this.updateStackingElementsPosition, this);
     }
 
     update(changes: Partial<T>) {
@@ -123,6 +130,8 @@ export abstract class UpdatableDisplay<T extends EntityData> extends PIXI.Contai
         this.buildText();
         this.buildInteraction();
 
+        this.updateStackingElementsPosition();
+
         this.spriteContainer.updateMouseOverEffect();
     }
 
@@ -137,8 +146,13 @@ export abstract class UpdatableDisplay<T extends EntityData> extends PIXI.Contai
             align: 'left',
         });
         text.x = 32 / 2 - Math.floor(text.width / 2); // avoid blurry text
-        text.y = -50; // TODO
         this.textContainer.addChild(text);
+    }
+
+    private updateStackingElementsPosition() {
+        const spriteBounds = this.spriteContainer.getLocalBounds();
+        this.textContainer.y = spriteBounds.y - 16;
+        this.interactionContainer.y = spriteBounds.y - 36;
     }
 
     protected buildShadow() {
@@ -153,7 +167,6 @@ export abstract class UpdatableDisplay<T extends EntityData> extends PIXI.Contai
         let i = 0;
         for (const entityInteraction of interaction) {
             const q = this.context.textureLoader.createAnimatedSprite('misc', entityInteraction);
-            q.y = -72; // TODO
             q.x = i * scale * 32;
             q.scale.set(scale);
             this.interactionContainer.addChild(q);
