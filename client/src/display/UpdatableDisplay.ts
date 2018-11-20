@@ -46,7 +46,7 @@ class SpriteContainer extends PIXI.Container {
             this.filters = [this.outlineFilter];
             this.cursor = GOLDEN;
         } else {
-            this.filters = [];
+            this.filters = null;
             this.cursor = '';
         }
     }

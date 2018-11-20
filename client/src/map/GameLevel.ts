@@ -44,6 +44,8 @@ export class GameLevel {
 
     constructor(private playingNetworkApi: PlayingNetworkApi, readonly map: LoadedMap, images: ResourceDictionary) {
         this.tileSet = map.tileSets.map(tileset => new TexturedTileSet(tileset, images));
+        this.chunkBaseContainer.interactiveChildren = false;
+        this.chunkAboveContainer.interactiveChildren = false;
         this.container.addChild(this.chunkBaseContainer);
         this.container.addChild(this.objectContainer);
         this.container.addChild(this.chunkAboveContainer);
@@ -162,9 +164,9 @@ export class GameLevel {
     private createDisplay(self: boolean, data: EntityData): UpdatableDisplay<EntityData> {
         switch (data.type) {
             case 'humanoid':
-                return new HumanoidDisplay(this.context,self, data);
+                return new HumanoidDisplay(this.context, self, data);
             case 'monster':
-                return new MonsterDisplay(this.context,self, data);
+                return new MonsterDisplay(this.context, self, data);
         }
         throw new Error('Unknown entity!');
     }
