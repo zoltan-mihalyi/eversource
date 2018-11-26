@@ -11,6 +11,7 @@ import { CreatureActivity, Direction } from '../../../common/domain/CreatureEnti
 import { HumanoidEntityData } from '../../../common/domain/HumanoidEntityData';
 import { HumanoidDisplay } from '../../../client/src/display/HumanoidDisplay';
 import { GameContext } from '../../../client/src/game/GameContext';
+import { EntityId } from '../../../common/domain/EntityData';
 
 interface Props {
     name: string;
@@ -26,17 +27,12 @@ interface State {
 }
 
 const process = new CancellableProcess();
-const textureLoader = new TextureLoader(process, 32, 'file://' + path.join(wwwDir, 'spritesheets'));
-const gameContext: GameContext = {
-    textureLoader,
-    onInteract: () => {
-    },
-};
 
 const CANVAS_WIDTH = 192;
 
 export class ShowCharacter extends React.Component<Props, State> {
     private app: PIXI.Application;
+    private gameContext: GameContext;
 
     private onChangeAppearance = this.createOnChangeHandler('appearance');
     private onChangeEquipment = this.createOnChangeHandler('equipment');
@@ -50,6 +46,14 @@ export class ShowCharacter extends React.Component<Props, State> {
         };
 
         this.app = new PIXI.Application({ width: CANVAS_WIDTH, height: 144, backgroundColor: 0x2e8036 });
+        const basePath = 'file://' + path.join(wwwDir, 'spritesheets');
+        this.gameContext = {
+            textureLoader: new TextureLoader(this.app.renderer, process, 32, basePath),
+            playingNetworkApi: {
+                interact: () => {
+                },
+            },
+        };
         this.updateCharacter();
     }
 
@@ -80,7 +84,8 @@ export class ShowCharacter extends React.Component<Props, State> {
                             <option value="hostile">Hostile</option>
                         </select>
                         <span className="prop-name">scale </span>
-                        <input type="number" value={preset.scale || 1} step={0.01} min={0.01} onChange={this.changeScale}/>
+                        <input type="number" value={preset.scale || 1} step={0.01} min={0.01}
+                               onChange={this.changeScale}/>
                     </div>
                     <PropTable data={preset.appearance as {}} onChange={this.onChangeAppearance}/>
                     <PropTable data={preset.equipment as {}} onChange={this.onChangeEquipment}/>
@@ -167,7 +172,7 @@ export class ShowCharacter extends React.Component<Props, State> {
             direction,
         };
 
-        const character = new HumanoidDisplay(gameContext, false, entityData);
+        const character = new HumanoidDisplay(0 as EntityId, this.gameContext, entityData, false);
         character.init();
         character.x = CANVAS_WIDTH / 2;
         character.y = 122;

@@ -8,6 +8,7 @@ import { MultiColorReplaceFilter } from '@pixi/filter-multi-color-replace'
 import { TileSet } from '../../../common/tiled/interfaces';
 import { loadTileSet, mergeTileData } from '../../../common/tiled/TiledResolver';
 import { SplitTextureSource } from '../texture/SplitTextureSource';
+import { AnyRenderer, RecoloredAnimatedSprite } from '../texture/RecoloredAnimatedSprite';
 
 interface Animations {
     [key: string]: Texture[];
@@ -69,8 +70,8 @@ export class TextureLoader {
     private tileSetLoader = new TileSetDetailsLoader(this.process, this.baseDir);
     private palettesLoader = new PalettesLoader(this.process, this.baseDir);
 
-    constructor(private readonly process: CancellableProcess, private tileHeight: number,
-                private baseDir = 'spritesheets') {
+    constructor(private renderer: AnyRenderer, private readonly process: CancellableProcess,
+                private tileHeight: number, private baseDir = 'spritesheets') {
     }
 
     loadDetails(requestHolder: PIXI.Container, tileSet: string, callback: (details: TileSetDetails) => void) {
@@ -84,7 +85,7 @@ export class TextureLoader {
     createCustomAnimatedSprite(tileSet: string, image: string, animation: string,
                                palettesFile: string, color?: string): PIXI.extras.AnimatedSprite {
 
-        const sprite = new PIXI.extras.AnimatedSprite([Texture.EMPTY]);
+        const sprite = new RecoloredAnimatedSprite(this.renderer, [PIXI.Texture.EMPTY]);
 
         this.loadDetails(sprite, tileSet, (details: TileSetDetails) => {
             const { tileSet } = details;
@@ -94,16 +95,13 @@ export class TextureLoader {
                 1 - ((this.tileHeight + tileoffset.y) / tileSet.tileheight),
             );
 
-            sprite.textures = details.getAnimations(image)[animation];
+            sprite.setRecolorTextures(details.getAnimations(image)[animation]);
             sprite.play();
         });
 
         if (color) {
             addRequestToContainer(sprite, this.palettesLoader.get(palettesFile!, (palettes) => {
-                const palette = palettes.variations[color];
-                sprite.filters = [new MultiColorReplaceFilter(
-                    palettes.base.map((baseColorInfo, i) => [string2hex(baseColorInfo.color), string2hex(palette[i])]),
-                )];
+                sprite.setRecolor(palettes, color);
             }));
         }
 
@@ -152,8 +150,4 @@ function addRequestToContainer(container: PIXI.Container, request: Request): voi
             r.stop();
         }
     };
-}
-
-function string2hex(color: string): number {
-    return parseInt(color.substring(1), 16);
 }

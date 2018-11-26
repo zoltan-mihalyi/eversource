@@ -5,7 +5,7 @@ import { loadImages } from './ImageLoader';
 const SPLIT_W = 512;
 const SPLIT_H = 512;
 
-const taskQueue = new TaskQueue(2);
+export const taskQueue = new TaskQueue(2);
 
 export class SplitBaseTexture extends BaseTexture {
     constructor(readonly x: number, readonly y: number) {

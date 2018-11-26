@@ -7,6 +7,8 @@ import { EntityData, EntityId } from '../../../common/domain/EntityData';
 import { registerCursors } from '../display/Cursors';
 import { PlayingNetworkApi, PlayingStateData } from '../protocol/PlayingState';
 import { PlayerStateDiff } from '../../../common/protocol/Messages';
+import { TextureLoader } from './TextureLoader';
+import { CancellableProcess } from '../../../common/util/CancellableProcess';
 
 export class GameApplication extends PIXI.Application {
     private viewContainer = new PIXI.Container();
@@ -17,13 +19,16 @@ export class GameApplication extends PIXI.Application {
     private lastMovementIntent: MovementIntent = { x: 0, y: 0 };
     private entityId: EntityId | null = null;
     private gameLevel: GameLevel;
+    private readonly process = new CancellableProcess();
 
     constructor(data: PlayingStateData, private playingNetworkApi: PlayingNetworkApi) {
         super({ antialias: false });
 
         const { map, resources, position } = data;
 
-        const gameLevel = new GameLevel(playingNetworkApi, map, resources);
+        const textureLoader = new TextureLoader(this.renderer, this.process, map.map.tileheight);
+        const gameContext = { textureLoader, playingNetworkApi };
+        const gameLevel = new GameLevel(gameContext, map, resources);
         this.gameLevel = gameLevel;
 
         this.viewContainer.scale.x = map.map.tilewidth;
@@ -42,7 +47,7 @@ export class GameApplication extends PIXI.Application {
     }
 
     destroy() {
-        this.gameLevel.destroy();
+        this.process.stop();
         cancelAnimationFrame(this.timer);
         this.inputManager.destroy();
         super.destroy();
