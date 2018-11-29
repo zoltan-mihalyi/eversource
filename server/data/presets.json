@@ -836,7 +836,7 @@
         "dark"
       ],
       "head": [
-        "ornate_metal_helm",
+        "metal_helm",
         "dark"
       ],
       "feet": [
@@ -858,7 +858,8 @@
       "cape": [],
       "belt": []
     },
-    "name": "Dark Champion"
+    "name": "Dark Champion",
+    "scale": 1
   },
   "silver": {
     "appearance": {
