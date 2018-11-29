@@ -167,6 +167,28 @@ License: CC-BY-SA 3.0
 
 https://opengameart.org/content/rpg-terrains
 
+## LPC masks
+- Nila122
+
+License: GNU GPL 3.0 and CC-BY-SA 3.0
+
+https://opengameart.org/content/lpc-masks
+
+## LPC gentleman
+- bluecarrot16
+
+License: GNU GPL 3.0 and CC-BY-SA 3.0
+
+https://opengameart.org/content/lpc-gentleman
+
+## LPC formal wear
+- pennomi
+- laetissima
+- makrohn
+
+License: GNU GPL 3.0 and CC-BY-SA 3.0
+
+https://opengameart.org/content/lpc-2-characters
 
 ## Universal LPC Sprite Sheet
 - Luke Mehl

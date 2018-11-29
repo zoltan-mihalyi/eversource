@@ -1301,6 +1301,17 @@
                  "width":32,
                  "x":3616,
                  "y":5664
+                }, 
+                {
+                 "height":32,
+                 "id":131,
+                 "name":"wilhelm",
+                 "rotation":0,
+                 "type":"npc",
+                 "visible":true,
+                 "width":32,
+                 "x":3616,
+                 "y":5184
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -1308,7 +1319,7 @@
          "x":0,
          "y":0
         }],
- "nextobjectid":130,
+ "nextobjectid":132,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.1.6",

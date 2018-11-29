@@ -5,6 +5,7 @@ export const monsterPresets: MonsterPresets = {
         "name": "Bee",
         "image": "bee",
         "palette": null,
+        "scale": 0.8,
         "movement": {
             "interval": 2,
             "radiusX": 1,
@@ -76,6 +77,10 @@ export const monsterPresets: MonsterPresets = {
         "name": "Black Widow",
         "image": "spider01",
         "palette": "black-widow",
+        "scale": 1.5,
+        "movement": {
+            "speed": 1.5,
+        }
     },
     "golem": {
         "name": "Golem",
@@ -86,11 +91,13 @@ export const monsterPresets: MonsterPresets = {
         "name": "Dirt Golem",
         "image": "golem",
         "palette": "dirt",
+        "scale": 1.5
     },
     "golem_emerald": {
         "name": "Emerald Golem",
         "image": "golem",
         "palette": "emerald",
+        "scale": 1.5
     },
     "golem_gold": {
         "name": "Gold Golem",
@@ -101,6 +108,7 @@ export const monsterPresets: MonsterPresets = {
         "name": "Lava Golem",
         "image": "golem",
         "palette": "lava",
+        "scale": 1.5
     },
     "golem_ice": {
         "name": "Ice Golem",
@@ -118,6 +126,7 @@ export const monsterPresets: MonsterPresets = {
         "name": "Stone Golem",
         "image": "golem",
         "palette": "stone",
+        "scale": 1.5
     },
     "golem_pink": {
         "name": "Tourmaline Golem",
@@ -153,6 +162,7 @@ export const monsterPresets: MonsterPresets = {
         "name": "Souleater Imp",
         "image": "imp",
         "palette": "dark",
+        "scale": 1.5
     },
     "imp_void": {
         "name": "Void Imp",

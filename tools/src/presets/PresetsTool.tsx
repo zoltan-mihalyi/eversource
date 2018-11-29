@@ -133,6 +133,7 @@ export class PresetsTool extends React.Component<Props, State> {
                 hands: [],
                 feet: [],
                 chest: [],
+                mask: [],
             },
         };
 

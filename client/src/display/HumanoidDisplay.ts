@@ -14,6 +14,7 @@ const PARTS = [
     'belt',
     'facial',
     'hair',
+    'mask',
     'ears',
     'arms',
     'hands',
@@ -61,7 +62,7 @@ export class HumanoidDisplay extends CreatureDisplay<HumanoidEntityData> {
                     break;
                 default:
                     image = `character/${part}/${appearance.sex}/${value}`;
-                    paletteFile= `character/${getPaletteFile(part, value)}`;
+                    paletteFile = `character/${getPaletteFile(part, value)}`;
             }
 
 

@@ -1,6 +1,11 @@
 import { Entity, HiddenEntityData } from './Entity';
 import { Grid } from '../../../common/Grid';
-import { BaseCreatureEntityData, CreatureAttitude, CreatureEntityData, Direction } from '../../../common/domain/CreatureEntityData';
+import {
+    BaseCreatureEntityData,
+    CreatureAttitude,
+    CreatureEntityData,
+    Direction,
+} from '../../../common/domain/CreatureEntityData';
 import { HumanoidEntityData } from '../../../common/domain/HumanoidEntityData';
 import { Omit } from '../../../common/util/Omit';
 import { MonsterEntityData } from '../../../common/domain/MonsterEntityData';

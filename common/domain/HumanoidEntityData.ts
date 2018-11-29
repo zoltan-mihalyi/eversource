@@ -21,6 +21,7 @@ export interface Equipment {
     legs: ColoredImage;
     hands: ColoredImage;
     feet: ColoredImage;
+    mask: ColoredImage;
 }
 
 export interface HumanoidEntityData extends BaseCreatureEntityData {

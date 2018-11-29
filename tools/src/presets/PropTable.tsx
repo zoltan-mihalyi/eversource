@@ -44,6 +44,7 @@ const possibleValues: { [P in keyof PropData]: string[] } = {
     arms: filesInDir('arms/female'),
     hands: filesInDir('hands/female'),
     shirt: filesInDir('shirt/female'),
+    mask: filesInDir('mask/female'),
 };
 
 interface State {

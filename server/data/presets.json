@@ -26,7 +26,8 @@
       "hands": [],
       "arms": [],
       "cape": [],
-      "belt": []
+      "belt": [],
+      "mask": []
     },
     "name": "Orc",
     "attitude": "hostile"
@@ -73,7 +74,8 @@
       "cape": [],
       "belt": [
         "overskirt"
-      ]
+      ],
+      "mask": []
     },
     "name": "Diana"
   },
@@ -113,7 +115,8 @@
       "hands": [],
       "arms": [],
       "cape": [],
-      "belt": []
+      "belt": [],
+      "mask": []
     },
     "name": "Cacal"
   },
@@ -160,7 +163,8 @@
         "normal",
         "white"
       ],
-      "belt": []
+      "belt": [],
+      "mask": []
     },
     "name": "Priest"
   },
@@ -204,7 +208,8 @@
       "hands": [],
       "arms": [],
       "cape": [],
-      "belt": []
+      "belt": [],
+      "mask": []
     },
     "name": "Warlock"
   },
@@ -242,7 +247,8 @@
       "hands": [],
       "arms": [],
       "cape": [],
-      "belt": []
+      "belt": [],
+      "mask": []
     },
     "name": "Mage"
   },
@@ -281,7 +287,8 @@
       "cape": [],
       "belt": [
         "cloth"
-      ]
+      ],
+      "mask": []
     },
     "name": "Monk"
   },
@@ -320,7 +327,8 @@
         "plate"
       ],
       "cape": [],
-      "belt": []
+      "belt": [],
+      "mask": []
     },
     "name": "Knight"
   },
@@ -362,7 +370,8 @@
         "bordered",
         "maroon"
       ],
-      "belt": []
+      "belt": [],
+      "mask": []
     },
     "name": "Lieutenant Murova"
   },
@@ -413,6 +422,9 @@
       "belt": [
         "cloth",
         "teal"
+      ],
+      "mask": [
+        "formal_glasses"
       ]
     },
     "name": "Kumas"
@@ -462,7 +474,8 @@
       ],
       "arms": [],
       "cape": [],
-      "belt": []
+      "belt": [],
+      "mask": []
     },
     "name": "Forester Nefag"
   },
@@ -504,7 +517,10 @@
       "hands": [],
       "arms": [],
       "cape": [],
-      "belt": []
+      "belt": [],
+      "mask": [
+        "patch"
+      ]
     },
     "name": "Bandit",
     "attitude": "hostile"
@@ -548,10 +564,12 @@
       "hands": [],
       "arms": [],
       "cape": [],
-      "belt": []
+      "belt": [],
+      "mask": []
     },
     "name": "Apprentice Bandit",
-    "attitude": "hostile"
+    "attitude": "hostile",
+    "scale": 0.9
   },
   "skeleton_warlock": {
     "appearance": {
@@ -580,7 +598,8 @@
       "hands": [],
       "arms": [],
       "cape": [],
-      "belt": []
+      "belt": [],
+      "mask": []
     },
     "name": "Skeleton Warlock",
     "attitude": "hostile"
@@ -614,7 +633,8 @@
       "hands": [],
       "arms": [],
       "cape": [],
-      "belt": []
+      "belt": [],
+      "mask": []
     },
     "name": "Skeleton Hunter",
     "attitude": "hostile"
@@ -652,11 +672,12 @@
         "tattered",
         "maroon"
       ],
-      "belt": []
+      "belt": [],
+      "mask": []
     },
     "name": "Skeleton Lava Warrior",
     "attitude": "hostile",
-    "scale": 2
+    "scale": 1.2
   },
   "skeleton_punk": {
     "appearance": {
@@ -683,7 +704,8 @@
       "hands": [],
       "arms": [],
       "cape": [],
-      "belt": []
+      "belt": [],
+      "mask": []
     },
     "name": "Skeleton Punk",
     "attitude": "hostile"
@@ -716,7 +738,8 @@
       "hands": [],
       "arms": [],
       "cape": [],
-      "belt": []
+      "belt": [],
+      "mask": []
     },
     "name": "Skeleton Priest",
     "attitude": "hostile"
@@ -766,7 +789,8 @@
         "normal",
         "blue"
       ],
-      "belt": []
+      "belt": [],
+      "mask": []
     },
     "name": "Protector Treguna"
   },
@@ -813,7 +837,8 @@
         "normal",
         "blue"
       ],
-      "belt": []
+      "belt": [],
+      "mask": []
     },
     "name": "Bronze Champion"
   },
@@ -857,7 +882,8 @@
         "dark"
       ],
       "cape": [],
-      "belt": []
+      "belt": [],
+      "mask": []
     },
     "name": "Dark Champion",
     "scale": 1
@@ -904,7 +930,8 @@
         "normal",
         "green"
       ],
-      "belt": []
+      "belt": [],
+      "mask": []
     },
     "name": "Silver Champion"
   },
@@ -951,7 +978,8 @@
         "normal",
         "black"
       ],
-      "belt": []
+      "belt": [],
+      "mask": []
     },
     "name": "Dark George"
   },
@@ -989,7 +1017,8 @@
       ],
       "chest": [
         "dress_with_sash"
-      ]
+      ],
+      "mask": []
     }
   },
   "kia_rak": {
@@ -1028,7 +1057,8 @@
       ],
       "chest": [
         "dress_with_sash"
-      ]
+      ],
+      "mask": []
     }
   },
   "tia_rak": {
@@ -1071,7 +1101,8 @@
         "shoes",
         "white"
       ],
-      "chest": []
+      "chest": [],
+      "mask": []
     }
   },
   "cactus_bonus": {
@@ -1116,7 +1147,8 @@
       "chest": [
         "plate",
         "brass"
-      ]
+      ],
+      "mask": []
     }
   },
   "obelus": {
@@ -1159,7 +1191,8 @@
       "chest": [
         "legion",
         "steel"
-      ]
+      ],
+      "mask": []
     }
   },
   "legionary": {
@@ -1198,7 +1231,8 @@
       "chest": [
         "legion",
         "brass"
-      ]
+      ],
+      "mask": []
     }
   },
   "butcher_bob": {
@@ -1237,7 +1271,8 @@
       ],
       "chest": [
         "apron"
-      ]
+      ],
+      "mask": []
     }
   },
   "smith_sam": {
@@ -1281,7 +1316,8 @@
       "chest": [
         "apron",
         "gray"
-      ]
+      ],
+      "mask": []
     }
   },
   "miller_mike": {
@@ -1327,7 +1363,8 @@
       "chest": [
         "apron",
         "bright"
-      ]
+      ],
+      "mask": []
     }
   },
   "fishmonger_filomena": {
@@ -1375,7 +1412,8 @@
       "chest": [
         "apron",
         "brown"
-      ]
+      ],
+      "mask": []
     }
   },
   "gargon_servant": {
@@ -1412,7 +1450,8 @@
       "feet": [
         "sandals"
       ],
-      "chest": []
+      "chest": [],
+      "mask": []
     },
     "attitude": "neutral"
   },
@@ -1457,8 +1496,93 @@
       "chest": [
         "legion",
         "steel"
-      ]
+      ],
+      "mask": []
     },
     "attitude": "neutral"
+  },
+  "?": {
+    "name": "?",
+    "appearance": {
+      "sex": "female",
+      "body": [
+        "normal",
+        "tanned"
+      ],
+      "nose": [],
+      "facial": [],
+      "hair": [
+        "ponytail2",
+        "light-blonde"
+      ],
+      "eyes": [],
+      "ears": []
+    },
+    "equipment": {
+      "shirt": [
+        "underdress"
+      ],
+      "legs": [],
+      "head": [],
+      "cape": [],
+      "belt": [],
+      "arms": [],
+      "hands": [],
+      "feet": [],
+      "chest": [
+        "vest"
+      ],
+      "mask": [
+        "mask"
+      ]
+    }
+  },
+  "wilhelm": {
+    "name": "Baron Wilhelm",
+    "appearance": {
+      "sex": "male",
+      "body": [
+        "normal"
+      ],
+      "nose": [],
+      "facial": [
+        "bigstache",
+        "brown"
+      ],
+      "hair": [
+        "bangslong",
+        "brown"
+      ],
+      "eyes": [],
+      "ears": []
+    },
+    "equipment": {
+      "shirt": [],
+      "legs": [
+        "plate",
+        "silver"
+      ],
+      "head": [],
+      "cape": [],
+      "belt": [],
+      "arms": [
+        "plate",
+        "silver"
+      ],
+      "hands": [
+        "gloves",
+        "silver"
+      ],
+      "feet": [
+        "shoes"
+      ],
+      "chest": [
+        "plate",
+        "silver"
+      ],
+      "mask": [
+        "formal_monocle"
+      ]
+    }
   }
 }

@@ -1,0 +1,48 @@
+{
+  "base": [
+    {
+      "color": "#949494",
+      "coordinates": [
+        24,
+        87
+      ]
+    },
+    {
+      "color": "#e3e3e3",
+      "coordinates": [
+        24,
+        88
+      ]
+    },
+    {
+      "color": "#d0d0d0",
+      "coordinates": [
+        27,
+        88
+      ]
+    },
+    {
+      "color": "#b5b5b5",
+      "coordinates": [
+        30,
+        88
+      ]
+    },
+    {
+      "color": "#ffffff",
+      "coordinates": [
+        24,
+        89
+      ]
+    }
+  ],
+  "variations": {
+    "dark": [
+      "#4f4843",
+      "#6f6c6a",
+      "#66625f",
+      "#5c5652",
+      "#817f81"
+    ]
+  }
+}
