@@ -128,32 +128,56 @@ export abstract class Entity<O extends EntityData = EntityData> {
         let newX = x + dx;
         let newY = y + dy;
 
+        const halfSize = this.getSize() / 2;
+
         if (dx !== 0) {
             const dir = Math.sign(dx);
-            const side = dir === 1 ? 1 : 0;
+            const goingRight = dir > 0;
+            const side = halfSize * dir;
 
-            for (let i = Math.floor(x); i * dir <= Math.floor(newX) * dir; i += dir) {
-                const edge1 = getHorizontalEdge(grid.getBlock(i + side, Math.floor(y)), 1 - side, y % 1);
-                const edge2 = getHorizontalEdge(grid.getBlock(i + side, Math.floor(y)), 1 - side, 1);
-                const edge3 = getHorizontalEdge(grid.getBlock(i + side, Math.ceil(y)), 1 - side, y % 1);
-                const closestEdge = Math.min(edge1 * dir, edge2 * dir, edge3 * dir) * dir;
-                if ((newX * dir) > (i + closestEdge) * dir) {
-                    newX = (i + closestEdge);
+            const top = y - halfSize;
+            const bottom = y + halfSize - 1;
+
+            for (let i = Math.floor(x + side); i * dir <= Math.floor(newX + side) * dir; i += dir) {
+                const edges = [
+                    getHorizontalEdge(grid.getBlock(i, Math.floor(top)), goingRight, top % 1),
+                    getHorizontalEdge(grid.getBlock(i, Math.ceil(bottom)), goingRight, (bottom % 1) || 1),
+                ];
+
+                for (let j = Math.floor(top); j < Math.ceil(bottom); j += 1) {
+                    edges.push(getHorizontalEdge(grid.getBlock(i, j), goingRight, 1));
+                }
+
+                const closestEdge = dir === -1 ? Math.max(...edges) : Math.min(...edges);
+                const closestX = i + closestEdge - side;
+                if (newX * dir > closestX * dir) {
+                    newX = closestX;
                     break;
                 }
             }
         }
         if (dy !== 0) {
             const dir = Math.sign(dy);
-            const side = dir === 1 ? 1 : 0;
+            const goingDown = dir > 0;
+            const side = halfSize * dir;
 
-            for (let i = Math.floor(y); i * dir <= Math.floor(newY) * dir; i += dir) {
-                const edge1 = getVerticalEdge(grid.getBlock(Math.floor(newX), i + side), 1 - side, newX % 1);
-                const edge2 = getVerticalEdge(grid.getBlock(Math.floor(newX), i + side), 1 - side, 1);
-                const edge3 = getVerticalEdge(grid.getBlock(Math.ceil(newX), i + side), 1 - side, newX % 1);
-                const closestEdge = Math.min(edge1 * dir, edge2 * dir, edge3 * dir) * dir;
-                if ((newY * dir) > (i + closestEdge) * dir) {
-                    newY = (i + closestEdge);
+            const left = newX - halfSize;
+            const right = newX + halfSize- 1;
+
+            for (let j = Math.floor(y + side); j * dir <= Math.floor(newY + side) * dir; j += dir) {
+                const edges = [
+                    getVerticalEdge(grid.getBlock(Math.floor(left), j), goingDown, left % 1),
+                    getVerticalEdge(grid.getBlock(Math.ceil(right), j), goingDown, (right % 1) || 1),
+                ];
+
+                for (let i = Math.floor(left); i < Math.ceil(right); i += 1) {
+                    edges.push(getHorizontalEdge(grid.getBlock(i, j), goingDown, 1));
+                }
+
+                const closestEdge = dir === -1 ? Math.max(...edges) : Math.min(...edges);
+                const closestY = j + closestEdge - side;
+                if (newY * dir > closestY * dir) {
+                    newY = closestY;
                     break;
                 }
             }
@@ -165,6 +189,8 @@ export abstract class Entity<O extends EntityData = EntityData> {
             });
         }
     }
+
+    protected abstract getSize(): number;
 }
 
 function canAcceptQuest(done: Set<QuestId>, quest: Quest) { // TODO refactor this
@@ -180,37 +206,37 @@ function extendInteraction(base: EntityInteractions | null, extra: EntityInterac
     return Array.from(new Set([...base || [], ...extra])) as EntityInteractions;
 }
 
-function getHorizontalEdge(block: GridBlock, side: number, y: number) {
+function getHorizontalEdge(block: GridBlock, goingRight: boolean, y: number) {
     switch (block) {
         case GridBlock.EMPTY:
-            return side === 0 ? Infinity : -Infinity;
+            return goingRight ? Infinity : -Infinity;
         case GridBlock.TOP_LEFT:
-            return side === 0 ? 0 : 1 - y;
+            return goingRight ? 0 : 1 - y;
         case GridBlock.TOP_RIGHT:
-            return side === 1 ? 1 : y;
+            return goingRight ? y : 1;
         case GridBlock.BOTTOM_LEFT:
-            return side === 0 ? 0 : y;
+            return goingRight ? 0 : y;
         case GridBlock.BOTTOM_RIGHT:
-            return side === 1 ? 1 : 1 - y;
+            return goingRight ? 1 - y : 1;
         default:
-            return side;
+            return goingRight ? 0 : 1;
     }
 }
 
-function getVerticalEdge(block: GridBlock, side: number, x: number) {
+function getVerticalEdge(block: GridBlock, goingDown: boolean, x: number) {
     switch (block) {
         case GridBlock.EMPTY:
-            return side === 0 ? Infinity : -Infinity;
+            return goingDown ? Infinity : -Infinity;
         case GridBlock.TOP_LEFT:
-            return side === 0 ? 0 : 1 - x;
+            return goingDown ? 0 : 1 - x;
         case GridBlock.TOP_RIGHT:
-            return side === 0 ? 0 : x;
+            return goingDown ? 0 : x;
         case GridBlock.BOTTOM_LEFT:
-            return side === 1 ? 1 : x;
+            return goingDown ? x : 1;
         case GridBlock.BOTTOM_RIGHT:
-            return side === 1 ? 1 : 1 - x;
+            return goingDown ? 1 - x : 1;
         default:
-            return side;
+            return goingDown ? 0 : 1;
     }
 }
 

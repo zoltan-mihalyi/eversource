@@ -35,6 +35,7 @@ export const monsterPresets: MonsterPresets = {
         "name": "Queen Bee",
         "image": "bee",
         "palette": "gold",
+        "scale": 1.5,
         "movement": {
             "interval": 5,
             "speed": 1,
@@ -64,6 +65,7 @@ export const monsterPresets: MonsterPresets = {
         "name": "Lava Rock Slime",
         "image": "slime",
         "palette": "lava-rock",
+        "attitude": "neutral",
     },
     "spider": {
         "name": "Forest Spider",
@@ -109,6 +111,8 @@ export const monsterPresets: MonsterPresets = {
         "name": "Forest Golem",
         "image": "golem",
         "palette": "forest",
+        "attitude": "friendly",
+        "scale": 2,
     },
     "golem_stone": {
         "name": "Stone Golem",

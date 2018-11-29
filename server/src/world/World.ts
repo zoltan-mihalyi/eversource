@@ -1,7 +1,7 @@
 import { X, Y, ZoneId } from '../../../common/domain/Location';
 import { MapLoader } from './MapLoader';
 import { Zone } from './Zone';
-import { HumanoidPresets, MonsterPresets } from './Presets';
+import { HumanoidPresets, MonsterPresets, resolvePresetAttitude } from './Presets';
 import { BASE_HUMANOID, BASE_MONSTER, CreatureEntity } from '../entity/CreatureEntity';
 import { Direction } from '../../../common/domain/CreatureEntityData';
 import { WalkingController } from '../entity/controller/WalkingController';
@@ -57,8 +57,8 @@ export class WorldImpl implements World {
 
         for (const object of mapData.objects) {
             const position = {
-                x: object.x / mapData.tileWidth as X,
-                y: object.y / mapData.tileHeight as Y,
+                x: (object.x + object.width / 2) / mapData.tileWidth as X,
+                y: (object.y + object.height / 2) / mapData.tileHeight as Y,
             };
             const properties = object.properties || {};
             if (object.type === 'npc') {
@@ -71,15 +71,19 @@ export class WorldImpl implements World {
                 const characterEntity = new CreatureEntity({
                     ...BASE_HUMANOID,
                     ...preset,
+                    attitude: resolvePresetAttitude(preset.attitude, false),
+                    scale: preset.scale || 1,
                     position,
                     direction,
                 }, getHidden(object), controller);
                 zone.addEntity(characterEntity);
             } else if (object.type === 'monster') {
-                const { name, image, palette, movement } = this.monsterPresets[object.name];
+                const { name, image, palette, movement, attitude, scale } = this.monsterPresets[object.name];
 
                 zone.addEntity(new CreatureEntity({
                     ...BASE_MONSTER,
+                    attitude: resolvePresetAttitude(attitude, true),
+                    scale: scale || 1,
                     name,
                     image,
                     palette,

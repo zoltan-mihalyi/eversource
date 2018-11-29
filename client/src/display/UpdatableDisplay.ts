@@ -3,6 +3,7 @@ import { EntityData } from '../../../common/domain/EntityData';
 import { OutlineFilter } from '@pixi/filter-outline';
 import { GOLDEN } from './Cursors';
 import { GameContext } from '../game/GameContext';
+import DestroyOptions = PIXI.DestroyOptions;
 
 const properties: (keyof EntityData)[] = [
     'interaction',
@@ -54,6 +55,7 @@ class SpriteContainer extends PIXI.Container {
 export abstract class UpdatableDisplay<T extends EntityData> extends PIXI.Container {
     protected readonly shadowContainer = new PIXI.Container();
     protected readonly spriteContainer: SpriteContainer;
+    protected readonly statusContainer = new PIXI.Container();
     protected readonly textContainer = new PIXI.Container();
     protected readonly interactionContainer = new PIXI.Container();
 
@@ -63,9 +65,11 @@ export abstract class UpdatableDisplay<T extends EntityData> extends PIXI.Contai
         this.addChild(
             this.shadowContainer,
             this.spriteContainer,
+            this.statusContainer,
             this.textContainer,
             this.interactionContainer,
         );
+        PIXI.ticker.shared.add(this.updateStackingElementsPosition, this);
     }
 
     init() { // build and softUpdate can use child fields which are not initialized in parent constructor
@@ -73,11 +77,17 @@ export abstract class UpdatableDisplay<T extends EntityData> extends PIXI.Contai
         this.softUpdate();
     }
 
+    destroy(options?: DestroyOptions | boolean) {
+        super.destroy(options);
+        PIXI.ticker.shared.remove(this.updateStackingElementsPosition, this);
+    }
+
     update(changes: Partial<T>) {
         if (!this.matches(changes)) {
             const containers = [
                 this.shadowContainer,
                 this.spriteContainer,
+                this.statusContainer,
                 this.textContainer,
                 this.interactionContainer,
             ];
@@ -120,8 +130,11 @@ export abstract class UpdatableDisplay<T extends EntityData> extends PIXI.Contai
 
         this.buildShadow();
         this.buildSprite();
+        this.buildStatus();
         this.buildText();
         this.buildInteraction();
+
+        this.updateStackingElementsPosition();
 
         this.spriteContainer.updateMouseOverEffect();
     }
@@ -136,9 +149,15 @@ export abstract class UpdatableDisplay<T extends EntityData> extends PIXI.Contai
             strokeThickness: 0.7,
             align: 'left',
         });
-        text.x = 32 / 2 - Math.floor(text.width / 2); // avoid blurry text
-        text.y = -50; // TODO
+        text.x = -Math.floor(text.width / 2); // avoid blurry text
         this.textContainer.addChild(text);
+    }
+
+    private updateStackingElementsPosition() {
+        const spriteTop = this.spriteContainer.scale.y * this.spriteContainer.getLocalBounds().y;
+        this.statusContainer.y = spriteTop - this.statusContainer.height;
+        this.textContainer.y = this.statusContainer.y - 17;
+        this.interactionContainer.y = this.textContainer.y;
     }
 
     protected buildShadow() {
@@ -153,8 +172,8 @@ export abstract class UpdatableDisplay<T extends EntityData> extends PIXI.Contai
         let i = 0;
         for (const entityInteraction of interaction) {
             const q = this.context.textureLoader.createAnimatedSprite('misc', entityInteraction);
-            q.y = -72; // TODO
-            q.x = i * scale * 32;
+            q.x = (i - (interaction.length - 1) / 2) * scale * 20;
+            q.y = -scale * 6;
             q.scale.set(scale);
             this.interactionContainer.addChild(q);
             i++;
@@ -164,12 +183,17 @@ export abstract class UpdatableDisplay<T extends EntityData> extends PIXI.Contai
     protected buildSprite() {
     }
 
+    protected buildStatus() {
+    }
+
     hasInteraction(): boolean {
         return this.data.interaction !== null;
     }
 
     updateMouseOverEffect(mouseOver: boolean) {
-        this.textContainer.visible = mouseOver || this.alwaysShowName();
+        const visible = mouseOver || this.alwaysShowName();
+        this.textContainer.visible = visible;
+        this.statusContainer.visible = visible;
     }
 
     onClick() {

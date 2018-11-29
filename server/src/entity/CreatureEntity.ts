@@ -1,6 +1,6 @@
 import { Entity, HiddenEntityData } from './Entity';
 import { Grid } from '../../../common/Grid';
-import { BaseCreatureEntityData, CreatureEntityData, Direction } from '../../../common/domain/CreatureEntityData';
+import { BaseCreatureEntityData, CreatureAttitude, CreatureEntityData, Direction } from '../../../common/domain/CreatureEntityData';
 import { HumanoidEntityData } from '../../../common/domain/HumanoidEntityData';
 import { Omit } from '../../../common/util/Omit';
 import { MonsterEntityData } from '../../../common/domain/MonsterEntityData';
@@ -8,9 +8,9 @@ import { Controller } from './controller/Controller';
 import { canInteract } from '../../../common/game/Interaction';
 import { questsById } from '../quest/QuestIndexer';
 
-type BaseHumanoid = Omit<HumanoidEntityData, 'position' | 'name' | 'appearance' | 'equipment'>;
+type BaseHumanoid = Omit<HumanoidEntityData, 'position' | 'name' | 'scale' | 'appearance' | 'equipment'>;
 
-const BASE_CREATURE: Omit<BaseCreatureEntityData, 'position' | 'name'> = {
+const BASE_CREATURE: Omit<BaseCreatureEntityData, 'position' | 'name' | 'scale'> = {
     activity: 'standing',
     activitySpeed: 0,
     direction: 'down',
@@ -19,6 +19,7 @@ const BASE_CREATURE: Omit<BaseCreatureEntityData, 'position' | 'name'> = {
     hp: 100,
     maxHp: 100,
     player: false,
+    attitude: CreatureAttitude.FRIENDLY,
 };
 
 export const BASE_HUMANOID: BaseHumanoid = {
@@ -26,10 +27,11 @@ export const BASE_HUMANOID: BaseHumanoid = {
     type: 'humanoid',
 };
 
-type BaseMonster = Omit<MonsterEntityData, 'position' | 'name' | 'image'>;
+type BaseMonster = Omit<MonsterEntityData, 'position' | 'name' | 'scale' | 'image'>;
 
 export const BASE_MONSTER: BaseMonster = {
     ...BASE_CREATURE,
+    attitude: CreatureAttitude.HOSTILE,
     type: 'monster',
     palette: null,
 };
@@ -41,7 +43,9 @@ export class CreatureEntity extends Entity<CreatureEntityData> {
     }
 
     update(grid: Grid, delta: number) {
-        const mul = this.getSpeed() / 1000 * delta;
+        const deltaSec = delta / 1000;
+
+        const mul = this.getSpeed() * deltaSec;
 
         this.controller.update(this, delta);
 
@@ -69,8 +73,10 @@ export class CreatureEntity extends Entity<CreatureEntityData> {
             this.setSingle('activity', 'standing');
         }
 
-        const speed = length(dx, dy) * 1000 / delta;
+        const speed = length(dx, dy) / deltaSec;
         this.setSingle('activitySpeed', speed);
+
+        this.setSingle('hp', Math.min(this.state.maxHp, this.state.hp + this.getHpRegen() * deltaSec));
 
         this.updatePlayerState();
     }
@@ -98,6 +104,10 @@ export class CreatureEntity extends Entity<CreatureEntityData> {
         });
     }
 
+    protected getSize() {
+        return this.state.scale;
+    }
+
     private updatePlayerState() {
         const { player } = this.hidden;
         if (!player) {
@@ -112,6 +122,10 @@ export class CreatureEntity extends Entity<CreatureEntityData> {
 
     private getSpeed() {
         return 4;
+    }
+
+    private getHpRegen() {
+        return 3;
     }
 }
 

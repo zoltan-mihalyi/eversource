@@ -28,7 +28,8 @@
       "cape": [],
       "belt": []
     },
-    "name": "Orc"
+    "name": "Orc",
+    "attitude": "hostile"
   },
   "diana": {
     "appearance": {
@@ -74,7 +75,8 @@
         "overskirt"
       ]
     },
-    "name": "Diana"
+    "name": "Diana",
+    "attitude": "hostile"
   },
   "cacal": {
     "appearance": {
@@ -503,7 +505,8 @@
       "cape": [],
       "belt": []
     },
-    "name": "Bandit"
+    "name": "Bandit",
+    "attitude": "hostile"
   },
   "bandit_dock": {
     "appearance": {
@@ -546,7 +549,8 @@
       "cape": [],
       "belt": []
     },
-    "name": "Apprentice Bandit"
+    "name": "Apprentice Bandit",
+    "attitude": "hostile"
   },
   "skeleton_warlock": {
     "appearance": {
@@ -577,7 +581,8 @@
       "cape": [],
       "belt": []
     },
-    "name": "Skeleton Warlock"
+    "name": "Skeleton Warlock",
+    "attitude": "hostile"
   },
   "skeleton_hunter": {
     "appearance": {
@@ -610,7 +615,8 @@
       "cape": [],
       "belt": []
     },
-    "name": "Skeleton Hunter"
+    "name": "Skeleton Hunter",
+    "attitude": "hostile"
   },
   "skeleton_lava_warrior": {
     "appearance": {
@@ -647,7 +653,9 @@
       ],
       "belt": []
     },
-    "name": "Skeleton Lava Warrior"
+    "name": "Skeleton Lava Warrior",
+    "attitude": "hostile",
+    "scale": 2
   },
   "skeleton_punk": {
     "appearance": {
@@ -676,7 +684,8 @@
       "cape": [],
       "belt": []
     },
-    "name": "Skeleton Punk"
+    "name": "Skeleton Punk",
+    "attitude": "hostile"
   },
   "skeleton_priest": {
     "appearance": {
@@ -708,7 +717,8 @@
       "cape": [],
       "belt": []
     },
-    "name": "Skeleton Priest"
+    "name": "Skeleton Priest",
+    "attitude": "hostile"
   },
   "protector": {
     "appearance": {
@@ -1401,7 +1411,8 @@
         "sandals"
       ],
       "chest": []
-    }
+    },
+    "attitude": "neutral"
   },
   "gargon_captain": {
     "name": "Gargon Captain",
@@ -1444,6 +1455,7 @@
         "legion",
         "steel"
       ]
-    }
+    },
+    "attitude": "neutral"
   }
 }

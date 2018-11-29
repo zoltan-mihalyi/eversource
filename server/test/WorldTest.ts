@@ -66,6 +66,8 @@ describe('World', function () {
                 name: 'orc',
                 x: 320,
                 y: 320,
+                width: 32,
+                height: 32,
                 properties: {},
             } as TiledObject,
             {
@@ -100,7 +102,7 @@ describe('World', function () {
         const world = newWorld(mapLoader, presets);
         const zone = await world.getZone(zoneId);
 
-        const entities = zone.query(10, 10, 10, 10);
+        const entities = zone.query(10.5, 10.5, 10.5, 10.5);
         assert.strictEqual(entities.length, 1);
         const entityData = entities[0].get();
         assert.strictEqual((entityData as HumanoidEntityData).appearance, presets.orc.appearance);
@@ -113,6 +115,8 @@ describe('World', function () {
                 name: 'lava_slime',
                 x: 320,
                 y: 320,
+                width: 32,
+                height: 32,
                 properties: {},
             } as TiledObject,
             {
@@ -129,7 +133,7 @@ describe('World', function () {
         const world = newWorld(mapLoader, void 0, presets);
         const zone = await world.getZone(zoneId);
 
-        const entities = zone.query(10, 10, 10, 10);
+        const entities = zone.query(10.5, 10.5, 10.5, 10.5);
         assert.strictEqual(entities.length, 1);
         const entityData = entities[0].get();
         assert.strictEqual((entityData as MonsterEntityData).image, presets.lava_slime.image);

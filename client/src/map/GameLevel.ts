@@ -33,6 +33,7 @@ export class GameLevel {
     readonly chunkAboveContainer = new PIXI.Container();
     private readonly tileSet: TexturedTileSet[];
     private readonly process = new CancellableProcess();
+    private entityId!: EntityId;
 
     private context: GameContext = {
         onInteract: (display: UpdatableDisplay<any>) => {
@@ -76,7 +77,7 @@ export class GameLevel {
             const id = diff.id;
             switch (diff.type) {
                 case 'create': {
-                    const display = this.createDisplay(diff.data);
+                    const display = this.createDisplay(id === this.entityId, diff.data);
                     display.init();
                     this.entityDisplays.set(id, display);
                     this.displayIds.set(display, id);
@@ -108,6 +109,10 @@ export class GameLevel {
             }
             return difference;
         });
+    }
+
+    setEntityId(entityId: EntityId) {
+        this.entityId = entityId;
     }
 
     round(position: Position): Position {
@@ -154,12 +159,12 @@ export class GameLevel {
         this.process.stop();
     }
 
-    private createDisplay(data: EntityData): UpdatableDisplay<EntityData> {
+    private createDisplay(self: boolean, data: EntityData): UpdatableDisplay<EntityData> {
         switch (data.type) {
             case 'humanoid':
-                return new HumanoidDisplay(this.context, data);
+                return new HumanoidDisplay(this.context,self, data);
             case 'monster':
-                return new MonsterDisplay(this.context, data);
+                return new MonsterDisplay(this.context,self, data);
         }
         throw new Error('Unknown entity!');
     }

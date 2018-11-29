@@ -1,14 +1,25 @@
-import { CreatureEntityData } from '../../../common/domain/CreatureEntityData';
+import { CreatureAttitude, CreatureEntityData } from '../../../common/domain/CreatureEntityData';
 import { UpdatableDisplay } from './UpdatableDisplay';
 import * as PIXI from "pixi.js";
+import { GameContext } from '../game/GameContext';
+
+const HP_BAR_WIDTH = 60;
 
 export abstract class CreatureDisplay<T extends CreatureEntityData> extends UpdatableDisplay<T> {
     protected abstract displayedProperties: (keyof T)[];
+
+    constructor(context: GameContext, private self: boolean, data: T) {
+        super(context, data);
+    }
 
     protected buildShadow() {
         const shadow = this.context.textureLoader.createAnimatedSprite('misc', 'shadow');
         shadow.blendMode = PIXI.BLEND_MODES.MULTIPLY;
         this.shadowContainer.addChild(shadow);
+    }
+
+    protected buildStatus() {
+        this.statusContainer.addChild(new PIXI.Graphics());
     }
 
     protected createAnimatedSprite(tileSet: string, image: string, paletteFile: string, color?: string) {
@@ -23,6 +34,24 @@ export abstract class CreatureDisplay<T extends CreatureEntityData> extends Upda
         for (const child of this.spriteContainer.children) {
             (child as PIXI.extras.AnimatedSprite).animationSpeed = speed;
         }
+
+        this.spriteContainer.scale.set(this.data.scale);
+        this.shadowContainer.scale.set(this.data.scale);
+
+        const hpGraphics = this.statusContainer.children[0] as PIXI.Graphics | undefined;
+
+        if (hpGraphics) {
+            hpGraphics.clear();
+
+            hpGraphics.beginFill(0x555555);
+            hpGraphics.drawRect(-HP_BAR_WIDTH / 2 - 1, -1, HP_BAR_WIDTH + 2, 4 + 2);
+
+            hpGraphics.beginFill(0x000000);
+            hpGraphics.drawRect(-HP_BAR_WIDTH / 2, 0, HP_BAR_WIDTH, 4);
+
+            hpGraphics.beginFill(attitudeColor(this.self, this.data.attitude));
+            hpGraphics.drawRect(-HP_BAR_WIDTH / 2, 0, this.data.hp / this.data.maxHp * HP_BAR_WIDTH, 4);
+        }
     }
 
     protected calculateAnimationSpeed(): number {
@@ -30,7 +59,7 @@ export abstract class CreatureDisplay<T extends CreatureEntityData> extends Upda
             case 'standing':
                 return 0.08;
             case 'walking':
-                return this.data.activitySpeed / 16;
+                return this.data.activitySpeed / 16 / this.data.scale;
             case 'casting':
                 return 0.25;
         }
@@ -57,5 +86,19 @@ export abstract class CreatureDisplay<T extends CreatureEntityData> extends Upda
             return '#6e96db';
         }
         return super.nameColor();
+    }
+}
+
+function attitudeColor(self: boolean, attitude: CreatureAttitude): number {
+    if (self) {
+        return 0x00CC2C;
+    }
+    switch (attitude) {
+        case CreatureAttitude.FRIENDLY:
+            return 0x6e96db;
+        case CreatureAttitude.NEUTRAL:
+            return 0xe1e000;
+        case CreatureAttitude.HOSTILE:
+            return 0xcc0000;
     }
 }

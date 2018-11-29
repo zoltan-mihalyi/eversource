@@ -13,6 +13,7 @@ export class FakeUserDao implements UserDao {
                     id: '1' as CharacterId,
                     name: 'John' as CharacterName,
                     classId: 'warrior' as ClassId,
+                    hp: 50,
 
                     location: {
                         position: {
@@ -50,6 +51,7 @@ export class FakeUserDao implements UserDao {
                 id: '2' as CharacterId,
                 name: 'Robin' as CharacterName,
                 classId: 'hunter' as ClassId,
+                hp: 20,
 
                 location: {
                     position: {
@@ -87,6 +89,7 @@ export class FakeUserDao implements UserDao {
                 id: '3' as CharacterId,
                 name: 'Unimaginable' as CharacterName,
                 classId: 'mage' as ClassId,
+                hp: 80,
 
                 location: {
                     position: {
