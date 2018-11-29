@@ -99,7 +99,7 @@
     "equipment": {
       "chest": [],
       "shirt": [
-        "simple",
+        "sleeveless",
         "maroon"
       ],
       "feet": [
@@ -139,7 +139,7 @@
     },
     "equipment": {
       "shirt": [
-        "simple",
+        "long_sleeve",
         "white"
       ],
       "legs": [
@@ -186,7 +186,7 @@
     },
     "equipment": {
       "shirt": [
-        "simple",
+        "long_sleeve",
         "black"
       ],
       "legs": [
@@ -224,8 +224,8 @@
     },
     "equipment": {
       "shirt": [
-        "simple",
-        "maroon"
+        "sleeveless",
+        "red"
       ],
       "legs": [
         "robe_skirt",
@@ -267,7 +267,7 @@
     },
     "equipment": {
       "shirt": [
-        "simple"
+        "long_sleeve"
       ],
       "legs": [
         "robe_skirt"
@@ -393,7 +393,7 @@
     },
     "equipment": {
       "shirt": [
-        "simple",
+        "long_sleeve",
         "teal"
       ],
       "legs": [
@@ -485,7 +485,7 @@
     },
     "equipment": {
       "shirt": [
-        "simple",
+        "long_sleeve",
         "white"
       ],
       "legs": [
@@ -528,7 +528,7 @@
     },
     "equipment": {
       "shirt": [
-        "simple",
+        "long_sleeve",
         "white"
       ],
       "legs": [
@@ -972,7 +972,7 @@
     },
     "equipment": {
       "shirt": [
-        "simple",
+        "sleeveless",
         "white"
       ],
       "legs": [],
@@ -1012,7 +1012,7 @@
     },
     "equipment": {
       "shirt": [
-        "simple"
+        "sleeveless"
       ],
       "legs": [],
       "head": [],
@@ -1257,7 +1257,7 @@
     },
     "equipment": {
       "shirt": [
-        "simple",
+        "long_sleeve",
         "black"
       ],
       "legs": [
@@ -1352,8 +1352,8 @@
     },
     "equipment": {
       "shirt": [
-        "simple",
-        "white"
+        "long_sleeve",
+        "blue_gray"
       ],
       "legs": [
         "pants",
@@ -1395,7 +1395,7 @@
     },
     "equipment": {
       "shirt": [
-        "simple",
+        "long_sleeve",
         "black"
       ],
       "legs": [
@@ -1436,7 +1436,7 @@
     },
     "equipment": {
       "shirt": [
-        "simple"
+        "sleeveless"
       ],
       "legs": [
         "metal_greaves"
