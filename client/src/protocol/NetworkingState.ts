@@ -1,9 +1,12 @@
-import { ResponseCommand, ResponseTypes } from '../../../common/protocol/Messages';
+import { PlayerStateDiff, ResponseCommand, ResponseTypes } from '../../../common/protocol/Messages';
 import { State } from '../../../common/util/StateManager';
 import { ErrorCode } from '../../../common/protocol/ErrorCode';
 import { CharacterInfo } from '../../../common/domain/CharacterInfo';
 import { Display } from './Display';
 import { Diff } from '../../../common/protocol/Diff';
+import { EntityData, EntityId } from '../../../common/domain/EntityData';
+import { QuestId } from '../../../common/domain/InteractionTable';
+import { QuestLogItem } from '../../../common/protocol/QuestLogItem';
 
 export type ResponseHandler = {
     [P in ResponseCommand]: (data: ResponseTypes[P]) => void;
@@ -17,14 +20,17 @@ export interface NetworkingContext {
 
 const errorMessages: { [P in ErrorCode]: string } = {
     [ErrorCode.VERSION_MISMATCH]: 'Version mismatch',
-    [ErrorCode.MISSING_PARAMETERS]: 'Missing parameters',
+    [ErrorCode.INVALID_REQUEST]: 'Invalid request',
     [ErrorCode.INVALID_CREDENTIALS]: 'Invalid credentials',
 };
 
 const CONNECTION_CLOSED = 'Connection closed';
 
 export abstract class NetworkingState<T> extends State<NetworkingContext, T> implements ResponseHandler {
-    onClose(){
+    onOpen() {
+    }
+
+    onClose() {
         this.context.display.showConnectionError(CONNECTION_CLOSED);
         this.abort();
     }
@@ -44,9 +50,15 @@ export abstract class NetworkingState<T> extends State<NetworkingContext, T> imp
     characters(characters: CharacterInfo[]) {
     }
 
-    diffs(diffs: Diff[]) {
+    world(diffs: Diff<EntityId, EntityData>[]) {
     }
 
-    protected abort(){
+    playerState(playerState: PlayerStateDiff) {
+    }
+
+    questLog(diffs: Diff<QuestId, QuestLogItem>[]) {
+    }
+
+    protected abort() {
     }
 }

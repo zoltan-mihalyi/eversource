@@ -1,8 +1,8 @@
-import { Grid } from '../../common/Grid';
+import { Grid, GridBlock } from '../../common/Grid';
 import * as assert from 'assert';
 
-const X = true;
-const _ = false;
+const X = GridBlock.FULL;
+const _ = GridBlock.EMPTY;
 const grid = new Grid(5, 3, [
     X, _, _, X, _,
     _, _, _, _, _,
@@ -13,10 +13,10 @@ describe('Grid', function () {
     it('should calculate hasBlock properly', function () {
 
 
-        assert(grid.hasBlock(0,0));
-        assert(!grid.hasBlock(1,0));
-        assert(grid.hasBlock(2,2));
-        assert(!grid.hasBlock(2,3));
+        assert.strictEqual(grid.getBlock(0,0), X);
+        assert.strictEqual(grid.getBlock(1,0), _);
+        assert.strictEqual(grid.getBlock(2,2), X);
+        assert.strictEqual(grid.getBlock(2,3), _);
 
     });
 

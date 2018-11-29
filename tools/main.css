@@ -1,4 +1,14 @@
-.exit{
+@font-face {
+    font-family: pixel;
+    src: url('alagard_by_pix3m-d6awiwp.ttf');
+}
+
+header {
+    font-size: 64px;
+    font-family: pixel, serif;
+}
+
+.exit {
     position: absolute;
     right: 0;
 }
@@ -46,13 +56,12 @@ input.big {
     font-size: x-large;
 }
 
-.config select {
+.config select, .config input {
     font-size: large;
 }
 
 .display {
-    margin-top: 20px;
-    zoom: 400%;
+    margin-top: 5px;
     image-rendering: pixelated;
     text-align: center;
 }
@@ -75,17 +84,17 @@ input.big {
     margin-right: 20px;
 }
 
-.palettes .color{
+.palettes .color {
     width: 30px;
     height: 30px;
     display: inline-block;
 }
 
-.palettes h1{
+.palettes h1 {
     word-break: break-all;
 }
 
-.palettes h3{
+.palettes h3 {
     display: inline-block;
     margin-bottom: 0;
     margin-left: 10px;

@@ -14,20 +14,22 @@ export class CharacterSelectionScreen extends React.Component<Props> {
 
         return (
             <div className="gui">
-                <div className="container">
-                    <ul className="limited">
-                        {characters.map((character, idx) => (
-                            <li key={idx}>
-                                <button onClick={() => onSelect(character)}>
-                                    <h2>{character.name}</h2>
-                                    <h3>Level 1 {character.classId}</h3>
-                                    <h3 className="secondary">{character.location.zoneId}</h3>
-                                </button>
-                            </li>
-                        ))}
-                    </ul>
-                    <div className="center">
-                        <Button onClick={onExit}>Exit</Button>
+                <div className="container panel">
+                    <div className="content">
+                        <ul className="limited">
+                            {characters.map((character, idx) => (
+                                <li key={idx}>
+                                    <button className="item" onClick={() => onSelect(character)}>
+                                        <h2>{character.name}</h2>
+                                        <h3>Level 1 {character.classId}</h3>
+                                        <h3 className="secondary">{character.location.zoneId}</h3>
+                                    </button>
+                                </li>
+                            ))}
+                        </ul>
+                        <div className="center">
+                            <Button onClick={onExit}>Exit</Button>
+                        </div>
                     </div>
                 </div>
             </div>

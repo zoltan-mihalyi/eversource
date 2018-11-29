@@ -9,7 +9,7 @@ export class Chunk {
     readonly above: PIXI.Container = new PIXI.Container();
 
     constructor(loadedMap: LoadedMap, ts: TexturedTileSet[], readonly chunkX: X, readonly chunkY: Y, width: number, height: number) {
-        const {map} = loadedMap;
+        const { map } = loadedMap;
 
         for (const container of [this.base, this.above]) {
             container.x = chunkX;

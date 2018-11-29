@@ -5,27 +5,27 @@ import * as PIXI from "pixi.js";
 export abstract class CreatureDisplay<T extends CreatureEntityData> extends UpdatableDisplay<T> {
     protected abstract displayedProperties: (keyof T)[];
 
-    protected build() {
-        const shadow = this.textureLoader.createAnimatedSprite('misc', 'shadow');
+    protected buildShadow() {
+        const shadow = this.context.textureLoader.createAnimatedSprite('misc', 'shadow');
         shadow.blendMode = PIXI.BLEND_MODES.MULTIPLY;
-        this.addChild(shadow);
+        this.shadowContainer.addChild(shadow);
     }
 
     protected createAnimatedSprite(tileSet: string, image: string, paletteFile: string, color?: string) {
         const { direction, activity } = this.data;
         const animation = activity + ':' + direction;
 
-        return this.textureLoader.createCustomAnimatedSprite(tileSet, image, animation, paletteFile, color);
+        return this.context.textureLoader.createCustomAnimatedSprite(tileSet, image, animation, paletteFile, color);
     }
 
     protected softUpdate() {
         const speed = this.calculateAnimationSpeed();
-        for (const child of this.children) {
+        for (const child of this.spriteContainer.children) {
             (child as PIXI.extras.AnimatedSprite).animationSpeed = speed;
         }
     }
 
-    private calculateAnimationSpeed(): number {
+    protected calculateAnimationSpeed(): number {
         switch (this.data.activity) {
             case 'standing':
                 return 0.08;
@@ -37,11 +37,25 @@ export abstract class CreatureDisplay<T extends CreatureEntityData> extends Upda
     }
 
     protected matches(changes: Partial<T>): boolean {
+        if (!super.matches(changes)) {
+            return false;
+        }
         for (const property of this.displayedProperties) {
             if (changes.hasOwnProperty(property) && changes[property] !== this.data[property]) {
                 return false;
             }
         }
         return true;
+    }
+
+    protected alwaysShowName() {
+        return this.data.player;
+    }
+
+    protected nameColor() {
+        if (this.data.player) {
+            return '#6e96db';
+        }
+        return super.nameColor();
     }
 }

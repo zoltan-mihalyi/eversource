@@ -31,13 +31,17 @@ const possibleValues: { [P in keyof PropData]: string[] } = {
     sex: ['female', 'male'],
     body: filesInDir('body/female'),
     ears: ['bigears', 'elvenears'],
-    eyes: filesInDir('body/female/eyes'),
+    eyes: filesInDir('eyes/female'),
     nose: ['bignose', 'buttonnose', 'straightnose'],
+    cape: filesInDir('cape/female'),
+    belt: filesInDir('belt/female'),
     chest: filesInDir('chest/female'),
     feet: filesInDir('feet/female'),
     hair: filesInDir('hair/female'),
     head: filesInDir('head/female'),
     legs: filesInDir('legs/female'),
+    arms: filesInDir('arms/female'),
+    hands: filesInDir('hands/female'),
     shirt: filesInDir('shirt/female'),
 };
 

@@ -1,14 +1,20 @@
 import { Grid } from '../../../common/Grid';
 import { Entity } from '../entity/Entity';
 import * as rbush from 'rbush';
-import BBox = rbush.BBox;
+import { EntityId } from '../../../common/domain/EntityData';
+import { X, Y } from '../../../common/domain/Location';
 
 interface EntityBox extends rbush.BBox {
     entity: Entity;
 }
 
+interface AreaBox extends rbush.BBox {
+    name: string;
+}
+
 export class Zone {
-    private entities = new Map<Entity, EntityBox>();
+    private areas = rbush<AreaBox>();
+    private entities = new Map<EntityId, EntityBox>();
     private entityIndex = rbush<EntityBox>();
 
     constructor(private grid: Grid) {
@@ -16,13 +22,22 @@ export class Zone {
 
     addEntity(entity: Entity) {
         const bBox = entityBBox(entity);
-        this.entities.set(entity, bBox);
+        this.entities.set(entity.id, bBox);
         this.entityIndex.insert(bBox);
     }
 
+    addArea(x: X, y: Y, width: number, height: number, name: string) {
+        this.areas.insert({ minX: x, minY: y, maxX: x + width, maxY: y + height, name });
+    }
+
+    getEntity(id: EntityId): Entity | null {
+        const entityBox = this.entities.get(id);
+        return entityBox ? entityBox.entity : null;
+    }
+
     removeEntity(entity: Entity): void {
-        const bBox = this.entities.get(entity)!;
-        this.entities.delete(entity);
+        const bBox = this.entities.get(entity.id)!;
+        this.entities.delete(entity.id);
         this.entityIndex.remove(bBox);
     }
 
@@ -31,20 +46,25 @@ export class Zone {
     }
 
     update(interval: number) {
-        this.entities.forEach((bBox: BBox, entity: Entity) => {
+        this.entities.forEach((entityBox: EntityBox) => {
+            const entity = entityBox.entity;
             const lastPosition = entity.get().position;
             entity.update(this.grid, interval);
             if (entity.get().position !== lastPosition) {
                 this.handlePositionChange(entity);
+            }
+
+            for (const area of this.areas.search(entityBox)) {
+                entity.emit('area', area.name);
             }
         });
     }
 
     private handlePositionChange(entity: Entity) {
         const bBox = entityBBox(entity);
-        const prevBox = this.entities.get(entity)!;
+        const prevBox = this.entities.get(entity.id)!;
         this.entityIndex.remove(prevBox);
-        this.entities.set(entity, bBox);
+        this.entities.set(entity.id, bBox);
         this.entityIndex.insert(bBox);
     }
 }

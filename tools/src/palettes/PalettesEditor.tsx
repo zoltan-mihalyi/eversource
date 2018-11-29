@@ -14,6 +14,8 @@ interface State {
     palettes: Palettes | null;
 }
 
+const MAX_PALETTE_SIZE = 16;
+
 const PaletteBoxes: React.SFC<{ palette: Palette }> = ({ palette }) => {
     return (
         <div>
@@ -21,6 +23,17 @@ const PaletteBoxes: React.SFC<{ palette: Palette }> = ({ palette }) => {
                 <div key={index} className="color" style={{ background: color }}/>
             ))}
         </div>
+    );
+};
+
+const PaletteSizeWarning: React.SFC<{ size: number }> = ({ size }) => {
+    if (size <= MAX_PALETTE_SIZE) {
+        return null;
+    }
+    return (
+        <p style={{ fontSize: 24, color: 'black', backgroundColor: 'red' }}>
+            Palette size is <b>{size}</b> which is greater than {MAX_PALETTE_SIZE}!
+        </p>
     );
 };
 
@@ -46,6 +59,8 @@ export class PalettesEditor extends React.Component<Props, State> {
                     <button className="big" onClick={this.setBase}>Set base</button>
                 ) : (
                     <div>
+                        <PaletteSizeWarning size={palettes.base.length}/>
+
                         <h3>Base</h3>
                         <PaletteBoxes palette={palettes.base.map(info => info.color)}/>
                         <button className="big" onClick={this.add}>+</button>

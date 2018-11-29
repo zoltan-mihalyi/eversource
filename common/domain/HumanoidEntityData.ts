@@ -13,13 +13,17 @@ export interface Appearance {
 export interface Equipment {
     shirt: ColoredImage;
     head: ColoredImage;
+    cape: ColoredImage;
+    belt: ColoredImage;
+    arms: ColoredImage;
     chest: ColoredImage;
     legs: ColoredImage;
+    hands: ColoredImage;
     feet: ColoredImage;
 }
 
 export interface HumanoidEntityData extends BaseCreatureEntityData {
-    kind: 'humanoid';
+    type: 'humanoid';
     appearance: Appearance;
     equipment: Equipment;
 }

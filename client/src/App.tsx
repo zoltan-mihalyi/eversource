@@ -6,11 +6,11 @@ import { CharacterSelectionScreen } from './components/menu/CharacterSelectionSc
 import { CharacterInfo } from '../../common/domain/CharacterInfo';
 import { LoadingScreen } from './components/menu/LoadingScreen';
 import { ZoneId } from '../../common/domain/Location';
-import { PROTOCOL_VERSION } from '../../common/protocol/Messages';
 import { GameApplication } from './map/GameApplication';
 import { Display } from './protocol/Display';
-import { NetworkHandler } from './protocol/NetworkHandler';
+import { connect } from './protocol/NetworkHandler';
 import { CreditsScreen } from './components/menu/CreditsScreen';
+import { PlayingNetworkApi } from './protocol/PlayingState';
 
 type ShowLoginScreen = {
     type: 'login';
@@ -32,7 +32,8 @@ type ShowLoadingScreen = {
 type ShowGameScreen = {
     type: 'game';
     game: GameApplication;
-    enterCharacterSelection: () => void;
+    onMount: (gameScreen: GameScreen) => void;
+    playingNetworkApi: PlayingNetworkApi;
 }
 
 type ShowScreen =
@@ -46,9 +47,11 @@ interface State {
     screen: ShowScreen;
 }
 
-const wsUri = `ws://${location.hostname}:${location.port}`;
+const protocol = location.protocol === 'http:' ? 'ws' : 'wss';
 
-export class App extends React.Component<{}, State> {
+const wsUri = `${protocol}://${location.hostname}:${location.port}`;
+
+export class App extends React.Component<{}, State> implements Display {
     state: State = {
         screen: { type: 'login', state: { type: 'initial' } },
     };
@@ -76,77 +79,13 @@ export class App extends React.Component<{}, State> {
                 );
             case 'game':
                 return (
-                    <GameScreen game={screen.game} enterCharacterSelection={screen.enterCharacterSelection}/>
+                    <GameScreen game={screen.game} onMount={screen.onMount} playingNetworkApi={screen.playingNetworkApi}/>
                 );
         }
     }
 
     private onSubmitLogin = (username: string, password: string) => {
-        const ws = new WebSocket(`${wsUri}?v=${PROTOCOL_VERSION}&username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`);
-
-        const display: Display = {
-            showLogin: () => {
-                this.setState({
-                    screen: {
-                        type: 'login',
-                        state: { type: 'initial' },
-                    },
-                });
-            },
-            showCharacterLoading: () => {
-                this.setState({
-                    screen: {
-                        type: 'login',
-                        state: { type: 'characters' },
-                    },
-                });
-            },
-            showConnectionError: (message: string) => {
-                this.setState({
-                    screen: {
-                        type: 'login',
-                        state: { type: 'error', message },
-                    },
-                });
-            },
-            showCharacterSelection: (characters: CharacterInfo[], onSelect: (character: CharacterInfo) => void, onExit: () => void) => {
-                this.setState({
-                    screen: {
-                        type: 'characters',
-                        characters,
-                        onSelect,
-                        onExit,
-                    },
-                });
-            },
-            showLoading: (zoneId: ZoneId) => {
-                this.setState({
-                    screen: {
-                        type: 'loading',
-                        zoneId,
-                    },
-                });
-            },
-
-            showGame: (game: GameApplication, enterCharacterSelection: () => void) => {
-                this.setState({
-                    screen: {
-                        type: 'game',
-                        enterCharacterSelection,
-                        game,
-                    },
-                });
-            },
-        };
-
-        new NetworkHandler(ws, display);
-
-        this.setState({
-            screen: {
-                type: 'login',
-                state: { type: 'connecting' }, // TODO onEnter?
-            },
-        });
+        connect(this, wsUri, username, password);
     };
 
     private showCredits = () => {
@@ -157,9 +96,70 @@ export class App extends React.Component<{}, State> {
         });
     };
 
-    private showLogin = () => {
+    showLogin = () => {
         this.setState({
-            screen: { type: 'login', state: { type: 'initial' } },
+            screen: {
+                type: 'login',
+                state: { type: 'initial' },
+            },
         });
     };
+
+    showConnecting() {
+        this.setState({
+            screen: {
+                type: 'login',
+                state: { type: 'connecting' },
+            },
+        });
+    }
+
+    showCharacterLoading() {
+        this.setState({
+            screen: {
+                type: 'login',
+                state: { type: 'characters' },
+            },
+        });
+    }
+
+    showConnectionError(message: string) {
+        this.setState({
+            screen: {
+                type: 'login',
+                state: { type: 'error', message },
+            },
+        });
+    }
+
+    showCharacterSelection(characters: CharacterInfo[], onSelect: (character: CharacterInfo) => void, onExit: () => void) {
+        this.setState({
+            screen: {
+                type: 'characters',
+                characters,
+                onSelect,
+                onExit,
+            },
+        });
+    }
+
+    showLoading(zoneId: ZoneId) {
+        this.setState({
+            screen: {
+                type: 'loading',
+                zoneId,
+            },
+        });
+    }
+
+    showGame(game: GameApplication, onMount: (gameScreen: GameScreen) => void, playingNetworkApi: PlayingNetworkApi) {
+        this.setState({
+            screen: {
+                type: 'game',
+                onMount,
+                playingNetworkApi,
+                game,
+            },
+        });
+    }
 }

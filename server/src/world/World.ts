@@ -1,10 +1,13 @@
 import { X, Y, ZoneId } from '../../../common/domain/Location';
 import { MapLoader } from './MapLoader';
 import { Zone } from './Zone';
-import { Presets } from './Presets';
+import { HumanoidPresets, MonsterPresets } from './Presets';
 import { BASE_HUMANOID, BASE_MONSTER, CreatureEntity } from '../entity/CreatureEntity';
 import { Direction } from '../../../common/domain/CreatureEntityData';
 import { WalkingController } from '../entity/controller/WalkingController';
+import { TiledObject } from '../../../common/tiled/interfaces';
+import { HiddenEntityData } from '../entity/Entity';
+import { questEnds, questStarts } from '../quest/QuestIndexer';
 
 export interface World {
     getZone(zoneId: ZoneId): Promise<Zone>;
@@ -13,12 +16,20 @@ export interface World {
 const FPS = 50;
 const INTERVAL = 1000 / FPS;
 
+
+function getHidden(object: TiledObject): HiddenEntityData {
+    return {
+        quests: questStarts[object.name] || [],
+        questCompletions: questEnds[object.name] || [],
+    };
+}
+
 export class WorldImpl implements World {
     private readonly zonePromises = new Map<ZoneId, Promise<Zone>>();
     private readonly zones = new Map<ZoneId, Zone>();
     private readonly timer: NodeJS.Timer;
 
-    constructor(private mapLoader: MapLoader, private presets: Presets) {
+    constructor(private mapLoader: MapLoader, private humanoidPresets: HumanoidPresets, private monsterPresets: MonsterPresets) {
         this.timer = setInterval(this.update, INTERVAL);
     }
 
@@ -51,8 +62,7 @@ export class WorldImpl implements World {
             };
             const properties = object.properties || {};
             if (object.type === 'npc') {
-                const npc = this.presets[object.name!];
-                const { appearance, equipment } = npc;
+                const preset = this.humanoidPresets[object.name];
 
                 const directionProp = properties.direction as Direction | undefined;
 
@@ -60,19 +70,29 @@ export class WorldImpl implements World {
                 const controller = properties.controller === 'walking' ? new WalkingController(position) : void 0;
                 const characterEntity = new CreatureEntity({
                     ...BASE_HUMANOID,
+                    ...preset,
                     position,
                     direction,
-                    appearance,
-                    equipment,
-                }, controller);
+                }, getHidden(object), controller);
                 zone.addEntity(characterEntity);
             } else if (object.type === 'monster') {
+                const { name, image, palette, movement } = this.monsterPresets[object.name];
+
                 zone.addEntity(new CreatureEntity({
                     ...BASE_MONSTER,
+                    name,
+                    image,
+                    palette,
                     position,
-                    image: object.name,
-                    palette: (properties.palette as string | undefined) || null,
-                }, new WalkingController(position)))
+                }, getHidden(object), new WalkingController(position, movement)))
+            } else if (object.type === 'area') {
+                zone.addArea(
+                    object.x / mapData.tileWidth as X,
+                    object.y / mapData.tileHeight as Y,
+                    object.width / mapData.tileWidth,
+                    object.height / mapData.tileHeight,
+                    object.name,
+                );
             }
         }
 

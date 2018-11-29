@@ -1,100 +1,126 @@
 import { X, Y, ZoneId } from '../../../common/domain/Location';
 import { UserDao } from '../dao/UserDao';
 import { CharacterId, CharacterInfo, CharacterName, ClassId } from '../../../common/domain/CharacterInfo';
+import { CharacterDetails } from '../character/CharacterDetails';
 
 export class FakeUserDao implements UserDao {
-    private characters: CharacterInfo[] = [
+    private characters: CharacterDetails[] = [
         {
-            id: '1' as CharacterId,
-            name: 'John' as CharacterName,
-            classId: 'warrior' as ClassId,
+            questsDone: new Set(),
+            questLog: new Map(),
+            info:
+                {
+                    id: '1' as CharacterId,
+                    name: 'John' as CharacterName,
+                    classId: 'warrior' as ClassId,
 
-            location: {
-                position: {
-                    x: 106 as X,
-                    y: 214 as Y,
+                    location: {
+                        position: {
+                            x: 106 as X,
+                            y: 165 as Y,
+                        },
+                        zoneId: 'lavaland' as ZoneId,
+                    },
+                    appearance: {
+                        sex: 'male',
+                        body: ['normal','dark'],
+                        hair: ['messy1'],
+                        ears: [],
+                        eyes: ['normal', 'red'],
+                        nose: ['bignose'],
+                    },
+                    equipment: {
+                        shirt: ['simple', 'white'],
+                        head: ['bandana'],
+                        cape: [],
+                        belt: ['cloth'],
+                        arms: [],
+                        chest: [],
+                        legs: ['pants'],
+                        hands: [],
+                        feet: ['shoes', 'black'],
+                    },
                 },
-                zoneId: 'lavaland' as ZoneId,
-            },
-            appearance: {
-                sex: 'male',
-                body: ['dark'],
-                hair: ['messy1'],
-                ears: [],
-                eyes: ['red'],
-                nose: ['bignose'],
-            },
-            equipment: {
-                shirt: ['white'],
-                head: ['bandana'],
-                chest: [],
-                legs: ['pants'],
-                feet: ['shoes', 'black'],
+        },
+        {
+            questsDone: new Set(),
+            questLog: new Map(),
+            info: {
+                id: '2' as CharacterId,
+                name: 'Robin' as CharacterName,
+                classId: 'hunter' as ClassId,
+
+                location: {
+                    position: {
+                        x: 101 as X,
+                        y: 214 as Y,
+                    },
+                    zoneId: 'lavaland' as ZoneId,
+                },
+                appearance: {
+                    sex: 'male',
+                    body: ['normal'],
+                    hair: ['bedhead'],
+                    ears: [],
+                    eyes: [],
+                    nose: ['straightnose'],
+                },
+                equipment: {
+                    shirt: [],
+                    head: ['ornate_metal_helm'],
+                    cape: ['normal', 'red'],
+                    belt: [],
+                    arms: ['ornate_metal_arms'],
+                    chest: ['ornate_metal_chest'],
+                    legs: ['ornate_metal_greaves'],
+                    hands: ['gloves', 'gold'],
+                    feet: ['ornate_metal_boots'],
+                },
             },
         },
         {
-            id: '2' as CharacterId,
-            name: 'Robin' as CharacterName,
-            classId: 'hunter' as ClassId,
+            questsDone: new Set(),
+            questLog: new Map(),
+            info: {
+                id: '3' as CharacterId,
+                name: 'Unimaginable' as CharacterName,
+                classId: 'mage' as ClassId,
 
-            location: {
-                position: {
-                    x: 101 as X,
-                    y: 214 as Y,
+                location: {
+                    position: {
+                        x: 41 as X,
+                        y: 210 as Y,
+                    },
+                    zoneId: 'lavaland' as ZoneId,
                 },
-                zoneId: 'lavaland' as ZoneId,
-            },
-            appearance: {
-                sex: 'male',
-                body: ['light'],
-                hair: ['bedhead'],
-                ears: [],
-                eyes: [],
-                nose: ['straightnose'],
-            },
-            equipment: {
-                shirt: [],
-                head: ['golden_helm'],
-                chest: ['golden_chest'],
-                legs: ['golden_greaves'],
-                feet: ['golden_boots'],
-            },
-        },
-        {
-            id: '3' as CharacterId,
-            name: 'Unimaginable' as CharacterName,
-            classId: 'mage' as ClassId,
-
-            location: {
-                position: {
-                    x: 106 as X,
-                    y: 210 as Y,
+                appearance: {
+                    sex: 'female',
+                    body: ['normal'],
+                    hair: ['xlongknot'],
+                    ears: ['elvenears'],
+                    eyes: ['normal'],
+                    nose: ['buttonnose'],
                 },
-                zoneId: 'lavaland' as ZoneId,
-            },
-            appearance: {
-                sex: 'female',
-                body: ['light'],
-                hair: ['xlongknot'],
-                ears: ['elvenears'],
-                eyes: ['blue'],
-                nose: ['buttonnose'],
-            },
-            equipment: {
-                shirt: [],
-                head: ['chain_hood'],
-                chest: ['mail'],
-                legs: [],
-                feet: ['shoes', 'maroon'],
+                equipment: {
+                    shirt: [],
+                    head: ['chain_hood'],
+                    cape: ['normal'],
+                    belt: [],
+                    arms: [],
+                    chest: ['mail'],
+                    legs: [],
+                    hands: [],
+                    feet: ['shoes', 'maroon'],
+                },
             },
         },
     ];
 
     getCharacters(): CharacterInfo[] {
-        return this.characters;
+        return this.characters.map(character => character.info);
     }
 
-    getCharacterIfExists(id: string): CharacterInfo | null {
-        return this.characters.find(char => char.id === id) || null;
+    getCharacterIfExists(id: string): CharacterDetails | null {
+        return this.characters.find(char => char.info.id === id) || null;
     }
 }
