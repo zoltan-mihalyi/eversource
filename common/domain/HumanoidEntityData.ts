@@ -7,6 +7,7 @@ export interface Appearance {
     ears: ColoredImage;
     eyes: ColoredImage;
     nose: ColoredImage;
+    facial: ColoredImage;
     hair: ColoredImage;
 }
 

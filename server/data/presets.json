@@ -8,7 +8,8 @@
       "eyes": [],
       "ears": [],
       "hair": [],
-      "nose": []
+      "nose": [],
+      "facial": []
     },
     "equipment": {
       "chest": [],
@@ -47,7 +48,8 @@
         "princess",
         "pink2"
       ],
-      "nose": []
+      "nose": [],
+      "facial": []
     },
     "equipment": {
       "chest": [
@@ -89,7 +91,8 @@
         "jewfro",
         "brown"
       ],
-      "nose": []
+      "nose": [],
+      "facial": []
     },
     "equipment": {
       "chest": [],
@@ -129,7 +132,8 @@
         "normal",
         "brown"
       ],
-      "ears": []
+      "ears": [],
+      "facial": []
     },
     "equipment": {
       "shirt": [
@@ -175,7 +179,8 @@
         "normal",
         "red"
       ],
-      "ears": []
+      "ears": [],
+      "facial": []
     },
     "equipment": {
       "shirt": [
@@ -212,7 +217,8 @@
       "nose": [],
       "hair": [],
       "eyes": [],
-      "ears": []
+      "ears": [],
+      "facial": []
     },
     "equipment": {
       "shirt": [
@@ -254,7 +260,8 @@
         "normal",
         "brown"
       ],
-      "ears": []
+      "ears": [],
+      "facial": []
     },
     "equipment": {
       "shirt": [
@@ -287,7 +294,8 @@
       "nose": [],
       "hair": [],
       "eyes": [],
-      "ears": []
+      "ears": [],
+      "facial": []
     },
     "equipment": {
       "shirt": [],
@@ -326,7 +334,8 @@
       ],
       "hair": [],
       "eyes": [],
-      "ears": []
+      "ears": [],
+      "facial": []
     },
     "equipment": {
       "shirt": [],
@@ -374,6 +383,10 @@
       ],
       "ears": [
         "elvenears"
+      ],
+      "facial": [
+        "beard",
+        "blue"
       ]
     },
     "equipment": {
@@ -418,7 +431,11 @@
       "eyes": [
         "normal"
       ],
-      "ears": []
+      "ears": [],
+      "facial": [
+        "beard",
+        "gray"
+      ]
     },
     "equipment": {
       "shirt": [],
@@ -458,7 +475,11 @@
       ],
       "hair": [],
       "eyes": [],
-      "ears": []
+      "ears": [],
+      "facial": [
+        "fiveoclock",
+        "black"
+      ]
     },
     "equipment": {
       "shirt": [
@@ -499,7 +520,8 @@
         "normal",
         "gray"
       ],
-      "ears": []
+      "ears": [],
+      "facial": []
     },
     "equipment": {
       "shirt": [
@@ -535,7 +557,8 @@
       "nose": [],
       "hair": [],
       "eyes": [],
-      "ears": []
+      "ears": [],
+      "facial": []
     },
     "equipment": {
       "shirt": [],
@@ -566,7 +589,8 @@
       "nose": [],
       "hair": [],
       "eyes": [],
-      "ears": []
+      "ears": [],
+      "facial": []
     },
     "equipment": {
       "shirt": [],
@@ -598,7 +622,8 @@
       "nose": [],
       "hair": [],
       "eyes": [],
-      "ears": []
+      "ears": [],
+      "facial": []
     },
     "equipment": {
       "shirt": [],
@@ -637,7 +662,8 @@
         "green2"
       ],
       "eyes": [],
-      "ears": []
+      "ears": [],
+      "facial": []
     },
     "equipment": {
       "shirt": [],
@@ -662,7 +688,8 @@
       "nose": [],
       "hair": [],
       "eyes": [],
-      "ears": []
+      "ears": [],
+      "facial": []
     },
     "equipment": {
       "shirt": [],
@@ -699,6 +726,10 @@
       ],
       "ears": [
         "elvenears"
+      ],
+      "facial": [
+        "mustache",
+        "brown"
       ]
     },
     "equipment": {
@@ -738,7 +769,8 @@
       "nose": [],
       "hair": [],
       "eyes": [],
-      "ears": []
+      "ears": [],
+      "facial": []
     },
     "equipment": {
       "shirt": [],
@@ -784,7 +816,8 @@
       "nose": [],
       "hair": [],
       "eyes": [],
-      "ears": []
+      "ears": [],
+      "facial": []
     },
     "equipment": {
       "shirt": [],
@@ -826,7 +859,8 @@
       "nose": [],
       "hair": [],
       "eyes": [],
-      "ears": []
+      "ears": [],
+      "facial": []
     },
     "equipment": {
       "shirt": [],
@@ -872,7 +906,8 @@
       "nose": [],
       "hair": [],
       "eyes": [],
-      "ears": []
+      "ears": [],
+      "facial": []
     },
     "equipment": {
       "shirt": [],
@@ -922,7 +957,8 @@
         "brunette"
       ],
       "eyes": [],
-      "ears": []
+      "ears": [],
+      "facial": []
     },
     "equipment": {
       "shirt": [
@@ -961,7 +997,8 @@
         "normal",
         "brown"
       ],
-      "ears": []
+      "ears": [],
+      "facial": []
     },
     "equipment": {
       "shirt": [
@@ -996,7 +1033,8 @@
         "brunette2"
       ],
       "eyes": [],
-      "ears": []
+      "ears": [],
+      "facial": []
     },
     "equipment": {
       "shirt": [
@@ -1038,7 +1076,8 @@
         "normal",
         "brown"
       ],
-      "ears": []
+      "ears": [],
+      "facial": []
     },
     "equipment": {
       "shirt": [],
@@ -1079,7 +1118,11 @@
       "nose": [],
       "hair": [],
       "eyes": [],
-      "ears": []
+      "ears": [],
+      "facial": [
+        "bigstache",
+        "light-blonde"
+      ]
     },
     "equipment": {
       "shirt": [],
@@ -1118,7 +1161,8 @@
       "nose": [],
       "hair": [],
       "eyes": [],
-      "ears": []
+      "ears": [],
+      "facial": []
     },
     "equipment": {
       "shirt": [],
@@ -1158,7 +1202,8 @@
       ],
       "hair": [],
       "eyes": [],
-      "ears": []
+      "ears": [],
+      "facial": []
     },
     "equipment": {
       "shirt": [],
@@ -1197,7 +1242,8 @@
         "normal",
         "brown"
       ],
-      "ears": []
+      "ears": [],
+      "facial": []
     },
     "equipment": {
       "shirt": [
@@ -1242,7 +1288,8 @@
         "normal",
         "green"
       ],
-      "ears": []
+      "ears": [],
+      "facial": []
     },
     "equipment": {
       "shirt": [],
@@ -1290,7 +1337,8 @@
         "normal",
         "orange"
       ],
-      "ears": []
+      "ears": [],
+      "facial": []
     },
     "equipment": {
       "shirt": [
@@ -1332,7 +1380,8 @@
         "normal",
         "green"
       ],
-      "ears": []
+      "ears": [],
+      "facial": []
     },
     "equipment": {
       "shirt": [
@@ -1371,7 +1420,8 @@
         "normal",
         "yellow"
       ],
-      "ears": []
+      "ears": [],
+      "facial": []
     },
     "equipment": {
       "shirt": [

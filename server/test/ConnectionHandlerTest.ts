@@ -32,6 +32,7 @@ const characters: CharacterInfo[] = [
             eyes: [],
             hair: [],
             nose: [],
+            facial: [],
         },
         equipment: {
             chest: [],
