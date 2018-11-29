@@ -302,7 +302,7 @@
     "equipment": {
       "shirt": [],
       "legs": [
-        "metal_greaves"
+        "plate"
       ],
       "head": [
         "metal_helm"
@@ -342,7 +342,7 @@
     "equipment": {
       "shirt": [],
       "legs": [
-        "metal_greaves"
+        "plate"
       ],
       "head": [
         "chain_hood"
@@ -634,7 +634,7 @@
     "equipment": {
       "shirt": [],
       "legs": [
-        "metal_greaves"
+        "plate"
       ],
       "head": [
         "chain_hood"
@@ -745,7 +745,7 @@
     "equipment": {
       "shirt": [],
       "legs": [
-        "metal_greaves"
+        "plate"
       ],
       "head": [
         "chainhat",
@@ -785,7 +785,7 @@
     "equipment": {
       "shirt": [],
       "legs": [
-        "ornate_metal_greaves",
+        "plate",
         "bronze"
       ],
       "head": [
@@ -832,7 +832,7 @@
     "equipment": {
       "shirt": [],
       "legs": [
-        "ornate_metal_greaves",
+        "plate",
         "dark"
       ],
       "head": [
@@ -875,7 +875,7 @@
     "equipment": {
       "shirt": [],
       "legs": [
-        "ornate_metal_greaves",
+        "plate",
         "silver"
       ],
       "head": [
@@ -922,7 +922,7 @@
     "equipment": {
       "shirt": [],
       "legs": [
-        "ornate_metal_greaves",
+        "plate",
         "dark"
       ],
       "head": [
@@ -1439,7 +1439,7 @@
         "sleeveless"
       ],
       "legs": [
-        "metal_greaves"
+        "plate"
       ],
       "head": [],
       "cape": [],
