@@ -75,7 +75,7 @@ export class FakeUserDao implements UserDao {
                     cape: ['normal', 'red'],
                     belt: [],
                     arms: ['ornate_metal_arms'],
-                    chest: ['ornate_metal_chest'],
+                    chest: ['plate', 'gold'],
                     legs: ['plate', 'gold'],
                     hands: ['gloves', 'gold'],
                     feet: ['ornate_metal_boots'],
