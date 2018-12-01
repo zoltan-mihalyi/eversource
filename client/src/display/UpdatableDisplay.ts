@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js';
-import { EntityData } from '../../../common/domain/EntityData';
+import { EntityData, EntityId } from '../../../common/domain/EntityData';
 import { OutlineFilter } from '@pixi/filter-outline';
 import { GOLDEN } from './Cursors';
 import { GameContext } from '../game/GameContext';
@@ -46,7 +46,7 @@ class SpriteContainer extends PIXI.Container {
             this.filters = [this.outlineFilter];
             this.cursor = GOLDEN;
         } else {
-            this.filters = [];
+            this.filters = null;
             this.cursor = '';
         }
     }
@@ -59,7 +59,7 @@ export abstract class UpdatableDisplay<T extends EntityData> extends PIXI.Contai
     protected readonly textContainer = new PIXI.Container();
     protected readonly interactionContainer = new PIXI.Container();
 
-    constructor(protected context: GameContext, protected data: T) {
+    constructor(private id: EntityId, protected context: GameContext, protected data: T) {
         super();
         this.spriteContainer = new SpriteContainer(this);
         this.addChild(
@@ -197,7 +197,7 @@ export abstract class UpdatableDisplay<T extends EntityData> extends PIXI.Contai
     }
 
     onClick() {
-        this.context.onInteract(this);
+        this.context.playingNetworkApi.interact(this.id);
     }
 
     protected abstract softUpdate(): void;

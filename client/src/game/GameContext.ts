@@ -1,8 +1,9 @@
 import { TextureLoader } from '../map/TextureLoader';
-import { UpdatableDisplay } from '../display/UpdatableDisplay';
+import { PlayingNetworkApi } from '../protocol/PlayingState';
+
+type Interactable = Pick<PlayingNetworkApi, 'interact'>
 
 export interface GameContext {
     textureLoader: TextureLoader;
-
-    onInteract(display: UpdatableDisplay<any>): void;
+    playingNetworkApi: Interactable;
 }

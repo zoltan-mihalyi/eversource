@@ -2,14 +2,15 @@ import { CreatureAttitude, CreatureEntityData } from '../../../common/domain/Cre
 import { UpdatableDisplay } from './UpdatableDisplay';
 import * as PIXI from "pixi.js";
 import { GameContext } from '../game/GameContext';
+import { EntityId } from '../../../common/domain/EntityData';
 
 const HP_BAR_WIDTH = 60;
 
 export abstract class CreatureDisplay<T extends CreatureEntityData> extends UpdatableDisplay<T> {
     protected abstract displayedProperties: (keyof T)[];
 
-    constructor(context: GameContext, private self: boolean, data: T) {
-        super(context, data);
+    constructor(id: EntityId, context: GameContext, data: T, private self: boolean) {
+        super(id, context, data);
     }
 
     protected buildShadow() {
