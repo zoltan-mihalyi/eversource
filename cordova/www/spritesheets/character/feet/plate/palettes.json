@@ -1,28 +1,28 @@
 {
   "base": [
     {
-      "color": "#1e0c08",
+      "color": "#1d131e",
       "coordinates": [
         21,
         55
       ]
     },
     {
-      "color": "#4f2313",
+      "color": "#2e2533",
       "coordinates": [
         21,
         56
       ]
     },
     {
-      "color": "#dc6f35",
+      "color": "#4d4a5d",
       "coordinates": [
         23,
         56
       ]
     },
     {
-      "color": "#ffc95a",
+      "color": "#726b7e",
       "coordinates": [
         24,
         56
@@ -36,35 +36,49 @@
       ]
     },
     {
-      "color": "#ffff61",
+      "color": "#867e7f",
       "coordinates": [
         25,
         57
       ]
     },
     {
-      "color": "#ffffdf",
+      "color": "#b19998",
       "coordinates": [
         23,
         58
       ]
     },
     {
-      "color": "#8c4322",
+      "color": "#e5e6c7",
+      "coordinates": [
+        24,
+        58
+      ]
+    },
+    {
+      "color": "#a8b3b8",
+      "coordinates": [
+        23,
+        59
+      ]
+    },
+    {
+      "color": "#3d3748",
       "coordinates": [
         36,
         124
       ]
     },
     {
-      "color": "#ff7d2c",
+      "color": "#5e5252",
       "coordinates": [
         224,
         631
       ]
     },
     {
-      "color": "#331309",
+      "color": "#281820",
       "coordinates": [
         483,
         693
@@ -72,6 +86,20 @@
     }
   ],
   "variations": {
+    "gold": [
+      "#1e0c08",
+      "#4f2313",
+      "#dc6f35",
+      "#ffc95a",
+      "#ffffff",
+      "#ffff61",
+      "#ffffdf",
+      "#ffffff",
+      "#ffffff",
+      "#8c4322",
+      "#ff7d2c",
+      "#331309"
+    ],
     "bronze": [
       "#15090c",
       "#36181d",
@@ -80,6 +108,8 @@
       "#e7c08c",
       "#d7953f",
       "#e5b97f",
+      "#e7c08c",
+      "#e7c08c",
       "#602a32",
       "#c52831",
       "#230d11"
@@ -92,6 +122,8 @@
       "#696969",
       "#414141",
       "#606060",
+      "#696969",
+      "#696969",
       "#0e0e0e",
       "#1d1d1d",
       "#040404"
@@ -104,6 +136,8 @@
       "#ffffff",
       "#dbdbdb",
       "#f4f4f4",
+      "#ffffff",
+      "#ffffff",
       "#505050",
       "#7b7b7b",
       "#222222"

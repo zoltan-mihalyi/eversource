@@ -99,7 +99,7 @@
     "equipment": {
       "chest": [],
       "shirt": [
-        "simple",
+        "sleeveless",
         "maroon"
       ],
       "feet": [
@@ -139,7 +139,7 @@
     },
     "equipment": {
       "shirt": [
-        "simple",
+        "long_sleeve",
         "white"
       ],
       "legs": [
@@ -186,7 +186,7 @@
     },
     "equipment": {
       "shirt": [
-        "simple",
+        "long_sleeve",
         "black"
       ],
       "legs": [
@@ -224,8 +224,8 @@
     },
     "equipment": {
       "shirt": [
-        "simple",
-        "maroon"
+        "sleeveless",
+        "red"
       ],
       "legs": [
         "robe_skirt",
@@ -267,7 +267,7 @@
     },
     "equipment": {
       "shirt": [
-        "simple"
+        "long_sleeve"
       ],
       "legs": [
         "robe_skirt"
@@ -302,22 +302,23 @@
     "equipment": {
       "shirt": [],
       "legs": [
-        "metal_greaves"
+        "plate"
       ],
       "head": [
         "metal_helm"
       ],
       "feet": [
-        "metal_boots"
+        "plate"
       ],
       "chest": [
-        "plate_chest"
+        "plate"
       ],
       "hands": [
-        "metal_gloves"
+        "gloves",
+        "steel"
       ],
       "arms": [
-        "metal_arms"
+        "plate"
       ],
       "cape": [],
       "belt": []
@@ -342,19 +343,20 @@
     "equipment": {
       "shirt": [],
       "legs": [
-        "metal_greaves"
+        "plate"
       ],
       "head": [
         "chain_hood"
       ],
       "feet": [
-        "metal_boots"
+        "plate"
       ],
       "chest": [
         "mail"
       ],
       "hands": [
-        "metal_gloves"
+        "gloves",
+        "steel"
       ],
       "arms": [],
       "cape": [
@@ -393,7 +395,7 @@
     },
     "equipment": {
       "shirt": [
-        "simple",
+        "long_sleeve",
         "teal"
       ],
       "legs": [
@@ -485,7 +487,7 @@
     },
     "equipment": {
       "shirt": [
-        "simple",
+        "long_sleeve",
         "white"
       ],
       "legs": [
@@ -528,7 +530,7 @@
     },
     "equipment": {
       "shirt": [
-        "simple",
+        "long_sleeve",
         "white"
       ],
       "legs": [
@@ -634,16 +636,16 @@
     "equipment": {
       "shirt": [],
       "legs": [
-        "metal_greaves"
+        "plate"
       ],
       "head": [
         "chain_hood"
       ],
       "feet": [
-        "metal_boots"
+        "plate"
       ],
       "chest": [
-        "plate_chest"
+        "plate"
       ],
       "hands": [],
       "arms": [],
@@ -745,21 +747,21 @@
     "equipment": {
       "shirt": [],
       "legs": [
-        "metal_greaves"
+        "plate"
       ],
       "head": [
         "chainhat",
         "blue"
       ],
       "feet": [
-        "metal_boots"
+        "plate"
       ],
       "chest": [
-        "plate_chest"
+        "plate"
       ],
       "hands": [],
       "arms": [
-        "metal_arms"
+        "plate"
       ],
       "cape": [
         "normal",
@@ -785,7 +787,7 @@
     "equipment": {
       "shirt": [],
       "legs": [
-        "ornate_metal_greaves",
+        "plate",
         "bronze"
       ],
       "head": [
@@ -793,11 +795,11 @@
         "bronze"
       ],
       "feet": [
-        "ornate_metal_boots",
+        "plate",
         "bronze"
       ],
       "chest": [
-        "ornate_metal_chest",
+        "plate",
         "bronze"
       ],
       "hands": [
@@ -805,7 +807,7 @@
         "bronze"
       ],
       "arms": [
-        "ornate_metal_arms",
+        "plate",
         "bronze"
       ],
       "cape": [
@@ -832,19 +834,19 @@
     "equipment": {
       "shirt": [],
       "legs": [
-        "ornate_metal_greaves",
+        "plate",
         "dark"
       ],
       "head": [
-        "ornate_metal_helm",
+        "metal_helm",
         "dark"
       ],
       "feet": [
-        "ornate_metal_boots",
+        "plate",
         "dark"
       ],
       "chest": [
-        "ornate_metal_chest",
+        "plate",
         "dark"
       ],
       "hands": [
@@ -852,13 +854,14 @@
         "dark"
       ],
       "arms": [
-        "ornate_metal_arms",
+        "plate",
         "dark"
       ],
       "cape": [],
       "belt": []
     },
-    "name": "Dark Champion"
+    "name": "Dark Champion",
+    "scale": 1
   },
   "silver": {
     "appearance": {
@@ -875,7 +878,7 @@
     "equipment": {
       "shirt": [],
       "legs": [
-        "ornate_metal_greaves",
+        "plate",
         "silver"
       ],
       "head": [
@@ -883,11 +886,11 @@
         "silver"
       ],
       "feet": [
-        "ornate_metal_boots",
+        "plate",
         "silver"
       ],
       "chest": [
-        "ornate_metal_chest",
+        "plate",
         "silver"
       ],
       "hands": [
@@ -895,7 +898,7 @@
         "silver"
       ],
       "arms": [
-        "ornate_metal_arms",
+        "plate",
         "silver"
       ],
       "cape": [
@@ -922,7 +925,7 @@
     "equipment": {
       "shirt": [],
       "legs": [
-        "ornate_metal_greaves",
+        "plate",
         "dark"
       ],
       "head": [
@@ -930,11 +933,11 @@
         "dark"
       ],
       "feet": [
-        "ornate_metal_boots",
+        "plate",
         "dark"
       ],
       "chest": [
-        "ornate_metal_chest",
+        "plate",
         "dark"
       ],
       "hands": [
@@ -942,7 +945,7 @@
         "dark"
       ],
       "arms": [
-        "ornate_metal_arms",
+        "plate",
         "dark"
       ],
       "cape": [
@@ -972,7 +975,7 @@
     },
     "equipment": {
       "shirt": [
-        "simple",
+        "sleeveless",
         "white"
       ],
       "legs": [],
@@ -1012,7 +1015,7 @@
     },
     "equipment": {
       "shirt": [
-        "simple"
+        "sleeveless"
       ],
       "legs": [],
       "head": [],
@@ -1112,7 +1115,7 @@
         "sandals"
       ],
       "chest": [
-        "plate_chest",
+        "plate",
         "brass"
       ]
     }
@@ -1257,7 +1260,7 @@
     },
     "equipment": {
       "shirt": [
-        "simple",
+        "long_sleeve",
         "black"
       ],
       "legs": [
@@ -1352,8 +1355,8 @@
     },
     "equipment": {
       "shirt": [
-        "simple",
-        "white"
+        "long_sleeve",
+        "blue_gray"
       ],
       "legs": [
         "pants",
@@ -1395,7 +1398,7 @@
     },
     "equipment": {
       "shirt": [
-        "simple",
+        "long_sleeve",
         "black"
       ],
       "legs": [
@@ -1436,20 +1439,21 @@
     },
     "equipment": {
       "shirt": [
-        "simple"
+        "sleeveless"
       ],
       "legs": [
-        "metal_greaves"
+        "plate"
       ],
       "head": [],
       "cape": [],
       "belt": [],
       "arms": [],
       "hands": [
-        "metal_gloves"
+        "gloves",
+        "steel"
       ],
       "feet": [
-        "metal_boots"
+        "plate"
       ],
       "chest": [
         "legion",

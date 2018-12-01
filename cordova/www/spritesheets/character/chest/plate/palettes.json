@@ -1,102 +1,124 @@
 {
   "base": [
     {
-      "color": "#1e0c08",
+      "color": "#1e131d",
       "coordinates": [
         22,
         33
       ]
     },
     {
-      "color": "#e47031",
+      "color": "#4c495d",
       "coordinates": [
         23,
         34
       ]
     },
     {
-      "color": "#ffff62",
+      "color": "#897e7e",
       "coordinates": [
         24,
         34
       ]
     },
     {
-      "color": "#fdca56",
+      "color": "#726c7a",
       "coordinates": [
         26,
         35
       ]
     },
     {
-      "color": "#fcfee0",
+      "color": "#b19fa0",
       "coordinates": [
         25,
         36
       ]
     },
     {
-      "color": "#522614",
+      "color": "#302636",
       "coordinates": [
         29,
         36
       ]
     },
     {
-      "color": "#fdfffc",
+      "color": "#e9ead5",
       "coordinates": [
         23,
-        37
+        38
       ]
     },
     {
-      "color": "#ffb454",
+      "color": "#c2b69d",
+      "coordinates": [
+        26,
+        38
+      ]
+    },
+    {
+      "color": "#5d5353",
       "coordinates": [
         34,
-        100
-      ]
-    },
-    {
-      "color": "#c69865",
-      "coordinates": [
-        36,
         104
       ]
     }
   ],
   "variations": {
+    "brass": [
+      "#1e1400",
+      "#966600",
+      "#e7a820",
+      "#bf8200",
+      "#f1c882",
+      "#6d4a00",
+      "#fbe3b0",
+      "#f1c882",
+      "#966600"
+    ],
+    "gold": [
+      "#1e0c08", 
+      "#e47031", 
+      "#ffff62", 
+      "#fdca56", 
+      "#fcfee0", 
+      "#522614", 
+      "#ffffff", 
+      "#fdfffc",
+      "#ff7d2c" 
+    ],
     "bronze": [
       "#15090c",
       "#9e3a43",
       "#d7953f",
       "#d7603b",
-      "#e5b97f",
+      "#dfab66",
       "#36181d",
       "#e7c08c",
-      "#d64c36",
-      "#995852"
+      "#dfab66",
+      "#9e3a43"
     ],
     "dark": [
       "#030303",
       "#181818",
       "#414141",
       "#2c2c2c",
-      "#606060",
+      "#555555",
       "#070707",
       "#696969",
-      "#272727",
-      "#1e1e1e"
+      "#555555",
+      "#181818"
     ],
     "silver": [
       "#0e0e0e",
       "#6f6f6f",
       "#dbdbdb",
       "#9b9b9b",
-      "#f4f4f4",
+      "#ededed",
       "#363636",
       "#ffffff",
-      "#929292",
-      "#797979"
+      "#ededed",
+      "#6f6f6f"
     ]
   }
 }
