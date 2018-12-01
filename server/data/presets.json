@@ -314,7 +314,8 @@
         "plate"
       ],
       "hands": [
-        "metal_gloves"
+        "gloves",
+        "steel"
       ],
       "arms": [
         "metal_arms"
@@ -354,7 +355,8 @@
         "mail"
       ],
       "hands": [
-        "metal_gloves"
+        "gloves",
+        "steel"
       ],
       "arms": [],
       "cape": [
@@ -1447,7 +1449,8 @@
       "belt": [],
       "arms": [],
       "hands": [
-        "metal_gloves"
+        "gloves",
+        "steel"
       ],
       "feet": [
         "plate"
