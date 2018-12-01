@@ -308,7 +308,7 @@
         "metal_helm"
       ],
       "feet": [
-        "metal_boots"
+        "plate"
       ],
       "chest": [
         "plate"
@@ -348,7 +348,7 @@
         "chain_hood"
       ],
       "feet": [
-        "metal_boots"
+        "plate"
       ],
       "chest": [
         "mail"
@@ -640,7 +640,7 @@
         "chain_hood"
       ],
       "feet": [
-        "metal_boots"
+        "plate"
       ],
       "chest": [
         "plate"
@@ -752,7 +752,7 @@
         "blue"
       ],
       "feet": [
-        "metal_boots"
+        "plate"
       ],
       "chest": [
         "plate"
@@ -793,7 +793,7 @@
         "bronze"
       ],
       "feet": [
-        "ornate_metal_boots",
+        "plate",
         "bronze"
       ],
       "chest": [
@@ -840,7 +840,7 @@
         "dark"
       ],
       "feet": [
-        "ornate_metal_boots",
+        "plate",
         "dark"
       ],
       "chest": [
@@ -884,7 +884,7 @@
         "silver"
       ],
       "feet": [
-        "ornate_metal_boots",
+        "plate",
         "silver"
       ],
       "chest": [
@@ -931,7 +931,7 @@
         "dark"
       ],
       "feet": [
-        "ornate_metal_boots",
+        "plate",
         "dark"
       ],
       "chest": [
@@ -1450,7 +1450,7 @@
         "metal_gloves"
       ],
       "feet": [
-        "metal_boots"
+        "plate"
       ],
       "chest": [
         "legion",
