@@ -30,6 +30,7 @@ export class GameLevel {
     readonly chunkAboveContainer = new PIXI.Container();
     private readonly tileSet: TexturedTileSet[];
     private entityId!: EntityId;
+    private scale: number = 1;
 
     constructor(private context: GameContext, readonly map: LoadedMap, images: ResourceDictionary) {
         this.tileSet = map.tileSets.map(tileset => new TexturedTileSet(tileset, images));
@@ -47,6 +48,10 @@ export class GameLevel {
         }
     }
 
+    setScale(scale: number) {
+        this.scale = scale;
+    }
+
     updateObjects(diffs: Diff<EntityId, EntityData>[]) {
         const { tilewidth, tileheight } = this.map.map;
 
@@ -58,10 +63,8 @@ export class GameLevel {
 
             const { x, y } = this.round(position);
 
-            display.x = x;
-            display.y = y;
-            display.scale.x = 1 / tilewidth;
-            display.scale.y = 1 / tileheight;
+            display.x = x * tilewidth;
+            display.y = y * tileheight;
         };
 
         for (const diff of diffs) {
@@ -109,9 +112,12 @@ export class GameLevel {
     round(position: Position): Position {
         const { tilewidth, tileheight } = this.map.map;
 
+        const roundX = tilewidth * this.scale;
+        const roundY = tileheight * this.scale;
+
         return {
-            x: Math.round(position.x * tilewidth) / tilewidth as X,
-            y: Math.round(position.y * tileheight) / tileheight as Y,
+            x: Math.round(position.x * roundX) / roundX as X,
+            y: Math.round(position.y * roundY) / roundY as Y,
         }
     }
 

@@ -31,9 +31,6 @@ export class GameApplication extends PIXI.Application {
         const gameLevel = new GameLevel(gameContext, map, resources);
         this.gameLevel = gameLevel;
 
-        this.viewContainer.scale.x = map.map.tilewidth;
-        this.viewContainer.scale.y = map.map.tileheight;
-
         this.timer = requestAnimationFrame(this.update);
 
         this.viewContainer.addChild(gameLevel.container);
@@ -44,6 +41,11 @@ export class GameApplication extends PIXI.Application {
         this.inputManager = new InputManager();
 
         registerCursors(this.renderer.plugins.interaction.cursorStyles);
+    }
+
+    setScale(scale: number) {
+        this.gameLevel.setScale(scale);
+        this.viewContainer.scale.set(scale);
     }
 
     destroy() {
@@ -90,14 +92,14 @@ export class GameApplication extends PIXI.Application {
 
         const { tilewidth, tileheight } = this.gameLevel.map.map;
 
-        viewContainer.x = Math.floor(-this.centerX * viewContainer.scale.x + canvas.width / 2);
-        viewContainer.y = Math.floor(-this.centerY * viewContainer.scale.y + canvas.height / 2);
+        viewContainer.x = -this.centerX * tilewidth * viewContainer.scale.x + Math.floor(canvas.width / 2);
+        viewContainer.y = -this.centerY * tileheight * viewContainer.scale.y + Math.floor(canvas.height / 2);
 
         this.gameLevel.setVisibleArea(
-            -viewContainer.x / viewContainer.scale.x as X,
-            -viewContainer.y / viewContainer.scale.y as Y,
-            canvas.width / viewContainer.scale.x,
-            canvas.height / viewContainer.scale.y,
+            -viewContainer.x / tilewidth / viewContainer.scale.x as X,
+            -viewContainer.y / tileheight / viewContainer.scale.y as Y,
+            canvas.width / tilewidth / viewContainer.scale.x,
+            canvas.height / tileheight / viewContainer.scale.y,
         );
     };
 

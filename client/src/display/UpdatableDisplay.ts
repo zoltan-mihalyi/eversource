@@ -12,7 +12,7 @@ const properties: (keyof EntityData)[] = [
 
 class SpriteContainer extends PIXI.Container {
     private isMouseOver = false;
-    private outlineFilter = new OutlineFilter(1, 0xffff55);
+    private outlineFilter = new OutlineFilter(2, 0xffff55);
 
     constructor(protected updatableDisplay: UpdatableDisplay<any>) {
         super();
@@ -143,12 +143,13 @@ export abstract class UpdatableDisplay<T extends EntityData> extends PIXI.Contai
         const { name } = this.data;
         const text = new PIXI.Text(name, {
             fontFamily: 'pixel, serif',
-            fontSize: 16,
+            fontSize: 32,
             fill: this.nameColor(),
             stroke: '#000000',
-            strokeThickness: 0.7,
+            strokeThickness: 1.4,
             align: 'left',
         });
+        text.scale.set(0.5);
         text.x = -Math.floor(text.width / 2); // avoid blurry text
         this.textContainer.addChild(text);
     }

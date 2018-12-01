@@ -149,21 +149,23 @@ export class GameScreen extends React.Component<Props, State> {
         const { game } = this.props;
         const canvas = game.view;
 
-        const width = window.innerWidth;
-        const height = window.innerHeight;
+        const devicePixelRatio = window.devicePixelRatio || 1;
+
+        const cssWidth = window.innerWidth;
+        const cssHeight = window.innerHeight;
+
+        const width = window.innerWidth * devicePixelRatio;
+        const height = window.innerHeight * devicePixelRatio;
 
         const widthRatio = width / 800;
-        const heightRatio = height / 600;
+        const heightRatio = height / 450;
 
-        const pixelRatio = restrict((widthRatio + heightRatio) / 2, 1, 2);
+        game.setScale(roundScale(Math.max(widthRatio, heightRatio)));
 
-        const canvasWidth = Math.floor(width / pixelRatio);
-        const canvasHeight = Math.floor(height / pixelRatio);
+        canvas.style.width = `${cssWidth}px`;
+        canvas.style.height = `${cssHeight}px`;
 
-        canvas.style.width = `${canvasWidth * pixelRatio}px`;
-        canvas.style.height = `${canvasHeight * pixelRatio}px`;
-
-        game.renderer.resize(canvasWidth, canvasHeight);
+        game.renderer.resize(width, height);
         game.updateView();
     };
 
@@ -188,12 +190,9 @@ export class GameScreen extends React.Component<Props, State> {
     };
 }
 
-function restrict(num: number, start: number, end: number): number {
-    if (num < start) {
-        return start;
+function roundScale(scale: number): number {
+    if (scale < 2) {
+        return Math.ceil(scale);
     }
-    if (num > end) {
-        return end;
-    }
-    return num;
+    return Math.round(scale * 32) / 32;
 }

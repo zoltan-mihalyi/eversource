@@ -11,7 +11,6 @@ export class SplitBaseTexture extends BaseTexture {
     constructor(readonly x: number, readonly y: number) {
         super();
         this.mipmap = false;
-        this.scaleMode = PIXI.SCALE_MODES.NEAREST;
     }
 
     loadLater(source: HTMLImageElement | HTMLCanvasElement | HTMLVideoElement) {

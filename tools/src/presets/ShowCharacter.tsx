@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as path from 'path';
-import * as PIXI from 'pixi.js';
+import * as PIXI from '../../../client/src/pixi';
 import { HumanoidPreset, PresetAttitude, resolvePresetAttitude } from '../../../server/src/world/Presets';
 import { PropTable } from './PropTable';
 import { TextureLoader } from '../../../client/src/map/TextureLoader';
@@ -12,6 +12,8 @@ import { HumanoidEntityData } from '../../../common/domain/HumanoidEntityData';
 import { HumanoidDisplay } from '../../../client/src/display/HumanoidDisplay';
 import { GameContext } from '../../../client/src/game/GameContext';
 import { EntityId } from '../../../common/domain/EntityData';
+
+PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
 
 interface Props {
     name: string;
@@ -28,10 +30,12 @@ interface State {
 
 const process = new CancellableProcess();
 
-const CANVAS_WIDTH = 192;
+const SCALE = 4;
+const CANVAS_WIDTH = 192 * SCALE;
 
 export class ShowCharacter extends React.Component<Props, State> {
     private app: PIXI.Application;
+    private container = new PIXI.Container();
     private gameContext: GameContext;
 
     private onChangeAppearance = this.createOnChangeHandler('appearance');
@@ -45,7 +49,14 @@ export class ShowCharacter extends React.Component<Props, State> {
             preset: props.originalPreset,
         };
 
-        this.app = new PIXI.Application({ width: CANVAS_WIDTH, height: 144, backgroundColor: 0x2e8036 });
+        this.app = new PIXI.Application({
+            width: CANVAS_WIDTH,
+            height: CANVAS_WIDTH * 0.75,
+            backgroundColor: 0x2e8036,
+        });
+        this.container.scale.set(SCALE);
+        this.app.stage.addChild(this.container);
+
         const basePath = 'file://' + path.join(wwwDir, 'spritesheets');
         this.gameContext = {
             textureLoader: new TextureLoader(this.app.renderer, process, 32, basePath),
@@ -148,9 +159,7 @@ export class ShowCharacter extends React.Component<Props, State> {
     }
 
     private updateCharacter() {
-
-        this.app.stage.removeChildren();
-
+        this.container.removeChildren();
 
         const { preset, activity, direction } = this.state;
 
@@ -174,19 +183,16 @@ export class ShowCharacter extends React.Component<Props, State> {
 
         const character = new HumanoidDisplay(0 as EntityId, this.gameContext, entityData, false);
         character.init();
-        character.x = CANVAS_WIDTH / 2;
+        character.x = CANVAS_WIDTH / SCALE / 2;
         character.y = 122;
-        this.app.stage.addChild(character);
+        this.container.addChild(character);
     }
 
     private containerRef = (div: HTMLElement | null) => {
         if (!div) {
             return;
         }
-        const { view } = this.app;
-        view.style.width = view.width * 4 + 'px';
-        view.style.height = view.height * 4 + 'px';
-        div.appendChild(view);
+        div.appendChild(this.app.view);
     };
 
     private changeAnim = (event: React.SyntheticEvent<HTMLSelectElement>) => {

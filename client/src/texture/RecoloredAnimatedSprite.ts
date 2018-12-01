@@ -84,7 +84,6 @@ export class RecoloredAnimatedSprite extends PIXI.extras.AnimatedSprite {
         let recoloredBaseTexture = recoloredTextures[key];
         if (!recoloredBaseTexture) {
             recoloredBaseTexture = new PIXI.BaseRenderTexture(baseTexture.width, baseTexture.height);
-            recoloredBaseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
             recoloredTextures[key] = recoloredBaseTexture;
 
             const sprite = new PIXI.Sprite(new PIXI.Texture(baseTexture));
