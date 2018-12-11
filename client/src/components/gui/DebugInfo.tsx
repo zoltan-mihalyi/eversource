@@ -20,7 +20,8 @@ export class DebugInfo extends React.PureComponent<{}, State> {
     render() {
         return (
             <div className="gui top right" style={STYLE}>
-                FPS: {this.state.fps}
+                FPS: {this.state.fps}<br/>
+                Version: {process.env.CLIENT_VERSION}
             </div>
         );
     }
