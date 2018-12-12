@@ -2,7 +2,7 @@ import { Appearance, Equipment } from '../../../common/domain/HumanoidEntityData
 import { MovementConfig } from '../entity/controller/WalkingController';
 import { CreatureAttitude } from '../../../common/domain/CreatureEntityData';
 
-interface BasePreset {
+export interface BasePreset {
     name: string;
     attitude?: PresetAttitude;
     scale?: number;

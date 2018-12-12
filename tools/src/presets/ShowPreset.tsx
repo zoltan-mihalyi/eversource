@@ -1,29 +1,36 @@
 import * as React from 'react';
 import * as path from 'path';
 import * as PIXI from '../../../client/src/pixi';
-import { HumanoidPreset, PresetAttitude, resolvePresetAttitude } from '../../../server/src/world/Presets';
-import { PropTable } from './PropTable';
 import { TextureLoader } from '../../../client/src/map/TextureLoader';
 import { CancellableProcess } from '../../../common/util/CancellableProcess';
-import { X, Y } from '../../../common/domain/Location';
 import { wwwDir } from '../Utils';
-import { CreatureActivity, Direction } from '../../../common/domain/CreatureEntityData';
-import { HumanoidEntityData } from '../../../common/domain/HumanoidEntityData';
-import { HumanoidDisplay } from '../../../client/src/display/HumanoidDisplay';
+import { BaseCreatureEntityData, CreatureActivity, Direction } from '../../../common/domain/CreatureEntityData';
 import { GameContext } from '../../../client/src/game/GameContext';
-import { EntityId } from '../../../common/domain/EntityData';
+import { BasePreset, PresetAttitude, resolvePresetAttitude } from '../../../server/src/world/Presets';
+import { UpdatableDisplay } from '../../../client/src/display/UpdatableDisplay';
+import { X, Y } from '../../../common/domain/Location';
 
 PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
 
-interface Props {
+export interface EditProps<T> {
+    preset: T;
+    onChange: (update: Partial<T>) => void;
+}
+
+export type createDisplay<T> = (baseEntityData: BaseCreatureEntityData, preset: T, context: GameContext) => UpdatableDisplay<any>;
+
+interface Props<T> {
     name: string;
-    originalPreset: HumanoidPreset;
-    save: (preset: HumanoidPreset) => void;
+    canCast: boolean;
+    originalPreset: T;
+    Edit: React.ComponentType<EditProps<T>>;
+    createDisplay: createDisplay<T>;
+    save: (preset: T) => void;
     exit: () => void;
 }
 
-interface State {
-    preset: HumanoidPreset;
+interface State<T> {
+    preset: T;
     activity: CreatureActivity;
     direction: Direction;
 }
@@ -33,15 +40,12 @@ const process = new CancellableProcess();
 const SCALE = 4;
 const CANVAS_WIDTH = 192 * SCALE;
 
-export class ShowCharacter extends React.Component<Props, State> {
+export class ShowPreset<T extends BasePreset> extends React.Component<Props<T>, State<T>> {
     private app: PIXI.Application;
     private container = new PIXI.Container();
     private gameContext: GameContext;
 
-    private onChangeAppearance = this.createOnChangeHandler('appearance');
-    private onChangeEquipment = this.createOnChangeHandler('equipment');
-
-    constructor(props: Props) {
+    constructor(props: Props<T>) {
         super(props);
         this.state = {
             activity: 'walking',
@@ -78,6 +82,7 @@ export class ShowCharacter extends React.Component<Props, State> {
 
     render() {
         const { preset } = this.state;
+        const { canCast, Edit } = this.props;
 
         return (
             <div>
@@ -98,12 +103,12 @@ export class ShowCharacter extends React.Component<Props, State> {
                         <input type="number" value={preset.scale || 1} step={0.01} min={0.01}
                                onChange={this.changeScale}/>
                     </div>
-                    <PropTable data={preset.appearance as {}} onChange={this.onChangeAppearance}/>
-                    <PropTable data={preset.equipment as {}} onChange={this.onChangeEquipment}/>
+                    <Edit preset={preset} onChange={this.onChange}/>
+
                     <select onChange={this.changeAnim} value={this.state.activity} size={3}>
                         <option value="standing">Standing</option>
                         <option value="walking">Walking</option>
-                        <option value="casting">Casting</option>
+                        {canCast && <option value="casting">Casting</option>}
                     </select>
                     <select onChange={this.changeDir} value={this.state.direction} size={4}>
                         <option value="left">Left</option>
@@ -124,7 +129,7 @@ export class ShowCharacter extends React.Component<Props, State> {
     private changeName = (e: React.SyntheticEvent<HTMLInputElement>) => {
         this.setState({
             preset: {
-                ...this.state.preset,
+                ...this.state.preset as any,
                 name: e.currentTarget.value,
             },
         });
@@ -133,7 +138,7 @@ export class ShowCharacter extends React.Component<Props, State> {
     private changeAttitude = (e: React.SyntheticEvent<HTMLSelectElement>) => {
         this.setState({
             preset: {
-                ...this.state.preset,
+                ...this.state.preset as any,
                 attitude: e.currentTarget.value as PresetAttitude,
             },
         });
@@ -141,30 +146,27 @@ export class ShowCharacter extends React.Component<Props, State> {
     private changeScale = (e: React.SyntheticEvent<HTMLInputElement>) => {
         this.setState({
             preset: {
-                ...this.state.preset,
+                ...this.state.preset as any,
                 scale: +e.currentTarget.value || 1,
             },
         });
     };
 
-    private createOnChangeHandler<K extends keyof HumanoidPreset>(key: K) {
-        return (value: HumanoidPreset[K]) => {
-            this.setState({
-                preset: {
-                    ...this.state.preset,
-                    [key]: value,
-                },
-            });
-        };
-    }
+    private onChange = (update: Partial<T>) => {
+        this.setState({
+            preset: {
+                ...this.state.preset as any,
+                ...update as any,
+            },
+        });
+    };
 
     private updateCharacter() {
         this.container.removeChildren();
 
         const { preset, activity, direction } = this.state;
 
-        const entityData: HumanoidEntityData = {
-            type: 'humanoid',
+        const baseEntityData: BaseCreatureEntityData = {
             level: 1,
             hp: 100,
             maxHp: 100,
@@ -176,12 +178,11 @@ export class ShowCharacter extends React.Component<Props, State> {
             activity,
             activitySpeed: 3,
             name: preset.name,
-            appearance: preset.appearance,
-            equipment: preset.equipment,
             direction,
         };
 
-        const character = new HumanoidDisplay(0 as EntityId, this.gameContext, entityData, false);
+        const character = this.props.createDisplay(baseEntityData, preset, this.gameContext);
+
         character.init();
         character.x = CANVAS_WIDTH / SCALE / 2;
         character.y = 122;
