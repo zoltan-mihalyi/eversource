@@ -4,11 +4,12 @@ import * as PIXI from '../../../client/src/pixi';
 import { TextureLoader } from '../../../client/src/map/TextureLoader';
 import { CancellableProcess } from '../../../common/util/CancellableProcess';
 import { wwwDir } from '../Utils';
-import { BaseCreatureEntityData, CreatureActivity, Direction } from '../../../common/domain/CreatureEntityData';
+import { BaseCreatureEntityData, CreatureActivity, Direction, Effect } from '../../../common/domain/CreatureEntityData';
 import { GameContext } from '../../../client/src/game/GameContext';
 import { BasePreset, PresetAttitude, resolvePresetAttitude } from '../../../server/src/world/Presets';
 import { UpdatableDisplay } from '../../../client/src/display/UpdatableDisplay';
 import { X, Y } from '../../../common/domain/Location';
+import { EffectEdit } from './EffectEdit';
 
 PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
 
@@ -100,26 +101,45 @@ export class ShowPreset<T extends BasePreset> extends React.Component<Props<T>, 
                             <option value="hostile">Hostile</option>
                         </select>
                         <span className="prop-name">scale </span>
-                        <input type="number" value={preset.scale || 1} step={0.01} min={0.01}
+                        <input className="small-input" type="number" value={preset.scale || 1} step={0.01} min={0.01}
                                onChange={this.changeScale}/>
                     </div>
                     <Edit preset={preset} onChange={this.onChange}/>
 
-                    <select onChange={this.changeAnim} value={this.state.activity} size={3}>
-                        <option value="standing">Standing</option>
-                        <option value="walking">Walking</option>
-                        {canCast && <option value="casting">Casting</option>}
-                    </select>
-                    <select onChange={this.changeDir} value={this.state.direction} size={4}>
-                        <option value="left">Left</option>
-                        <option value="up">Up</option>
-                        <option value="right">Right</option>
-                        <option value="down">Down</option>
-                    </select>
+                    <div className="prop-table">
+                        <select onChange={this.changeAnim} value={this.state.activity} size={3}>
+                            <option value="standing">Standing</option>
+                            <option value="walking">Walking</option>
+                            {canCast && <option value="casting">Casting</option>}
+                        </select>
+                        <select onChange={this.changeDir} value={this.state.direction} size={4}>
+                            <option value="left">Left</option>
+                            <option value="up">Up</option>
+                            <option value="right">Right</option>
+                            <option value="down">Down</option>
+                        </select>
+                        <div>
+                            <p className="prop-name">Effects</p>
+                            {preset.effects && preset.effects.map(((effect, i) => (
+                                <EffectEdit key={i} index={i} effect={effect} onChange={this.changeEffect}
+                                            onRemove={this.removeEffect}/>
+                            )))}
+                            <button onClick={this.addEffect}>+</button>
+                        </div>
+                    </div>
                 </div>
                 <div className="display" ref={this.containerRef}/>
             </div>
         );
+    }
+
+    private changePreset(newValues: Partial<BasePreset>) {
+        this.setState({
+            preset: {
+                ...this.state.preset as any,
+                ...newValues as any,
+            },
+        });
     }
 
     private save = () => {
@@ -127,28 +147,41 @@ export class ShowPreset<T extends BasePreset> extends React.Component<Props<T>, 
     };
 
     private changeName = (e: React.SyntheticEvent<HTMLInputElement>) => {
-        this.setState({
-            preset: {
-                ...this.state.preset as any,
-                name: e.currentTarget.value,
-            },
+        this.changePreset({
+            name: e.currentTarget.value,
         });
     };
 
     private changeAttitude = (e: React.SyntheticEvent<HTMLSelectElement>) => {
-        this.setState({
-            preset: {
-                ...this.state.preset as any,
-                attitude: e.currentTarget.value as PresetAttitude,
-            },
+        this.changePreset({
+            attitude: e.currentTarget.value as PresetAttitude,
         });
     };
     private changeScale = (e: React.SyntheticEvent<HTMLInputElement>) => {
-        this.setState({
-            preset: {
-                ...this.state.preset as any,
-                scale: +e.currentTarget.value || 1,
-            },
+        this.changePreset({
+            scale: +e.currentTarget.value || 1,
+        });
+    };
+
+    private changeEffect = (index: number, effect: Effect) => {
+        const effects = this.state.preset.effects!.slice();
+        effects[index] = effect;
+
+        this.changePreset({ effects });
+    };
+
+    private addEffect = () => {
+        const effects: Effect[] = [...this.state.preset.effects || [], { type: 'alpha', param: 1 }];
+
+        this.changePreset({ effects });
+    };
+
+    private removeEffect = (index: number) => {
+        const effects = this.state.preset.effects!.slice();
+        effects.splice(index, 1);
+
+        this.changePreset({
+            effects: effects.length > 0 ? effects : void 0,
         });
     };
 
@@ -179,6 +212,7 @@ export class ShowPreset<T extends BasePreset> extends React.Component<Props<T>, 
             activitySpeed: 3,
             name: preset.name,
             direction,
+            effects: preset.effects || [],
         };
 
         const character = this.props.createDisplay(baseEntityData, preset, this.gameContext);

@@ -1,11 +1,12 @@
 import { Appearance, Equipment } from '../../../common/domain/HumanoidEntityData';
 import { MovementConfig } from '../entity/controller/WalkingController';
-import { CreatureAttitude } from '../../../common/domain/CreatureEntityData';
+import { CreatureAttitude, Effect } from '../../../common/domain/CreatureEntityData';
 
 export interface BasePreset {
     name: string;
     attitude?: PresetAttitude;
     scale?: number;
+    effects?: Effect[];
 }
 
 export type PresetAttitude = "friendly" | "neutral" | "hostile";
@@ -42,7 +43,7 @@ function resolveGivenAttitude(attitude: PresetAttitude): CreatureAttitude {
 
 export function resolvePresetAttitude(attitude: PresetAttitude | undefined, monster: boolean): CreatureAttitude {
     if (attitude === void 0) {
-        return resolveGivenAttitude(monster ? 'hostile' : 'friendly');
+        return monster ? CreatureAttitude.HOSTILE : CreatureAttitude.FRIENDLY;
     }
     return resolveGivenAttitude(attitude);
 

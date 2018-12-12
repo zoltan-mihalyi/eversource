@@ -25,6 +25,7 @@ const BASE_CREATURE: Omit<BaseCreatureEntityData, 'position' | 'name' | 'scale'>
     maxHp: 100,
     player: false,
     attitude: CreatureAttitude.FRIENDLY,
+    effects: [],
 };
 
 export const BASE_HUMANOID: BaseHumanoid = {

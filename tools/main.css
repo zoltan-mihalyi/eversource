@@ -53,7 +53,8 @@ input.big {
 }
 
 .config {
-    font-size: x-large;
+    font-size: large;
+    height: 310px;
 }
 
 .config select, .config input {
@@ -98,4 +99,8 @@ input.big {
     display: inline-block;
     margin-bottom: 0;
     margin-left: 10px;
+}
+
+.small-input {
+    width: 64px;
 }

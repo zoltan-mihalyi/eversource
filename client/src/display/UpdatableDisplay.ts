@@ -2,17 +2,34 @@ import * as PIXI from 'pixi.js';
 import { EntityData, EntityId } from '../../../common/domain/EntityData';
 import { OutlineFilter } from '@pixi/filter-outline';
 import { GOLDEN } from './Cursors';
+import { AdjustmentFilter } from '@pixi/filter-adjustment';
 import { GameContext } from '../game/GameContext';
 import DestroyOptions = PIXI.DestroyOptions;
+import AdjustmentOptions = PIXI.filters.AdjustmentOptions;
 
 const properties: (keyof EntityData)[] = [
     'interaction',
     'name',
 ];
 
+const ADJUSTMENT_KEYS: (keyof AdjustmentOptions)[] = [
+    'gamma',
+    'contrast',
+    'saturation',
+    'brightness',
+    'red',
+    'green',
+    'blue',
+    'alpha',
+];
+
 class SpriteContainer extends PIXI.Container {
     private isMouseOver = false;
     private outlineFilter = new OutlineFilter(2, 0xffff55);
+    private adjustmentFilter = new AdjustmentFilter();
+
+    private effectFilters: PIXI.Filter<any>[] = [];
+    private adjustmentOptions: AdjustmentOptions = {};
 
     constructor(protected updatableDisplay: UpdatableDisplay<any>) {
         super();
@@ -43,12 +60,39 @@ class SpriteContainer extends PIXI.Container {
         this.updatableDisplay.updateMouseOverEffect(this.isMouseOver);
 
         if (this.isMouseOver && this.updatableDisplay.hasInteraction()) {
-            this.filters = [this.outlineFilter];
+            this.updateFilters();
             this.cursor = GOLDEN;
         } else {
-            this.filters = null;
+            this.updateFilters();
             this.cursor = '';
         }
+    }
+
+    setEffectFilters(filters: PIXI.Filter<any>[], adjustmentOptions: AdjustmentOptions) {
+        this.effectFilters = filters;
+        this.adjustmentOptions = adjustmentOptions;
+        this.updateFilters();
+    }
+
+    private updateFilters() {
+        const filters: PIXI.Filter<any>[] = this.effectFilters.slice();
+
+        if (this.isMouseOver || Object.keys(this.adjustmentOptions).length > 0) {
+            for (const key of ADJUSTMENT_KEYS) {
+                const value = this.adjustmentOptions[key];
+                this.adjustmentFilter[key] = value === void 0 ? 1 : value;
+            }
+            filters.push(this.adjustmentFilter);
+        }
+
+
+        if (this.isMouseOver) {
+            if (this.updatableDisplay.hasInteraction()) {
+                filters.push(this.outlineFilter);
+            }
+            this.adjustmentFilter.gamma *= 1.3;
+        }
+        this.filters = filters.length > 0 ? filters : null;
     }
 }
 

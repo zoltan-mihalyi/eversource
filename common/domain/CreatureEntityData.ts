@@ -11,6 +11,13 @@ export const enum CreatureAttitude {
     HOSTILE
 }
 
+export type EffectType = 'speed' | 'alpha' | 'poison' | 'fire' | 'ice' | 'stone' | 'light';
+
+export interface Effect {
+    type: EffectType;
+    param: number;
+}
+
 export interface BaseCreatureEntityData extends BaseEntityData {
     level: number;
     hp: number;
@@ -21,6 +28,7 @@ export interface BaseCreatureEntityData extends BaseEntityData {
     activitySpeed: number;
     attitude: CreatureAttitude;
     scale: number;
+    effects: Effect[];
 }
 
 export type CreatureEntityData = HumanoidEntityData | MonsterEntityData;

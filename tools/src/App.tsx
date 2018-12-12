@@ -4,7 +4,7 @@ import { MonsterPresetTool } from './presets/monsters/MonsterPresetTool';
 import { HumanoidPresetsTool } from './presets/humanoids/HumanoidPresetsTool';
 
 interface State {
-    screen: 'presets' | 'monsters' | 'palettes' | null;
+    screen: 'humanoids' | 'monsters' | 'palettes' | null;
 }
 
 export class App extends React.Component<{}, State> {
@@ -23,7 +23,7 @@ export class App extends React.Component<{}, State> {
                     <div>
                         <header>Eversource Tools</header>
                         <div>
-                            <button className="big" onClick={this.showPresets}>Presets</button>
+                            <button className="big" onClick={this.showHumanoids}>Humanoids</button>
                         </div>
                         <div>
                             <button className="big" onClick={this.showMonsters}>Monsters</button>
@@ -33,7 +33,7 @@ export class App extends React.Component<{}, State> {
                         </div>
                     </div>
                 );
-            case 'presets':
+            case 'humanoids':
                 return (
                     <HumanoidPresetsTool onExit={this.showMainMenu}/>
                 );
@@ -52,8 +52,8 @@ export class App extends React.Component<{}, State> {
         this.setState({ screen: null });
     };
 
-    private showPresets = () => {
-        this.setState({ screen: 'presets' });
+    private showHumanoids = () => {
+        this.setState({ screen: 'humanoids' });
     };
     private showMonsters = () => {
         this.setState({ screen: 'monsters' });

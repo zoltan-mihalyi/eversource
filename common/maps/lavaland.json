@@ -1312,6 +1312,17 @@
                  "width":32,
                  "x":3616,
                  "y":5184
+                }, 
+                {
+                 "height":32,
+                 "id":132,
+                 "name":"rufus",
+                 "rotation":0,
+                 "type":"npc",
+                 "visible":true,
+                 "width":32,
+                 "x":1408,
+                 "y":6624
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -1319,7 +1330,7 @@
          "x":0,
          "y":0
         }],
- "nextobjectid":132,
+ "nextobjectid":133,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.1.6",

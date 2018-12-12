@@ -1535,7 +1535,13 @@
       "mask": [
         "mask"
       ]
-    }
+    },
+    "effects": [
+      {
+        "type": "fire",
+        "param": 1
+      }
+    ]
   },
   "wilhelm": {
     "name": "Baron Wilhelm",
@@ -1584,5 +1590,56 @@
         "formal_monocle"
       ]
     }
+  },
+  "rufus": {
+    "name": "Rufus The Stoned",
+    "appearance": {
+      "sex": "male",
+      "body": [
+        "normal",
+        "tanned"
+      ],
+      "nose": [],
+      "facial": [
+        "bigstache",
+        "blonde2"
+      ],
+      "hair": [
+        "bangs",
+        "blonde2"
+      ],
+      "eyes": [],
+      "ears": []
+    },
+    "equipment": {
+      "shirt": [],
+      "legs": [
+        "plate",
+        "gold"
+      ],
+      "head": [],
+      "cape": [],
+      "belt": [],
+      "arms": [
+        "legion"
+      ],
+      "hands": [
+        "gloves",
+        "gold"
+      ],
+      "feet": [
+        "sandals"
+      ],
+      "chest": [
+        "legion"
+      ],
+      "mask": []
+    },
+    "effects": [
+      {
+        "type": "stone",
+        "param": 1
+      }
+    ]
   }
 }

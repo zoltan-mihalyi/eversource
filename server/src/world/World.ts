@@ -1,9 +1,9 @@
-import { X, Y, ZoneId } from '../../../common/domain/Location';
+import { Position, X, Y, ZoneId } from '../../../common/domain/Location';
 import { MapLoader } from './MapLoader';
 import { Zone } from './Zone';
-import { HumanoidPresets, MonsterPresets, resolvePresetAttitude } from './Presets';
+import { BasePreset, HumanoidPresets, MonsterPresets, resolvePresetAttitude } from './Presets';
 import { BASE_HUMANOID, BASE_MONSTER, CreatureEntity } from '../entity/CreatureEntity';
-import { Direction } from '../../../common/domain/CreatureEntityData';
+import { BaseCreatureEntityData, Direction } from '../../../common/domain/CreatureEntityData';
 import { WalkingController } from '../entity/controller/WalkingController';
 import { TiledObject } from '../../../common/tiled/interfaces';
 import { HiddenEntityData } from '../entity/Entity';
@@ -63,31 +63,27 @@ export class WorldImpl implements World {
             const properties = object.properties || {};
             if (object.type === 'npc') {
                 const preset = this.humanoidPresets[object.name];
+                const { appearance, equipment } = preset;
 
-                const directionProp = properties.direction as Direction | undefined;
-
-                const direction = typeof directionProp === 'string' ? directionProp : 'down';
+                const direction = (properties.direction || 'down') as Direction;
                 const controller = properties.controller === 'walking' ? new WalkingController(position) : void 0;
                 const characterEntity = new CreatureEntity({
                     ...BASE_HUMANOID,
-                    ...preset,
-                    attitude: resolvePresetAttitude(preset.attitude, false),
-                    scale: preset.scale || 1,
-                    position,
+                    ...baseFromPreset(preset, position, false),
+                    appearance,
+                    equipment,
                     direction,
                 }, getHidden(object), controller);
                 zone.addEntity(characterEntity);
             } else if (object.type === 'monster') {
-                const { name, image, palette, movement, attitude, scale } = this.monsterPresets[object.name];
+                const preset = this.monsterPresets[object.name];
+                const { image, palette, movement } = preset;
 
                 zone.addEntity(new CreatureEntity({
                     ...BASE_MONSTER,
-                    attitude: resolvePresetAttitude(attitude, true),
-                    scale: scale || 1,
-                    name,
+                    ...baseFromPreset(preset, position, true),
                     image,
                     palette,
-                    position,
                 }, getHidden(object), new WalkingController(position, movement)))
             } else if (object.type === 'area') {
                 zone.addArea(
@@ -109,4 +105,17 @@ export class WorldImpl implements World {
             zone.update(INTERVAL);
         });
     };
+}
+
+type PresetBaseEntityData = Pick<BaseCreatureEntityData, 'attitude' | 'effects' | 'scale' | 'position' | 'name'>;
+
+function baseFromPreset(preset: BasePreset, position: Position, monster: boolean): PresetBaseEntityData {
+    return {
+        position,
+        name: preset.name,
+        scale: preset.scale || 1,
+        attitude: resolvePresetAttitude(preset.attitude, monster),
+        effects: preset.effects || [],
+    };
+
 }
