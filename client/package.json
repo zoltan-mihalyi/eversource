@@ -6,6 +6,7 @@
   "scripts": {
     "webpack": "webpack",
     "tsc": "tsc",
+    "storybook": "start-storybook -s ../cordova/www -p 6006",
     "dev": "webpack --watch",
     "test": "webpack"
   },
@@ -26,11 +27,15 @@
     "react-dom": "^16.4.2"
   },
   "devDependencies": {
+    "@babel/core": "^7.2.2",
+    "@storybook/react": "^4.1.2",
     "@types/pako": "^1.0.0",
     "@types/pixi.js": "^4.8.0",
     "@types/react": "^16.4.12",
     "@types/react-dom": "^16.0.7",
+    "@types/storybook__react": "^4.0.0",
     "awesome-typescript-loader": "^5.2.0",
+    "babel-loader": "^8.0.4",
     "source-map-loader": "^0.2.4",
     "typescript": "^3.0.1",
     "webpack": "^4.17.1",
