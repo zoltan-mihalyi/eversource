@@ -171,7 +171,7 @@ export abstract class Entity<O extends EntityData = EntityData> {
                 ];
 
                 for (let i = Math.floor(left); i < Math.ceil(right); i += 1) {
-                    edges.push(getHorizontalEdge(grid.getBlock(i, j), goingDown, 1));
+                    edges.push(getVerticalEdge(grid.getBlock(i, j), goingDown, 1));
                 }
 
                 const closestEdge = dir === -1 ? Math.max(...edges) : Math.min(...edges);
