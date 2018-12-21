@@ -1,34 +1,39 @@
 import * as fs from 'fs';
 import * as React from 'react';
-import { ShowCharacter } from './ShowCharacter';
-import { HumanoidPreset, HumanoidPresets } from '../../../server/src/world/Presets';
+import { createDisplay, EditProps, ShowPreset } from './ShowPreset';
+import { BasePreset } from '../../../server/src/world/Presets';
 
-const PRESETS_JSON = '../server/data/presets.json';
-
-interface Props {
+interface Props<T> {
+    file: string;
+    canCast: boolean;
+    defaultPreset: T;
+    Edit: React.ComponentType<EditProps<T>>;
+    createDisplay: createDisplay<T>;
     onExit: () => void;
 }
 
-interface State {
-    presets: HumanoidPresets;
+interface State<T> {
+    presets: { [name: string]: T };
     selected: string | null;
     modified: boolean;
 }
 
-export class PresetsTool extends React.Component<Props, State> {
+export class PresetsTool<T extends BasePreset> extends React.Component<Props<T>, State<T>> {
     private addName = React.createRef<HTMLInputElement>();
 
-    constructor(props: Props) {
+    constructor(props: Props<T>) {
         super(props);
-        const presets = JSON.parse(fs.readFileSync(PRESETS_JSON, 'utf-8'));
+        const presets = JSON.parse(fs.readFileSync(this.getFileName(), 'utf-8'));
         this.state = { presets, selected: null, modified: false };
     }
 
     render() {
+        const { Edit, canCast } = this.props;
+
         const { presets, selected, modified } = this.state;
         if (selected) {
-            return (<ShowCharacter name={selected} save={this.savePreset} exit={this.exit}
-                                   originalPreset={presets[selected]}/>);
+            return (<ShowPreset name={selected} save={this.savePreset} exit={this.exit} canCast={canCast} Edit={Edit}
+                                createDisplay={this.props.createDisplay} originalPreset={presets[selected]}/>);
         }
 
         return (
@@ -53,7 +58,7 @@ export class PresetsTool extends React.Component<Props, State> {
         );
     }
 
-    private savePreset = (preset: HumanoidPreset) => {
+    private savePreset = (preset: T) => {
         const { presets, selected } = this.state;
         this.setState({
             presets: {
@@ -65,7 +70,7 @@ export class PresetsTool extends React.Component<Props, State> {
 
     private save = () => {
         this.setState({ modified: false });
-        fs.writeFileSync(PRESETS_JSON, JSON.stringify(this.state.presets, null, 2));
+        fs.writeFileSync(this.getFileName(), JSON.stringify(this.state.presets, null, 2));
     };
 
     private exit = () => {
@@ -101,7 +106,7 @@ export class PresetsTool extends React.Component<Props, State> {
             return;
         }
 
-        const presets: HumanoidPresets = {};
+        const presets: { [name: string]: T } = {};
         for (const key of Object.keys(this.state.presets)) {
             presets[key === name ? newName : key] = this.state.presets[key];
         }
@@ -112,30 +117,7 @@ export class PresetsTool extends React.Component<Props, State> {
     }
 
     private add = () => {
-        const preset: HumanoidPreset = {
-            name: 'Fill Me',
-            appearance: {
-                sex: 'female',
-                body: ['normal', 'tanned'],
-                nose: [],
-                facial: [],
-                hair: [],
-                eyes: [],
-                ears: [],
-            },
-            equipment: {
-                shirt: [],
-                legs: [],
-                head: [],
-                cape: [],
-                belt: [],
-                arms: [],
-                hands: [],
-                feet: [],
-                chest: [],
-                mask: [],
-            },
-        };
+        const preset = this.props.defaultPreset;
 
         const name = this.addName.current!.value;
 
@@ -158,5 +140,9 @@ export class PresetsTool extends React.Component<Props, State> {
 
     private select(name: string) {
         this.setState({ selected: name });
+    }
+
+    private getFileName() {
+        return `../server/data/presets/${this.props.file}.json`;
     }
 }
