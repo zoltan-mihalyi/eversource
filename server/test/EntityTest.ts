@@ -1,9 +1,9 @@
 import { Entity } from '../src/entity/Entity';
 import { BASE_MONSTER, CreatureEntity } from '../src/entity/CreatureEntity';
-import { CreatureAttitude } from '../../common/domain/CreatureEntityData';
 import { X, Y } from '../../common/domain/Location';
 import { Grid, GridBlock } from '../../common/Grid';
 import * as assert from 'assert';
+import { EntityOwner } from '../src/entity/EntityOwner';
 
 const X = GridBlock.FULL;
 const _ = GridBlock.EMPTY;
@@ -99,16 +99,17 @@ describe('Entity', function () {
     });
 });
 
+const owner = new EntityOwner();
 
 function entity(x: number, y: number): Entity {
-    return new CreatureEntity({
+    return new CreatureEntity(owner, {
         ...BASE_MONSTER,
         image: '',
         scale: 1,
         position: {
             x: x as X,
-            y: y as Y
+            y: y as Y,
         },
         name: '',
-    }, void 0);
+    }, { name: '', questCompletions: [], quests: [] });
 }

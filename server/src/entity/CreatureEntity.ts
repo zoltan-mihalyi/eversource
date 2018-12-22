@@ -10,8 +10,7 @@ import { HumanoidEntityData } from '../../../common/domain/HumanoidEntityData';
 import { Omit } from '../../../common/util/Omit';
 import { MonsterEntityData } from '../../../common/domain/MonsterEntityData';
 import { Controller } from './controller/Controller';
-import { canInteract } from '../../../common/game/Interaction';
-import { questsById } from '../quest/QuestIndexer';
+import { EntityOwner } from './EntityOwner';
 
 type BaseHumanoid = Omit<HumanoidEntityData, 'position' | 'name' | 'scale' | 'appearance' | 'equipment'>;
 
@@ -42,13 +41,21 @@ export const BASE_MONSTER: BaseMonster = {
     palette: null,
 };
 
-export class CreatureEntity extends Entity<CreatureEntityData> {
+export interface HiddenCreatureEntityData extends HiddenEntityData {
+    name: string;
+}
 
-    constructor(data: CreatureEntityData, hidden: HiddenEntityData | undefined, private controller: Controller = new Controller()) {
-        super(data, hidden);
+export class CreatureEntity extends Entity<CreatureEntityData, HiddenCreatureEntityData> {
+
+    constructor(owner: EntityOwner, data: CreatureEntityData, hidden: HiddenCreatureEntityData,
+                private controller: Controller = new Controller()) {
+
+        super(owner, data, hidden);
     }
 
     update(grid: Grid, delta: number) {
+        super.update(grid, delta);
+
         const deltaSec = delta / 1000;
 
         const mul = this.getSpeed() * deltaSec;
@@ -83,47 +90,24 @@ export class CreatureEntity extends Entity<CreatureEntityData> {
         this.setSingle('activitySpeed', speed);
 
         this.setSingle('hp', Math.min(this.state.maxHp, this.state.hp + this.getHpRegen() * deltaSec));
-
-        this.updatePlayerState();
     }
 
     emit(eventType: string, payload?: any) {
-        const { player } = this.hidden;
-        if (!player) {
-            return;
-        }
-        const { questLog } = player.state;
-        questLog.forEach((q, questId) => {
-            if (q === 'failed') {
-                return;
-            }
-            const tasks = questsById[questId]!.tasks;
-            if (!tasks) {
-                return;
-            }
+        this.owner.emit(eventType, payload);
+    }
 
-            tasks.list.forEach((task, i) => {
-                if (task.type === 'visit' && eventType === 'area' && task.areaName === payload) {
-                    questLog.set(questId, q.map((num, id) => id == i ? 1 : num));
-                }
-            });
-        });
+    hit(other: Entity) {
+        const hp = Math.max(0, this.get().hp - 30);
+        if (hp === 0) {
+            this.owner.removeEntity();
+            other.emit('kill', this.hidden.name);
+        } else {
+            this.set({ hp });
+        }
     }
 
     protected getSize() {
         return this.state.scale;
-    }
-
-    private updatePlayerState() {
-        const { player } = this.hidden;
-        if (!player) {
-            return;
-        }
-        const { state, details } = player;
-
-        if (state.interacting && !canInteract(this.get(), state.interacting.getFor(details))) {
-            state.interacting = void 0;
-        }
     }
 
     private getSpeed() {

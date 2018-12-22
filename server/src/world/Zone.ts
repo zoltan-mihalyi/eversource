@@ -3,6 +3,7 @@ import { Entity } from '../entity/Entity';
 import * as rbush from 'rbush';
 import { EntityId } from '../../../common/domain/EntityData';
 import { X, Y } from '../../../common/domain/Location';
+import { EntityFactory, Spawner } from '../entity/Spawner';
 
 interface EntityBox extends rbush.BBox {
     entity: Entity;
@@ -13,11 +14,17 @@ interface AreaBox extends rbush.BBox {
 }
 
 export class Zone {
+    private spawners = new Set<Spawner>(); // todo active and inactive group?
+
     private areas = rbush<AreaBox>();
     private entities = new Map<EntityId, EntityBox>();
     private entityIndex = rbush<EntityBox>();
 
     constructor(private grid: Grid) {
+    }
+
+    addSpawner(spawnTime: number, entityCreator: EntityFactory) {
+        this.spawners.add(new Spawner(this, spawnTime, entityCreator));
     }
 
     addEntity(entity: Entity) {
@@ -46,6 +53,9 @@ export class Zone {
     }
 
     update(interval: number) {
+        const time = Date.now();
+        this.spawners.forEach(spawner => spawner.updateTime(time));
+
         this.entities.forEach((entityBox: EntityBox) => {
             const entity = entityBox.entity;
             const lastPosition = entity.get().position;

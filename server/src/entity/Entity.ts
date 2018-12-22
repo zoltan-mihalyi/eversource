@@ -5,34 +5,19 @@ import { CharacterDetails, QuestStatus } from '../character/CharacterDetails';
 import { Quest } from '../quest/Quest';
 import { InteractionTable, QuestId, QuestInfo } from '../../../common/domain/InteractionTable';
 import { questInfoMap } from '../quest/QuestIndexer';
+import { EntityOwner } from './EntityOwner';
 
 let nextId = 0;
-
-export interface HiddenPlayerInfo {
-    state: HiddenPlayerState;
-    details: CharacterDetails;
-}
-
-export interface HiddenPlayerState {
-    interacting?: Entity;
-    questLog: Map<QuestId, QuestStatus>;
-}
 
 export interface HiddenEntityData {
     quests: Quest[];
     questCompletions: Quest[];
-    player?: HiddenPlayerInfo;
 }
 
-const EMPTY_HIDDEN_ENTITY_DATA: HiddenEntityData = {
-    quests: [],
-    questCompletions: [],
-};
-
-export abstract class Entity<O extends EntityData = EntityData> {
+export abstract class Entity<O extends EntityData = EntityData, H extends HiddenEntityData = HiddenEntityData> {
     readonly id = nextId++ as EntityId;
 
-    protected constructor(protected state: Readonly<O>, protected hidden: HiddenEntityData = EMPTY_HIDDEN_ENTITY_DATA) {
+    protected constructor(protected owner: EntityOwner, protected state: Readonly<O>, protected hidden: H) {
     }
 
     protected set<K extends keyof O>(partial: Pick<O, K>) {
@@ -117,6 +102,7 @@ export abstract class Entity<O extends EntityData = EntityData> {
     }
 
     update(grid: Grid, delta: number) {
+        this.owner.update(this);
     }
 
     emit(eventType: string, payload?: any) {
@@ -162,7 +148,7 @@ export abstract class Entity<O extends EntityData = EntityData> {
             const side = halfSize * dir;
 
             const left = newX - halfSize;
-            const right = newX + halfSize- 1;
+            const right = newX + halfSize - 1;
 
             for (let j = Math.floor(y + side); j * dir <= Math.floor(newY + side) * dir; j += dir) {
                 const edges = [

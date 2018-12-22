@@ -1,7 +1,7 @@
 import { ClientState } from './ClientState';
 import { Zone } from '../world/Zone';
 import { CharacterSelectionRequestHandler } from './CharacterSelectionRequestHandler';
-import { Entity, HiddenEntityData, HiddenPlayerInfo } from '../entity/Entity';
+import { Entity, HiddenEntityData } from '../entity/Entity';
 import { CreatureEntity } from '../entity/CreatureEntity';
 import { EntityData, EntityId } from '../../../common/domain/EntityData';
 import { PlayerController } from '../entity/controller/PlayerController';
@@ -12,12 +12,14 @@ import { questInfoMap, questsById } from '../quest/QuestIndexer';
 import { DynamicDiffable } from './diffable/DynamicDiffable';
 import { DiffablePlayerState } from './diffable/DiffablePlayerState';
 import { QuestLogItem } from '../../../common/protocol/QuestLogItem';
+import { CreatureAttitude, CreatureEntityData } from '../../../common/domain/CreatureEntityData';
+import { PlayerEntityOwner } from '../entity/EntityOwner';
 
 export interface PlayerData {
     zone: Zone;
     character: CreatureEntity;
     controller: PlayerController;
-    hidden: HiddenEntityData;
+    owner: PlayerEntityOwner;
 }
 
 export class PlayingRequestHandler extends ClientState<PlayerData> {
@@ -36,7 +38,7 @@ export class PlayingRequestHandler extends ClientState<PlayerData> {
         const command = separatorIndex === -1 ? data : data.substring(0, separatorIndex); // todo duplicate
         const params = separatorIndex === -1 ? '' : data.substring(separatorIndex + 1);
 
-        const player = this.data.hidden.player!;
+        const owner = this.data.owner;
         switch (command) {
             case 'move': {
                 const split = params.split(',');
@@ -60,34 +62,40 @@ export class PlayingRequestHandler extends ClientState<PlayerData> {
                 if (!entity) {
                     return;
                 }
-                const entityData = entity.getFor(player.details);
+                const entityData = entity.getFor(owner.details);
+
+                if (entity instanceof CreatureEntity && (entityData as CreatureEntityData).attitude !== CreatureAttitude.FRIENDLY) {
+                    entity.hit(this.data.character);
+                    return;
+                }
+
                 if (!canInteract(this.data.character.get(), entityData)) {
                     return;
                 }
-                player.state.interacting = entity;
+                owner.interacting = entity;
                 break;
             }
             case 'interact-end': {
-                player.state.interacting = void 0;
+                owner.interacting = void 0;
                 break;
             }
             case 'accept-quest': {
-                const quest = findQuest(player, params, 'acceptable');
+                const quest = owner.findQuest(params, 'acceptable');
                 if (!quest) {
                     return;
                 }
                 const tasks = questsById[quest.id]!.tasks;
                 const progression = tasks ? tasks.list.map(() => 0) : [];
-                player.details.questLog.set(quest.id, progression);
+                owner.details.questLog.set(quest.id, progression);
                 break;
             }
             case 'complete-quest': {
-                const quest = findQuest(player, params, 'completable');
+                const quest = owner.findQuest(params, 'completable');
                 if (!quest) {
                     return;
                 }
-                player.details.questLog.delete(quest.id);
-                player.details.questsDone.add(quest.id);
+                owner.details.questLog.delete(quest.id);
+                owner.details.questsDone.add(quest.id);
                 break;
             }
         }
@@ -111,15 +119,14 @@ export class PlayingRequestHandler extends ClientState<PlayerData> {
     private indexEntities(entities: Entity[]): Map<EntityId, EntityData> {
         const result = new Map<EntityId, EntityData>();
         for (const entity of entities) {
-            result.set(entity.id, entity.getFor(this.data.hidden.player!.details));
+            result.set(entity.id, entity.getFor(this.data.owner.details));
         }
         return result;
     }
 
     private sendPlayerData() {
-        const { state, details } = this.data.hidden.player!;
+        const { interacting, details } = this.data.owner;
 
-        let { interacting } = state;
         const playerState: PlayerState = {
             interaction: !interacting ? null : interacting.getInteractionsFor(details),
             character: {
@@ -136,7 +143,7 @@ export class PlayingRequestHandler extends ClientState<PlayerData> {
     }
 
     private sendQuestLog() {
-        const questLog = this.data.hidden.player!.details.questLog;
+        const questLog = this.data.owner.details.questLog;
 
         const qLogByQ = new Map<QuestId, QuestLogItem>();
 
@@ -175,15 +182,7 @@ function validNumber(num: number): boolean {
     return !isNaN(num) && isFinite(num);
 }
 
-function findQuest(player: HiddenPlayerInfo, params: string, type: 'acceptable' | 'completable'): QuestInfo | undefined {
-    const questId = +params as QuestId;
-    if (isNaN(questId)) {
-        return;
-    }
-    const entity = player.state.interacting;
-    if (!entity) {
-        return;
-    }
-    const interactionTable = entity.getInteractionsFor(player.details);
-    return interactionTable[type].find(q => q.id === questId);
+
+function isCreature(entityData: EntityData): entityData is CreatureEntityData {
+    return entityData.type === 'humanoid' || entityData.type === 'monster';
 }

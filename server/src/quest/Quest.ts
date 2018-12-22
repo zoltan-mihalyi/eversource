@@ -13,6 +13,7 @@ interface VisitAreaTask extends BaseTask {
 
 interface KillTask extends BaseTask {
     type: 'kill';
+    monsterNames: string[];
 }
 
 interface ItemTask extends BaseTask {
@@ -31,4 +32,14 @@ export interface Quest extends QuestBase {
     endsAt: string;
     requires: QuestId[];
     tasks?: Tasks;
+}
+
+export function matchesEvent(task: Task, eventType: string, payload?: any) {
+    switch (eventType) {
+        case 'area':
+            return task.type === 'visit' && task.areaName === payload;
+        case 'kill':
+            return task.type === 'kill' && task.monsterNames.indexOf(payload) !== -1;
+    }
+    return false;
 }
