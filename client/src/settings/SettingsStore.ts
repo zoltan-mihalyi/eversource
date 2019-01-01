@@ -1,5 +1,6 @@
 interface Settings {
     username: string | null;
+    debug: boolean | null;
 }
 
 class SettingsStore {

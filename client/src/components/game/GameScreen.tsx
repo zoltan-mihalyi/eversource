@@ -9,6 +9,8 @@ import { QuestLog } from './QuestLog';
 import { PlayerStateDiff } from '../../../../common/protocol/Messages';
 import { QuestLogItem } from '../../../../common/protocol/QuestLogItem';
 import { Diff } from '../../../../common/protocol/Diff';
+import { DebugInfo } from '../gui/DebugInfo';
+import { settings } from '../../settings/SettingsStore';
 
 interface Props {
     game: GameApplication;
@@ -19,6 +21,7 @@ interface Props {
 interface State {
     playerState: PlayerState;
     questLog: Map<QuestId, QuestLogItem>;
+    debug: boolean;
 }
 
 interface ImageStyle extends CSSStyleDeclaration {
@@ -31,10 +34,11 @@ export class GameScreen extends React.Component<Props, State> {
     state: State = {
         playerState: { interaction: null, character: null },
         questLog: new Map<QuestId, QuestLogItem>(),
+        debug: settings.get('debug') || false,
     };
 
     render() {
-        const { playerState: { interaction }, questLog } = this.state;
+        const { playerState: { interaction }, questLog, debug } = this.state;
 
         return (
             <div>
@@ -52,6 +56,7 @@ export class GameScreen extends React.Component<Props, State> {
                 <div className="gui bottom">
                     <Button onClick={this.leave}>Leave</Button>
                 </div>
+                {debug && <DebugInfo/>}
                 <div ref={this.joystickContainerRef}/>
             </div>
         );
@@ -59,6 +64,11 @@ export class GameScreen extends React.Component<Props, State> {
 
     componentDidMount() {
         this.props.onMount(this);
+        document.body.addEventListener('keydown', this.onKeyDown);
+    }
+
+    componentWillUnmount() {
+        document.body.removeEventListener('keydown', this.onKeyDown);
     }
 
     updatePlayerState(playerStateDiff: PlayerStateDiff): void { // TODO interface
@@ -110,6 +120,15 @@ export class GameScreen extends React.Component<Props, State> {
         const { inputManager } = this.props.game;
         if (div) {
             inputManager.initializeJoystick(div);
+        }
+    };
+
+    private onKeyDown = (event: KeyboardEvent) => {
+        if (event.which === 112) { // F1=112
+            event.preventDefault();
+            const debug = !this.state.debug;
+            this.setState({ debug });
+            settings.set('debug', debug);
         }
     };
 
