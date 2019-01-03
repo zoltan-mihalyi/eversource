@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { CharacterInfo } from '../../../../common/domain/CharacterInfo';
 import { Button } from '../gui/Button';
+import { Gui } from '../common/Gui';
 
 interface Props {
     onSelect: (character: CharacterInfo) => void;
@@ -13,7 +14,7 @@ export class CharacterSelectionScreen extends React.Component<Props> {
         const { onSelect, onExit, characters } = this.props;
 
         return (
-            <div className="gui">
+            <Gui>
                 <div className="container panel">
                     <div className="content">
                         <ul className="limited">
@@ -32,7 +33,7 @@ export class CharacterSelectionScreen extends React.Component<Props> {
                         </div>
                     </div>
                 </div>
-            </div>
+            </Gui>
         );
     }
 }

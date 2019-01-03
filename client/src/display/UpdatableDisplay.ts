@@ -6,6 +6,7 @@ import { AdjustmentFilter } from '@pixi/filter-adjustment';
 import { GameContext } from '../game/GameContext';
 import DestroyOptions = PIXI.DestroyOptions;
 import AdjustmentOptions = PIXI.filters.AdjustmentOptions;
+import { black, brown } from '../components/theme';
 
 const properties: (keyof EntityData)[] = [
     'interaction',
@@ -158,7 +159,7 @@ export abstract class UpdatableDisplay<T extends EntityData> extends PIXI.Contai
     }
 
     protected nameColor(): string {
-        return '#ccbd7b';
+        return brown.lighter;
     }
 
     protected matches(changes: Partial<T>): boolean {
@@ -189,7 +190,7 @@ export abstract class UpdatableDisplay<T extends EntityData> extends PIXI.Contai
             fontFamily: 'pixel, serif',
             fontSize: 32,
             fill: this.nameColor(),
-            stroke: '#000000',
+            stroke: black,
             strokeThickness: 1.4,
             align: 'left',
         });
