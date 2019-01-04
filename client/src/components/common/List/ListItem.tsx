@@ -48,7 +48,7 @@ const styles: StyleRules<ClassKeys> = {
     },
 };
 
-type Level = 'lowest' | 'lower' | 'normal' | 'higher' | 'highest';
+export type Level = 'lowest' | 'lower' | 'normal' | 'higher' | 'highest';
 
 interface Props {
     checked?: boolean;

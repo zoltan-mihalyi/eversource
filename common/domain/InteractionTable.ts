@@ -8,12 +8,16 @@ export interface TaskInfo {
     title: string;
 }
 
-export interface QuestInfo {
+export interface QuestBase {
     id: QuestId;
+    level: number;
     name: string;
     description: string;
     taskDescription: string;
     completion: string;
+}
+
+export interface QuestInfo extends QuestBase{
     progress?: string;
     tasks: TaskInfo[];
 }

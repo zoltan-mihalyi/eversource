@@ -3,6 +3,7 @@ import { QuestId } from '../../common/domain/InteractionTable';
 
 export const quests: Quest[] = [{
     id: 1 as QuestId,
+    level: 1,
     name: 'A simple quest',
     startsAt: 'cacal',
     endsAt: 'cacal',
@@ -18,6 +19,7 @@ export const quests: Quest[] = [{
     },
 }, {
     id: 2 as QuestId,
+    level: 1,
     name: 'What next',
     startsAt: 'cacal',
     endsAt: 'nefag',
@@ -27,6 +29,7 @@ export const quests: Quest[] = [{
     requires: [1 as QuestId],
 }, {
     id: 3 as QuestId,
+    level: 3,
     name: 'The lonely forester',
     startsAt: 'nefag',
     endsAt: 'diana',
@@ -36,6 +39,7 @@ export const quests: Quest[] = [{
     requires: [],
 }, {
     id: 4 as QuestId,
+    level: 2,
     name: 'A forester without job',
     startsAt: 'nefag',
     endsAt: 'cacal',
@@ -45,6 +49,7 @@ export const quests: Quest[] = [{
     requires: [],
 }, {
     id: 5 as QuestId,
+    level: 6,
     name: 'The queen bee',
     startsAt: 'diana',
     endsAt: 'diana',
@@ -60,6 +65,7 @@ export const quests: Quest[] = [{
     },
 }, {
     id: 6 as QuestId,
+    level: 4,
     name: 'Strange guests',
     startsAt: 'dark',
     endsAt: 'protector',
@@ -75,11 +81,22 @@ export const quests: Quest[] = [{
     },
 }, {
     id: 7 as QuestId,
+    level: 1,
     name: 'Trust issues',
     startsAt: 'cacal',
     endsAt: 'cacal',
     description: 'I am not sure if we can trust you. Answer me: are the lava slimes your friends?',
     taskDescription: 'Answer the question!',
     completion: 'The lava slimes are your enemies? I was hoping you\'d say that. Come, I have some tasks for you.',
+    requires: [],
+}, {
+    id: 8 as QuestId,
+    level: 7,
+    name: 'Destroy the world',
+    startsAt: 'cactus_bonus',
+    endsAt: 'obelus',
+    description: 'WA HA HA HA',
+    taskDescription: 'Find Obelus!',
+    completion: 'OMG!',
     requires: [],
 }];

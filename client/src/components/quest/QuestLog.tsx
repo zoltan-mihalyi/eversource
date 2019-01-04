@@ -4,11 +4,12 @@ import { QuestLogItem } from '../../../../common/protocol/QuestLogItem';
 import { Dialog } from '../common/Dialog';
 import { List } from '../common/List';
 import { Scrollable } from '../common/Scrollable';
-import { ListItem } from '../common/List/ListItem';
+import { Level, ListItem } from '../common/List/ListItem';
 import { SplitLayout } from '../common/SplitLayout';
 import { QuestContent } from './QuestContent';
 
 interface Props {
+    playerLevel: number;
     questLog: Map<QuestId, QuestLogItem>;
     onClose: () => void;
 }
@@ -21,7 +22,7 @@ export class QuestLog extends React.PureComponent<Props, State> {
     state: State = {};
 
     render() {
-        const { questLog } = this.props;
+        const { playerLevel, questLog } = this.props;
         const selected = this.state.selected || questLog.keys().next().value;
         const item = (selected && questLog.get(selected)) || null;
 
@@ -31,8 +32,9 @@ export class QuestLog extends React.PureComponent<Props, State> {
                     <Scrollable>
                         <List>
                             {Array.from(questLog).map(([key, item]) => (
-                                <ListItem selected={selected === key} key={key} checked={isComplete(item)} onClick={() => this.select(key)}>
-                                    {item.info.name}
+                                <ListItem level={questLevel(playerLevel, item.info.level)} selected={selected === key} key={key}
+                                          checked={isComplete(item)} onClick={() => this.select(key)}>
+                                    [{item.info.level}] {item.info.name}
                                 </ListItem>
                             ))}
                         </List>
@@ -58,4 +60,22 @@ function isComplete(item: QuestLogItem): boolean {
         }
     });
     return complete;
+}
+
+function questLevel(playerLevel: number, questLevel: number): Level {
+    const diff = questLevel - playerLevel;
+
+    if (diff > 4) {
+        return 'highest';
+    }
+    if (diff > 2) {
+        return 'higher';
+    }
+    if (diff >= -2) {
+        return 'normal';
+    }
+    if (diff >= -4) {
+        return 'lower';
+    }
+    return 'lowest';
 }

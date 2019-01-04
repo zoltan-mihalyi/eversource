@@ -1,4 +1,4 @@
-import { QuestId } from '../../../common/domain/InteractionTable';
+import { QuestBase, QuestId, TaskInfo } from '../../../common/domain/InteractionTable';
 import { NonEmptyArray } from '../../../common/util/NonEmptyArray';
 
 interface BaseTask {
@@ -26,14 +26,9 @@ export interface Tasks {
     list: NonEmptyArray<Task>;
 }
 
-export interface Quest {
-    id: QuestId;
-    name: string;
+export interface Quest extends QuestBase {
     startsAt: string;
     endsAt: string;
-    description: string;
-    taskDescription: string;
-    completion: string;
     requires: QuestId[];
     tasks?: Tasks;
 }

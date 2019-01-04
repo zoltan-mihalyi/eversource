@@ -22,7 +22,7 @@ export class CharacterSelectionScreen extends React.Component<Props> {
                                 <li key={idx}>
                                     <button className="item" onClick={() => onSelect(character)}>
                                         <h2>{character.name}</h2>
-                                        <h3>Level 1 {character.classId}</h3>
+                                        <h3>Level {character.level} {character.classId}</h3>
                                         <h3 className="secondary">{character.location.zoneId}</h3>
                                     </button>
                                 </li>
