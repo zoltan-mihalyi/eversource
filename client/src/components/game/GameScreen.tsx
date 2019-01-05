@@ -1,14 +1,12 @@
 import * as React from 'react';
 import { GameApplication } from '../../map/GameApplication';
-import { Button } from '../gui/Button';
 import { PlayingNetworkApi } from '../../protocol/PlayingState';
 import { QuestId } from '../../../../common/domain/InteractionTable';
-import { InteractionTableGui } from './InteractionTableGui';
+import { InteractionDialog } from '../quest/InteractionDialog';
 import { PlayerState } from '../../../../common/protocol/PlayerState';
-import { QuestLog } from './QuestLog';
-import { PlayerStateDiff } from '../../../../common/protocol/Messages';
 import { QuestLogItem } from '../../../../common/protocol/QuestLogItem';
 import { Diff } from '../../../../common/protocol/Diff';
+import { GameMenu } from './GameMenu';
 import { DebugInfo } from '../gui/DebugInfo';
 import { settings } from '../../settings/SettingsStore';
 
@@ -38,26 +36,19 @@ export class GameScreen extends React.Component<Props, State> {
     };
 
     render() {
-        const { playerState: { interaction }, questLog, debug } = this.state;
+        const { playerState: { interaction, character }, questLog, debug } = this.state;
 
         return (
             <div>
                 <div ref={this.containerRef}/>
-                <div className="gui top right">
-                    <QuestLog questLog={questLog}/>
-                </div>
-                <div className="gui top">
-                    {
-                        interaction &&
-                        <InteractionTableGui interactions={interaction} onAcceptQuest={this.acceptQuest}
-                                             onCompleteQuest={this.completeQuest} onClose={this.closeInteraction}/>
-                    }
-                </div>
-                <div className="gui bottom">
-                    <Button onClick={this.leave}>Leave</Button>
-                </div>
                 {debug && <DebugInfo/>}
+                {interaction && <InteractionDialog interactions={interaction} onAcceptQuest={this.acceptQuest}
+                                                   onCompleteQuest={this.completeQuest}
+                                                   onClose={this.closeInteraction}/>}
+
                 <div ref={this.joystickContainerRef}/>
+                <GameMenu playerLevel={character === null ? 1 : character.level} questLog={questLog}
+                          onLeave={this.leave}/>
             </div>
         );
     }
@@ -71,27 +62,8 @@ export class GameScreen extends React.Component<Props, State> {
         document.body.removeEventListener('keydown', this.onKeyDown);
     }
 
-    updatePlayerState(playerStateDiff: PlayerStateDiff): void { // TODO interface
-        const { playerState } = this.state;
-
-        const newPlayerState: PlayerState = { ...playerState };
-        for (const key of Object.keys(playerStateDiff) as (keyof PlayerState)[]) {
-            const valueDiff = playerStateDiff[key] as PlayerState[keyof PlayerState];
-            let newValue: PlayerState[keyof PlayerState];
-            if (valueDiff === null) {
-                newValue = null;
-            } else {
-                if (playerState[key]) {
-                    newValue = { ...playerState[key], ...valueDiff };
-                } else {
-                    newValue = valueDiff;
-                }
-            }
-
-            newPlayerState[key] = newValue;
-        }
-
-        this.setState({ playerState: newPlayerState });
+    updatePlayerState(playerState: PlayerState) { // TODO interface
+        this.setState({ playerState });
     }
 
     updateQuestLog(diffs: Diff<QuestId, QuestLogItem>[]) {

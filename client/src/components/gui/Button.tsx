@@ -3,7 +3,7 @@ import * as React from 'react';
 
 type Props = React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>;
 
-export const Button: React.SFC<Props> = ({ children, ...rest }) => (
+export const Button: React.FunctionComponent<Props> = ({ children, ...rest }) => (
     <button {...rest}>
         <table className="button">
             <tbody>

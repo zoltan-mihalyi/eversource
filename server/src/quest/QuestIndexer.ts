@@ -12,6 +12,7 @@ for (const quest of quests) {
     const tasks = questTasks ? questTasks.list.map(({ title, count }) => ({ title, count })) : [];
     const questInfo: QuestInfo = {
         id: quest.id,
+        level: quest.level,
         name: quest.name,
         description: quest.description,
         taskDescription: quest.taskDescription,

@@ -123,6 +123,7 @@ export class PlayingRequestHandler extends ClientState<PlayerData> {
         const playerState: PlayerState = {
             interaction: !interacting ? null : interacting.getInteractionsFor(details),
             character: {
+                level: this.data.character.get().level,
                 id: this.data.character.id,
             },
         };

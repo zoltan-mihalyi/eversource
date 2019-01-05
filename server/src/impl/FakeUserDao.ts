@@ -11,6 +11,7 @@ export class FakeUserDao implements UserDao {
             info:
                 {
                     id: '1' as CharacterId,
+                    level: 1,
                     name: 'John' as CharacterName,
                     classId: 'warrior' as ClassId,
                     hp: 50,
@@ -50,6 +51,7 @@ export class FakeUserDao implements UserDao {
             questLog: new Map(),
             info: {
                 id: '2' as CharacterId,
+                level: 2,
                 name: 'Robin' as CharacterName,
                 classId: 'hunter' as ClassId,
                 hp: 20,
@@ -89,6 +91,7 @@ export class FakeUserDao implements UserDao {
             questLog: new Map(),
             info: {
                 id: '3' as CharacterId,
+                level: 10,
                 name: 'Unimaginable' as CharacterName,
                 classId: 'mage' as ClassId,
                 hp: 80,

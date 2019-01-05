@@ -32,6 +32,7 @@ export class LoadingRequestHandler extends ClientState<CharacterDetails> {
         const hidden = { player, quests: [], questCompletions: [] };
         const character = new CreatureEntity({
             ...BASE_HUMANOID,
+            level: info.level,
             position,
             name,
             player: true,

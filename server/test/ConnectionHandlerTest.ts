@@ -15,6 +15,7 @@ function tick(): Promise<void> {
 const characters: CharacterInfo[] = [
     {
         name: 'John' as CharacterName,
+        level: 12,
         id: '1' as CharacterId,
         classId: 'warrior' as ClassId,
         hp: 100,

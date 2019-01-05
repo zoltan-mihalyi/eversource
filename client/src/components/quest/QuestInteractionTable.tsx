@@ -2,6 +2,10 @@ import * as React from 'react';
 import { QuestInfo } from '../../../../common/domain/InteractionTable';
 import { QuestItemState } from './QuestItemState';
 import { Rewards } from './Rewards';
+import { QuestContent } from './QuestContent';
+import { Scrollable } from '../common/Scrollable';
+import { ActionButton } from '../common/Button/ActionButton';
+import { QuestStyle } from './QuestStyle';
 
 interface Props {
     info: QuestInfo;
@@ -13,17 +17,14 @@ interface Props {
 
 export class QuestInteractionTable extends React.PureComponent<Props> {
     render() {
-        const { info } = this.props;
-
         return (
             <>
-                <div className="content">
-                    <h2>{info.name}</h2>
+                <Scrollable variant="paper" padding fixedHeight>
                     {this.renderContent()}
-                </div>
+                </Scrollable>
 
-                <div className="actions">
-                    <button onClick={this.props.onBack}>Back</button>
+                <div>
+                    <ActionButton onClick={this.props.onBack}>Back</ActionButton>
                     {this.renderButton()}
                 </div>
             </>
@@ -35,30 +36,22 @@ export class QuestInteractionTable extends React.PureComponent<Props> {
         switch (state) {
             case QuestItemState.ACCEPTABLE:
                 return (
-                    <>
-                        <p>{info.description}</p>
-                        <h3>Completion</h3>
-                        <p>{info.taskDescription}</p>
-                        {info.tasks.length === 0 ? null : (
-                            <ul className="task-status">
-                                {info.tasks.map((task, i) => (
-                                    <li key={i}>{task.count !== 1 ? task.count + ' ' : ''}{task.title}</li>
-                                ))}
-                            </ul>
-                        )}
-                        <Rewards/>
-                    </>
+                    <QuestContent info={info}/>
                 );
             case QuestItemState.COMPLETABLE:
                 return (
-                    <>
+                    <QuestStyle>
+                        <h2>{info.name}</h2>
                         <p>{info.completion}</p>
                         <Rewards/>
-                    </>
+                    </QuestStyle>
                 );
             case QuestItemState.COMPLETABLE_LATER:
                 return (
-                    <p>{info.progress}</p>
+                    <QuestStyle>
+                        <h2>{info.name}</h2>
+                        <p>{info.progress}</p>
+                    </QuestStyle>
                 );
         }
     }
@@ -68,11 +61,11 @@ export class QuestInteractionTable extends React.PureComponent<Props> {
         switch (state) {
             case QuestItemState.ACCEPTABLE:
                 return (
-                    <button onClick={this.props.onAccept}>Accept</button>
+                    <ActionButton onClick={this.props.onAccept}>Accept</ActionButton>
                 );
             case QuestItemState.COMPLETABLE:
                 return (
-                    <button onClick={this.props.onComplete}>Complete</button>
+                    <ActionButton onClick={this.props.onComplete}>Complete</ActionButton>
                 );
             case QuestItemState.COMPLETABLE_LATER:
                 return null;

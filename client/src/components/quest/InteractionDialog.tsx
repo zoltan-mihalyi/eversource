@@ -1,9 +1,12 @@
 import * as React from 'react';
 import { InteractionTable, QuestId, QuestInfo } from '../../../../common/domain/InteractionTable';
-import { QuestItem } from './QuestItem';
-import { CloseButton } from '../gui/CloseButton';
+import { InteractionItem } from './InteractionItem';
 import { QuestInteractionTable } from './QuestInteractionTable';
 import { QuestItemState } from './QuestItemState';
+import { Dialog } from '../common/Dialog';
+import { Scrollable } from '../common/Scrollable';
+import { InteractionItemList } from './InteractionItemList';
+import { Positioned } from '../common/Positioned';
 
 interface Props {
     interactions: InteractionTable;
@@ -17,7 +20,7 @@ interface State {
     selectedLater: boolean;
 }
 
-export class InteractionTableGui extends React.PureComponent<Props, State> {
+export class InteractionDialog extends React.PureComponent<Props, State> {
     state: State = { selectedId: null, selectedLater: false };
 
     static getDerivedStateFromProps(props: Props, state: State): Partial<State> | null {
@@ -48,29 +51,27 @@ export class InteractionTableGui extends React.PureComponent<Props, State> {
         const selected = selectedId === null ? null : findQuest(this.props.interactions, selectedId)!;
 
         return (
-            <div className="panel interaction size-medium">
-                <div className="toolbar">
-                    <h2>{name}</h2>
-                    <CloseButton onClose={this.props.onClose}/>
-                </div>
-                {selected ? (
-                    <QuestInteractionTable info={selected} state={getQuestState(this.props.interactions, selected)}
-                                           onAccept={this.onAccept} onComplete={this.onComplete}
-                                           onBack={this.clearSelection}/>
-                ) : (
-                    <div className="content">
-                        <ul>
-                            {acceptable.map((q, i) => <QuestItem key={i} state={QuestItemState.ACCEPTABLE} quest={q}
-                                                                 onSelect={this.onSelect}/>)}
-                            {completable.map((q, i) => <QuestItem key={i} state={QuestItemState.COMPLETABLE} quest={q}
-                                                                  onSelect={this.onSelect}/>)}
-                            {completableLater.map((q, i) => <QuestItem key={i} state={QuestItemState.COMPLETABLE_LATER}
-                                                                       quest={q}
-                                                                       onSelect={this.onSelect}/>)}
-                        </ul>
-                    </div>
-                )}
-            </div>
+            <Positioned horizontal="left" vertical="top">
+                <Dialog title={name} onClose={this.props.onClose}>
+                    {selected ? (
+                        <QuestInteractionTable info={selected} state={getQuestState(this.props.interactions, selected)}
+                                               onAccept={this.onAccept} onComplete={this.onComplete}
+                                               onBack={this.clearSelection}/>
+                    ) : (
+                        <Scrollable fixedHeight padding variant="paper">
+                            <InteractionItemList>
+                                {acceptable.map((q, i) => <InteractionItem key={i} state={QuestItemState.ACCEPTABLE} quest={q}
+                                                                           onSelect={this.onSelect}/>)}
+                                {completable.map((q, i) => <InteractionItem key={i} state={QuestItemState.COMPLETABLE} quest={q}
+                                                                            onSelect={this.onSelect}/>)}
+                                {completableLater.map((q, i) => <InteractionItem key={i} state={QuestItemState.COMPLETABLE_LATER}
+                                                                                 quest={q}
+                                                                                 onSelect={this.onSelect}/>)}
+                            </InteractionItemList>
+                        </Scrollable>
+                    )}
+                </Dialog>
+            </Positioned>
         );
     }
 

@@ -10,8 +10,9 @@ import { LoadedMap } from '../../../common/tiled/TiledResolver';
 import { EntityData, EntityId } from '../../../common/domain/EntityData';
 import { PlayerStateDiff } from '../../../common/protocol/Messages';
 import { QuestId } from '../../../common/domain/InteractionTable';
-import ResourceDictionary = PIXI.loaders.ResourceDictionary;
 import { QuestLogItem } from '../../../common/protocol/QuestLogItem';
+import { PlayerState } from '../../../common/protocol/PlayerState';
+import ResourceDictionary = PIXI.loaders.ResourceDictionary;
 
 export interface PlayingStateData {
     map: LoadedMap;
@@ -36,6 +37,7 @@ export interface PlayingNetworkApi {
 export class PlayingState extends NetworkingState<PlayingStateData> implements PlayingNetworkApi {
     private readonly game: GameApplication;
     private gameScreen!: GameScreen;
+    private currentPlayerState: PlayerState = { interaction: null, character: null };
 
     constructor(manager: StateManager<any, NetworkingContext>, context: NetworkingContext, data: PlayingStateData) {
         super(manager, context, data);
@@ -52,12 +54,35 @@ export class PlayingState extends NetworkingState<PlayingStateData> implements P
         this.game.updateState(diffs);
     }
 
-    playerState(playerState: PlayerStateDiff) {
-        this.game.updatePlayerState(playerState);
-        this.gameScreen.updatePlayerState(playerState);
+    playerState(playerStateDiff: PlayerStateDiff) {
+        this.updatePlayerState(playerStateDiff);
+        this.game.updatePlayerState(playerStateDiff);
+        this.gameScreen.updatePlayerState(this.currentPlayerState);
     }
 
-    questLog(diffs: Diff<QuestId, QuestLogItem>[]){
+    private updatePlayerState(playerStateDiff: PlayerStateDiff) {
+        const playerState = this.currentPlayerState;
+
+        const newPlayerState: PlayerState = { ...playerState };
+        for (const key of Object.keys(playerStateDiff) as (keyof PlayerState)[]) {
+            const valueDiff = playerStateDiff[key] as PlayerState[keyof PlayerState];
+            let newValue: PlayerState[keyof PlayerState];
+            if (valueDiff === null) {
+                newValue = null;
+            } else {
+                if (playerState[key]) {
+                    newValue = { ...playerState[key], ...valueDiff };
+                } else {
+                    newValue = valueDiff;
+                }
+            }
+
+            newPlayerState[key] = newValue;
+        }
+        this.currentPlayerState = newPlayerState;
+    }
+
+    questLog(diffs: Diff<QuestId, QuestLogItem>[]) {
         this.gameScreen.updateQuestLog(diffs);
     }
 

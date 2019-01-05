@@ -1,13 +1,14 @@
 import * as React from 'react';
+import { brown } from '../theme';
 
 interface State {
     fps: number;
 }
 
-const STYLE = {
+const STYLE: React.CSSProperties = {
     padding: 5,
-    color: 'white',
-    width: 60,
+    color: brown.lightest,
+    textAlign: 'right',
 };
 
 export class DebugInfo extends React.PureComponent<{}, State> {
