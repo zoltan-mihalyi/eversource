@@ -1,4 +1,4 @@
-import { QuestBase, QuestId, TaskInfo } from '../../../common/domain/InteractionTable';
+import { QuestBase, QuestId } from '../../../common/domain/InteractionTable';
 import { NonEmptyArray } from '../../../common/util/NonEmptyArray';
 
 interface BaseTask {
@@ -27,7 +27,10 @@ export interface Tasks {
     list: NonEmptyArray<Task>;
 }
 
+export type QuestDifficulty = 'easy' | 'normal' | 'hard';
+
 export interface Quest extends QuestBase {
+    difficulty: QuestDifficulty;
     startsAt: string;
     endsAt: string;
     requires: QuestId[];

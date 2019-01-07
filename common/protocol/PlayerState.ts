@@ -1,8 +1,9 @@
 import { InteractionTable } from '../domain/InteractionTable';
 import { EntityId } from '../domain/EntityData';
 
-interface CharacterState {
+export interface CharacterState {
     level: number;
+    xp: number;
     id: EntityId;
 }
 

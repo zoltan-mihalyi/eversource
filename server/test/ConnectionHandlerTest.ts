@@ -16,6 +16,7 @@ const characters: CharacterInfo[] = [
     {
         name: 'John' as CharacterName,
         level: 12,
+        xp: 10,
         id: '1' as CharacterId,
         classId: 'warrior' as ClassId,
         hp: 100,

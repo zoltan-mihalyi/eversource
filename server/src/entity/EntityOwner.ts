@@ -4,6 +4,7 @@ import { Entity } from './Entity';
 import { canInteract } from '../../../common/game/Interaction';
 import { CharacterDetails, QuestProgression } from '../character/CharacterDetails';
 import { QuestId, QuestInfo, TaskInfo } from '../../../common/domain/InteractionTable';
+import { maxXpFor } from '../../../common/algorithms';
 
 export class EntityOwner {
     emit(eventType: string, payload?: any): void {
@@ -25,6 +26,11 @@ export class PlayerEntityOwner extends EntityOwner {
 
     emit(eventType: string, payload?: any) {
         const { questLog } = this.details;
+
+        if (eventType === 'kill') {
+            this.addXp(30);
+        }
+
         questLog.forEach((q, questId) => {
             if (q === 'failed') {
                 return;
@@ -53,6 +59,17 @@ export class PlayerEntityOwner extends EntityOwner {
         }
         const interactionTable = entity.getInteractionsFor(this.details);
         return interactionTable[type].find(q => q.id === questId);
+    }
+
+    addXp(xp: number) {
+        const { info } = this.details;
+
+        info.xp += xp;
+        let maxXp;
+        while (info.xp >= (maxXp = maxXpFor(info.level))) {
+            info.level++;
+            info.xp -= maxXp;
+        }
     }
 
     update(entity: Entity) {

@@ -8,6 +8,11 @@ type ClassKeys = 'root';
 
 const styles: StyleRules<ClassKeys> = {
     '@global': {
+        body: {
+            margin: 0,
+            overflow: 'hidden',
+        },
+
         '::-webkit-scrollbar-track': {
             background: brown.darkest,
         },
@@ -27,7 +32,7 @@ const styles: StyleRules<ClassKeys> = {
             '::-webkit-scrollbar': {
                 width: 6,
             },
-        }
+        },
     },
     root: {
         fontFamily: 'pixel, serif',

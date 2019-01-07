@@ -27,3 +27,8 @@ export const quest = {
     active: '#ffff00',
     inactive: '#c0c0c0',
 };
+
+export const xp = {
+    foreground:'#472093',
+    background: '#797979'
+};

@@ -8,7 +8,8 @@ export type CharacterName = Opaque<string, 'CharacterName'>;
 
 export interface CharacterInfo {
     id: CharacterId;
-    level: number;
+    level: number; // TODO synchronize with entity
+    xp: number;
     name: CharacterName;
     classId: ClassId;
     location: Location;

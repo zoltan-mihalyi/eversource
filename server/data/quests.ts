@@ -4,6 +4,7 @@ import { QuestId } from '../../common/domain/InteractionTable';
 export const quests: Quest[] = [{
     id: 1 as QuestId,
     level: 1,
+    difficulty: 'normal',
     name: 'A simple quest',
     startsAt: 'cacal',
     endsAt: 'cacal',
@@ -20,6 +21,7 @@ export const quests: Quest[] = [{
 }, {
     id: 2 as QuestId,
     level: 1,
+    difficulty: 'easy',
     name: 'What next',
     startsAt: 'cacal',
     endsAt: 'nefag',
@@ -30,6 +32,7 @@ export const quests: Quest[] = [{
 }, {
     id: 3 as QuestId,
     level: 3,
+    difficulty: 'easy',
     name: 'The lonely forester',
     startsAt: 'nefag',
     endsAt: 'diana',
@@ -40,6 +43,7 @@ export const quests: Quest[] = [{
 }, {
     id: 4 as QuestId,
     level: 2,
+    difficulty: 'easy',
     name: 'A forester without job',
     startsAt: 'nefag',
     endsAt: 'cacal',
@@ -50,6 +54,7 @@ export const quests: Quest[] = [{
 }, {
     id: 5 as QuestId,
     level: 6,
+    difficulty: 'normal',
     name: 'The queen bee',
     startsAt: 'diana',
     endsAt: 'diana',
@@ -66,6 +71,7 @@ export const quests: Quest[] = [{
 }, {
     id: 6 as QuestId,
     level: 4,
+    difficulty: 'normal',
     name: 'Strange guests',
     startsAt: 'dark',
     endsAt: 'protector',
@@ -82,6 +88,7 @@ export const quests: Quest[] = [{
 }, {
     id: 7 as QuestId,
     level: 1,
+    difficulty: 'easy',
     name: 'Trust issues',
     startsAt: 'cacal',
     endsAt: 'cacal',
@@ -92,6 +99,7 @@ export const quests: Quest[] = [{
 }, {
     id: 8 as QuestId,
     level: 7,
+    difficulty: 'hard',
     name: 'Destroy the world',
     startsAt: 'cactus_bonus',
     endsAt: 'obelus',

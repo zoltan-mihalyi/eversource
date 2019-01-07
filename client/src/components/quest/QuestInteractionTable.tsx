@@ -43,7 +43,7 @@ export class QuestInteractionTable extends React.PureComponent<Props> {
                     <QuestStyle>
                         <h2>{info.name}</h2>
                         <p>{info.completion}</p>
-                        <Rewards/>
+                        <Rewards info={info}/>
                     </QuestStyle>
                 );
             case QuestItemState.COMPLETABLE_LATER:
