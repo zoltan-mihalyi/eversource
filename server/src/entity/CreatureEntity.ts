@@ -13,15 +13,15 @@ import { Controller } from './controller/Controller';
 import { EntityOwner } from './EntityOwner';
 import { basicAttack } from '../../../common/algorithms';
 
-type BaseHumanoid = Omit<HumanoidEntityData, 'position' | 'name' | 'level' | 'scale' | 'appearance' | 'equipment'>;
+type BaseKeys = 'position' | 'name' | 'level' | 'hp' | 'maxHp' | 'scale';
 
-const BASE_CREATURE: Omit<BaseCreatureEntityData, 'position' | 'name' | 'level' | 'scale'> = {
+type BaseHumanoid = Omit<HumanoidEntityData, BaseKeys | 'appearance' | 'equipment'>;
+
+const BASE_CREATURE: Omit<BaseCreatureEntityData, BaseKeys> = {
     activity: 'standing',
     activitySpeed: 0,
     direction: 'down',
     interaction: null,
-    hp: 100,
-    maxHp: 100,
     player: false,
     attitude: CreatureAttitude.FRIENDLY,
     effects: [],
@@ -32,7 +32,7 @@ export const BASE_HUMANOID: BaseHumanoid = {
     type: 'humanoid',
 };
 
-type BaseMonster = Omit<MonsterEntityData, 'position' | 'name' | 'level' | 'scale' | 'image'>;
+type BaseMonster = Omit<MonsterEntityData, BaseKeys | 'image'>;
 
 export const BASE_MONSTER: BaseMonster = {
     ...BASE_CREATURE,

@@ -106,6 +106,8 @@ function entity(x: number, y: number): Entity {
         ...BASE_MONSTER,
         image: '',
         level: 1,
+        hp: 100,
+        maxHp: 100,
         scale: 1,
         position: {
             x: x as X,

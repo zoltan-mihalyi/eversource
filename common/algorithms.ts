@@ -4,6 +4,10 @@ export function maxXpFor(level: number): number {
     return 100 + level * 100;
 }
 
+export function hpForLevel(level: number): number {
+    return 100 + level * 50;
+}
+
 export function baseXpReward(level: number) {
     return Math.sqrt(level) * 15;
 }
