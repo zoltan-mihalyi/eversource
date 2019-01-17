@@ -109,12 +109,13 @@ export class WorldImpl implements World {
     };
 }
 
-type PresetBaseEntityData = Pick<BaseCreatureEntityData, 'attitude' | 'effects' | 'scale' | 'position' | 'name'>;
+type PresetBaseEntityData = Pick<BaseCreatureEntityData, 'attitude' | 'effects' | 'scale' | 'position' | 'name' | 'level'>;
 
 function baseFromPreset(preset: BasePreset, position: Position, monster: boolean): PresetBaseEntityData {
     return {
         position,
         name: preset.name,
+        level: preset.level,
         scale: preset.scale || 1,
         attitude: resolvePresetAttitude(preset.attitude, monster),
         effects: preset.effects || [],

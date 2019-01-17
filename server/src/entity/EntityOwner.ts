@@ -1,34 +1,40 @@
 import { questsById } from '../quest/QuestIndexer';
 import { matchesEvent, Tasks } from '../quest/Quest';
-import { Entity } from './Entity';
+import { Entity, EntityEvent } from './Entity';
 import { canInteract } from '../../../common/game/Interaction';
 import { CharacterDetails, QuestProgression } from '../character/CharacterDetails';
 import { QuestId, QuestInfo, TaskInfo } from '../../../common/domain/InteractionTable';
-import { maxXpFor } from '../../../common/algorithms';
+import { maxXpFor, mobXpReward } from '../../../common/algorithms';
+import { CreatureEntity } from './CreatureEntity';
 
 export class EntityOwner {
-    emit(eventType: string, payload?: any): void {
+    emit(event: EntityEvent): void {
     }
 
     removeEntity(): void {
     }
 
-    update(entity: Entity) {
+    update() {
     }
 }
 
 export class PlayerEntityOwner extends EntityOwner {
     interacting?: Entity;
+    private entity!: CreatureEntity
 
-    constructor(readonly details: CharacterDetails) {
+    constructor(readonly details: CharacterDetails,) {
         super();
     }
 
-    emit(eventType: string, payload?: any) {
+    setEntity(entity: CreatureEntity) {
+        this.entity = entity;
+    }
+
+    emit(event: EntityEvent) {
         const { questLog } = this.details;
 
-        if (eventType === 'kill') {
-            this.addXp(30);
+        if (event.type === 'kill') {
+            this.addXp(mobXpReward(event.data.level));
         }
 
         questLog.forEach((q, questId) => {
@@ -41,7 +47,7 @@ export class PlayerEntityOwner extends EntityOwner {
             }
 
             tasks.list.forEach((task, i) => {
-                if (matchesEvent(task, eventType, payload)) {
+                if (matchesEvent(task, event)) {
                     this.updateQuest(questId, task, i);
                 }
             });
@@ -69,11 +75,14 @@ export class PlayerEntityOwner extends EntityOwner {
         while (info.xp >= (maxXp = maxXpFor(info.level))) {
             info.level++;
             info.xp -= maxXp;
+            this.entity.setSingle('level', info.level);
+            const entityData = this.entity.get();
+            console.log(`Level up! ${entityData.name} -> ${entityData.level}`);
         }
     }
 
-    update(entity: Entity) {
-        if (this.interacting && !canInteract(entity.get(), this.interacting.getFor(this.details))) {
+    update() {
+        if (this.interacting && !canInteract(this.entity.get(), this.interacting.getFor(this.details))) {
             this.interacting = void 0;
         }
     }

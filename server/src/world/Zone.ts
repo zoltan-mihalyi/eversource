@@ -65,7 +65,7 @@ export class Zone {
             }
 
             for (const area of this.areas.search(entityBox)) {
-                entity.emit('area', area.name);
+                entity.emit({ type: 'area', name: area.name });
             }
         });
     }

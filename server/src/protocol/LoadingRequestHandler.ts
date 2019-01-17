@@ -36,6 +36,7 @@ export class LoadingRequestHandler extends ClientState<CharacterDetails> {
             appearance: info.appearance,
             equipment: info.equipment,
         }, hidden, controller);
+        owner.setEntity(character);
         zone.addEntity(character);
 
         this.context.sendCommand('ready', void 0);

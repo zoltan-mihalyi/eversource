@@ -1,4 +1,4 @@
-import { Entity, HiddenEntityData } from './Entity';
+import { Entity, EntityEvent, HiddenEntityData } from './Entity';
 import { Grid } from '../../../common/Grid';
 import {
     BaseCreatureEntityData,
@@ -11,15 +11,15 @@ import { Omit } from '../../../common/util/Omit';
 import { MonsterEntityData } from '../../../common/domain/MonsterEntityData';
 import { Controller } from './controller/Controller';
 import { EntityOwner } from './EntityOwner';
+import { basicAttack } from '../../../common/algorithms';
 
-type BaseHumanoid = Omit<HumanoidEntityData, 'position' | 'name' | 'scale' | 'appearance' | 'equipment'>;
+type BaseHumanoid = Omit<HumanoidEntityData, 'position' | 'name' | 'level' | 'scale' | 'appearance' | 'equipment'>;
 
-const BASE_CREATURE: Omit<BaseCreatureEntityData, 'position' | 'name' | 'scale'> = {
+const BASE_CREATURE: Omit<BaseCreatureEntityData, 'position' | 'name' | 'level' | 'scale'> = {
     activity: 'standing',
     activitySpeed: 0,
     direction: 'down',
     interaction: null,
-    level: 1,
     hp: 100,
     maxHp: 100,
     player: false,
@@ -32,7 +32,7 @@ export const BASE_HUMANOID: BaseHumanoid = {
     type: 'humanoid',
 };
 
-type BaseMonster = Omit<MonsterEntityData, 'position' | 'name' | 'scale' | 'image'>;
+type BaseMonster = Omit<MonsterEntityData, 'position' | 'name' | 'level' | 'scale' | 'image'>;
 
 export const BASE_MONSTER: BaseMonster = {
     ...BASE_CREATURE,
@@ -92,15 +92,15 @@ export class CreatureEntity extends Entity<CreatureEntityData, HiddenCreatureEnt
         this.setSingle('hp', Math.min(this.state.maxHp, this.state.hp + this.getHpRegen() * deltaSec));
     }
 
-    emit(eventType: string, payload?: any) {
-        this.owner.emit(eventType, payload);
+    emit(event: EntityEvent) {
+        this.owner.emit(event);
     }
 
-    hit(other: Entity) {
-        const hp = Math.max(0, this.get().hp - 30);
+    hit(other: CreatureEntity) {
+        const hp = Math.max(0, this.get().hp - basicAttack(other.get().level));
         if (hp === 0) {
             this.owner.removeEntity();
-            other.emit('kill', this.hidden.name);
+            other.emit({ type: 'kill', name: this.hidden.name, data: this.get() });
         } else {
             this.set({ hp });
         }

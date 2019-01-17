@@ -94,6 +94,8 @@ export class ShowPreset<T extends BasePreset> extends React.Component<Props<T>, 
                     <div>
                         <span className="prop-name">name </span>
                         <input value={preset.name} onChange={this.changeName}/>
+                        <span className="prop-name">level </span>
+                        <input className="small-input" value={preset.level} type="number" min="1" step="1" onChange={this.changeLevel}/>
                         {' '}
                         <select value={preset.attitude} onChange={this.changeAttitude}>
                             <option value="friendly">Friendly</option>
@@ -149,6 +151,12 @@ export class ShowPreset<T extends BasePreset> extends React.Component<Props<T>, 
     private changeName = (e: React.SyntheticEvent<HTMLInputElement>) => {
         this.changePreset({
             name: e.currentTarget.value,
+        });
+    };
+
+    private changeLevel = (e: React.SyntheticEvent<HTMLInputElement>) => {
+        this.changePreset({
+            level: +e.currentTarget.value,
         });
     };
 

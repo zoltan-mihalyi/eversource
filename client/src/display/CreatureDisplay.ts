@@ -130,7 +130,7 @@ export abstract class CreatureDisplay<T extends CreatureEntityData> extends Upda
         if (!super.matches(changes)) {
             return false;
         }
-        for (const property of this.displayedProperties) {
+        for (const property of ['level' as 'level', ...this.displayedProperties]) {
             if (changes.hasOwnProperty(property) && changes[property] !== this.data[property]) {
                 return false;
             }
@@ -140,6 +140,10 @@ export abstract class CreatureDisplay<T extends CreatureEntityData> extends Upda
 
     protected alwaysShowName() {
         return this.data.player;
+    }
+
+    protected getText(){
+        return `[${this.data.level}] ${super.getText()}`;
     }
 
     protected nameColor() {

@@ -4,6 +4,7 @@ import { CreatureAttitude, Effect } from '../../../common/domain/CreatureEntityD
 
 export interface BasePreset {
     name: string;
+    level: number;
     attitude?: PresetAttitude;
     scale?: number;
     effects?: Effect[];

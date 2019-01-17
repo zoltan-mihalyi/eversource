@@ -11,7 +11,7 @@ export class FakeUserDao implements UserDao {
             info:
                 {
                     id: '1' as CharacterId,
-                    level: 1,
+                    level: 21,
                     xp: 180,
                     name: 'John' as CharacterName,
                     classId: 'warrior' as ClassId,

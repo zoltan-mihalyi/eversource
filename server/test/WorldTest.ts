@@ -77,6 +77,7 @@ describe('World', function () {
         const presets: HumanoidPresets = {
             orc: {
                 "name": "orc",
+                "level": 1,
                 "appearance": {
                     "sex": "female",
                     "body": ["orc"],
@@ -127,6 +128,7 @@ describe('World', function () {
         const presets: MonsterPresets = {
             lava_slime: {
                 "name": "Lava Slime",
+                "level": 1,
                 "image": "slime",
                 "palette": "lava",
             }

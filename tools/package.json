@@ -4,6 +4,7 @@
   "version": "1.0.0",
   "scripts": {
     "test": "tsc",
+    "add-preset-property": "ts-node src/scripts/add-preset-property.ts",
     "palette-reducer": "ts-node src/scripts/palette-reducer.ts",
     "large-palette-finder": "ts-node src/scripts/large-palette-finder.ts"
   },
