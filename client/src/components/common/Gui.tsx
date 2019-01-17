@@ -8,11 +8,6 @@ type ClassKeys = 'root';
 
 const styles: StyleRules<ClassKeys> = {
     '@global': {
-        '@font-face': {
-            fontFamily: 'pixel',
-            src: "url('css/alagard_by_pix3m-d6awiwp.ttf')",
-        },
-
         '::-webkit-scrollbar-track': {
             background: brown.darkest,
         },
