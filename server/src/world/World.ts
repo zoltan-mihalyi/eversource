@@ -20,8 +20,9 @@ const FPS = 50;
 const INTERVAL = 1000 / FPS;
 
 
-function getHidden(object: TiledObject): HiddenCreatureEntityData {
+function getHidden(object: TiledObject, preset: BasePreset): HiddenCreatureEntityData {
     return {
+        story: preset.story || '',
         name: object.name,
         quests: questStarts[object.name] || [],
         questCompletions: questEnds[object.name] || [],
@@ -77,7 +78,7 @@ export class WorldImpl implements World {
                     appearance,
                     equipment,
                     direction,
-                }, getHidden(object), properties.controller === 'walking' ? {} : void 0));
+                }, getHidden(object, preset), properties.controller === 'walking' ? {} : void 0));
             } else if (object.type === 'monster') {
                 const preset = this.monsterPresets[object.name];
                 const { image, palette, movement } = preset;
@@ -87,7 +88,7 @@ export class WorldImpl implements World {
                     ...baseFromPreset(preset, position, true),
                     image,
                     palette,
-                }, getHidden(object), { movement }));
+                }, getHidden(object, preset), { movement }));
             } else if (object.type === 'area') {
                 zone.addArea(
                     object.x / mapData.tileWidth as X,

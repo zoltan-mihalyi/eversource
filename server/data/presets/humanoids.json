@@ -79,7 +79,8 @@
       "mask": []
     },
     "name": "Diana",
-    "level": 15
+    "level": 15,
+    "story": "I love the smell of the fields."
   },
   "cacal": {
     "appearance": {
@@ -121,7 +122,8 @@
       "mask": []
     },
     "name": "Cacal",
-    "level": 16
+    "level": 16,
+    "story": "I'm just stayin here."
   },
   "priest": {
     "appearance": {
@@ -488,7 +490,8 @@
       "mask": []
     },
     "name": "Forester Nefag",
-    "level": 6
+    "level": 6,
+    "story": "Long time ago this place was a forest."
   },
   "bandit": {
     "appearance": {
@@ -811,7 +814,8 @@
       "mask": []
     },
     "name": "Protector Treguna",
-    "level": 20
+    "level": 20,
+    "story": "We really need your help to protect the city."
   },
   "bronze": {
     "appearance": {
@@ -907,7 +911,8 @@
     },
     "name": "Dark Champion",
     "scale": 1,
-    "level": 15
+    "level": 15,
+    "story": "Greetings, champion!"
   },
   "silver": {
     "appearance": {
@@ -1176,7 +1181,8 @@
       ],
       "mask": []
     },
-    "level": 25
+    "level": 25,
+    "story": "This place is in ruins. But We can rebuild it together!"
   },
   "obelus": {
     "name": "Obelus",
@@ -1221,7 +1227,8 @@
       ],
       "mask": []
     },
-    "level": 25
+    "level": 25,
+    "story": "You look like a foreign to me."
   },
   "legionary": {
     "name": "Legionary",

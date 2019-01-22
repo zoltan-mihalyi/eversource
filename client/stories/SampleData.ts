@@ -31,6 +31,7 @@ function questLogItem(id: number, name: string, status: QuestStatus, extra?: Par
 
 export const INTERACTIONS: InteractionTable = {
     name: 'Knight',
+    story: 'I have a responsible job. But sometimes I need help.',
     acceptable: [questInfo(1, 'Acceptable')],
     completable: [questInfo(2, 'Completable')],
     completableLater: [questInfo(3, 'Completable later')],

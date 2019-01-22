@@ -114,5 +114,5 @@ function entity(x: number, y: number): Entity {
             y: y as Y,
         },
         name: '',
-    }, { name: '', questCompletions: [], quests: [] });
+    }, { name: '', story: '', questCompletions: [], quests: [] });
 }

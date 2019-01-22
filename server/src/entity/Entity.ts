@@ -24,6 +24,7 @@ interface KillEvent {
 export type EntityEvent = AreaEvent | KillEvent;
 
 export interface HiddenEntityData {
+    story: string;
     quests: Quest[];
     questCompletions: Quest[];
 }
@@ -82,6 +83,7 @@ export abstract class Entity<O extends EntityData = EntityData, H extends Hidden
 
         return {
             name: this.state.name,
+            story: this.hidden.story,
             entityId: this.id,
             acceptable,
             completable,

@@ -25,6 +25,7 @@ export interface QuestInfo extends QuestBase {
 
 export interface InteractionTable {
     name: string;
+    story: string;
     entityId: EntityId;
     acceptable: QuestInfo[];
     completable: QuestInfo[];

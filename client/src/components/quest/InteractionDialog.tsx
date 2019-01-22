@@ -46,7 +46,7 @@ export class InteractionDialog extends React.PureComponent<Props, State> {
     }
 
     render() {
-        const { name, acceptable, completable, completableLater } = this.props.interactions;
+        const { name, story, acceptable, completable, completableLater } = this.props.interactions;
         const { selectedId } = this.state;
         const selected = selectedId === null ? null : findQuest(this.props.interactions, selectedId)!;
 
@@ -59,6 +59,7 @@ export class InteractionDialog extends React.PureComponent<Props, State> {
                                                onBack={this.clearSelection}/>
                     ) : (
                         <Scrollable fixedHeight padding variant="paper">
+                            {story}
                             <InteractionItemList>
                                 {acceptable.map((q, i) => <InteractionItem key={i} state={QuestItemState.ACCEPTABLE} quest={q}
                                                                            onSelect={this.onSelect}/>)}

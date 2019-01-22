@@ -94,6 +94,8 @@ export class ShowPreset<T extends BasePreset> extends React.Component<Props<T>, 
                     <div>
                         <span className="prop-name">name </span>
                         <input value={preset.name} onChange={this.changeName}/>
+                        <span className="prop-name">story </span>
+                        <input value={preset.story} onChange={this.changeStory}/>
                         <span className="prop-name">level </span>
                         <input className="small-input" value={preset.level} type="number" min="1" step="1" onChange={this.changeLevel}/>
                         {' '}
@@ -151,6 +153,12 @@ export class ShowPreset<T extends BasePreset> extends React.Component<Props<T>, 
     private changeName = (e: React.SyntheticEvent<HTMLInputElement>) => {
         this.changePreset({
             name: e.currentTarget.value,
+        });
+    };
+
+    private changeStory = (e: React.SyntheticEvent<HTMLInputElement>) => {
+        this.changePreset({
+            story: e.currentTarget.value,
         });
     };
 

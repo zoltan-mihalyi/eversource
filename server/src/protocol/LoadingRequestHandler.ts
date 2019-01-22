@@ -25,7 +25,7 @@ export class LoadingRequestHandler extends ClientState<CharacterDetails> {
 
         const controller = new PlayerController();
         const owner = new PlayerEntityOwner(this.data);
-        const hidden: HiddenCreatureEntityData = { name: 'player', quests: [], questCompletions: [] };
+        const hidden: HiddenCreatureEntityData = { name: 'player', story: '', quests: [], questCompletions: [] };
         const character = new CreatureEntity(owner, {
             ...BASE_HUMANOID,
             level: info.level,
