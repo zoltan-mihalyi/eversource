@@ -72,11 +72,12 @@ export class PlayingRequestHandler extends ClientState<PlayerData> {
                 if (!canInteract(this.data.character.get(), entityData)) {
                     return;
                 }
-                owner.interacting = entity;
+
+                owner.interactingRef.set(entity);
                 break;
             }
             case 'interact-end': {
-                owner.interacting = void 0;
+                owner.interactingRef.unset();
                 break;
             }
             case 'accept-quest': {
@@ -114,7 +115,7 @@ export class PlayingRequestHandler extends ClientState<PlayerData> {
         const { zone, character } = this.data;
 
         this.context.networkLoop.remove(this.networkUpdate);
-        zone.removeEntity(character);
+        this.data.owner.removeEntity();
     }
 
     private indexEntities(entities: Entity[]): Map<EntityId, EntityData> {
@@ -126,9 +127,11 @@ export class PlayingRequestHandler extends ClientState<PlayerData> {
     }
 
     private sendPlayerData() {
-        const { interacting, details } = this.data.owner;
+        const { interactingRef, details } = this.data.owner;
 
-        const { info } = this.data.owner.details;
+        const { info } = details;
+
+        const interacting = interactingRef.get();
 
         const playerState: PlayerState = {
             interaction: !interacting ? null : interacting.getInteractionsFor(details),

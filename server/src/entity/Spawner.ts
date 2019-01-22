@@ -8,10 +8,9 @@ export interface EntityFactory {
 
 export class Spawner extends EntityOwner {
     private nextSpawnTime: number | null = null;
-    private entity!: Entity;
 
-    constructor(private zone: Zone, private spawnTime: number, private factory: EntityFactory) {
-        super();
+    constructor(zone: Zone, private spawnTime: number, private factory: EntityFactory) {
+        super(zone);
         this.spawn();
     }
 
@@ -24,7 +23,7 @@ export class Spawner extends EntityOwner {
     }
 
     removeEntity() {
-        this.zone.removeEntity(this.entity);
+        super.removeEntity();
         this.nextSpawnTime = Date.now() + this.spawnTime;
     }
 

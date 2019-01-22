@@ -1,9 +1,7 @@
 import { Entity } from '../src/entity/Entity';
-import { BASE_MONSTER, CreatureEntity } from '../src/entity/CreatureEntity';
-import { X, Y } from '../../common/domain/Location';
 import { Grid, GridBlock } from '../../common/Grid';
 import * as assert from 'assert';
-import { EntityOwner } from '../src/entity/EntityOwner';
+import { entity } from './sampleData';
 
 const X = GridBlock.FULL;
 const _ = GridBlock.EMPTY;
@@ -98,21 +96,3 @@ describe('Entity', function () {
         assert.strictEqual(y, 2.5);
     });
 });
-
-const owner = new EntityOwner();
-
-function entity(x: number, y: number): Entity {
-    return new CreatureEntity(owner, {
-        ...BASE_MONSTER,
-        image: '',
-        level: 1,
-        hp: 100,
-        maxHp: 100,
-        scale: 1,
-        position: {
-            x: x as X,
-            y: y as Y,
-        },
-        name: '',
-    }, { name: '', story: '', questCompletions: [], quests: [] });
-}

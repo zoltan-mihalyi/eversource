@@ -31,6 +31,10 @@ export class WalkingController extends Controller {
 
     update(entity: CreatureEntity, delta: number) {
         const { x, y } = entity.get().position;
+        if (entity.isReferenced('interacting')) {
+            this.setMoving(0, 0);
+            return;
+        }
 
         const dx = this.target.x - x;
         const dy = this.target.y - y;

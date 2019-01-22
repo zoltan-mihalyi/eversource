@@ -7,6 +7,7 @@ import { InteractionTable, QuestId, QuestInfo } from '../../../common/domain/Int
 import { questInfoMap } from '../quest/QuestIndexer';
 import { EntityOwner } from './EntityOwner';
 import { CreatureEntityData } from '../../../common/domain/CreatureEntityData';
+import { EntityReference, ReferenceReason } from './EntityReference';
 
 let nextId = 0;
 
@@ -33,6 +34,18 @@ export abstract class Entity<O extends EntityData = EntityData, H extends Hidden
     readonly id = nextId++ as EntityId;
 
     protected constructor(protected owner: EntityOwner, protected state: Readonly<O>, protected hidden: H) {
+    }
+
+    referenced(reference: EntityReference) {
+        this.owner.referenced(reference);
+    }
+
+    dereferenced(reference: EntityReference) {
+        this.owner.dereferenced(reference);
+    }
+
+    isReferenced(reason: ReferenceReason): boolean {
+        return this.owner.isReferenced(reason);
     }
 
     protected set<K extends keyof O>(partial: Pick<O, K>) {
