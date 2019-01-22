@@ -52,15 +52,13 @@ interface Props {
 
 const RawDialog: React.ComponentType<Props & WithStyles<ClassKeys>> = ({ title, classes, children, onClose }) => {
     return (
-        <Gui>
-            <Panel margin>
-                <div className={classes.header}>
-                    <span className={classes.title}>{title}</span>
-                    <Button className={classes.closeButton} onClick={onClose}>X</Button>
-                </div>
-                {children}
-            </Panel>
-        </Gui>
+        <Panel margin>
+            <div className={classes.header}>
+                <span className={classes.title}>{title}</span>
+                <Button className={classes.closeButton} onClick={onClose}>X</Button>
+            </div>
+            {children}
+        </Panel>
     );
 };
 

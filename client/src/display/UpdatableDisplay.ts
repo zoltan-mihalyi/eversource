@@ -184,8 +184,12 @@ export abstract class UpdatableDisplay<T extends EntityData> extends PIXI.Contai
         this.spriteContainer.updateMouseOverEffect();
     }
 
+    protected getText(){
+        return this.data.name;
+    }
+
     private buildText() {
-        const { name } = this.data;
+        const name = this.getText();
         const text = new PIXI.Text(name, {
             fontFamily: 'pixel, serif',
             fontSize: 32,

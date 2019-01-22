@@ -6,8 +6,22 @@ import { Quest } from '../quest/Quest';
 import { InteractionTable, QuestId, QuestInfo } from '../../../common/domain/InteractionTable';
 import { questInfoMap } from '../quest/QuestIndexer';
 import { EntityOwner } from './EntityOwner';
+import { CreatureEntityData } from '../../../common/domain/CreatureEntityData';
 
 let nextId = 0;
+
+interface AreaEvent {
+    type: 'area';
+    name: string;
+}
+
+interface KillEvent {
+    type: 'kill';
+    data: CreatureEntityData;
+    name: string;
+}
+
+export type EntityEvent = AreaEvent | KillEvent;
 
 export interface HiddenEntityData {
     quests: Quest[];
@@ -102,10 +116,10 @@ export abstract class Entity<O extends EntityData = EntityData, H extends Hidden
     }
 
     update(grid: Grid, delta: number) {
-        this.owner.update(this);
+        this.owner.update();
     }
 
-    emit(eventType: string, payload?: any) {
+    emit(event: EntityEvent) {
     }
 
     tryMove(grid: Grid, dx: number, dy: number) {

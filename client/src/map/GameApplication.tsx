@@ -43,10 +43,13 @@ export class GameApplication extends PIXI.Application {
         registerCursors(this.renderer.plugins.interaction.cursorStyles);
     }
 
-    setScale(scale: number) {
+    setScale = (width: number, height: number, scale: number) => {
         this.gameLevel.setScale(scale);
         this.viewContainer.scale.set(scale);
-    }
+
+        this.renderer.resize(width, height);
+        this.updateView();
+    };
 
     destroy() {
         this.process.stop();
@@ -86,7 +89,7 @@ export class GameApplication extends PIXI.Application {
     }
 
 
-    updateView = () => {
+    private updateView () {
         const viewContainer = this.viewContainer;
         const canvas = this.view;
 

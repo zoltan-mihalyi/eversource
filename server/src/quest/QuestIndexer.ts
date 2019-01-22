@@ -1,6 +1,7 @@
 import { groupBy, indexBy } from '../utils';
 import { quests } from '../../data/quests';
 import { QuestId, QuestInfo } from '../../../common/domain/InteractionTable';
+import { questXpReward } from '../../../common/algorithms';
 
 export const questStarts = groupBy(quests, 'startsAt');
 export const questEnds = groupBy(quests, 'endsAt');
@@ -13,6 +14,7 @@ for (const quest of quests) {
     const questInfo: QuestInfo = {
         id: quest.id,
         level: quest.level,
+        xpReward: questXpReward(quest.level, quest.difficulty),
         name: quest.name,
         description: quest.description,
         taskDescription: quest.taskDescription,

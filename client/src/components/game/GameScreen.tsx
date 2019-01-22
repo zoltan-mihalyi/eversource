@@ -1,17 +1,28 @@
 import * as React from 'react';
-import { GameApplication } from '../../map/GameApplication';
 import { PlayingNetworkApi } from '../../protocol/PlayingState';
 import { QuestId } from '../../../../common/domain/InteractionTable';
 import { InteractionDialog } from '../quest/InteractionDialog';
-import { PlayerState } from '../../../../common/protocol/PlayerState';
+import { CharacterState, PlayerState } from '../../../../common/protocol/PlayerState';
 import { QuestLogItem } from '../../../../common/protocol/QuestLogItem';
-import { Diff } from '../../../../common/protocol/Diff';
 import { GameMenu } from './GameMenu';
 import { DebugInfo } from '../gui/DebugInfo';
 import { settings } from '../../settings/SettingsStore';
+import { InputManager } from '../../input/InputManager';
+import { XpBar } from './XpBar';
+import { EntityId } from '../../../../common/domain/EntityData';
+import { maxXpFor } from '../../../../common/algorithms';
+import { Gui } from '../common/Gui';
+
+const EMPTY_CHARACTER: CharacterState = {
+    level: 1,
+    xp: 0,
+    id: 0 as EntityId,
+};
 
 interface Props {
-    game: GameApplication;
+    setScale: (width: number, height: number, scale: number) => void;
+    inputManager: InputManager;
+    canvas: HTMLCanvasElement;
     onMount: (gameScreen: GameScreen) => void;
     playingNetworkApi: PlayingNetworkApi;
 }
@@ -38,8 +49,10 @@ export class GameScreen extends React.Component<Props, State> {
     render() {
         const { playerState: { interaction, character }, questLog, debug } = this.state;
 
+        const displayCharacter = character || EMPTY_CHARACTER;
+
         return (
-            <div>
+            <Gui>
                 <div ref={this.containerRef}/>
                 {debug && <DebugInfo/>}
                 {interaction && <InteractionDialog interactions={interaction} onAcceptQuest={this.acceptQuest}
@@ -47,9 +60,11 @@ export class GameScreen extends React.Component<Props, State> {
                                                    onClose={this.closeInteraction}/>}
 
                 <div ref={this.joystickContainerRef}/>
-                <GameMenu playerLevel={character === null ? 1 : character.level} questLog={questLog}
+                <GameMenu playerLevel={displayCharacter.level} questLog={questLog}
                           onLeave={this.leave}/>
-            </div>
+                <XpBar level={displayCharacter.level} xp={displayCharacter.xp}
+                       maxXp={maxXpFor(displayCharacter.level)}/>
+            </Gui>
         );
     }
 
@@ -66,30 +81,12 @@ export class GameScreen extends React.Component<Props, State> {
         this.setState({ playerState });
     }
 
-    updateQuestLog(diffs: Diff<QuestId, QuestLogItem>[]) {
-        const oldQuestLog = this.state.questLog;
-        const questLog = new Map(oldQuestLog);
-
-        for (const diff of diffs) {
-            switch (diff.type) {
-                case 'create':
-                    questLog.set(diff.id, diff.data);
-                    break;
-                case 'change':
-                    questLog.set(diff.id, { ...questLog.get(diff.id)!, ...diff.changes });
-                    break;
-                case 'remove':
-                    questLog.delete(diff.id);
-            }
-        }
-
-        this.setState({
-            questLog,
-        });
+    updateQuestLog(questLog: Map<QuestId, QuestLogItem>) {
+        this.setState({ questLog });
     }
 
     private joystickContainerRef = (div: HTMLDivElement | null) => {
-        const { inputManager } = this.props.game;
+        const { inputManager } = this.props;
         if (div) {
             inputManager.initializeJoystick(div);
         }
@@ -105,9 +102,8 @@ export class GameScreen extends React.Component<Props, State> {
     };
 
     private initialize(container: HTMLElement) {
-        const { game } = this.props;
+        const { canvas } = this.props;
 
-        const canvas = game.view;
         this.canvas = canvas;
         canvas.addEventListener('contextmenu', this.onContextMenu);
         container.appendChild(canvas);
@@ -137,8 +133,7 @@ export class GameScreen extends React.Component<Props, State> {
     };
 
     private updateSize = () => {
-        const { game } = this.props;
-        const canvas = game.view;
+        const { canvas, setScale } = this.props;
 
         const devicePixelRatio = window.devicePixelRatio || 1;
 
@@ -151,13 +146,10 @@ export class GameScreen extends React.Component<Props, State> {
         const widthRatio = width / 800;
         const heightRatio = height / 450;
 
-        game.setScale(roundScale(Math.max(widthRatio, heightRatio)));
-
         canvas.style.width = `${cssWidth}px`;
         canvas.style.height = `${cssHeight}px`;
 
-        game.renderer.resize(width, height);
-        game.updateView();
+        setScale(width, height, roundScale(Math.max(widthRatio, heightRatio)));
     };
 
     private onContextMenu = (event: Event) => {

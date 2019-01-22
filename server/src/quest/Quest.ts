@@ -1,5 +1,6 @@
-import { QuestBase, QuestId, TaskInfo } from '../../../common/domain/InteractionTable';
+import { QuestBase, QuestId } from '../../../common/domain/InteractionTable';
 import { NonEmptyArray } from '../../../common/util/NonEmptyArray';
+import { EntityEvent } from '../entity/Entity';
 
 interface BaseTask {
     count: number;
@@ -27,19 +28,22 @@ export interface Tasks {
     list: NonEmptyArray<Task>;
 }
 
+export type QuestDifficulty = 'easy' | 'normal' | 'hard';
+
 export interface Quest extends QuestBase {
+    difficulty: QuestDifficulty;
     startsAt: string;
     endsAt: string;
     requires: QuestId[];
     tasks?: Tasks;
 }
 
-export function matchesEvent(task: Task, eventType: string, payload?: any) {
-    switch (eventType) {
+export function matchesEvent(task: Task, event: EntityEvent) {
+    switch (event.type) {
         case 'area':
-            return task.type === 'visit' && task.areaName === payload;
+            return task.type === 'visit' && task.areaName === event.name;
         case 'kill':
-            return task.type === 'kill' && task.monsterNames.indexOf(payload) !== -1;
+            return task.type === 'kill' && task.monsterNames.indexOf(event.name) !== -1;
     }
     return false;
 }

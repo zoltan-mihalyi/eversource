@@ -7,9 +7,10 @@ import { EntityId } from '../../../../common/domain/EntityData';
 import { GameContext } from '../../../../client/src/game/GameContext';
 import { BaseCreatureEntityData } from '../../../../common/domain/CreatureEntityData';
 import { HumanoidEdit } from './HumanoidEdit';
+import { BASE_PRESET } from '../utils';
 
 const DEFAULT: HumanoidPreset = {
-    name: 'Fill Me',
+    ...BASE_PRESET,
     appearance: {
         sex: 'female',
         body: ['normal', 'tanned'],

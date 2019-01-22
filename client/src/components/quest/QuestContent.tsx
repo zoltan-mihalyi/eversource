@@ -42,7 +42,7 @@ const RawQuestContent: React.FunctionComponent<Props & WithStyles<ClassKeys>> = 
                 </Enumeration>
             )
         )}
-        <Rewards/>
+        <Rewards info={info}/>
     </QuestStyle>
 );
 

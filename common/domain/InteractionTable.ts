@@ -17,7 +17,8 @@ export interface QuestBase {
     completion: string;
 }
 
-export interface QuestInfo extends QuestBase{
+export interface QuestInfo extends QuestBase {
+    xpReward: number;
     progress?: string;
     tasks: TaskInfo[];
 }

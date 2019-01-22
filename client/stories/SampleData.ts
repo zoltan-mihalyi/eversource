@@ -2,11 +2,16 @@ import { InteractionTable, QuestId, QuestInfo } from '../../common/domain/Intera
 import { EntityId } from '../../common/domain/EntityData';
 import { QuestLogItem } from '../../common/protocol/QuestLogItem';
 import { QuestStatus } from '../../server/src/character/CharacterDetails';
+import { PlayingNetworkApi } from '../src/protocol/PlayingState';
+
+function noop() {
+}
 
 export function questInfo(id: number, name: string, extra?: Partial<QuestInfo>): QuestInfo {
     return {
         id: id as QuestId,
         level: 5,
+        xpReward: 40,
         name,
         tasks: [{ count: 10, title: 'Intruders slain' }, { count: 1, title: 'Area explored' }],
         completion: 'Good job!',
@@ -42,13 +47,22 @@ QUEST_LOG.set(5 as QuestId, questLogItem(5, 'A quest with long task', [8, 1], {
     level: 12,
     tasks: [{
         title: 'A bit longer task name',
-        count: 32
+        count: 32,
     }, {
         title: 'An unnecessarily long task name',
-        count: 150
-    }]
+        count: 150,
+    }],
 }));
 QUEST_LOG.set(6 as QuestId, questLogItem(6, 'A low level quest', [0, 0], { level: 2 }));
 QUEST_LOG.set(7 as QuestId, questLogItem(7, 'A very low level quest', [0, 0], { level: 1 }));
 
 export const PLAYER_LEVEL = 6;
+
+export const FAKE_API: PlayingNetworkApi = {
+    interact: noop,
+    acceptQuest: noop,
+    closeInteraction: noop,
+    leaveGame: noop,
+    move: noop,
+    completeQuest: noop,
+};

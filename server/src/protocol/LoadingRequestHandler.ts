@@ -5,6 +5,7 @@ import { BASE_HUMANOID, CreatureEntity, HiddenCreatureEntityData } from '../enti
 import { PlayerController } from '../entity/controller/PlayerController';
 import { CharacterDetails } from '../character/CharacterDetails';
 import { PlayerEntityOwner } from '../entity/EntityOwner';
+import { hpForLevel } from '../../../common/algorithms';
 
 export class LoadingRequestHandler extends ClientState<CharacterDetails> {
     private serverLoading = false;
@@ -32,10 +33,12 @@ export class LoadingRequestHandler extends ClientState<CharacterDetails> {
             name,
             player: true,
             hp: info.hp,
+            maxHp: hpForLevel(info.level),
             scale: 1,
             appearance: info.appearance,
             equipment: info.equipment,
         }, hidden, controller);
+        owner.setEntity(character);
         zone.addEntity(character);
 
         this.context.sendCommand('ready', void 0);

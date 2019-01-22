@@ -1,6 +1,12 @@
 import * as fs from "fs";
 import * as path from "path";
 import { Palettes } from '../../../client/src/game/Palettes';
+import { BasePreset } from '../../../server/src/world/Presets';
+
+export const BASE_PRESET: BasePreset = {
+    name: 'Fill Me',
+    level: 1,
+};
 
 export class DirectoryReader {
     constructor(private base: string) {

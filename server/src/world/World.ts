@@ -10,6 +10,7 @@ import { questEnds, questStarts } from '../quest/QuestIndexer';
 import { HiddenEntityData } from '../entity/Entity';
 import { EntityFactory } from '../entity/Spawner';
 import { EntityOwner } from '../entity/EntityOwner';
+import { hpForLevel } from '../../../common/algorithms';
 
 export interface World {
     getZone(zoneId: ZoneId): Promise<Zone>;
@@ -109,12 +110,17 @@ export class WorldImpl implements World {
     };
 }
 
-type PresetBaseEntityData = Pick<BaseCreatureEntityData, 'attitude' | 'effects' | 'scale' | 'position' | 'name'>;
+type PresetBaseEntityData = Pick<BaseCreatureEntityData, 'attitude' | 'effects' | 'scale' | 'position' | 'name' | 'level' | 'hp' | 'maxHp'>;
 
 function baseFromPreset(preset: BasePreset, position: Position, monster: boolean): PresetBaseEntityData {
+    const hp = hpForLevel(preset.level);
+
     return {
         position,
         name: preset.name,
+        level: preset.level,
+        hp,
+        maxHp: hp,
         scale: preset.scale || 1,
         attitude: resolvePresetAttitude(preset.attitude, monster),
         effects: preset.effects || [],

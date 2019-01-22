@@ -79,7 +79,9 @@ export class App extends React.Component<{}, State> implements Display {
                 );
             case 'game':
                 return (
-                    <GameScreen game={screen.game} onMount={screen.onMount} playingNetworkApi={screen.playingNetworkApi}/>
+                    <GameScreen inputManager={screen.game.inputManager} canvas={screen.game.view}
+                                setScale={screen.game.setScale} onMount={screen.onMount}
+                                playingNetworkApi={screen.playingNetworkApi}/>
                 );
         }
     }

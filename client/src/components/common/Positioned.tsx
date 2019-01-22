@@ -3,7 +3,7 @@ import * as React from 'react';
 import { className, injectSheet } from '../utils';
 
 
-type ClassKeys = 'root' | 'left' | 'right' | 'top' | 'bottom';
+type ClassKeys = 'root' | 'left' | 'stretch' | 'right' | 'top' | 'bottom';
 
 const styles: StyleRules<ClassKeys> = {
     root: {
@@ -15,6 +15,9 @@ const styles: StyleRules<ClassKeys> = {
     right: {
         right: 0,
     },
+    stretch: {
+        width: '100%',
+    },
     top: {
         top: 0,
     },
@@ -24,7 +27,7 @@ const styles: StyleRules<ClassKeys> = {
 };
 
 interface Props {
-    horizontal: 'left' | 'right';
+    horizontal: 'left' | 'right' | 'stretch';
     vertical: 'top' | 'bottom';
 }
 

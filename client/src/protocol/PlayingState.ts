@@ -38,6 +38,8 @@ export class PlayingState extends NetworkingState<PlayingStateData> implements P
     private readonly game: GameApplication;
     private gameScreen!: GameScreen;
     private currentPlayerState: PlayerState = { interaction: null, character: null };
+    private currentQuestLog: Map<QuestId, QuestLogItem> = new Map<QuestId, QuestLogItem>();
+
 
     constructor(manager: StateManager<any, NetworkingContext>, context: NetworkingContext, data: PlayingStateData) {
         super(manager, context, data);
@@ -83,7 +85,25 @@ export class PlayingState extends NetworkingState<PlayingStateData> implements P
     }
 
     questLog(diffs: Diff<QuestId, QuestLogItem>[]) {
-        this.gameScreen.updateQuestLog(diffs);
+
+        const oldQuestLog = this.currentQuestLog;
+        const questLog = new Map(oldQuestLog);
+
+        for (const diff of diffs) {
+            switch (diff.type) {
+                case 'create':
+                    questLog.set(diff.id, diff.data);
+                    break;
+                case 'change':
+                    questLog.set(diff.id, { ...questLog.get(diff.id)!, ...diff.changes });
+                    break;
+                case 'remove':
+                    questLog.delete(diff.id);
+            }
+        }
+
+        this.currentQuestLog = questLog;
+        this.gameScreen.updateQuestLog(questLog);
     }
 
     protected abort() {

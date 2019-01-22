@@ -1,13 +1,13 @@
 import { ClientState } from './ClientState';
 import { Zone } from '../world/Zone';
 import { CharacterSelectionRequestHandler } from './CharacterSelectionRequestHandler';
-import { Entity, HiddenEntityData } from '../entity/Entity';
+import { Entity } from '../entity/Entity';
 import { CreatureEntity } from '../entity/CreatureEntity';
 import { EntityData, EntityId } from '../../../common/domain/EntityData';
 import { PlayerController } from '../entity/controller/PlayerController';
 import { canInteract } from '../../../common/game/Interaction';
 import { PlayerState } from '../../../common/protocol/PlayerState';
-import { QuestId, QuestInfo } from '../../../common/domain/InteractionTable';
+import { QuestId } from '../../../common/domain/InteractionTable';
 import { questInfoMap, questsById } from '../quest/QuestIndexer';
 import { DynamicDiffable } from './diffable/DynamicDiffable';
 import { DiffablePlayerState } from './diffable/DiffablePlayerState';
@@ -96,6 +96,7 @@ export class PlayingRequestHandler extends ClientState<PlayerData> {
                 }
                 owner.details.questLog.delete(quest.id);
                 owner.details.questsDone.add(quest.id);
+                owner.addXp(quest.xpReward);
                 break;
             }
         }
@@ -127,10 +128,13 @@ export class PlayingRequestHandler extends ClientState<PlayerData> {
     private sendPlayerData() {
         const { interacting, details } = this.data.owner;
 
+        const { info } = this.data.owner.details;
+
         const playerState: PlayerState = {
             interaction: !interacting ? null : interacting.getInteractionsFor(details),
             character: {
-                level: this.data.character.get().level,
+                xp: info.xp,
+                level: info.level,
                 id: this.data.character.id,
             },
         };
