@@ -9,6 +9,7 @@ import { PlayingNetworkApi, PlayingStateData } from '../protocol/PlayingState';
 import { PlayerStateDiff } from '../../../common/protocol/Messages';
 import { TextureLoader } from './TextureLoader';
 import { CancellableProcess } from '../../../common/util/CancellableProcess';
+import { PlayerState } from '../../../common/protocol/PlayerState';
 
 export class GameApplication extends PIXI.Application {
     private viewContainer = new PIXI.Container();
@@ -72,11 +73,11 @@ export class GameApplication extends PIXI.Application {
         this.gameLevel.updateObjects(diffs);
     }
 
-    updatePlayerState(state: PlayerStateDiff) {
-        if (state.character && state.character.id !== void 0) {
+    updatePlayerState(state: PlayerState) {
+        if (state.character) {
             this.entityId = state.character.id;
-            this.gameLevel.setEntityId(this.entityId);
         }
+        this.gameLevel.updatePlayerState(state);
     }
 
     private setViewCenter(position: Position) {
@@ -108,6 +109,8 @@ export class GameApplication extends PIXI.Application {
 
     private update = () => {
         const { x, y } = this.inputManager.getMovementIntent();
+
+        this.gameLevel.update();
 
         if (x !== this.lastMovementIntent.x || y !== this.lastMovementIntent.y) {
             this.playingNetworkApi.move(x, y);

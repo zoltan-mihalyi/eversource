@@ -10,8 +10,11 @@ import { UpdatableDisplay } from '../display/UpdatableDisplay';
 import { HumanoidDisplay } from '../display/HumanoidDisplay';
 import { MonsterDisplay } from '../display/MonsterDisplay';
 import { GameContext } from '../game/GameContext';
+import { PlayerState } from '../../../common/protocol/PlayerState';
+import { InteractionTable } from '../../../common/domain/InteractionTable';
 import ResourceDictionary = PIXI.loaders.ResourceDictionary;
 import DisplayObject = PIXI.DisplayObject;
+import { CreatureDisplay } from '../display/CreatureDisplay';
 
 const CHUNK_WIDTH = 16;
 const CHUNK_HEIGHT = 16;
@@ -30,6 +33,7 @@ export class GameLevel {
     readonly chunkAboveContainer = new PIXI.Container();
     private readonly tileSet: TexturedTileSet[];
     private entityId!: EntityId;
+    private interaction: InteractionTable | null = null;
     private scale: number = 1;
 
     constructor(private context: GameContext, readonly map: LoadedMap, images: ResourceDictionary) {
@@ -80,9 +84,9 @@ export class GameLevel {
                     break;
                 }
                 case 'change': {
-                    const character = this.entityDisplays.get(id)!;
-                    character.update(diff.changes);
-                    updateDisplayPosition(character, diff.changes);
+                    const display = this.entityDisplays.get(id)!;
+                    display.update(diff.changes);
+                    updateDisplayPosition(display, diff.changes);
                     break;
                 }
                 case 'remove': {
@@ -105,8 +109,14 @@ export class GameLevel {
         });
     }
 
-    setEntityId(entityId: EntityId) {
-        this.entityId = entityId;
+    updatePlayerState(state: PlayerState) {
+        if (state.character) {
+            this.entityId = state.character.id;
+            if (this.interaction && this.interaction !== state.interaction) {
+                (this.entityDisplays.get(this.interaction.entityId) as CreatureDisplay<any>).clearFacing();
+            }
+        }
+        this.interaction = state.interaction;
     }
 
     round(position: Position): Position {
@@ -149,6 +159,14 @@ export class GameLevel {
                 this.chunkBaseContainer.addChild(chunk.base);
                 this.chunkAboveContainer.addChild(chunk.above);
             }
+        }
+    }
+
+    update() {
+        if (this.interaction) {
+            const display = this.entityDisplays.get(this.interaction.entityId) as CreatureDisplay<any>;
+            const player = this.entityDisplays.get(this.entityId)!;
+            display.setFacing(player.x, player.y);
         }
     }
 
