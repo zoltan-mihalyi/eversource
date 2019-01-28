@@ -12,4 +12,5 @@ export interface ClientComponents extends NetworkComponents {
     mouseOver: true;
     fixAnimationSpeed: number | null;
     shadowSize: number;
+    shadowAlpha: number;
 }

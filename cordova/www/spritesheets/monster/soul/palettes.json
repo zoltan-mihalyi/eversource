@@ -1,0 +1,34 @@
+{
+  "base": [
+    {
+      "color": "#00ff00",
+      "coordinates": [
+        29,
+        28
+      ]
+    }
+  ],
+  "variations": {
+    "orange": [
+      "#ff8a00"
+    ],
+    "cyan": [
+      "#00ffaa"
+    ],
+    "bright": [
+      "#ffff7d"
+    ],
+    "blue": [
+      "#003fea"
+    ],
+    "pink": [
+      "#ff9cff"
+    ],
+    "red": [
+      "#ff000e"
+    ],
+    "white": [
+      "#ffffff"
+    ]
+  }
+}

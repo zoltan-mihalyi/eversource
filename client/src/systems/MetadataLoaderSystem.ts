@@ -23,14 +23,14 @@ export function metadataLoaderSystem(container: EntityContainer<ClientComponents
         textureLoader.loadDetails(display, tileSet, (details) => {
             const { tileSet } = details;
             const properties = tileSet.properties || {};
-            const animationSpeed = properties.animationSpeed;
-            const size = properties.size;
 
             display.spriteContainer.hitArea = typeof properties.hitArea === 'string'
                 ? rectFromString(properties.hitArea)
                 : null as any;
 
-            entitiy.set('fixAnimationSpeed', typeof animationSpeed === 'number' ? animationSpeed : null);
+            entitiy.set('shadowSize', orDefault(properties.shadowSize, 1));
+            entitiy.set('shadowAlpha', orDefault(properties.shadowAlpha, 1));
+            entitiy.set('fixAnimationSpeed', orDefault(properties.animationSpeed, null));
         });
 
     }
@@ -46,4 +46,7 @@ function getTileSet(view: SimpleView | HumanoidView): string {
 
 function rectFromString(hitAreaString: string): PIXI.Rectangle {
     return new PIXI.Rectangle(...hitAreaString.split(',').map(Number));
+}
+function orDefault<T>(value: any, def: T): T {
+    return value === void 0 ? def : value;
 }

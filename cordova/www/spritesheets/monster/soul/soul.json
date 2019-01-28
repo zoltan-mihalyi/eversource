@@ -1,60 +1,60 @@
-{ "columns":3,
- "image":"bee.png",
- "imageheight":128,
- "imagewidth":96,
+{ "columns":4,
+ "image":"soul.png",
+ "imageheight":256,
+ "imagewidth":256,
  "margin":0,
- "name":"bee",
+ "name":"soul",
  "properties":
     {
-     "animationSpeed":0.3,
-     "shadowSize":0.5
+     "shadowAlpha": 0.25,
+     "animationSpeed":0.15
     },
  "propertytypes":
     {
-     "animationSpeed":"float",
-     "shadowSize":"float"
+     "shadowAlpha":"float",
+     "animationSpeed":"float"
     },
  "spacing":0,
- "tilecount":12,
- "tileheight":32,
+ "tilecount":16,
+ "tileheight":64,
  "tileoffset":
     {
-     "x":-16,
-     "y":-32
+     "x":-32,
+     "y":-24
     },
  "tileproperties":
     {
      "0":
         {
-         "name":"walking:up"
+         "name":"standing:up"
         },
      "1":
         {
-         "name":"standing:up"
+         "name":"walking:up"
         },
-     "10":
+     "12":
         {
          "name":"standing:right"
         },
-     "3":
+     "13":
         {
-         "name":"walking:left"
+         "name":"walking:right"
         },
      "4":
         {
          "name":"standing:left"
         },
-     "6":
+     "5":
         {
-         "name":"walking:down"
+         "name":"walking:left"
         },
-     "7":
+     "8":
         {
          "name":"standing:down"
         },
      "9":
         {
-         "name":"walking:right"
+         "name":"walking:down"
         }
     },
  "tilepropertytypes":
@@ -67,11 +67,11 @@
         {
          "name":"string"
         },
-     "10":
+     "12":
         {
          "name":"string"
         },
-     "3":
+     "13":
         {
          "name":"string"
         },
@@ -79,11 +79,11 @@
         {
          "name":"string"
         },
-     "6":
+     "5":
         {
          "name":"string"
         },
-     "7":
+     "8":
         {
          "name":"string"
         },
@@ -107,7 +107,7 @@
                 }, 
                 {
                  "duration":100,
-                 "tileid":2
+                 "tileid":0
                 }]
         },
      "1":
@@ -127,43 +127,43 @@
                 }, 
                 {
                  "duration":100,
+                 "tileid":3
+                }]
+        },
+     "12":
+        {
+         "animation":[
+                {
+                 "duration":100,
+                 "tileid":0
+                }, 
+                {
+                 "duration":100,
                  "tileid":1
+                }, 
+                {
+                 "duration":100,
+                 "tileid":0
                 }]
         },
-     "10":
+     "13":
         {
          "animation":[
                 {
                  "duration":100,
-                 "tileid":9
+                 "tileid":0
                 }, 
                 {
                  "duration":100,
-                 "tileid":10
+                 "tileid":1
                 }, 
                 {
                  "duration":100,
-                 "tileid":11
+                 "tileid":2
                 }, 
-                {
-                 "duration":100,
-                 "tileid":10
-                }]
-        },
-     "3":
-        {
-         "animation":[
                 {
                  "duration":100,
                  "tileid":3
-                }, 
-                {
-                 "duration":100,
-                 "tileid":4
-                }, 
-                {
-                 "duration":100,
-                 "tileid":5
                 }]
         },
      "4":
@@ -171,55 +171,51 @@
          "animation":[
                 {
                  "duration":100,
+                 "tileid":0
+                }, 
+                {
+                 "duration":100,
+                 "tileid":1
+                }, 
+                {
+                 "duration":100,
+                 "tileid":0
+                }]
+        },
+     "5":
+        {
+         "animation":[
+                {
+                 "duration":100,
+                 "tileid":0
+                }, 
+                {
+                 "duration":100,
+                 "tileid":1
+                }, 
+                {
+                 "duration":100,
+                 "tileid":2
+                }, 
+                {
+                 "duration":100,
                  "tileid":3
-                }, 
-                {
-                 "duration":100,
-                 "tileid":4
-                }, 
-                {
-                 "duration":100,
-                 "tileid":5
-                }, 
-                {
-                 "duration":100,
-                 "tileid":4
                 }]
         },
-     "6":
+     "8":
         {
          "animation":[
                 {
                  "duration":100,
-                 "tileid":6
+                 "tileid":0
                 }, 
                 {
                  "duration":100,
-                 "tileid":7
+                 "tileid":1
                 }, 
                 {
                  "duration":100,
-                 "tileid":8
-                }]
-        },
-     "7":
-        {
-         "animation":[
-                {
-                 "duration":100,
-                 "tileid":6
-                }, 
-                {
-                 "duration":100,
-                 "tileid":7
-                }, 
-                {
-                 "duration":100,
-                 "tileid":8
-                }, 
-                {
-                 "duration":100,
-                 "tileid":7
+                 "tileid":0
                 }]
         },
      "9":
@@ -227,18 +223,22 @@
          "animation":[
                 {
                  "duration":100,
-                 "tileid":9
+                 "tileid":0
                 }, 
                 {
                  "duration":100,
-                 "tileid":10
+                 "tileid":1
                 }, 
                 {
                  "duration":100,
-                 "tileid":11
+                 "tileid":2
+                }, 
+                {
+                 "duration":100,
+                 "tileid":3
                 }]
         }
     },
- "tilewidth":32,
+ "tilewidth":64,
  "type":"tileset"
 }

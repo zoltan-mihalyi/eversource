@@ -63,12 +63,6 @@
     "name": "Pink Bee",
     "image": "bee",
     "palette": "pink",
-    "effects": [
-      {
-        "type": "speed",
-        "param": 1
-      }
-    ],
     "level": 22
   },
   "slime_lava": {
@@ -117,7 +111,7 @@
     "image": "golem",
     "palette": "dirt",
     "scale": 1.5,
-    "level": 16
+    "level": 6
   },
   "golem_emerald": {
     "name": "Emerald Golem",
@@ -244,5 +238,79 @@
     "image": "impling",
     "palette": "void",
     "level": 18
+  },
+  "slime_forest": {
+    "name": "Enchanted Slime",
+    "level": 2,
+    "image": "slime",
+    "palette": "forest",
+    "attitude": "neutral"
+  },
+  "soul": {
+    "name": "Soul",
+    "level": 1,
+    "image": "soul",
+    "palette": null,
+    "attitude": "neutral",
+    "scale": 0.5
+  },
+  "soul_cyan": {
+    "name": "Enchanted Soul",
+    "level": 2,
+    "image": "soul",
+    "palette": "cyan",
+    "scale": 0.7,
+    "attitude": "neutral"
+  },
+  "soul_orange": {
+    "name": "Corrupted Soul",
+    "level": 2,
+    "image": "soul",
+    "palette": "orange",
+    "attitude": "hostile",
+    "scale": 0.7
+  },
+  "soul_white": {
+    "name": "Pure Soul",
+    "level": 10,
+    "image": "soul",
+    "palette": "white",
+    "scale": 0.8
+  },
+  "soul_red": {
+    "name": "Blood Soul",
+    "level": 7,
+    "image": "soul",
+    "palette": "red",
+    "scale": 0.6
+  },
+  "soul_bright": {
+    "name": "Soul Of Light",
+    "level": 10,
+    "image": "soul",
+    "palette": "bright",
+    "scale": 0.9,
+    "effects": [
+      {
+        "type": "light",
+        "param": 1
+      }
+    ]
+  },
+  "soul_pink": {
+    "name": "Candy Soul",
+    "level": 20,
+    "image": "soul",
+    "palette": "pink",
+    "story": "",
+    "attitude": "neutral",
+    "scale": 0.9
+  },
+  "soul_blue": {
+    "name": "Cobalt Soul",
+    "level": 30,
+    "image": "soul",
+    "palette": "blue",
+    "scale": 0.7
   }
 }
