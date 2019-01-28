@@ -1,5 +1,5 @@
-import { Terrain, TerrainId, TileId, TileSet } from '../../../../common/tiled/interfaces';
-import { Opaque } from '../../../../common/util/Opaque';
+import { Terrain, TerrainId, TileId, TileSet } from '../../../common/tiled/interfaces';
+import { Opaque } from '../../../common/util/Opaque';
 
 
 type TerrainsKey = Opaque<string, 'TerrainsKey'>;

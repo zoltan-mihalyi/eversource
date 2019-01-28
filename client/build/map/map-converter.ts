@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as pako from 'pako';
 import { LargeToSmallMapping } from './TileMapping';
-import { Layer, TileId, TileLayer, TileMap, TileSet, TileSetRef } from '../../../../common/tiled/interfaces';
+import { Layer, TileId, TileLayer, TileMap, TileSet, TileSetRef } from '../../../common/tiled/interfaces';
 
 function readData(layer: TileLayer): number[] {
     if (layer.compression !== 'zlib') {
@@ -61,9 +61,8 @@ function splitLayers(original: TileLayer, data: number[], mapping: LargeToSmallM
 
 }
 
-export function convertMap(map: string, large: string, small: string, out: string) {
-    const tileMap = JSON.parse(fs.readFileSync(map, 'utf-8')) as TileMap;
-    const mapDir = path.dirname(map);
+export function convertMap(src: string, tileMap: TileMap, large: string, small: string): string {
+    const mapDir = path.dirname(src);
     const largeTileSet = JSON.parse(fs.readFileSync(path.resolve(mapDir, large), 'utf-8')) as TileSet;
     const smallTileSet = JSON.parse(fs.readFileSync(path.resolve(mapDir, small), 'utf-8')) as TileSet;
     const mapping = new LargeToSmallMapping(largeTileSet, smallTileSet);
@@ -114,5 +113,5 @@ export function convertMap(map: string, large: string, small: string, out: strin
         tilesets: newTilesets,
     };
 
-    fs.writeFileSync(out, JSON.stringify(outMap), 'utf-8');
+    return JSON.stringify(outMap);
 }
