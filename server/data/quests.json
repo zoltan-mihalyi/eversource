@@ -204,5 +204,41 @@
         }
       ]
     }
+  },
+  "11": {
+    "level": 4,
+    "difficulty": "normal",
+    "name": "Revealing the summoner",
+    "startsAt": "wizard",
+    "endsAt": "wizard",
+    "description": "So you want to know who summons the golems, right? I know an ancient elixir which reveals the summoner of any summoned creature. Maybe I can make it If you bring me the ingredients.",
+    "taskDescription": "Bring the ingredients of the elixir!",
+    "completion": "Ah finally! Pyrite! \nOh, I almost forgot, here is your elixir!",
+    "requires": [],
+    "tasks": {
+      "progress": "Where is my Pyrite? I mean, the ingredients?",
+      "list": [
+        {
+          "type": "item",
+          "count": 1,
+          "title": "Shadow Mushroom"
+        },
+        {
+          "type": "item",
+          "count": 1,
+          "title": "Fresh Grass"
+        },
+        {
+          "type": "item",
+          "count": 1,
+          "title": "Rafflesia tuan-mudae"
+        },
+        {
+          "type": "item",
+          "count": 3,
+          "title": "Pyrite"
+        }
+      ]
+    }
   }
 }

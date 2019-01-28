@@ -1,0 +1,104 @@
+{
+  "base": [
+    {
+      "color": "#241213",
+      "coordinates": [
+        23,
+        44
+      ]
+    },
+    {
+      "color": "#62351c",
+      "coordinates": [
+        24,
+        45
+      ]
+    },
+    {
+      "color": "#3e2613",
+      "coordinates": [
+        25,
+        45
+      ]
+    },
+    {
+      "color": "#744b30",
+      "coordinates": [
+        26,
+        46
+      ]
+    },
+    {
+      "color": "#996b4a",
+      "coordinates": [
+        28,
+        47
+      ]
+    },
+    {
+      "color": "#1d131e",
+      "coordinates": [
+        27,
+        108
+      ]
+    },
+    {
+      "color": "#726b7e",
+      "coordinates": [
+        28,
+        109
+      ]
+    },
+    {
+      "color": "#3d3748",
+      "coordinates": [
+        28,
+        110
+      ]
+    },
+    {
+      "color": "#3d2513",
+      "coordinates": [
+        101,
+        302
+      ]
+    },
+    {
+      "color": "#61341b",
+      "coordinates": [
+        161,
+        431
+      ]
+    },
+    {
+      "color": "#72492e",
+      "coordinates": [
+        89,
+        1198
+      ]
+    },
+    {
+      "color": "#734a2f",
+      "coordinates": [
+        97,
+        1198
+      ]
+    }
+  ],
+  "variations": {
+    "blue": [
+      "#00001c",
+      "#002b68",
+      "#06153f",
+      "#273c78",
+      "#4d599f",
+      "#1d1d1d",
+      "#6d6d6d",
+      "#393939",
+      "#03143e",
+      "#002a67",
+      "#253a76",
+      "#263b77"
+    ]
+  }
+}
