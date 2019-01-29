@@ -1,19 +1,36 @@
-import { CreatureAttitude, CreatureEntityData } from '../../../common/domain/CreatureEntityData';
+import { CreatureActivity, CreatureAttitude, CreatureEntityData, Direction } from '../../../common/domain/CreatureEntityData';
 import { UpdatableDisplay } from './UpdatableDisplay';
 import * as PIXI from "pixi.js";
 import { GameContext } from '../game/GameContext';
 import { EntityId } from '../../../common/domain/EntityData';
 import { EffectCache } from '../effects/EffectCache';
 import { AdjustmentOptions } from '@pixi/filter-adjustment'
+import { getDirection } from '../../../common/game/direction';
 
 const HP_BAR_WIDTH = 60;
 
 export abstract class CreatureDisplay<T extends CreatureEntityData> extends UpdatableDisplay<T> {
     protected abstract displayedProperties: (keyof T)[];
     private effectCache = new EffectCache();
+    private facing: Direction | null = null;
 
     constructor(id: EntityId, context: GameContext, data: T, private self: boolean) {
         super(id, context, data);
+    }
+
+    public setFacing(x: number, y: number) {
+        this.setFacingDirection(getDirection(x - this.x, y - this.y) || 'down');
+    }
+
+    public clearFacing() {
+        this.setFacingDirection(null);
+    }
+
+    private setFacingDirection(direction:Direction | null){
+        if (this.facing !== direction) {
+            this.facing = direction;
+            this.rebuild();
+        }
     }
 
     protected buildShadow() {
@@ -27,8 +44,7 @@ export abstract class CreatureDisplay<T extends CreatureEntityData> extends Upda
     }
 
     protected createAnimatedSprite(tileSet: string, image: string, paletteFile: string, color?: string) {
-        const { direction, activity } = this.data;
-        const animation = activity + ':' + direction;
+        const animation = this.data.activity + ':' + this.getDirection();
 
         return this.context.textureLoader.createCustomAnimatedSprite(tileSet, image, animation, paletteFile, color);
     }
@@ -59,6 +75,10 @@ export abstract class CreatureDisplay<T extends CreatureEntityData> extends Upda
         }
     }
 
+    private getDirection(): Direction {
+        return this.facing || this.data.direction;
+    }
+
     private updateEffects() {
         const effectFilters: PIXI.Filter<any>[] = [];
         const adjustmentOptions: AdjustmentOptions = {};
@@ -66,7 +86,7 @@ export abstract class CreatureDisplay<T extends CreatureEntityData> extends Upda
         for (const effect of this.data.effects) {
             switch (effect.type) {
                 case 'speed': {
-                    const [vx, vy] = directionVelocity(this.data);
+                    const [vx, vy] = directionVelocity(this.getDirection(), this.data.activity);
                     const str = effect.param * this.getBounds().width * 0.1;
                     effectFilters.push(this.effectCache.getSpeedEffect(vx * str, vy * str));
                     break;
@@ -142,7 +162,7 @@ export abstract class CreatureDisplay<T extends CreatureEntityData> extends Upda
         return this.data.player;
     }
 
-    protected getText(){
+    protected getText() {
         return `[${this.data.level}] ${super.getText()}`;
     }
 
@@ -168,8 +188,7 @@ function attitudeColor(self: boolean, attitude: CreatureAttitude): number {
     }
 }
 
-function directionVelocity(data: CreatureEntityData): [number, number] {
-    const { direction, activity } = data;
+function directionVelocity(direction: Direction, activity: CreatureActivity): [number, number] {
 
     if (activity !== 'walking') {
         return [0, 0];

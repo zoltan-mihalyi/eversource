@@ -129,29 +129,15 @@ export abstract class UpdatableDisplay<T extends EntityData> extends PIXI.Contai
 
     update(changes: Partial<T>) {
         if (!this.matches(changes)) {
-            const containers = [
-                this.shadowContainer,
-                this.spriteContainer,
-                this.statusContainer,
-                this.textContainer,
-                this.interactionContainer,
-            ];
-            for (const container of containers) {
-                const removed = container.removeChildren() as PIXI.Container[];
-                for (const child of removed) {
-                    child.destroy({ children: true });
-                }
-            }
-
             this.data = {
                 ...this.data as any,
                 ...changes as any,
             };
-            this.build();
+            this.rebuild();
         } else {
             Object.assign(this.data, changes);
+            this.softUpdate();
         }
-        this.softUpdate();
     }
 
     protected alwaysShowName(): boolean {
@@ -169,6 +155,24 @@ export abstract class UpdatableDisplay<T extends EntityData> extends PIXI.Contai
             }
         }
         return true;
+    }
+
+    protected rebuild(){
+        const containers = [
+            this.shadowContainer,
+            this.spriteContainer,
+            this.statusContainer,
+            this.textContainer,
+            this.interactionContainer,
+        ];
+        for (const container of containers) {
+            const removed = container.removeChildren() as PIXI.Container[];
+            for (const child of removed) {
+                child.destroy({ children: true });
+            }
+        }
+        this.build();
+        this.softUpdate();
     }
 
     private build(): void {

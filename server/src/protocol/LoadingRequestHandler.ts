@@ -24,7 +24,7 @@ export class LoadingRequestHandler extends ClientState<CharacterDetails> {
         const zone = await this.process.runPromise(this.context.world.getZone(zoneId));
 
         const controller = new PlayerController();
-        const owner = new PlayerEntityOwner(this.data);
+        const owner = new PlayerEntityOwner(zone, this.data);
         const hidden: HiddenCreatureEntityData = { name: 'player', story: '', quests: [], questCompletions: [] };
         const character = new CreatureEntity(owner, {
             ...BASE_HUMANOID,

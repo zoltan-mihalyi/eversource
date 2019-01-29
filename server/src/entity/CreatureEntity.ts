@@ -12,6 +12,7 @@ import { MonsterEntityData } from '../../../common/domain/MonsterEntityData';
 import { Controller } from './controller/Controller';
 import { EntityOwner } from './EntityOwner';
 import { basicAttack } from '../../../common/algorithms';
+import { getDirection } from '../../../common/game/direction';
 
 type BaseKeys = 'position' | 'name' | 'level' | 'hp' | 'maxHp' | 'scale';
 
@@ -70,15 +71,7 @@ export class CreatureEntity extends Entity<CreatureEntityData, HiddenCreatureEnt
         const dx = newPosition.x - x;
         const dy = newPosition.y - y;
 
-        let direction: Direction | null = null;
-        const xLarger = Math.abs(dx) > Math.abs(dy);
-        if (xLarger) {
-            direction = dx > 0 ? 'right' : 'left';
-        } else if (dy < 0) {
-            direction = 'up';
-        } else if (dy > 0) {
-            direction = 'down';
-        }
+        const direction = getDirection(dx, dy);
         if (direction) {
             this.setSingle('direction', direction);
             this.setSingle('activity', 'walking');

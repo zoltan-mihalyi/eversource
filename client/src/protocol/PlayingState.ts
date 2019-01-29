@@ -58,7 +58,7 @@ export class PlayingState extends NetworkingState<PlayingStateData> implements P
 
     playerState(playerStateDiff: PlayerStateDiff) {
         this.updatePlayerState(playerStateDiff);
-        this.game.updatePlayerState(playerStateDiff);
+        this.game.updatePlayerState(this.currentPlayerState);
         this.gameScreen.updatePlayerState(this.currentPlayerState);
     }
 

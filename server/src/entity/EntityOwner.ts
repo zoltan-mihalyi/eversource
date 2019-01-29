@@ -6,24 +6,52 @@ import { CharacterDetails, QuestProgression } from '../character/CharacterDetail
 import { QuestId, QuestInfo, TaskInfo } from '../../../common/domain/InteractionTable';
 import { maxXpFor, mobXpReward } from '../../../common/algorithms';
 import { CreatureEntity } from './CreatureEntity';
+import { EntityReference, ReferenceReason } from './EntityReference';
+import { Zone } from '../world/Zone';
 
-export class EntityOwner {
+export class EntityOwner<E extends Entity = Entity> {
+    protected entity!: E;
+    private backReferences = new Set<EntityReference>();
+
+    constructor(protected zone: Zone) {
+    }
+
+    referenced(reference: EntityReference) {
+        this.backReferences.add(reference);
+    }
+
+    dereferenced(reference: EntityReference) {
+        this.backReferences.delete(reference);
+    }
+
+    isReferenced(reason: ReferenceReason): boolean {
+        let found = false;
+        this.backReferences.forEach(ref => {
+            if (ref.reason === reason) {
+                found = true;
+            }
+        });
+        return found;
+    }
+
     emit(event: EntityEvent): void {
     }
 
-    removeEntity(): void {
+    removeEntity() {
+        this.backReferences.forEach(ref => ref.unset());
+        this.zone.removeEntity(this.entity);
     }
 
     update() {
     }
 }
 
-export class PlayerEntityOwner extends EntityOwner {
-    interacting?: Entity;
-    private entity!: CreatureEntity
+export class PlayerEntityOwner extends EntityOwner<CreatureEntity> {
+    private references = new Set<EntityReference>();
+    readonly interactingRef: EntityReference = this.createReference('interacting');
 
-    constructor(readonly details: CharacterDetails,) {
-        super();
+    constructor(zone: Zone, readonly details: CharacterDetails,) {
+        super(zone);
     }
 
     setEntity(entity: CreatureEntity) {
@@ -59,7 +87,7 @@ export class PlayerEntityOwner extends EntityOwner {
         if (isNaN(questId)) {
             return;
         }
-        const entity = this.interacting;
+        const entity = this.interactingRef.get();
         if (!entity) {
             return;
         }
@@ -82,9 +110,15 @@ export class PlayerEntityOwner extends EntityOwner {
     }
 
     update() {
-        if (this.interacting && !canInteract(this.entity.get(), this.interacting.getFor(this.details))) {
-            this.interacting = void 0;
+        const interacting = this.interactingRef.get();
+        if (interacting && !canInteract(this.entity.get(), interacting.getFor(this.details))) {
+            this.interactingRef.unset();
         }
+    }
+
+    removeEntity() {
+        super.removeEntity();
+        this.references.forEach(ref => ref.unset());
     }
 
     private updateQuest(questId: QuestId, task: TaskInfo, taskIndex: number) {
@@ -103,5 +137,11 @@ export class PlayerEntityOwner extends EntityOwner {
         });
 
         questLog.set(questId, progression);
+    }
+
+    private createReference(reason: ReferenceReason): EntityReference {
+        const entityReference = new EntityReference(reason);
+        this.references.add(entityReference);
+        return entityReference;
     }
 }
