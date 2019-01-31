@@ -3,11 +3,11 @@ import { HumanoidPreset } from '../../../../server/src/world/Presets';
 import * as React from 'react';
 import { HumanoidDisplay } from '../../../../client/src/display/HumanoidDisplay';
 import { HumanoidEntityData } from '../../../../common/domain/HumanoidEntityData';
-import { EntityId } from '../../../../common/domain/EntityData';
 import { GameContext } from '../../../../client/src/game/GameContext';
 import { BaseCreatureEntityData } from '../../../../common/domain/CreatureEntityData';
 import { HumanoidEdit } from './HumanoidEdit';
 import { BASE_PRESET } from '../utils';
+import { EntityId } from '../../../../common/es/Entity';
 
 const DEFAULT: HumanoidPreset = {
     ...BASE_PRESET,

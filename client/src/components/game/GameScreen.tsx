@@ -9,9 +9,9 @@ import { DebugInfo } from '../gui/DebugInfo';
 import { settings } from '../../settings/SettingsStore';
 import { InputManager } from '../../input/InputManager';
 import { XpBar } from './XpBar';
-import { EntityId } from '../../../../common/domain/EntityData';
 import { maxXpFor } from '../../../../common/algorithms';
 import { Gui } from '../common/Gui';
+import { EntityId } from '../../../../common/es/Entity';
 
 const EMPTY_CHARACTER: CharacterState = {
     level: 1,

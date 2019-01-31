@@ -3,13 +3,14 @@ import { Position, X, Y } from '../../../common/domain/Location';
 import { GameLevel } from './GameLevel';
 import { InputManager, MovementIntent } from '../input/InputManager';
 import { Diff } from '../../../common/protocol/Diff';
-import { EntityData, EntityId } from '../../../common/domain/EntityData';
+import { EntityData } from '../../../common/domain/EntityData';
 import { registerCursors } from '../display/Cursors';
 import { PlayingNetworkApi, PlayingStateData } from '../protocol/PlayingState';
 import { PlayerStateDiff } from '../../../common/protocol/Messages';
 import { TextureLoader } from './TextureLoader';
 import { CancellableProcess } from '../../../common/util/CancellableProcess';
 import { PlayerState } from '../../../common/protocol/PlayerState';
+import { EntityId } from '../../../common/es/Entity';
 
 export class GameApplication extends PIXI.Application {
     private viewContainer = new PIXI.Container();

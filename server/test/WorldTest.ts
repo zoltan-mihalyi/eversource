@@ -8,6 +8,7 @@ import { HumanoidPresets, MonsterPresets } from '../src/world/Presets';
 import { TiledObject } from '../../common/tiled/interfaces';
 import { HumanoidEntityData } from '../../common/domain/HumanoidEntityData';
 import { MonsterEntityData } from '../../common/domain/MonsterEntityData';
+import { HumanoidView, SimpleView } from '../../common/es/CommonComponents';
 
 const zoneId = 'zone' as ZoneId;
 
@@ -106,8 +107,8 @@ describe('World', function () {
 
         const entities = zone.query(10.5, 10.5, 10.5, 10.5);
         assert.strictEqual(entities.length, 1);
-        const entityData = entities[0].get();
-        assert.strictEqual((entityData as HumanoidEntityData).appearance, presets.orc.appearance);
+        const view = entities[0].components.view as HumanoidView;
+        assert.strictEqual(view.appearance, presets.orc.appearance);
     });
 
     it('should add monsters', async function () {
@@ -138,7 +139,7 @@ describe('World', function () {
 
         const entities = zone.query(10.5, 10.5, 10.5, 10.5);
         assert.strictEqual(entities.length, 1);
-        const entityData = entities[0].get();
-        assert.strictEqual((entityData as MonsterEntityData).image, presets.lava_slime.image);
+        const view = entities[0].components.view as SimpleView;
+        assert.strictEqual(view.image, presets.lava_slime.image);
     });
 });

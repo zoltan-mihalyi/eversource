@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js';
-import { EntityData, EntityId } from '../../../common/domain/EntityData';
+import { EntityData } from '../../../common/domain/EntityData';
 import { OutlineFilter } from '@pixi/filter-outline';
 import { GOLDEN } from './Cursors';
 import { AdjustmentFilter } from '@pixi/filter-adjustment';
@@ -7,6 +7,7 @@ import { GameContext } from '../game/GameContext';
 import DestroyOptions = PIXI.DestroyOptions;
 import AdjustmentOptions = PIXI.filters.AdjustmentOptions;
 import { black, brown } from '../components/theme';
+import { EntityId } from '../../../common/es/Entity';
 
 const properties: (keyof EntityData)[] = [
     'interaction',

@@ -4,9 +4,10 @@ import { ErrorCode } from '../../../common/protocol/ErrorCode';
 import { CharacterInfo } from '../../../common/domain/CharacterInfo';
 import { Display } from './Display';
 import { Diff } from '../../../common/protocol/Diff';
-import { EntityData, EntityId } from '../../../common/domain/EntityData';
+import { EntityData } from '../../../common/domain/EntityData';
 import { QuestId } from '../../../common/domain/InteractionTable';
 import { QuestLogItem } from '../../../common/protocol/QuestLogItem';
+import { EntityId } from '../../../common/es/Entity';
 
 export type ResponseHandler = {
     [P in ResponseCommand]: (data: ResponseTypes[P]) => void;

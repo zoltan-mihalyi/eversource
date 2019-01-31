@@ -1,6 +1,5 @@
 import { QuestBase, QuestId } from '../../../common/domain/InteractionTable';
 import { NonEmptyArray } from '../../../common/util/NonEmptyArray';
-import { EntityEvent } from '../entity/Entity';
 
 interface BaseTask {
     count: number;
@@ -14,14 +13,14 @@ interface VisitAreaTask extends BaseTask {
 
 interface KillTask extends BaseTask {
     type: 'kill';
-    monsterNames: string[];
+    npcIds: string[];
 }
 
 interface ItemTask extends BaseTask {
     type: 'item';
 }
 
-type Task = VisitAreaTask | KillTask | ItemTask;
+export type Task = VisitAreaTask | KillTask | ItemTask;
 
 export interface Tasks {
     progress: string;
@@ -36,14 +35,4 @@ export interface Quest extends QuestBase {
     endsAt: string;
     requires: QuestId[];
     tasks?: Tasks;
-}
-
-export function matchesEvent(task: Task, event: EntityEvent) {
-    switch (event.type) {
-        case 'area':
-            return task.type === 'visit' && task.areaName === event.name;
-        case 'kill':
-            return task.type === 'kill' && task.monsterNames.indexOf(event.name) !== -1;
-    }
-    return false;
 }

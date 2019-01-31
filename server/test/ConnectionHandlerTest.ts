@@ -72,7 +72,7 @@ class FakeUserDao implements UserDao {
 
 function fakeZone() {
     return {
-        addEntity: sinon.mock(),
+        createEntity: sinon.mock(),
         removeEntity: sinon.mock(),
     };
 }
@@ -160,7 +160,7 @@ describe('ConnectionHandler', () => {
         await tick();
 
         sinon.assert.calledOnce(world.getZone);
-        sinon.assert.calledOnce(zone.addEntity);
+        sinon.assert.calledOnce(zone.createEntity);
     });
 
     it('should respond to ready with ready', async function () {
@@ -207,7 +207,7 @@ describe('ConnectionHandler', () => {
 
         await tick();
 
-        sinon.assert.notCalled(zone.addEntity);
+        sinon.assert.notCalled(zone.createEntity);
     });
 
     it('should create character on ready only once', async function () {
@@ -223,7 +223,7 @@ describe('ConnectionHandler', () => {
 
         await tick();
 
-        sinon.assert.calledOnce(zone.addEntity);
+        sinon.assert.calledOnce(zone.createEntity);
     });
 
     it('should do nothing when entering incorrect character id', async function () {
@@ -240,7 +240,7 @@ describe('ConnectionHandler', () => {
         await tick();
 
         sinon.assert.notCalled(world.getZone);
-        sinon.assert.notCalled(zone.addEntity);
+        sinon.assert.notCalled(zone.createEntity);
     });
 
     it('should remove character on leave', async function () {

@@ -1,4 +1,3 @@
-// x and y between -1 and 1
 import { KeyboardInput, KEYS } from './KeyboardInput';
 import { VirtualJoystick } from './VirtualJoystick';
 

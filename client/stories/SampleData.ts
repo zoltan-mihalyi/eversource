@@ -1,8 +1,8 @@
 import { InteractionTable, QuestId, QuestInfo } from '../../common/domain/InteractionTable';
-import { EntityId } from '../../common/domain/EntityData';
 import { QuestLogItem } from '../../common/protocol/QuestLogItem';
 import { QuestStatus } from '../../server/src/character/CharacterDetails';
 import { PlayingNetworkApi } from '../src/protocol/PlayingState';
+import { EntityId } from '../../common/es/Entity';
 
 function noop() {
 }

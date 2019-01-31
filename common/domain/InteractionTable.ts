@@ -1,5 +1,5 @@
-import { EntityId } from './EntityData';
 import { Opaque } from '../util/Opaque';
+import { EntityId } from '../es/Entity';
 
 export type QuestId = Opaque<number, 'QuestId'>;
 
