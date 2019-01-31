@@ -1,16 +1,13 @@
 import { Position, X, Y, ZoneId } from '../../../common/domain/Location';
 import { MapLoader } from './MapLoader';
 import { Zone } from './Zone';
-import { BasePreset, HumanoidPresets, MonsterPresets, resolvePresetAttitude } from './Presets';
-import { BASE_HUMANOID, BASE_MONSTER, CreatureEntity, HiddenCreatureEntityData } from '../entity/CreatureEntity';
-import { BaseCreatureEntityData, CreatureEntityData, Direction } from '../../../common/domain/CreatureEntityData';
-import { MovementConfig, WalkingController } from '../entity/controller/WalkingController';
-import { TiledObject } from '../../../common/tiled/interfaces';
+import { BasePreset, HumanoidPresets, MonsterPresets, MovementConfig, resolvePresetAttitude } from './Presets';
+import { Direction } from '../../../common/domain/CreatureEntityData';
+import { TiledProperties } from '../../../common/tiled/interfaces';
 import { questEnds, questStarts } from '../quest/QuestIndexer';
-import { HiddenEntityData } from '../entity/Entity';
-import { EntityFactory } from '../entity/Spawner';
-import { EntityOwner } from '../entity/EntityOwner';
 import { hpForLevel } from '../../../common/algorithms';
+import { AIMovingController, ServerComponents } from '../es/ServerComponents';
+import { BaseCreatureView } from '../../../common/es/CommonComponents';
 
 export interface World {
     getZone(zoneId: ZoneId): Promise<Zone>;
@@ -18,16 +15,6 @@ export interface World {
 
 const FPS = 50;
 const INTERVAL = 1000 / FPS;
-
-
-function getHidden(object: TiledObject, preset: BasePreset): HiddenCreatureEntityData {
-    return {
-        story: preset.story || '',
-        name: object.name,
-        quests: questStarts[object.name] || [],
-        questCompletions: questEnds[object.name] || [],
-    };
-}
 
 export class WorldImpl implements World {
     private readonly zonePromises = new Map<ZoneId, Promise<Zone>>();
@@ -70,29 +57,39 @@ export class WorldImpl implements World {
                 const preset = this.humanoidPresets[object.name];
                 const { appearance, equipment } = preset;
 
-                const direction = (properties.direction || 'down') as Direction;
+                const controllers: Partial<ServerComponents> = properties.controller !== 'walking' ? {} : {
+                    aiMovingController: getController(position),
+                };
 
-                zone.addSpawner(10000, new CreatureEntityFactory({
-                    ...BASE_HUMANOID,
-                    ...baseFromPreset(preset, position, false),
-                    appearance,
-                    equipment,
-                    direction,
-                }, getHidden(object, preset), properties.controller === 'walking' ? {} : void 0));
+                zone.addSpawner(10000, {
+                    ...baseFromPreset(preset, object.name, properties, false),
+                    position,
+                    view: {
+                        ...baseCreatureView(properties),
+                        type: 'humanoid',
+                        appearance,
+                        equipment,
+                    },
+                    ...controllers,
+                });
             } else if (object.type === 'monster') {
                 const preset = this.monsterPresets[object.name];
-                const { image, palette, movement } = preset;
+                const { image, palette } = preset;
 
-                zone.addSpawner(10000, new CreatureEntityFactory({
-                    ...BASE_MONSTER,
-                    ...baseFromPreset(preset, position, true),
-                    image,
-                    palette,
-                }, getHidden(object, preset), { movement }));
+                zone.addSpawner(10000, {
+                    ...baseFromPreset(preset, object.name, properties, true),
+                    position,
+                    view: {
+                        ...baseCreatureView(properties),
+                        type: 'simple',
+                        image,
+                        palette,
+                    },
+                    aiMovingController: getController(position, preset.movement),
+                });
             } else if (object.type === 'area') {
                 zone.addArea(
-                    object.x / mapData.tileWidth as X,
-                    object.y / mapData.tileHeight as Y,
+                    position,
                     object.width / mapData.tileWidth,
                     object.height / mapData.tileHeight,
                     object.name,
@@ -101,6 +98,7 @@ export class WorldImpl implements World {
         }
 
         this.zones.set(zoneId, zone);
+        zone.init();
         return zone;
     }
 
@@ -111,38 +109,74 @@ export class WorldImpl implements World {
     };
 }
 
-type PresetBaseEntityData = Pick<BaseCreatureEntityData, 'attitude' | 'effects' | 'scale' | 'position' | 'name' | 'level' | 'hp' | 'maxHp'>;
+function baseCreatureView(properties: TiledProperties): BaseCreatureView {
+    return {
+        activity: { type: 'standing' },
+        direction: objectDirection(properties),
+    };
+}
 
-function baseFromPreset(preset: BasePreset, position: Position, monster: boolean): PresetBaseEntityData {
+function baseFromPreset(preset: BasePreset, npcId: string, properties: TiledProperties, monster: boolean): Partial<ServerComponents> {
     const hp = hpForLevel(preset.level);
 
-    return {
-        position,
-        name: preset.name,
-        level: preset.level,
-        hp,
-        maxHp: hp,
-        scale: preset.scale || 1,
-        attitude: resolvePresetAttitude(preset.attitude, monster),
-        effects: preset.effects || [],
+    const result: Partial<ServerComponents> = {
+        npcId,
+        name: {
+            value: preset.name,
+        },
+        hp: {
+            current: hp,
+            max: hp,
+        },
+        level: { value: preset.level },
+        scale: { value: preset.scale || 1 },
+        attitude: {
+            value: resolvePresetAttitude(preset.attitude, monster),
+        },
+        speed: {
+            running: 4,
+            walking: 2,
+        },
     };
 
-}
-
-type ControllerOptions = {
-    movement?: MovementConfig;
-}
-
-class CreatureEntityFactory implements EntityFactory {
-    constructor(private data: CreatureEntityData, private hidden: HiddenCreatureEntityData,
-                private options?: ControllerOptions) {
-
+    if (preset.effects) {
+        result.effects = preset.effects;
     }
 
-    create(owner: EntityOwner) {
-        const { options, data, hidden } = this;
-
-        const controller = options ? new WalkingController(data.position, options.movement) : void 0;
-        return new CreatureEntity(owner, data, hidden, controller);
+    if (questStarts[npcId] || questEnds[npcId] || preset.story) {
+        let story = preset.story;
+        if (!story) {
+            console.warn(`${npcId} has no story!`);
+            story = '';
+        }
+        result.interactable = {
+            story,
+            quests: questStarts[npcId] || [],
+            questCompletions: questEnds[npcId] || [],
+        };
     }
+    return result;
+}
+
+function getController(position: Position, config: MovementConfig = {}): AIMovingController {
+    const running = config.running || false;
+    const interval = (config.interval || 10) as number;
+
+    const radiusX = config.radiusX !== void 0 ? config.radiusX : 6;
+    const radiusY = config.radiusY !== void 0 ? config.radiusY : 5;
+
+    return {
+        nextMoveTime: 0,
+        initial: position,
+        target: position,
+
+        running,
+        interval,
+        radiusX,
+        radiusY,
+    };
+}
+
+function objectDirection(properties: TiledProperties): Direction {
+    return (properties.direction as Direction | undefined) || 'down';
 }

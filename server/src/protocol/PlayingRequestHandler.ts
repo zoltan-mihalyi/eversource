@@ -1,25 +1,21 @@
 import { ClientState } from './ClientState';
 import { Zone } from '../world/Zone';
 import { CharacterSelectionRequestHandler } from './CharacterSelectionRequestHandler';
-import { Entity } from '../entity/Entity';
-import { CreatureEntity } from '../entity/CreatureEntity';
-import { EntityData, EntityId } from '../../../common/domain/EntityData';
-import { PlayerController } from '../entity/controller/PlayerController';
-import { canInteract } from '../../../common/game/Interaction';
+import { EntityData, EntityInteraction } from '../../../common/domain/EntityData';
 import { PlayerState } from '../../../common/protocol/PlayerState';
 import { QuestId } from '../../../common/domain/InteractionTable';
-import { questInfoMap, questsById } from '../quest/QuestIndexer';
+import { questInfoMap } from '../quest/QuestIndexer';
 import { DynamicDiffable } from './diffable/DynamicDiffable';
 import { DiffablePlayerState } from './diffable/DiffablePlayerState';
 import { QuestLogItem } from '../../../common/protocol/QuestLogItem';
-import { CreatureAttitude, CreatureEntityData } from '../../../common/domain/CreatureEntityData';
-import { PlayerEntityOwner } from '../entity/EntityOwner';
+import { Entity, EntityId } from '../../../common/es/Entity';
+import { Quests, ServerComponents } from '../es/ServerComponents';
+import { getInteractionTable } from '../es/InteractionSystem';
+import { BaseCreatureEntityData } from '../../../common/domain/CreatureEntityData';
 
 export interface PlayerData {
+    entity: Entity<ServerComponents>;
     zone: Zone;
-    character: CreatureEntity;
-    controller: PlayerController;
-    owner: PlayerEntityOwner;
 }
 
 export class PlayingRequestHandler extends ClientState<PlayerData> {
@@ -38,7 +34,7 @@ export class PlayingRequestHandler extends ClientState<PlayerData> {
         const command = separatorIndex === -1 ? data : data.substring(0, separatorIndex); // todo duplicate
         const params = separatorIndex === -1 ? '' : data.substring(separatorIndex + 1);
 
-        const owner = this.data.owner;
+        const entity = this.data.entity;
         switch (command) {
             case 'move': {
                 const split = params.split(',');
@@ -50,7 +46,11 @@ export class PlayingRequestHandler extends ClientState<PlayerData> {
                 if (!validNumber(sX) || !validNumber(sY)) {
                     return;
                 }
-                this.data.controller.move(sX, sY);
+                entity.set('moving', {
+                    running: true,
+                    x: sX,
+                    y: sY,
+                });
                 break;
             }
             case 'interact': {
@@ -58,46 +58,36 @@ export class PlayingRequestHandler extends ClientState<PlayerData> {
                 if (isNaN(id)) {
                     return;
                 }
-                const entity = this.data.zone.getEntity(id as EntityId);
-                if (!entity) {
+                const targetEntity = this.data.zone.getEntity(id as EntityId);
+                if (!targetEntity) {
                     return;
                 }
-                const entityData = entity.getFor(owner.details);
-
-                if (entity instanceof CreatureEntity && (entityData as CreatureEntityData).attitude !== CreatureAttitude.FRIENDLY) {
-                    entity.hit(this.data.character);
-                    return;
-                }
-
-                if (!canInteract(this.data.character.get(), entityData)) {
-                    return;
-                }
-
-                owner.interactingRef.set(entity);
+                this.data.zone.eventBus.emit('tryInteract', {
+                    source: entity,
+                    target: targetEntity,
+                });
                 break;
             }
             case 'interact-end': {
-                owner.interactingRef.unset();
+                entity.unset('interacting');
                 break;
             }
             case 'accept-quest': {
-                const quest = owner.findQuest(params, 'acceptable');
-                if (!quest) {
+                const questId = +params as QuestId;
+                if (isNaN(questId)) {
                     return;
                 }
-                const tasks = questsById[quest.id]!.tasks;
-                const progression = tasks ? tasks.list.map(() => 0) : [];
-                owner.details.questLog.set(quest.id, progression);
+
+                this.data.zone.eventBus.emit('tryAcceptQuest', { entity, questId });
                 break;
             }
             case 'complete-quest': {
-                const quest = owner.findQuest(params, 'completable');
-                if (!quest) {
+                const questId = +params as QuestId;
+                if (isNaN(questId)) {
                     return;
                 }
-                owner.details.questLog.delete(quest.id);
-                owner.details.questsDone.add(quest.id);
-                owner.addXp(quest.xpReward);
+
+                this.data.zone.eventBus.emit('tryCompleteQuest', { entity, questId });
                 break;
             }
         }
@@ -112,33 +102,31 @@ export class PlayingRequestHandler extends ClientState<PlayerData> {
     }
 
     private cleanup() {
-        const { zone, character } = this.data;
+        const { zone, entity } = this.data;
 
         this.context.networkLoop.remove(this.networkUpdate);
-        this.data.owner.removeEntity();
+        zone.removeEntity(entity);
     }
 
-    private indexEntities(entities: Entity[]): Map<EntityId, EntityData> {
+    private indexEntities(entities: Entity<ServerComponents>[]): Map<EntityId, EntityData> {
         const result = new Map<EntityId, EntityData>();
         for (const entity of entities) {
-            result.set(entity.id, entity.getFor(this.data.owner.details));
+            result.set(entity.id, getFor(this.data.entity, entity));
         }
         return result;
     }
 
     private sendPlayerData() {
-        const { interactingRef, details } = this.data.owner;
+        const { entity } = this.data;
 
-        const { info } = details;
-
-        const interacting = interactingRef.get();
+        const { interacting } = entity.components;
 
         const playerState: PlayerState = {
-            interaction: !interacting ? null : interacting.getInteractionsFor(details),
+            interaction: !interacting ? null : getInteractionTable(interacting.entity, entity.components.quests!), // TODO
             character: {
-                xp: info.xp,
-                level: info.level,
-                id: this.data.character.id,
+                xp: entity.components.xp!.value,
+                level: entity.components.level!.value,
+                id: entity.id,
             },
         };
 
@@ -150,7 +138,7 @@ export class PlayingRequestHandler extends ClientState<PlayerData> {
     }
 
     private sendQuestLog() {
-        const questLog = this.data.owner.details.questLog;
+        const questLog = this.data.entity.components.quests!.questLog;
 
         const qLogByQ = new Map<QuestId, QuestLogItem>();
 
@@ -164,11 +152,12 @@ export class PlayingRequestHandler extends ClientState<PlayerData> {
     }
 
     private sendWorldData() {
-        const { character, zone } = this.data;
+        const { entity, zone } = this.data;
 
         const distance = this.detectionDistance;
-        const { x, y } = character.get().position;
-        const entities = zone.query(x - distance, y - distance, x + distance, y + distance);
+        const { x, y } = entity.components.position!; // TODO
+        const entities = zone.query(x - distance, y - distance, x + distance, y + distance)
+            .filter(e => e.components.view); // TODO
         const entityMap = this.indexEntities(entities);
 
         const diffs = this.worldDiff.update(entityMap);
@@ -189,7 +178,72 @@ function validNumber(num: number): boolean {
     return !isNaN(num) && isFinite(num);
 }
 
+function getFor(viewer: Entity<ServerComponents>, entity: Entity<ServerComponents>): EntityData {
+    const { position, level, hp, view, attitude, name, scale, effects, player } = entity.components;
 
-function isCreature(entityData: EntityData): entityData is CreatureEntityData {
-    return entityData.type === 'humanoid' || entityData.type === 'monster';
+    if (!view) {
+        throw new Error('view');
+    }
+
+    const base: BaseCreatureEntityData = {
+        name: name!.value,
+        level: level!.value,
+        hp: hp!.current,
+        maxHp: hp!.max,
+        player: !!player,
+        direction: view.direction,
+        activity: view.activity.type,
+        activitySpeed: view.activity.type === 'standing' ? 0 : view.activity.speed,
+        attitude: attitude!.value,
+        position: position!,
+        interaction: getInteraction(entity, viewer.components.quests!),
+        scale: scale!.value,
+        effects: effects || [], //TODO
+    };
+
+    switch (view.type) {
+        case 'simple': {
+            return {
+                ...base,
+                type: 'monster',
+                image: view.image,
+                palette: view.palette,
+            }
+        }
+        case 'humanoid': {
+            return {
+                ...base,
+                type: 'humanoid',
+                appearance: view.appearance,
+                equipment: view.equipment,
+            }
+        }
+    }
+
+    throw new Error('unknown view: ' + view);
+}
+
+function getInteraction(entity: Entity<ServerComponents>, quests: Quests): [EntityInteraction] | null {
+    const interactionTable = getInteractionTable(entity, quests);
+    if (interactionTable === null) {
+        return null;
+    }
+
+    const interactions: EntityInteraction[] = [];
+
+    const { completable, completableLater, acceptable } = interactionTable;
+    if (acceptable.length !== 0) {
+        interactions.push('quest');
+    }
+    if (completable.length !== 0) {
+        interactions.push('quest-complete');
+    }
+    if (completableLater.length !== 0) {
+        interactions.push('quest-complete-later');
+    }
+
+    if (interactions.length === 0) {
+        return null;
+    }
+    return interactions as [EntityInteraction];
 }

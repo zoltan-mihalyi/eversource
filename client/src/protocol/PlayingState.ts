@@ -7,11 +7,12 @@ import { Diff } from '../../../common/protocol/Diff';
 import { Position } from '../../../common/domain/Location';
 import { GameScreen } from '../components/game/GameScreen';
 import { LoadedMap } from '../../../common/tiled/TiledResolver';
-import { EntityData, EntityId } from '../../../common/domain/EntityData';
+import { EntityData } from '../../../common/domain/EntityData';
 import { PlayerStateDiff } from '../../../common/protocol/Messages';
 import { QuestId } from '../../../common/domain/InteractionTable';
 import { QuestLogItem } from '../../../common/protocol/QuestLogItem';
 import { PlayerState } from '../../../common/protocol/PlayerState';
+import { EntityId } from '../../../common/es/Entity';
 import ResourceDictionary = PIXI.loaders.ResourceDictionary;
 
 export interface PlayingStateData {

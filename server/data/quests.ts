@@ -15,7 +15,7 @@ export const quests: Quest[] = [{
     tasks: {
         progress: 'Have you slain the lava slimes?',
         list: [
-            { type: 'kill', count: 10, title: 'Intruders slain', monsterNames: ['slime_lava', 'slime_lava_rock'] },
+            { type: 'kill', count: 10, title: 'Intruders slain', npcIds: ['slime_lava', 'slime_lava_rock'] },
         ],
     },
 }, {

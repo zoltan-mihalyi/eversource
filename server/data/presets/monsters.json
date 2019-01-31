@@ -8,7 +8,7 @@
       "interval": 2,
       "radiusX": 1,
       "radiusY": 1,
-      "speed": 1
+      "running": true
     },
     "level": 6
   },
@@ -18,8 +18,7 @@
     "palette": "lava",
     "movement": {
       "interval": 5,
-      "radiusY": 0,
-      "speed": 0.5
+      "radiusY": 0
     },
     "level": 7
   },
@@ -29,7 +28,7 @@
     "palette": "emerald",
     "movement": {
       "interval": 5,
-      "speed": 1
+      "running": true
     },
     "level": 30
   },
@@ -40,7 +39,7 @@
     "scale": 1.5,
     "movement": {
       "interval": 5,
-      "speed": 1
+      "running": true
     },
     "level": 8
   },
@@ -50,7 +49,7 @@
     "palette": "night",
     "movement": {
       "interval": 5,
-      "speed": 1
+      "running": true
     },
     "effects": [
       {
@@ -97,7 +96,7 @@
     "palette": "black-widow",
     "scale": 1.5,
     "movement": {
-      "speed": 1.5
+      "running": true
     },
     "effects": [
       {

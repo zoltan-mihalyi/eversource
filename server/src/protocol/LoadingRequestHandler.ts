@@ -1,11 +1,9 @@
 import { ClientState } from './ClientState';
 import { PlayingRequestHandler } from './PlayingRequestHandler';
 import { CancellableProcess } from '../../../common/util/CancellableProcess';
-import { BASE_HUMANOID, CreatureEntity, HiddenCreatureEntityData } from '../entity/CreatureEntity';
-import { PlayerController } from '../entity/controller/PlayerController';
-import { CharacterDetails } from '../character/CharacterDetails';
-import { PlayerEntityOwner } from '../entity/EntityOwner';
 import { hpForLevel } from '../../../common/algorithms';
+import { CharacterDetails } from '../character/CharacterDetails';
+import { CreatureAttitude } from '../../../common/domain/CreatureEntityData';
 
 export class LoadingRequestHandler extends ClientState<CharacterDetails> {
     private serverLoading = false;
@@ -23,26 +21,43 @@ export class LoadingRequestHandler extends ClientState<CharacterDetails> {
 
         const zone = await this.process.runPromise(this.context.world.getZone(zoneId));
 
-        const controller = new PlayerController();
-        const owner = new PlayerEntityOwner(zone, this.data);
-        const hidden: HiddenCreatureEntityData = { name: 'player', story: '', quests: [], questCompletions: [] };
-        const character = new CreatureEntity(owner, {
-            ...BASE_HUMANOID,
-            level: info.level,
+        const entity = zone.createEntity({
+            level: { value: info.level },
+            xp: { value: info.xp },
             position,
-            name,
+            name: { value: name },
             player: true,
-            hp: info.hp,
-            maxHp: hpForLevel(info.level),
-            scale: 1,
-            appearance: info.appearance,
-            equipment: info.equipment,
-        }, hidden, controller);
-        owner.setEntity(character);
-        zone.addEntity(character);
+            speed: {
+                walking: 2,
+                running: 4,
+            },
+            quests: {
+                questLog: this.data.questLog,
+                questsDone: this.data.questsDone,
+            },
+            hp: {
+                max: hpForLevel(info.level),
+                current: info.hp,
+            },
+            scale: { value: 1 },
+            view: {
+                activity: { type: 'standing' },
+                direction: 'down',
+
+                type: 'humanoid',
+                appearance: info.appearance,
+                equipment: info.equipment,
+            },
+            attitude: {
+                value: CreatureAttitude.FRIENDLY,
+            },
+            weapon: {
+                damage: 1,
+            }
+        });
 
         this.context.sendCommand('ready', void 0);
-        this.manager.enter(PlayingRequestHandler, { zone, character, controller, owner });
+        this.manager.enter(PlayingRequestHandler, { zone, entity });
     }
 
     handleExit() {

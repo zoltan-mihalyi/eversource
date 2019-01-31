@@ -2,10 +2,10 @@ import { CreatureActivity, CreatureAttitude, CreatureEntityData, Direction } fro
 import { UpdatableDisplay } from './UpdatableDisplay';
 import * as PIXI from "pixi.js";
 import { GameContext } from '../game/GameContext';
-import { EntityId } from '../../../common/domain/EntityData';
 import { EffectCache } from '../effects/EffectCache';
 import { AdjustmentOptions } from '@pixi/filter-adjustment'
 import { getDirection } from '../../../common/game/direction';
+import { EntityId } from '../../../common/es/Entity';
 
 const HP_BAR_WIDTH = 60;
 

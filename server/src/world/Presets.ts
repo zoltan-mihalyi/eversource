@@ -1,5 +1,4 @@
 import {Appearance, Equipment} from '../../../common/domain/HumanoidEntityData';
-import {MovementConfig} from '../entity/controller/WalkingController';
 import {CreatureAttitude, Effect} from '../../../common/domain/CreatureEntityData';
 
 export interface BasePreset {
@@ -20,6 +19,13 @@ export interface HumanoidPreset extends BasePreset {
 
 export interface HumanoidPresets {
     [id: string]: HumanoidPreset;
+}
+
+export interface MovementConfig {
+    running?: boolean;
+    interval?: number;
+    radiusX?: number;
+    radiusY?: number;
 }
 
 export interface MonsterPreset extends BasePreset {

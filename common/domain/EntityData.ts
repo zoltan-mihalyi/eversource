@@ -4,7 +4,6 @@ import { CreatureEntityData } from './CreatureEntityData';
 import { ObjectEntityData } from './ObjectEntityData';
 import { NonEmptyArray } from '../util/NonEmptyArray';
 
-export type EntityId = Opaque<number, 'EntityId'>;
 
 export type EntityInteraction = 'trade' | 'quest' | 'quest-complete' | 'quest-complete-later' | 'pickup' | 'use';
 

@@ -5,7 +5,7 @@ import * as PIXI from 'pixi.js';
 import { Opaque } from '../../../common/util/Opaque';
 import { Diff } from '../../../common/protocol/Diff';
 import { LoadedMap } from '../../../common/tiled/TiledResolver';
-import { EntityData, EntityId } from '../../../common/domain/EntityData';
+import { EntityData } from '../../../common/domain/EntityData';
 import { UpdatableDisplay } from '../display/UpdatableDisplay';
 import { HumanoidDisplay } from '../display/HumanoidDisplay';
 import { MonsterDisplay } from '../display/MonsterDisplay';
@@ -15,6 +15,7 @@ import { InteractionTable } from '../../../common/domain/InteractionTable';
 import ResourceDictionary = PIXI.loaders.ResourceDictionary;
 import DisplayObject = PIXI.DisplayObject;
 import { CreatureDisplay } from '../display/CreatureDisplay';
+import { EntityId } from '../../../common/es/Entity';
 
 const CHUNK_WIDTH = 16;
 const CHUNK_HEIGHT = 16;

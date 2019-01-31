@@ -2,9 +2,10 @@ import { CharacterInfo } from '../domain/CharacterInfo';
 import { ErrorCode } from './ErrorCode';
 import { Diff } from './Diff';
 import { PlayerState } from './PlayerState';
-import { EntityData, EntityId } from '../domain/EntityData';
+import { EntityData } from '../domain/EntityData';
 import { QuestId } from '../domain/InteractionTable';
 import { QuestLogItem } from './QuestLogItem';
+import { EntityId } from '../es/Entity';
 
 export interface RequestTypes {
     enter: string;

@@ -1,7 +1,6 @@
 import { storiesOf } from '@storybook/react';
 import * as React from 'react';
 import { MonsterDisplay } from '../src/display/MonsterDisplay';
-import { EntityId } from '../../common/domain/EntityData';
 import { CreatureAttitude, Effect } from '../../common/domain/CreatureEntityData';
 import { MonsterEntityData } from '../../common/domain/MonsterEntityData';
 import { X, Y } from '../../common/domain/Location';
@@ -9,6 +8,7 @@ import { GameContext } from '../src/game/GameContext';
 import { TextureLoader } from '../src/map/TextureLoader';
 import { CancellableProcess } from '../../common/util/CancellableProcess';
 import { app, TestScreen } from './TestScreen';
+import { EntityId } from '../../common/es/Entity';
 
 const context: GameContext = {
     playingNetworkApi: {
