@@ -1,5 +1,6 @@
 import { Entity, EntityId } from './Entity';
 import { PartialPick, Writable } from '../util/Types';
+import { Opaque } from '../util/Opaque';
 
 export interface Query<T, K extends keyof T> {
     forEach(cb: (components: PartialPick<T, K>, entity: Entity<T>) => void): void;
@@ -84,10 +85,13 @@ class EntitySetterImpl<T> implements EntitySetter<T> {
     }
 }
 
+type Keys = Opaque<string, 'Keys'>;
+
 let nextId = 0;
 
 export class EntityContainer<T> {
     private entities = new Map<EntityId, Entity<T>>();
+    private queriesByKeys = new Map<Keys, QueryImpl<T, never>>();
     private queriesByType = new Map<keyof T, QueryImpl<T, never>[]>();
     private entitySetter = new EntitySetterImpl(this.queriesByType);
 
@@ -125,8 +129,16 @@ export class EntityContainer<T> {
         return this.entities.get(id) || null;
     }
 
-    createQuery<K extends keyof T>(...types: K[]): Query<T, K> {
+    createQuery<K extends keyof T & string>(...types: K[]): Query<T, K> {
+        const keys = getKeys([...types].sort());
+        let queryWithSameKeys = this.queriesByKeys.get(keys);
+        if (queryWithSameKeys) {
+            console.log('Reusing query: ' + keys);
+            return queryWithSameKeys as Query<T, K>;
+        }
+
         const query = new QueryImpl<T, K>(this.entities, types);
+        this.queriesByKeys.set(keys, query);
 
         for (const type of types) {
             const queriesForType = this.queriesByType.get(type);
@@ -140,4 +152,8 @@ export class EntityContainer<T> {
 
         return query;
     }
+}
+
+function getKeys(types: string[]): Keys {
+    return types.join(' ') as Keys;
 }
