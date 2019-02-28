@@ -10,15 +10,44 @@ import { HumanoidView, SimpleView } from '../../../../common/components/View';
 
 
 export function displaySpriteSystem(container: EntityContainer<ClientComponents>, textureLoader: TextureLoader) {
-    const displays = container.createQuery('display', 'view', 'activity', 'direction');
+    const displays = container.createQuery('display', 'view');
 
-    displays.on('add', updateDisplayView);
-    displays.on('update', updateDisplayView);
-    displays.on('remove', ({ display }) => {
+    displays.on('add', updateObjectDisplaySprite);
+    displays.on('update', updateObjectDisplaySprite);
+    displays.on('remove', ({ display, view }) => {
+        if (view.type !== 'object') { //todo dup
+            return;
+        }
+
         display.setContent('spriteContainer', []);
     });
 
-    function updateDisplayView({ display, view, activity, direction }: PartialPick<ClientComponents, 'view' | 'display' | 'activity' | 'direction'>) {
+    function updateObjectDisplaySprite({ display, view }: PartialPick<ClientComponents, 'view' | 'display'>) {
+        if (view.type !== 'object') {
+            return;
+        }
+        const fileName = `object/${view.image}`;
+        display.setContent('spriteContainer', [textureLoader.createCustomAnimatedSprite(fileName, fileName, view.animation, '')]);
+    }
+
+
+    const creatureDisplays = container.createQuery('display', 'view', 'activity', 'direction');
+
+    creatureDisplays.on('add', updateCreatureDisplaySprite);
+    creatureDisplays.on('update', updateCreatureDisplaySprite);
+    creatureDisplays.on('remove', ({ view, display }) => {
+        if (view.type === 'object') {
+            return;
+        }
+
+        display.setContent('spriteContainer', []);
+    });
+
+    function updateCreatureDisplaySprite({ display, view, activity, direction }: PartialPick<ClientComponents, 'view' | 'display' | 'activity' | 'direction'>) {
+        if (view.type == 'object') {
+            return;
+        }
+
         display.setContent('spriteContainer', buildSpriteContainerParts({
             textureLoader,
             view,
@@ -28,7 +57,7 @@ export function displaySpriteSystem(container: EntityContainer<ClientComponents>
     }
 }
 
-export function buildSpriteContainerParts(displayable: Displayable): PIXI.DisplayObject[] {
+export function buildSpriteContainerParts(displayable: Displayable<HumanoidView | SimpleView>): PIXI.DisplayObject[] {
     switch (displayable.view.type) {
         case 'humanoid':
             return buildHumanoidSprite(displayable as Displayable<HumanoidView>);

@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as React from 'react';
 import { createView, EditProps, ShowPreset } from './ShowPreset';
-import { BasePreset } from '../../../server/src/world/Presets';
+import { CreaturePreset } from '../../../server/src/world/Presets';
 
 interface Props<T> {
     file: string;
@@ -18,7 +18,7 @@ interface State<T> {
     modified: boolean;
 }
 
-export class PresetsTool<T extends BasePreset> extends React.Component<Props<T>, State<T>> {
+export class PresetsTool<T extends CreaturePreset> extends React.Component<Props<T>, State<T>> {
     private addName = React.createRef<HTMLInputElement>();
 
     constructor(props: Props<T>) {

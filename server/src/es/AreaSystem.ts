@@ -9,9 +9,9 @@ export function areaSystem(index: rbush.RBush<PositionBox>, container: EntityCon
     const areas = container.createQuery('position', 'area');
 
     eventBus.on('update', () => {
-        areas.forEach((areaComponents, areaEntity) => {
-            const { width, height } = areaComponents.area;
-            const { x, y } = areaComponents.position;
+        areas.forEach(({ area, position }, areaEntity) => {
+            const { width, height } = area;
+            const { x, y } = position;
 
             for (const { entity } of index.search(centerPositionedBBox(x, y, width, height))) {
                 if (entity === areaEntity) {
@@ -19,7 +19,7 @@ export function areaSystem(index: rbush.RBush<PositionBox>, container: EntityCon
                 }
                 eventBus.emit('area', {
                     visitor: entity,
-                    name: areaComponents.area.name,
+                    name: area.name,
                 });
             }
         });

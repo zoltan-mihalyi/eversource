@@ -9,6 +9,7 @@ import { EntityContainer } from '../../../common/es/EntityContainer';
 import { Entity } from '../../../common/es/Entity';
 import { Position } from '../../../common/domain/Location';
 import { CreatureAttitude } from '../../../common/components/CommonComponents';
+import { getSpell } from '../../data/spells';
 
 export function interactionSystem(entityContainer: EntityContainer<ServerComponents>, eventBus: EventBus<ServerEvents>) {
     const interactingEntities = entityContainer.createQuery('interacting');
@@ -35,13 +36,29 @@ export function interactionSystem(entityContainer: EntityContainer<ServerCompone
     });
 
     eventBus.on('tryInteract', ({ source, target }) => {
-        const { interactable, attitude, name } = target.components;
+        const { attitude } = target.components;
 
         if (attitude && attitude.value !== CreatureAttitude.FRIENDLY) {
             eventBus.emit('hit', {
                 source,
                 target,
             });
+            return;
+        }
+
+        const { useActions } = target.components;
+
+        if (useActions) {
+            for (const useAction of useActions) {
+                switch (useAction.type) {
+                    case 'destroy':
+                        eventBus.emit('kill', { killer: source, killed: target });
+                        break;
+                    case 'spell':
+                        eventBus.emit('spellCast', { caster: source, target, spell: getSpell(useAction.spellId) });
+                        break;
+                }
+            }
             return;
         }
 

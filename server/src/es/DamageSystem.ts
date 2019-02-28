@@ -11,7 +11,9 @@ export function damageSystem(eventBus: EventBus<ServerEvents>) {
             return;
         }
 
-        const newHp = Math.max(0, hp.current - damage.amount);
+        const absoluteAmount = damage.type === 'heal' ? damage.amount : -damage.amount;
+
+        const newHp = Math.min(Math.max(0, hp.current + absoluteAmount), hp.max);
 
         target.set('hp', {
             current: newHp,

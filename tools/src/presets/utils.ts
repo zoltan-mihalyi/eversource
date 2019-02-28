@@ -1,9 +1,9 @@
 import * as fs from "fs";
 import * as path from "path";
 import { Palettes } from '../../../client/src/game/Palettes';
-import { BasePreset } from '../../../server/src/world/Presets';
+import { CreaturePreset } from '../../../server/src/world/Presets';
 
-export const BASE_PRESET: BasePreset = {
+export const BASE_PRESET: CreaturePreset = {
     name: 'Fill Me',
     level: 1,
 };

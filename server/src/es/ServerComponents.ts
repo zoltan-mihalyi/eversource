@@ -67,6 +67,16 @@ export interface Quests {
     questsDone: Set<QuestId>;
 }
 
+type DestroyAction = {
+    type: 'destroy';
+};
+
+type SpellAction = {
+    type: 'spell';
+    spellId: string;
+};
+
+export type UseAction = DestroyAction | SpellAction;
 
 export interface ServerComponents extends CommonComponents {
     xp: Xp;
@@ -83,4 +93,5 @@ export interface ServerComponents extends CommonComponents {
     interactable: Interactable;
     interacting: Interacting;
     listening: true;
+    useActions: UseAction[];
 }

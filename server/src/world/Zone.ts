@@ -17,6 +17,7 @@ import { Entity, EntityId } from '../../../common/es/Entity';
 import { interactionSystem } from '../es/InteractionSystem';
 import { PositionBox, spatialIndexingSystem } from '../es/SpatialIndexingSystem';
 import { ServerEntityContainer } from '../es/ServerEntityContainer';
+import { spellSystem } from '../es/SpellSystem';
 
 export class Zone {
     private entityContainer = new ServerEntityContainer();
@@ -36,6 +37,7 @@ export class Zone {
         interactionSystem(this.entityContainer, this.eventBus);
         questSystem(this.eventBus);
         xpSystem(this.eventBus);
+        spellSystem(this.eventBus);
     }
 
     createEntity(components: Partial<ServerComponents>): Entity<ServerComponents> {

@@ -4,7 +4,7 @@ import * as PIXI from '../../../client/src/pixi';
 import { TextureLoader } from '../../../client/src/map/TextureLoader';
 import { CancellableProcess } from '../../../common/util/CancellableProcess';
 import { wwwDir } from '../Utils';
-import { BasePreset, PresetAttitude, resolvePresetAttitude } from '../../../server/src/world/Presets';
+import { CreaturePreset, PresetAttitude, resolvePresetAttitude } from '../../../server/src/world/Presets';
 import { EffectEdit } from './EffectEdit';
 import { Activity, Direction, Effect } from '../../../common/components/CommonComponents';
 import { View } from '../../../common/components/View';
@@ -56,7 +56,7 @@ const DIRECTIONS: Direction[] = [
     'up',
 ];
 
-export class ShowPreset<T extends BasePreset> extends React.Component<Props<T>, State<T>> {
+export class ShowPreset<T extends CreaturePreset> extends React.Component<Props<T>, State<T>> {
     private app: PIXI.Application;
     private container = new PIXI.Container();
     private entity: Entity<ClientComponents>;
@@ -168,7 +168,7 @@ export class ShowPreset<T extends BasePreset> extends React.Component<Props<T>, 
         );
     }
 
-    private changePreset(newValues: Partial<BasePreset>) {
+    private changePreset(newValues: Partial<CreaturePreset>) {
         this.setState({
             preset: {
                 ...this.state.preset as any,

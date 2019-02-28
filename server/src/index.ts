@@ -1,5 +1,5 @@
 import { Server } from './Server';
-import { WorldImpl } from './world/World';
+import { AllPresets, WorldImpl } from './world/World';
 import { TmxMapLoader } from './world/MapLoader';
 import { FakeDao } from './impl/FakeDao';
 import * as express from 'express';
@@ -9,10 +9,13 @@ const PORT = process.env.PORT ? +process.env.PORT : 8000;
 
 const mapLoader = new TmxMapLoader('../common/maps');
 
-const humanoidPresets = JSON.parse(fs.readFileSync('./data/presets/humanoids.json', 'utf-8'));
-const monsterPresets = JSON.parse(fs.readFileSync('./data/presets/monsters.json', 'utf-8'));
+const presets: AllPresets = {
+    humanoid: JSON.parse(fs.readFileSync('./data/presets/humanoids.json', 'utf-8')),
+    monster: JSON.parse(fs.readFileSync('./data/presets/monsters.json', 'utf-8')),
+    object: JSON.parse(fs.readFileSync('./data/presets/objects.json', 'utf-8')),
+};
 
-const world = new WorldImpl(mapLoader, humanoidPresets, monsterPresets);
+const world = new WorldImpl(mapLoader, presets);
 
 const app = express();
 app.use(express.static('../cordova/www'));

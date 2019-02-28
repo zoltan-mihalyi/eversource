@@ -100,7 +100,7 @@ export class TextureLoader {
         });
 
         if (color) {
-            addRequestToContainer(sprite, this.palettesLoader.get(palettesFile!, (palettes) => {
+            addRequestToContainer(sprite, this.palettesLoader.get(palettesFile, (palettes) => {
                 sprite.setRecolor(palettes, color);
             }));
         }

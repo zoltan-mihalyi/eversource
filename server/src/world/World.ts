@@ -1,7 +1,15 @@
 import { Position, X, Y, ZoneId } from '../../../common/domain/Location';
 import { MapLoader } from './MapLoader';
 import { Zone } from './Zone';
-import { BasePreset, HumanoidPresets, MonsterPresets, MovementConfig, resolvePresetAttitude } from './Presets';
+import {
+    BasePreset,
+    CreaturePreset,
+    HumanoidPresets,
+    MonsterPresets,
+    MovementConfig,
+    ObjectPresets,
+    resolvePresetAttitude
+} from './Presets';
 import { TiledProperties } from '../../../common/tiled/interfaces';
 import { questEnds, questStarts } from '../quest/QuestIndexer';
 import { hpForLevel } from '../../../common/algorithms';
@@ -15,12 +23,18 @@ export interface World {
 const FPS = 50;
 const INTERVAL = 1000 / FPS;
 
+export interface AllPresets {
+    humanoid: HumanoidPresets;
+    monster: MonsterPresets;
+    object: ObjectPresets;
+}
+
 export class WorldImpl implements World {
     private readonly zonePromises = new Map<ZoneId, Promise<Zone>>();
     private readonly zones = new Map<ZoneId, Zone>();
     private readonly timer: NodeJS.Timer;
 
-    constructor(private mapLoader: MapLoader, private humanoidPresets: HumanoidPresets, private monsterPresets: MonsterPresets) {
+    constructor(private mapLoader: MapLoader, private presets: AllPresets) {
         this.timer = setInterval(this.update, INTERVAL);
     }
 
@@ -46,6 +60,8 @@ export class WorldImpl implements World {
         console.log(`Loaded ${zoneId} in ${new Date().getTime() - start.getTime()} ms`);
         const zone = new Zone(mapData.grid);
 
+        const { presets } = this;
+
         for (const object of mapData.objects) {
             const position = {
                 x: (object.x + object.width / 2) / mapData.tileWidth as X,
@@ -53,7 +69,7 @@ export class WorldImpl implements World {
             };
             const properties = object.properties || {};
             if (object.type === 'npc') {
-                const preset = this.humanoidPresets[object.name];
+                const preset = presets.humanoid[object.name];
                 const { appearance, equipment } = preset;
 
                 const controllers: Partial<ServerComponents> = properties.controller !== 'walking' ? {} : {
@@ -61,7 +77,7 @@ export class WorldImpl implements World {
                 };
 
                 zone.addSpawner(10000, {
-                    ...baseFromPreset(preset, object.name, properties, false),
+                    ...creatureBaseFromPreset(preset, object.name, properties, false),
                     position,
                     view: {
                         type: 'humanoid',
@@ -71,11 +87,11 @@ export class WorldImpl implements World {
                     ...controllers,
                 });
             } else if (object.type === 'monster') {
-                const preset = this.monsterPresets[object.name];
+                const preset = presets.monster[object.name];
                 const { image, palette } = preset;
 
                 zone.addSpawner(10000, {
-                    ...baseFromPreset(preset, object.name, properties, true),
+                    ...creatureBaseFromPreset(preset, object.name, properties, true),
                     position,
                     view: {
                         type: 'simple',
@@ -84,6 +100,24 @@ export class WorldImpl implements World {
                     },
                     aiMovingController: getController(position, preset.movement),
                 });
+            } else if (object.type === 'object') {
+                const preset = presets.object[object.name];
+                const { image, animation, useActions } = preset;
+
+                const template: Partial<ServerComponents> = {
+                    ...baseFromPreset(preset, object.name),
+                    position,
+                    view: {
+                        type: 'object',
+                        image,
+                        animation,
+                    },
+                };
+                if (useActions) {
+                    template.useActions = useActions;
+                }
+
+                zone.addSpawner(10000, template);
             } else if (object.type === 'area') {
                 zone.addArea(
                     position,
@@ -106,29 +140,14 @@ export class WorldImpl implements World {
     };
 }
 
-function baseFromPreset(preset: BasePreset, npcId: string, properties: TiledProperties, monster: boolean): Partial<ServerComponents> {
-    const hp = hpForLevel(preset.level);
-
+function baseFromPreset(preset: BasePreset, npcId: string): Partial<ServerComponents> {
     const result: Partial<ServerComponents> = {
         npcId,
-        activity: 'standing',
-        direction: objectDirection(properties),
         name: {
             value: preset.name,
         },
-        hp: {
-            current: hp,
-            max: hp,
-        },
-        level: { value: preset.level },
         scale: { value: preset.scale || 1 },
-        attitude: {
-            value: resolvePresetAttitude(preset.attitude, monster),
-        },
-        speed: {
-            running: 4,
-            walking: 2,
-        },
+
     };
 
     if (preset.effects) {
@@ -147,7 +166,30 @@ function baseFromPreset(preset: BasePreset, npcId: string, properties: TiledProp
             questCompletions: questEnds[npcId] || [],
         };
     }
+
     return result;
+}
+
+function creatureBaseFromPreset(preset: CreaturePreset, npcId: string, properties: TiledProperties, monster: boolean): Partial<ServerComponents> {
+    const hp = hpForLevel(preset.level);
+
+    return {
+        ...baseFromPreset(preset, npcId),
+        activity: 'standing',
+        direction: objectDirection(properties),
+        hp: {
+            current: hp,
+            max: hp,
+        },
+        level: { value: preset.level },
+        attitude: {
+            value: resolvePresetAttitude(preset.attitude, monster),
+        },
+        speed: {
+            running: 4,
+            walking: 2,
+        },
+    };
 }
 
 function getController(position: Position, config: MovementConfig = {}): AIMovingController {

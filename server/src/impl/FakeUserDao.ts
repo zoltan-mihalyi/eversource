@@ -57,7 +57,7 @@ export class FakeUserDao implements UserDao {
                 xp: 280,
                 name: 'Robin' as CharacterName,
                 classId: 'hunter' as ClassId,
-                hp: hpForLevel(2) * 0.8,
+                hp: hpForLevel(2) * 0.3,
 
                 location: {
                     position: {

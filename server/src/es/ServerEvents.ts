@@ -1,6 +1,7 @@
 import { Quests, ServerComponents } from './ServerComponents';
 import { Entity } from '../../../common/es/Entity';
 import { QuestId, QuestInfo } from '../../../common/domain/InteractionTable';
+import { Spell } from '../../data/spells';
 
 export interface Hit {
     source: Entity<ServerComponents>;
@@ -8,7 +9,7 @@ export interface Hit {
 }
 
 export interface Damage {
-    type: 'physical';
+    type: 'physical' | 'heal';
     amount: number;
     source: Entity<ServerComponents>;
     target: Entity<ServerComponents>;
@@ -56,12 +57,19 @@ interface CompleteQuest {
     quest: QuestInfo;
 }
 
+interface SpellCast {
+    caster: Entity<ServerComponents>;
+    target: Entity<ServerComponents>;
+    spell: Spell;
+}
+
 export interface ServerEvents {
     init: void;
     update: Update;
     networkUpdate: void;
     hit: Hit;
     kill: Kill;
+    spellCast: SpellCast;
     area: Area;
     damage: Damage;
     tryInteract: TryInteract;

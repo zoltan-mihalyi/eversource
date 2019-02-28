@@ -2,6 +2,7 @@ import { QuestBase, QuestId } from '../../../common/domain/InteractionTable';
 import { NonEmptyArray } from '../../../common/util/Types';
 
 interface BaseTask {
+    type: string;
     count: number;
     title: string;
 }
@@ -16,11 +17,16 @@ interface KillTask extends BaseTask {
     npcIds: string[];
 }
 
+interface SpellTask extends BaseTask {
+    type: 'spell';
+    spellIds: string[];
+}
+
 interface ItemTask extends BaseTask {
     type: 'item';
 }
 
-export type Task = VisitAreaTask | KillTask | ItemTask;
+export type Task = VisitAreaTask | KillTask | ItemTask | SpellTask;
 
 export interface Tasks {
     progress: string;

@@ -35,4 +35,10 @@ export interface SimpleView {
     readonly palette: string | null;
 }
 
-export type View = HumanoidView | SimpleView;
+export interface ObjectView {
+    readonly type: 'object';
+    readonly image: string;
+    readonly animation: string;
+}
+
+export type View = HumanoidView | SimpleView | ObjectView;

@@ -107,4 +107,21 @@ export const quests: Quest[] = [{
     taskDescription: 'Find Obelus!',
     completion: 'OMG!',
     requires: [],
+}, {
+    id: 9 as QuestId,
+    level: 3,
+    difficulty: 'normal',
+    name: 'Poor\'s feast',
+    startsAt: 'nefag',
+    endsAt: 'nefag',
+    description: 'Look at these vegetables! They look fine, but do they taste good as well?',
+    taskDescription: 'Taste the vegetables!',
+    completion: 'Well, I think I will give it a try.',
+    requires: [],
+    tasks: {
+        progress: 'Hmm?',
+        list: [
+            { type: 'spell', count: 8, title: 'Vegetables tasted', spellIds: ['consume_vegetable'] }
+        ]
+    }
 }];

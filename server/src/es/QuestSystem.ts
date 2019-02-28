@@ -5,6 +5,7 @@ import { Task } from '../quest/Quest';
 import { QuestId, TaskInfo } from '../../../common/domain/InteractionTable';
 import { QuestProgression } from '../character/CharacterDetails';
 import { QuestLog, Quests } from './ServerComponents';
+import { getSpell } from '../../data/spells';
 
 export function questSystem(eventBus: EventBus<ServerEvents>) {
     eventBus.on('kill', ({ killer, killed }) => {
@@ -25,6 +26,17 @@ export function questSystem(eventBus: EventBus<ServerEvents>) {
         }
 
         updateQuestLog(quests, task => task.type === 'visit' && task.areaName === name);
+    });
+
+    eventBus.on('spellCast', ({ caster, target, spell }) => {
+        const { quests } = caster.components;
+        if (!quests) {
+            return;
+        }
+
+        updateQuestLog(quests, task => {
+            return task.type === 'spell' && task.spellIds.findIndex(spellId => getSpell(spellId) === spell) !== -1;
+        });
     });
 
     eventBus.on('acceptQuest', ({ quests, quest }) => {

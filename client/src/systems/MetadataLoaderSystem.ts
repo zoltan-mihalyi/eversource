@@ -12,9 +12,12 @@ export function metadataLoaderSystem(container: EntityContainer<ClientComponents
     entities.on('update', update);
 
     function update({ display, view }: PartialPick<ClientComponents, 'display' | 'view'>, entitiy: Entity<ClientComponents>) {
-        if (view.type !== 'simple') {
+        if (view.type === 'humanoid') {
             entitiy.set('fixAnimationSpeed', null);
             entitiy.set('shadowSize', 1);
+            return;
+        } else if (view.type === 'object') {
+            entitiy.set('fixAnimationSpeed', null);
             return;
         }
 

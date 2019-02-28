@@ -1,12 +1,12 @@
-import { WorldImpl } from '../src/world/World';
+import { AllPresets, WorldImpl } from '../src/world/World';
 import * as sinon from 'sinon';
 import * as assert from 'assert';
 import { ZoneId } from '../../common/domain/Location';
 import { MapData, MapLoader } from '../src/world/MapLoader';
 import { Grid } from '../../common/Grid';
-import { HumanoidPresets, MonsterPresets } from '../src/world/Presets';
+import { HumanoidPresets, MonsterPresets, ObjectPresets } from '../src/world/Presets';
 import { TiledObject } from '../../common/tiled/interfaces';
-import { HumanoidView, SimpleView } from '../../common/components/View';
+import { HumanoidView, ObjectView, SimpleView } from '../../common/components/View';
 
 const zoneId = 'zone' as ZoneId;
 
@@ -23,8 +23,13 @@ function createMapLoader(objects: TiledObject[] = []) {
 
 const runningWorlds = new Set<WorldImpl>();
 
-function newWorld(mapLoader: MapLoader, humanoidPresets: HumanoidPresets = {}, monsterPresets: MonsterPresets = {}) {
-    const world = new WorldImpl(mapLoader, humanoidPresets, monsterPresets);
+function newWorld(mapLoader: MapLoader, presets: Partial<AllPresets> = {}) {
+    const world = new WorldImpl(mapLoader, {
+        monster: {},
+        humanoid: {},
+        object: {},
+        ...presets,
+    });
     runningWorlds.add(world);
     return world;
 }
@@ -100,7 +105,7 @@ describe('World', function () {
                 }
             }
         };
-        const world = newWorld(mapLoader, presets);
+        const world = newWorld(mapLoader, { humanoid: presets });
         const zone = await world.getZone(zoneId);
 
         const entities = zone.query(10.5, 10.5, 10.5, 10.5);
@@ -132,12 +137,41 @@ describe('World', function () {
                 "palette": "lava",
             }
         };
-        const world = newWorld(mapLoader, void 0, presets);
+        const world = newWorld(mapLoader, { monster: presets });
         const zone = await world.getZone(zoneId);
 
         const entities = zone.query(10.5, 10.5, 10.5, 10.5);
         assert.strictEqual(entities.length, 1);
         const view = entities[0].components.view as SimpleView;
         assert.strictEqual(view.image, presets.lava_slime.image);
+    });
+
+
+    it('should add objects', async function () {
+        const mapLoader = createMapLoader([
+            {
+                type: 'object',
+                name: 'carrot',
+                x: 320,
+                y: 320,
+                width: 32,
+                height: 32,
+                properties: {},
+            } as TiledObject
+        ]);
+        const presets: ObjectPresets = {
+            carrot: {
+                "name": "Carrot",
+                "image": "plants",
+                "animation": "carrot",
+            }
+        };
+        const world = newWorld(mapLoader, { object: presets });
+        const zone = await world.getZone(zoneId);
+
+        const entities = zone.query(10.5, 10.5, 10.5, 10.5);
+        assert.strictEqual(entities.length, 1);
+        const view = entities[0].components.view as ObjectView;
+        assert.strictEqual(view.image, presets.carrot.image);
     });
 });

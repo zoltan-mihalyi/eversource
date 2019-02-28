@@ -1,18 +1,23 @@
-import {Appearance, Equipment} from '../../../common/components/View';
+import { Appearance, Equipment } from '../../../common/components/View';
 import { CreatureAttitude, Effect } from '../../../common/components/CommonComponents';
+import { UseAction } from '../es/ServerComponents';
+
 
 export interface BasePreset {
     name: string;
     story?: string;
-    level: number;
-    attitude?: PresetAttitude;
     scale?: number;
     effects?: Effect[];
 }
 
+export interface CreaturePreset extends BasePreset {
+    level: number;
+    attitude?: PresetAttitude;
+}
+
 export type PresetAttitude = "friendly" | "neutral" | "hostile";
 
-export interface HumanoidPreset extends BasePreset {
+export interface HumanoidPreset extends CreaturePreset {
     appearance: Appearance;
     equipment: Equipment;
 }
@@ -28,7 +33,7 @@ export interface MovementConfig {
     radiusY?: number;
 }
 
-export interface MonsterPreset extends BasePreset {
+export interface MonsterPreset extends CreaturePreset {
     image: string;
     palette: string | null;
     movement?: MovementConfig;
@@ -36,6 +41,16 @@ export interface MonsterPreset extends BasePreset {
 
 export interface MonsterPresets {
     [id: string]: MonsterPreset;
+}
+
+export interface ObjectPreset extends BasePreset {
+    image: string;
+    animation: string;
+    useActions?: UseAction[];
+}
+
+export interface ObjectPresets {
+    [id: string]: ObjectPreset;
 }
 
 function resolveGivenAttitude(attitude: PresetAttitude): CreatureAttitude {
