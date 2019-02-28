@@ -1,4 +1,4 @@
-import { Direction } from '../domain/CreatureEntityData';
+import { Direction } from '../components/CommonComponents';
 
 export function getDirection(dx: number, dy: number): Direction | null {
     const xLarger = Math.abs(dx) > Math.abs(dy);

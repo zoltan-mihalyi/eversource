@@ -4,11 +4,12 @@ import { ServerComponents } from '../../src/es/ServerComponents';
 import { ServerEvents } from '../../src/es/ServerEvents';
 import * as assert from 'assert';
 import { hpRegenSystem } from '../../src/es/HpRegenSystem';
+import { ServerEntityContainer } from '../../src/es/ServerEntityContainer';
 
 
 describe('HpRegenSystem', function () {
     it('missing hp', async function () {
-        const container = new EntityContainer<ServerComponents>();
+        const container = new ServerEntityContainer();
         const eventBus = new EventBus<ServerEvents>();
 
         hpRegenSystem(container, eventBus);
@@ -23,7 +24,7 @@ describe('HpRegenSystem', function () {
     });
 
     it('full hp', async function () {
-        const container = new EntityContainer<ServerComponents>();
+        const container = new ServerEntityContainer();
         const eventBus = new EventBus<ServerEvents>();
 
         hpRegenSystem(container, eventBus);

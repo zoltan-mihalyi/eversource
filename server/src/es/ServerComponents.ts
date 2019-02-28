@@ -3,7 +3,7 @@ import { Entity } from '../../../common/es/Entity';
 import { QuestId } from '../../../common/domain/InteractionTable';
 import { QuestStatus } from '../character/CharacterDetails';
 import { Quest } from '../quest/Quest';
-import { CommonComponents } from '../../../common/es/CommonComponents';
+import { CommonComponents, Xp } from '../../../common/components/CommonComponents';
 
 export interface Moving {
     readonly x: number;
@@ -69,6 +69,7 @@ export interface Quests {
 
 
 export interface ServerComponents extends CommonComponents {
+    xp: Xp;
     speed: Speed;
     moving: Moving;
     aiMovingController: AIMovingController;

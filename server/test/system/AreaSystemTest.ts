@@ -1,16 +1,15 @@
-import { EntityContainer } from '../../../common/es/EntityContainer';
 import { EventBus } from '../../../common/es/EventBus';
-import { ServerComponents } from '../../src/es/ServerComponents';
 import { ServerEvents } from '../../src/es/ServerEvents';
 import * as sinon from 'sinon';
 import { areaSystem } from '../../src/es/AreaSystem';
 import { spatialIndexingSystem } from '../../src/es/SpatialIndexingSystem';
 import { position } from '../sampleData';
+import { ServerEntityContainer } from '../../src/es/ServerEntityContainer';
 
 
 describe('AreaSystem', function () {
     it('should emit area event for intersecting entities', async function () {
-        const container = new EntityContainer<ServerComponents>();
+        const container = new ServerEntityContainer();
         const eventBus = new EventBus<ServerEvents>();
 
         const index = spatialIndexingSystem(container, eventBus);

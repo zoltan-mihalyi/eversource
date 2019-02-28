@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import * as React from 'react';
-import { createDisplay, EditProps, ShowPreset } from './ShowPreset';
+import { createView, EditProps, ShowPreset } from './ShowPreset';
 import { BasePreset } from '../../../server/src/world/Presets';
 
 interface Props<T> {
@@ -8,7 +8,7 @@ interface Props<T> {
     canCast: boolean;
     defaultPreset: T;
     Edit: React.ComponentType<EditProps<T>>;
-    createDisplay: createDisplay<T>;
+    createView: createView<T>;
     onExit: () => void;
 }
 
@@ -33,7 +33,7 @@ export class PresetsTool<T extends BasePreset> extends React.Component<Props<T>,
         const { presets, selected, modified } = this.state;
         if (selected) {
             return (<ShowPreset name={selected} save={this.savePreset} exit={this.exit} canCast={canCast} Edit={Edit}
-                                createDisplay={this.props.createDisplay} originalPreset={presets[selected]}/>);
+                                createView={this.props.createView} originalPreset={presets[selected]}/>);
         }
 
         return (

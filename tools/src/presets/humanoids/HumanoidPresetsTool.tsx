@@ -1,13 +1,9 @@
 import { PresetsTool } from '../PresetsTool';
 import { HumanoidPreset } from '../../../../server/src/world/Presets';
 import * as React from 'react';
-import { HumanoidDisplay } from '../../../../client/src/display/HumanoidDisplay';
-import { HumanoidEntityData } from '../../../../common/domain/HumanoidEntityData';
-import { GameContext } from '../../../../client/src/game/GameContext';
-import { BaseCreatureEntityData } from '../../../../common/domain/CreatureEntityData';
 import { HumanoidEdit } from './HumanoidEdit';
 import { BASE_PRESET } from '../utils';
-import { EntityId } from '../../../../common/es/Entity';
+import { HumanoidView } from '../../../../common/components/View';
 
 const DEFAULT: HumanoidPreset = {
     ...BASE_PRESET,
@@ -40,16 +36,13 @@ interface Props {
 
 export const HumanoidPresetsTool: React.SFC<Props> = ({ onExit }) => (
     <PresetsTool file={'humanoids'} defaultPreset={DEFAULT} onExit={onExit} Edit={HumanoidEdit}
-                 createDisplay={createDisplay} canCast={true}/>
+                 createView={createView} canCast={true}/>
 );
 
-function createDisplay(baseEntityData: BaseCreatureEntityData, preset: HumanoidPreset, context: GameContext): HumanoidDisplay {
-    const entityData: HumanoidEntityData = {
-        ...baseEntityData,
+function createView(preset: HumanoidPreset): HumanoidView {
+    return {
         type: 'humanoid',
         appearance: preset.appearance,
         equipment: preset.equipment,
     };
-
-    return new HumanoidDisplay(0 as EntityId, context, entityData, false);
 }

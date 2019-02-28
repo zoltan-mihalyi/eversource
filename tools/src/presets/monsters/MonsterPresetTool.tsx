@@ -1,13 +1,9 @@
 import { PresetsTool } from '../PresetsTool';
 import { MonsterPreset } from '../../../../server/src/world/Presets';
 import * as React from 'react';
-import { BaseCreatureEntityData } from '../../../../common/domain/CreatureEntityData';
-import { GameContext } from '../../../../client/src/game/GameContext';
 import { MonsterEdit } from './MonsterEdit';
-import { MonsterDisplay } from '../../../../client/src/display/MonsterDisplay';
-import { MonsterEntityData } from '../../../../common/domain/MonsterEntityData';
 import { BASE_PRESET } from '../utils';
-import { EntityId } from '../../../../common/es/Entity';
+import { SimpleView } from '../../../../common/components/View';
 
 const DEFAULT: MonsterPreset = {
     ...BASE_PRESET,
@@ -20,17 +16,14 @@ interface Props {
 }
 
 export const MonsterPresetTool: React.SFC<Props> = ({ onExit }) => (
-    <PresetsTool file={'monsters'} defaultPreset={DEFAULT} onExit={onExit} createDisplay={createDisplay}
+    <PresetsTool file={'monsters'} defaultPreset={DEFAULT} onExit={onExit} createView={createView}
                  Edit={MonsterEdit} canCast={false}/>
 );
 
-function createDisplay(baseEntityData: BaseCreatureEntityData, preset: MonsterPreset, context: GameContext): MonsterDisplay {
-    const entityData: MonsterEntityData = {
-        ...baseEntityData,
-        type: 'monster',
+function createView(preset: MonsterPreset): SimpleView {
+    return {
+        type: 'simple',
         image: preset.image,
         palette: preset.palette,
     };
-
-    return new MonsterDisplay(0 as EntityId, context, entityData, false);
 }

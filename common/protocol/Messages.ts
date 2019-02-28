@@ -2,10 +2,11 @@ import { CharacterInfo } from '../domain/CharacterInfo';
 import { ErrorCode } from './ErrorCode';
 import { Diff } from './Diff';
 import { PlayerState } from './PlayerState';
-import { EntityData } from '../domain/EntityData';
 import { QuestId } from '../domain/InteractionTable';
 import { QuestLogItem } from './QuestLogItem';
 import { EntityId } from '../es/Entity';
+import { NetworkComponents } from '../components/NetworkComponents';
+import { Nullable } from '../util/Types';
 
 export interface RequestTypes {
     enter: string;
@@ -27,7 +28,7 @@ export interface ResponseTypes {
     leaved: LeaveReason;
     characters: CharacterInfo[];
     ready: void;
-    world: Diff<EntityId, EntityData>[];
+    world: Diff<EntityId, Nullable<NetworkComponents>>[];
     playerState: PlayerStateDiff;
     questLog: Diff<QuestId, QuestLogItem>[];
 }

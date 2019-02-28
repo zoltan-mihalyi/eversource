@@ -1,5 +1,5 @@
-import {Appearance, Equipment} from '../../../common/domain/HumanoidEntityData';
-import {CreatureAttitude, Effect} from '../../../common/domain/CreatureEntityData';
+import {Appearance, Equipment} from '../../../common/components/View';
+import { CreatureAttitude, Effect } from '../../../common/components/CommonComponents';
 
 export interface BasePreset {
     name: string;

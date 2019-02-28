@@ -5,11 +5,12 @@ import { ServerEvents } from '../../src/es/ServerEvents';
 import * as sinon from 'sinon';
 import * as assert from 'assert';
 import { damageSystem } from '../../src/es/DamageSystem';
+import { ServerEntityContainer } from '../../src/es/ServerEntityContainer';
 
 
 describe('DamageSystem', function () {
     it('should reduce hp', async function () {
-        const container = new EntityContainer<ServerComponents>();
+        const container = new ServerEntityContainer();
         const eventBus = new EventBus<ServerEvents>();
 
         damageSystem(eventBus);
@@ -31,7 +32,7 @@ describe('DamageSystem', function () {
     });
 
     it('should kill', async function () {
-        const container = new EntityContainer<ServerComponents>();
+        const container = new ServerEntityContainer();
         const eventBus = new EventBus<ServerEvents>();
         const onKill = sinon.spy();
         eventBus.on('kill', onKill);

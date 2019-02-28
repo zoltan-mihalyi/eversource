@@ -3,8 +3,9 @@ import { EventBus } from '../../../common/es/EventBus';
 import { ServerEvents } from './ServerEvents';
 import { EntityContainer } from '../../../common/es/EntityContainer';
 import { Entity } from '../../../common/es/Entity';
+import { ServerEntityContainer } from './ServerEntityContainer';
 
-export function spawnSystem(entityContainer: EntityContainer<ServerComponents>, eventBus: EventBus<ServerEvents>) {
+export function spawnSystem(entityContainer: ServerEntityContainer, eventBus: EventBus<ServerEvents>) {
     const spawners = entityContainer.createQuery('spawner', 'spawnTimer');
 
     eventBus.on('kill', ({ killed }) => {
@@ -42,7 +43,7 @@ export function spawnSystem(entityContainer: EntityContainer<ServerComponents>, 
         });
     });
 
-    function spawn(spawner: Spawner, entity:Entity<ServerComponents>) {
+    function spawn(spawner: Spawner, entity: Entity<ServerComponents>) {
         entityContainer.createEntity({
             ...spawner.template,
             spawnedBy: { spawner: entity },

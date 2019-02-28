@@ -31,7 +31,6 @@ function initScreen(gameScreen: GameScreen) {
         character: {
             xp: 730,
             level:12,
-            id: 0 as EntityId,
         },
         interaction: null,
     });

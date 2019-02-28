@@ -7,17 +7,18 @@ import { questSystem } from '../../src/es/QuestSystem';
 import { QuestId } from '../../../common/domain/InteractionTable';
 import { QuestStatus } from '../../src/character/CharacterDetails';
 import { Entity } from '../../../common/es/Entity';
+import { ServerEntityContainer } from '../../src/es/ServerEntityContainer';
 
 
 describe('QuestSystem', function () {
-    let container: EntityContainer<ServerComponents>;
+    let container: ServerEntityContainer;
     let eventBus: EventBus<ServerEvents>;
     let questLog: QuestLog;
     let questsDone: Set<QuestId>;
     let player: Entity<ServerComponents>;
 
     beforeEach(() => {
-        container = new EntityContainer<ServerComponents>();
+        container = new ServerEntityContainer();
         eventBus = new EventBus<ServerEvents>();
         questLog = new Map<QuestId, QuestStatus>();
         questsDone = new Set<QuestId>();

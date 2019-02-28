@@ -10,10 +10,13 @@ export function hpRegenSystem(container: EntityContainer<ServerComponents>, even
 
         withHp.forEach((components, entity) => {
             const { hp } = components;
-            entity.set('hp', {
-                max: hp.max,
-                current: Math.min(hp.max, hp.current + 4 * deltaInSec),
-            });
+            const current = Math.min(hp.max, hp.current + 4 * deltaInSec);
+            if (current !== hp.current) {
+                entity.set('hp', {
+                    max: hp.max,
+                    current: current,
+                });
+            }
         });
     });
 }

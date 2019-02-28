@@ -2,12 +2,11 @@ import { Position, X, Y, ZoneId } from '../../../common/domain/Location';
 import { MapLoader } from './MapLoader';
 import { Zone } from './Zone';
 import { BasePreset, HumanoidPresets, MonsterPresets, MovementConfig, resolvePresetAttitude } from './Presets';
-import { Direction } from '../../../common/domain/CreatureEntityData';
 import { TiledProperties } from '../../../common/tiled/interfaces';
 import { questEnds, questStarts } from '../quest/QuestIndexer';
 import { hpForLevel } from '../../../common/algorithms';
 import { AIMovingController, ServerComponents } from '../es/ServerComponents';
-import { BaseCreatureView } from '../../../common/es/CommonComponents';
+import { Direction } from '../../../common/components/CommonComponents';
 
 export interface World {
     getZone(zoneId: ZoneId): Promise<Zone>;
@@ -65,7 +64,6 @@ export class WorldImpl implements World {
                     ...baseFromPreset(preset, object.name, properties, false),
                     position,
                     view: {
-                        ...baseCreatureView(properties),
                         type: 'humanoid',
                         appearance,
                         equipment,
@@ -80,7 +78,6 @@ export class WorldImpl implements World {
                     ...baseFromPreset(preset, object.name, properties, true),
                     position,
                     view: {
-                        ...baseCreatureView(properties),
                         type: 'simple',
                         image,
                         palette,
@@ -109,18 +106,13 @@ export class WorldImpl implements World {
     };
 }
 
-function baseCreatureView(properties: TiledProperties): BaseCreatureView {
-    return {
-        activity: { type: 'standing' },
-        direction: objectDirection(properties),
-    };
-}
-
 function baseFromPreset(preset: BasePreset, npcId: string, properties: TiledProperties, monster: boolean): Partial<ServerComponents> {
     const hp = hpForLevel(preset.level);
 
     const result: Partial<ServerComponents> = {
         npcId,
+        activity: 'standing',
+        direction: objectDirection(properties),
         name: {
             value: preset.name,
         },

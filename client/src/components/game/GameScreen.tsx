@@ -16,7 +16,6 @@ import { EntityId } from '../../../../common/es/Entity';
 const EMPTY_CHARACTER: CharacterState = {
     level: 1,
     xp: 0,
-    id: 0 as EntityId,
 };
 
 interface Props {

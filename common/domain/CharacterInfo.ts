@@ -1,6 +1,6 @@
 import { Opaque } from '../util/Opaque';
 import { Location } from './Location';
-import { Appearance, Equipment } from './HumanoidEntityData';
+import { Appearance, Equipment } from '../components/View';
 
 export type ClassId = Opaque<string, 'ClassId'>;
 export type CharacterId = Opaque<string, 'CharacterId'>;

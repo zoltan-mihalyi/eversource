@@ -4,10 +4,11 @@ import { ErrorCode } from '../../../common/protocol/ErrorCode';
 import { CharacterInfo } from '../../../common/domain/CharacterInfo';
 import { Display } from './Display';
 import { Diff } from '../../../common/protocol/Diff';
-import { EntityData } from '../../../common/domain/EntityData';
 import { QuestId } from '../../../common/domain/InteractionTable';
 import { QuestLogItem } from '../../../common/protocol/QuestLogItem';
 import { EntityId } from '../../../common/es/Entity';
+import { NetworkComponents } from '../../../common/components/NetworkComponents';
+import { Nullable } from '../../../common/util/Types';
 
 export type ResponseHandler = {
     [P in ResponseCommand]: (data: ResponseTypes[P]) => void;
@@ -51,7 +52,7 @@ export abstract class NetworkingState<T> extends State<NetworkingContext, T> imp
     characters(characters: CharacterInfo[]) {
     }
 
-    world(diffs: Diff<EntityId, EntityData>[]) {
+    world(diffs: Diff<EntityId, Nullable<NetworkComponents>>[]) {
     }
 
     playerState(playerState: PlayerStateDiff) {

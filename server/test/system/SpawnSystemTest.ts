@@ -4,11 +4,12 @@ import { EventBus } from '../../../common/es/EventBus';
 import { ServerComponents } from '../../src/es/ServerComponents';
 import { ServerEvents } from '../../src/es/ServerEvents';
 import * as sinon from 'sinon';
+import { ServerEntityContainer } from '../../src/es/ServerEntityContainer';
 
 
 describe('SpawnSystem', function () {
     it('should destroy entity', async function () {
-        const container = new EntityContainer<ServerComponents>();
+        const container = new ServerEntityContainer();
         const eventBus = new EventBus<ServerEvents>();
         const entity = container.createEntity({});
         const removeEntitySpy = sinon.spy();
@@ -27,7 +28,7 @@ describe('SpawnSystem', function () {
 
 
     it('should respawn', async function () {
-        const container = new EntityContainer<ServerComponents>();
+        const container = new ServerEntityContainer();
         const eventBus = new EventBus<ServerEvents>();
         const createEntitySpy = sinon.spy();
         const start = Date.now();

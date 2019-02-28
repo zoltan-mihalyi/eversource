@@ -1,23 +1,41 @@
 import { Entity, EntityId } from './Entity';
 import { PartialPick, Writable } from '../util/Types';
 
+type QueryCallback<T, K extends keyof T> = (components: PartialPick<T, K>, entity: Entity<T>) => void;
+
 export interface Query<T, K extends keyof T> {
-    forEach(cb: (components: PartialPick<T, K>, entity: Entity<T>) => void): void;
+    forEach(cb: QueryCallback<T, K>): void;
+
+    on(event: 'add' | 'remove' | 'update', cb: QueryCallback<T, K>): void;
 }
 
+interface QueryCallbacks<T, K extends keyof T> {
+    add: QueryCallback<T, K>[];
+    remove: QueryCallback<T, K>[];
+    update: QueryCallback<T, K>[]; //TODO
+}
 
 class QueryImpl<T, K extends keyof T> implements Query<T, K> {
     private entities = new Map<Entity<T>, PartialPick<T, K>>();
+    private callbacks: QueryCallbacks<T, K> = { add: [], remove: [], update: [] };
 
     constructor(all: Map<EntityId, Entity<T>>, private keys: ReadonlyArray<(keyof T)>) {
         all.forEach((entity) => this.addIfMatch(entity));
     }
 
-    forEach(cb: (components: PartialPick<T, K>, entity: Entity<T>) => void): void {
+    forEach(cb: QueryCallback<T, K>) {
         this.entities.forEach(cb);
     }
 
+    on(event: 'add' | 'remove' | 'update', cb: QueryCallback<T, K>) {
+        this.callbacks[event].push(cb);
+    }
+
     addIfMatch(entity: Entity<T>) {
+        if (this.entities.has(entity)) {
+            return;
+        }
+
         const { components } = entity;
 
         for (const key of this.keys) {
@@ -27,10 +45,28 @@ class QueryImpl<T, K extends keyof T> implements Query<T, K> {
         }
 
         this.entities.set(entity, components as PartialPick<T, K>);
+        for (const cb of this.callbacks.add) {
+            cb(components as PartialPick<T, K>, entity);
+        }
+    }
+
+    updated(entity: Entity<T>) {
+        if (!this.entities.has(entity)) {
+            return;
+        }
+        for (const cb of this.callbacks.update) {
+            cb(entity.components as PartialPick<T, K>, entity);
+        }
     }
 
     remove(entity: Entity<T>) {
+        if (!this.entities.has(entity)) {
+            return;
+        }
         this.entities.delete(entity);
+        for (const cb of this.callbacks.remove) {
+            cb(entity.components as PartialPick<T, K>, entity);
+        }
     }
 }
 
@@ -42,7 +78,7 @@ export interface EntitySetter<T> {
 
 class EntitySetterImpl<T> implements EntitySetter<T> {
 
-    constructor(private queriesByType: Map<keyof T, QueryImpl<T, never>[]>) {
+    constructor(private queriesByType: Map<keyof T, QueryImpl<T, any>[]>) {
     }
 
     set<K extends keyof T>(entity: Entity<T>, key: K, value: any): void {
@@ -51,17 +87,18 @@ class EntitySetterImpl<T> implements EntitySetter<T> {
         const added = !components[key];
         components[key] = value;
 
-        if (!added) {
-            return;
-        }
-
         const queries = this.queriesByType.get(key);
         if (!queries) {
             return;
         }
-
-        for (const query of queries) {
-            query.addIfMatch(entity);
+        if (!added) {
+            for (const query of queries) {
+                query.updated(entity);
+            }
+        } else {
+            for (const query of queries) {
+                query.addIfMatch(entity);
+            }
         }
     }
 
@@ -71,28 +108,24 @@ class EntitySetterImpl<T> implements EntitySetter<T> {
         if (!components[key]) {
             return;
         }
-        delete components[key];
 
         const queries = this.queriesByType.get(key);
-        if (!queries) {
-            return;
+        if (queries) {
+            for (const query of queries) {
+                query.remove(entity);
+            }
         }
 
-        for (const query of queries) {
-            query.remove(entity);
-        }
+        delete components[key];
     }
 }
 
-let nextId = 0;
-
 export class EntityContainer<T> {
     private entities = new Map<EntityId, Entity<T>>();
-    private queriesByType = new Map<keyof T, QueryImpl<T, never>[]>();
+    private queriesByType = new Map<keyof T, QueryImpl<T, any>[]>();
     private entitySetter = new EntitySetterImpl(this.queriesByType);
 
-    createEntity(template?: Partial<T>): Entity<T> {
-        const id = nextId++ as EntityId;
+    createEntityWithId(id: EntityId, template?: Partial<T>): Entity<T> {
 
         const entity = new Entity<T>(id, { ...template as any }, this.entitySetter);
         this.queriesByType.forEach(queries => {
@@ -105,7 +138,7 @@ export class EntityContainer<T> {
         return entity;
     }
 
-    removeEntity(entity: Entity<T>) {
+    removeEntity(entity: Entity<T>) { // TODO handle queries with no components
         const keys = Object.keys(entity.components) as (keyof T)[];
 
         for (const key of keys) {

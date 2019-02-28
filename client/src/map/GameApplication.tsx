@@ -1,39 +1,50 @@
 import * as PIXI from 'pixi.js';
 import { Position, X, Y } from '../../../common/domain/Location';
-import { GameLevel } from './GameLevel';
+import { GameContext, GameLevel } from './GameLevel';
 import { InputManager, MovementIntent } from '../input/InputManager';
-import { Diff } from '../../../common/protocol/Diff';
-import { EntityData } from '../../../common/domain/EntityData';
 import { registerCursors } from '../display/Cursors';
 import { PlayingNetworkApi, PlayingStateData } from '../protocol/PlayingState';
-import { PlayerStateDiff } from '../../../common/protocol/Messages';
 import { TextureLoader } from './TextureLoader';
 import { CancellableProcess } from '../../../common/util/CancellableProcess';
-import { PlayerState } from '../../../common/protocol/PlayerState';
-import { EntityId } from '../../../common/es/Entity';
+import { EventBus } from '../../../common/es/EventBus';
+import { ClientEvents } from '../es/ClientEvents';
+import { EntityContainer } from '../../../common/es/EntityContainer';
+import { ClientComponents } from '../es/ClientComponents';
+import { networkSystem } from '../systems/NetworkSystem';
+import { cameraFollowSystem } from '../systems/CameraFollowSystem';
+import { FragmentPosition, Metric } from '../systems/display/Metric';
 
 export class GameApplication extends PIXI.Application {
     private viewContainer = new PIXI.Container();
-    private centerX = 0 as X;
-    private centerY = 0 as Y;
-    private timer: number;
+    private center: FragmentPosition = { x: 0, y: 0 };
     readonly inputManager: InputManager;
     private lastMovementIntent: MovementIntent = { x: 0, y: 0 };
-    private entityId: EntityId | null = null;
     private gameLevel: GameLevel;
     private readonly process = new CancellableProcess();
+    readonly eventBus = new EventBus<ClientEvents>();
+    private metric: Metric;
 
     constructor(data: PlayingStateData, private playingNetworkApi: PlayingNetworkApi) {
         super({ antialias: false });
 
+
         const { map, resources, position } = data;
+        this.metric = new Metric(map.map.tilewidth, map.map.tileheight);
 
         const textureLoader = new TextureLoader(this.renderer, this.process, map.map.tileheight);
-        const gameContext = { textureLoader, playingNetworkApi };
+        const entityContainer = new EntityContainer<ClientComponents>();
+        const gameContext: GameContext = {
+            textureLoader,
+            playingNetworkApi,
+            metric: this.metric,
+            entityContainer,
+            eventBus: this.eventBus,
+        };
+
         const gameLevel = new GameLevel(gameContext, map, resources);
         this.gameLevel = gameLevel;
 
-        this.timer = requestAnimationFrame(this.update);
+        this.ticker.add(this.update);
 
         this.viewContainer.addChild(gameLevel.container);
         this.stage.addChild(this.viewContainer);
@@ -43,62 +54,40 @@ export class GameApplication extends PIXI.Application {
         this.inputManager = new InputManager();
 
         registerCursors(this.renderer.plugins.interaction.cursorStyles);
+
+        networkSystem(playingNetworkApi, entityContainer, this.eventBus);
+        cameraFollowSystem(entityContainer, this.eventBus, (pos) => this.setViewCenter(pos));
+
     }
 
     setScale = (width: number, height: number, scale: number) => {
-        this.gameLevel.setScale(scale);
+        this.metric.setScale(scale);
         this.viewContainer.scale.set(scale);
 
         this.renderer.resize(width, height);
-        this.updateView();
+        this.updateViewport();
     };
 
     destroy() {
         this.process.stop();
-        cancelAnimationFrame(this.timer);
         this.inputManager.destroy();
         super.destroy();
     }
 
-    updateState(diffs: Diff<EntityId, EntityData>[]) {
-        for (const diff of diffs) {
-            if (diff.id === this.entityId) {
-                if (diff.type === 'create') {
-                    this.setViewCenter(diff.data.position);
-                } else if (diff.type === 'change' && diff.changes.position) {
-                    this.setViewCenter(diff.changes.position);
-                }
-            }
-        }
-
-        this.gameLevel.updateObjects(diffs);
-    }
-
-    updatePlayerState(state: PlayerState) {
-        if (state.character) {
-            this.entityId = state.character.id;
-        }
-        this.gameLevel.updatePlayerState(state);
-    }
-
     private setViewCenter(position: Position) {
-        const { x, y } = this.gameLevel.round(position);
-
-        this.centerX = x;
-        this.centerY = y;
-
-        this.updateView();
+        this.center = this.metric.toFragmentPosition(position);
+        this.updateViewport();
     }
 
 
-    private updateView () {
+    private updateViewport() {
         const viewContainer = this.viewContainer;
         const canvas = this.view;
 
         const { tilewidth, tileheight } = this.gameLevel.map.map;
 
-        viewContainer.x = -this.centerX * tilewidth * viewContainer.scale.x + Math.floor(canvas.width / 2);
-        viewContainer.y = -this.centerY * tileheight * viewContainer.scale.y + Math.floor(canvas.height / 2);
+        viewContainer.x = -this.center.x * viewContainer.scale.x + Math.floor(canvas.width / 2);
+        viewContainer.y = -this.center.y * viewContainer.scale.y + Math.floor(canvas.height / 2);
 
         this.gameLevel.setVisibleArea(
             -viewContainer.x / tilewidth / viewContainer.scale.x as X,
@@ -109,9 +98,9 @@ export class GameApplication extends PIXI.Application {
     };
 
     private update = () => {
-        const { x, y } = this.inputManager.getMovementIntent();
+        this.eventBus.emit('render', void 0);
 
-        this.gameLevel.update();
+        const { x, y } = this.inputManager.getMovementIntent();
 
         if (x !== this.lastMovementIntent.x || y !== this.lastMovementIntent.y) {
             this.playingNetworkApi.move(x, y);
@@ -119,6 +108,5 @@ export class GameApplication extends PIXI.Application {
         this.lastMovementIntent.x = x;
         this.lastMovementIntent.y = y;
         this.inputManager.clearPressedKeys();
-        this.timer = requestAnimationFrame(this.update);
     };
 }

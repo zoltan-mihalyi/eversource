@@ -6,9 +6,7 @@ import { MapData, MapLoader } from '../src/world/MapLoader';
 import { Grid } from '../../common/Grid';
 import { HumanoidPresets, MonsterPresets } from '../src/world/Presets';
 import { TiledObject } from '../../common/tiled/interfaces';
-import { HumanoidEntityData } from '../../common/domain/HumanoidEntityData';
-import { MonsterEntityData } from '../../common/domain/MonsterEntityData';
-import { HumanoidView, SimpleView } from '../../common/es/CommonComponents';
+import { HumanoidView, SimpleView } from '../../common/components/View';
 
 const zoneId = 'zone' as ZoneId;
 

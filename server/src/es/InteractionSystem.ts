@@ -1,6 +1,5 @@
 import { EventBus } from '../../../common/es/EventBus';
 import { ServerEvents } from './ServerEvents';
-import { CreatureAttitude } from '../../../common/domain/CreatureEntityData';
 import { InteractionTable, QuestId, QuestInfo } from '../../../common/domain/InteractionTable';
 import { Quests, ServerComponents } from './ServerComponents';
 import { questInfoMap } from '../quest/QuestIndexer';
@@ -9,6 +8,7 @@ import { QuestStatus } from '../character/CharacterDetails';
 import { EntityContainer } from '../../../common/es/EntityContainer';
 import { Entity } from '../../../common/es/Entity';
 import { Position } from '../../../common/domain/Location';
+import { CreatureAttitude } from '../../../common/components/CommonComponents';
 
 export function interactionSystem(entityContainer: EntityContainer<ServerComponents>, eventBus: EventBus<ServerEvents>) {
     const interactingEntities = entityContainer.createQuery('interacting');

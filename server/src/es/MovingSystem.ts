@@ -1,10 +1,10 @@
 import { ServerComponents } from './ServerComponents';
-import { Direction } from '../../../common/domain/CreatureEntityData';
 import { EventBus } from '../../../common/es/EventBus';
 import { ServerEvents } from './ServerEvents';
 import { EntityContainer } from '../../../common/es/EntityContainer';
 import { Grid, GridBlock } from '../../../common/Grid';
 import { Position, X, Y } from '../../../common/domain/Location';
+import { getDirection } from '../../../common/game/direction';
 
 export function movingSystem(grid: Grid, entityContainer: EntityContainer<ServerComponents>, eventBus: EventBus<ServerEvents>) {
     const query = entityContainer.createQuery('position', 'speed', 'moving');
@@ -30,23 +30,19 @@ export function movingSystem(grid: Grid, entityContainer: EntityContainer<Server
             const newPosition = tryMove(grid, position, size, dx, dy);
             entity.set('position', newPosition);
 
-            const { view } = components;
-            if (view) {
+            const { activity } = components;
+            if (activity) {
                 const dx = newPosition.x - position.x;
                 const dy = newPosition.y - position.y;
 
                 const direction = getDirection(dx, dy);
                 if (direction) {
-                    entity.set('view', {
-                        ...view,
-                        direction,
-                        activity: { type: 'walking', speed: length(dx, dy) / deltaInSec },
-                    });
+                    entity.set('direction', direction);
+                    entity.set('activity', 'walking');
+                    entity.set('animation', { speed: length(dx, dy) / deltaInSec });
                 } else {
-                    entity.set('view', {
-                        ...view,
-                        activity: { type: 'standing' },
-                    });
+                    entity.set('activity', 'standing');
+                    entity.set('animation', { speed: 0.2 }); // TODO
                 }
             }
         });
@@ -155,19 +151,6 @@ function getVerticalEdge(block: GridBlock, goingDown: boolean, x: number) {
         default:
             return goingDown ? 0 : 1;
     }
-}
-
-
-function getDirection(dx: number, dy: number): Direction | null {
-    const xLarger = Math.abs(dx) > Math.abs(dy);
-    if (xLarger) {
-        return dx > 0 ? 'right' : 'left';
-    } else if (dy < 0) {
-        return 'up';
-    } else if (dy > 0) {
-        return 'down';
-    }
-    return null;
 }
 
 function length(x: number, y: number): number {

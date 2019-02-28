@@ -3,7 +3,7 @@ import { PlayingRequestHandler } from './PlayingRequestHandler';
 import { CancellableProcess } from '../../../common/util/CancellableProcess';
 import { hpForLevel } from '../../../common/algorithms';
 import { CharacterDetails } from '../character/CharacterDetails';
-import { CreatureAttitude } from '../../../common/domain/CreatureEntityData';
+import { CreatureAttitude } from '../../../common/components/CommonComponents';
 
 export class LoadingRequestHandler extends ClientState<CharacterDetails> {
     private serverLoading = false;
@@ -40,10 +40,9 @@ export class LoadingRequestHandler extends ClientState<CharacterDetails> {
                 current: info.hp,
             },
             scale: { value: 1 },
+            activity: 'standing',
+            direction: 'down',
             view: {
-                activity: { type: 'standing' },
-                direction: 'down',
-
                 type: 'humanoid',
                 appearance: info.appearance,
                 equipment: info.equipment,

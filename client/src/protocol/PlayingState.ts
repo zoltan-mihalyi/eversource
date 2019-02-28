@@ -7,13 +7,14 @@ import { Diff } from '../../../common/protocol/Diff';
 import { Position } from '../../../common/domain/Location';
 import { GameScreen } from '../components/game/GameScreen';
 import { LoadedMap } from '../../../common/tiled/TiledResolver';
-import { EntityData } from '../../../common/domain/EntityData';
 import { PlayerStateDiff } from '../../../common/protocol/Messages';
 import { QuestId } from '../../../common/domain/InteractionTable';
 import { QuestLogItem } from '../../../common/protocol/QuestLogItem';
 import { PlayerState } from '../../../common/protocol/PlayerState';
 import { EntityId } from '../../../common/es/Entity';
+import { NetworkComponents } from '../../../common/components/NetworkComponents';
 import ResourceDictionary = PIXI.loaders.ResourceDictionary;
+import { Nullable } from '../../../common/util/Types';
 
 export interface PlayingStateData {
     map: LoadedMap;
@@ -41,7 +42,6 @@ export class PlayingState extends NetworkingState<PlayingStateData> implements P
     private currentPlayerState: PlayerState = { interaction: null, character: null };
     private currentQuestLog: Map<QuestId, QuestLogItem> = new Map<QuestId, QuestLogItem>();
 
-
     constructor(manager: StateManager<any, NetworkingContext>, context: NetworkingContext, data: PlayingStateData) {
         super(manager, context, data);
         this.game = new GameApplication(data, this);
@@ -53,13 +53,12 @@ export class PlayingState extends NetworkingState<PlayingStateData> implements P
         }, this);
     }
 
-    world(diffs: Diff<EntityId, EntityData>[]) {
-        this.game.updateState(diffs);
+    world(diffs: Diff<EntityId, Nullable<NetworkComponents>>[]) {
+        this.game.eventBus.emit('worldUpdate', diffs);
     }
 
     playerState(playerStateDiff: PlayerStateDiff) {
         this.updatePlayerState(playerStateDiff);
-        this.game.updatePlayerState(this.currentPlayerState);
         this.gameScreen.updatePlayerState(this.currentPlayerState);
     }
 

@@ -1,7 +1,6 @@
 import * as rbush from 'rbush';
 import { Grid } from '../../../common/Grid';
 import { Position } from '../../../common/domain/Location';
-import { EntityContainer } from '../../../common/es/EntityContainer';
 import { ServerComponents } from '../es/ServerComponents';
 import { EventBus } from '../../../common/es/EventBus';
 import { ServerEvents } from '../es/ServerEvents';
@@ -17,9 +16,10 @@ import { xpSystem } from '../es/XpSystem';
 import { Entity, EntityId } from '../../../common/es/Entity';
 import { interactionSystem } from '../es/InteractionSystem';
 import { PositionBox, spatialIndexingSystem } from '../es/SpatialIndexingSystem';
+import { ServerEntityContainer } from '../es/ServerEntityContainer';
 
 export class Zone {
-    private entityContainer = new EntityContainer<ServerComponents>();
+    private entityContainer = new ServerEntityContainer();
     readonly eventBus = new EventBus<ServerEvents>(); // TODO private
     private readonly index: rbush.RBush<PositionBox>;
 

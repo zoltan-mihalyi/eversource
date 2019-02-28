@@ -1,5 +1,4 @@
-import { ColoredImage, RequiredColoredImage } from './ColoredImage';
-import { BaseCreatureEntityData } from './CreatureEntityData';
+import { ColoredImage, RequiredColoredImage } from '../domain/ColoredImage';
 
 export interface Appearance {
     sex: 'male' | 'female';
@@ -24,8 +23,16 @@ export interface Equipment {
     mask: ColoredImage;
 }
 
-export interface HumanoidEntityData extends BaseCreatureEntityData {
-    type: 'humanoid';
-    appearance: Appearance;
-    equipment: Equipment;
+export interface HumanoidView {
+    readonly type: 'humanoid';
+    readonly appearance: Appearance;
+    readonly equipment: Equipment;
 }
+
+export interface SimpleView {
+    readonly type: 'simple';
+    readonly image: string;
+    readonly palette: string | null;
+}
+
+export type View = HumanoidView | SimpleView;

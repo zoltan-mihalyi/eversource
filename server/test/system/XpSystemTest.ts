@@ -5,10 +5,11 @@ import { ServerEvents } from '../../src/es/ServerEvents';
 import * as assert from 'assert';
 import { xpSystem } from '../../src/es/XpSystem';
 import { maxXpFor, mobXpReward } from '../../../common/algorithms';
+import { ServerEntityContainer } from '../../src/es/ServerEntityContainer';
 
 describe('XpSystem', function () {
     it('should add xp on kill', async function () {
-        const container = new EntityContainer<ServerComponents>();
+        const container = new ServerEntityContainer();
         const eventBus = new EventBus<ServerEvents>();
 
         xpSystem(eventBus);
@@ -27,7 +28,7 @@ describe('XpSystem', function () {
     });
 
     it('should add level when xp is full', async function () {
-        const container = new EntityContainer<ServerComponents>();
+        const container = new ServerEntityContainer();
         const eventBus = new EventBus<ServerEvents>();
 
         xpSystem(eventBus);

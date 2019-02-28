@@ -1,5 +1,5 @@
 import { QuestBase, QuestId } from '../../../common/domain/InteractionTable';
-import { NonEmptyArray } from '../../../common/util/NonEmptyArray';
+import { NonEmptyArray } from '../../../common/util/Types';
 
 interface BaseTask {
     count: number;

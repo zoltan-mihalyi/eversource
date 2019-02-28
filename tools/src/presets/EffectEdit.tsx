@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Effect, EffectType } from '../../../common/domain/CreatureEntityData';
+import { Effect, EffectType } from '../../../common/components/CommonComponents';
 
 interface Props {
     index: number;

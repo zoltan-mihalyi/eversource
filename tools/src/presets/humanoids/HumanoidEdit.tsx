@@ -2,11 +2,11 @@ import * as React from 'react';
 import { EditProps } from '../ShowPreset';
 import { HumanoidPreset } from '../../../../server/src/world/Presets';
 import { PropTable } from '../PropTable';
-import { Appearance, Equipment } from '../../../../common/domain/HumanoidEntityData';
 import * as path from "path";
 import { wwwDir } from '../../Utils';
 import { DirectoryReader, getVariations } from '../utils';
-import { getPaletteFile } from '../../../../client/src/display/HumanoidDisplay';
+import { Appearance, Equipment } from '../../../../common/components/View';
+import { getPaletteFile } from '../../../../client/src/display/HumanoidSprite';
 
 const base = path.join(wwwDir, 'spritesheets', 'character');
 const reader = new DirectoryReader(base);
