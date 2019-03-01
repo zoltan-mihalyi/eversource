@@ -60,7 +60,7 @@ export class GameScreen extends React.Component<Props, State> {
 
                 <div ref={this.joystickContainerRef}/>
                 <GameMenu playerLevel={displayCharacter.level} questLog={questLog}
-                          onLeave={this.leave}/>
+                          onLeave={this.leave} onAbandonQuest={this.abandonQuest} />
                 <XpBar level={displayCharacter.level} xp={displayCharacter.xp}
                        maxXp={maxXpFor(displayCharacter.level)}/>
             </Gui>
@@ -157,6 +157,10 @@ export class GameScreen extends React.Component<Props, State> {
 
     private leave = () => {
         this.props.playingNetworkApi.leaveGame();
+    };
+
+    private abandonQuest = (questId: QuestId) => {
+        this.props.playingNetworkApi.abandonQuest(questId);
     };
 
     private acceptQuest = (id: QuestId) => {

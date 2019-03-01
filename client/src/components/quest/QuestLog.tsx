@@ -7,24 +7,45 @@ import { Scrollable } from '../common/Scrollable';
 import { Level, ListItem } from '../common/List/ListItem';
 import { SplitLayout } from '../common/SplitLayout';
 import { QuestContent } from './QuestContent';
+import { ActionButton } from '../common/Button/ActionButton';
+import { Panel } from '../common/Panel';
 
 interface Props {
     playerLevel: number;
     questLog: Map<QuestId, QuestLogItem>;
     onClose: () => void;
+    onAbandonQuest: (questId: QuestId) => void;
 }
 
 interface State {
-    selected?: QuestId;
+    selected: QuestId | null;
 }
 
 export class QuestLog extends React.PureComponent<Props, State> {
-    state: State = {};
+    state: State = {
+        selected: null,
+    };
+
+    static getDerivedStateFromProps(nextProps: Readonly<Props>, prevState: State): State | null {
+        let selected = prevState.selected;
+        if (selected !== null && !nextProps.questLog.has(selected)) { //remove invalid selection
+            selected = null;
+        }
+        if (selected === null) {
+            selected = nextProps.questLog.keys().next().value || null;
+        }
+        if (selected === prevState.selected) {
+            return null;
+        }
+        return {
+            selected
+        };
+    }
 
     render() {
         const { playerLevel, questLog } = this.props;
-        const selected = this.state.selected || questLog.keys().next().value;
-        const item = (selected && questLog.get(selected)) || null;
+        const { selected } = this.state;
+        const selectedItem = selected && questLog.get(selected)!;
 
         return (
             <Dialog title="Quest Log" onClose={this.props.onClose}>
@@ -39,9 +60,16 @@ export class QuestLog extends React.PureComponent<Props, State> {
                             ))}
                         </List>
                     </Scrollable>
-                    <Scrollable variant="paper" padding fixedHeight>
-                        {item ? <QuestContent status={item.status} info={item.info}/> : 'No quest'}
-                    </Scrollable>
+                    <Panel>
+                        <Scrollable variant="paper" padding fixedHeight>
+                            {
+                                selectedItem === null ? 'No quest selected' :
+                                    <QuestContent status={selectedItem.status} info={selectedItem.info}/>
+                            }
+                        </Scrollable>
+
+                        {selectedItem !== null && <ActionButton onClick={this.abandon}>Abandon</ActionButton>}
+                    </Panel>
                 </SplitLayout>
             </Dialog>
         );
@@ -49,6 +77,10 @@ export class QuestLog extends React.PureComponent<Props, State> {
 
     private select(questId: QuestId) {
         this.setState({ selected: questId });
+    }
+
+    private abandon = () => {
+        this.props.onAbandonQuest(this.state.selected!);
     }
 }
 

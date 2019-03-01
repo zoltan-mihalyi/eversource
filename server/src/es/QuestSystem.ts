@@ -53,6 +53,20 @@ export function questSystem(eventBus: EventBus<ServerEvents>) {
         quests.questLog.delete(questId);
         quests.questsDone.add(questId);
     });
+
+
+    eventBus.on('tryAbandonQuest', ({ entity, questId }) => {
+        const { quests } = entity.components;
+        if (!quests) {
+            return;
+        }
+
+        if (!quests.questLog.has(questId)) {
+            return;
+        }
+
+        quests.questLog.delete(questId);
+    });
 }
 
 function updateQuestLog(quests: Quests, match: (task: Task) => boolean) {

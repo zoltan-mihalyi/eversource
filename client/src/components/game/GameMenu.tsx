@@ -9,6 +9,7 @@ interface Props {
     playerLevel: number;
     questLog: Map<QuestId, QuestLogItem>;
     onLeave: () => void;
+    onAbandonQuest: (questId: QuestId) => void;
 }
 
 interface State {
@@ -26,7 +27,7 @@ export class GameMenu extends React.PureComponent<Props, State> {
         if (current === null) {
             content = (
                 <>
-                    <div style={{marginTop: 40}}>
+                    <div style={{ marginTop: 40 }}>
                         <ActionButton onClick={onLeave}>Leave</ActionButton>
                     </div>
                     <div style={{ height: 20 }}/>
@@ -37,7 +38,7 @@ export class GameMenu extends React.PureComponent<Props, State> {
             );
         } else {
             content = (
-                <QuestLog playerLevel={playerLevel} questLog={questLog} onClose={this.close}/>
+                <QuestLog playerLevel={playerLevel} questLog={questLog} onClose={this.close} onAbandonQuest={this.props.onAbandonQuest}/>
             );
         }
 

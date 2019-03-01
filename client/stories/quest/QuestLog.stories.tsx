@@ -17,8 +17,8 @@ storiesOf('Quest/QuestLog', module)
         </Gui>
     ))
     .add('normal', () => (
-        <QuestLog playerLevel={PLAYER_LEVEL} questLog={QUEST_LOG} onClose={noop}/>
+        <QuestLog playerLevel={PLAYER_LEVEL} questLog={QUEST_LOG} onClose={noop} onAbandonQuest={noop}/>
     ))
     .add('empty', () => (
-        <QuestLog playerLevel={PLAYER_LEVEL} questLog={new Map<QuestId, QuestLogItem>()} onClose={noop}/>
+        <QuestLog playerLevel={PLAYER_LEVEL} questLog={new Map<QuestId, QuestLogItem>()} onClose={noop} onAbandonQuest={noop}/>
     ));

@@ -62,6 +62,7 @@ export const PLAYER_LEVEL = 6;
 export const FAKE_API: PlayingNetworkApi = {
     interact: noop,
     acceptQuest: noop,
+    abandonQuest: noop,
     closeInteraction: noop,
     leaveGame: noop,
     move: noop,

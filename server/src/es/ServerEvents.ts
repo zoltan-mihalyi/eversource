@@ -75,6 +75,7 @@ export interface ServerEvents {
     tryInteract: TryInteract;
     tryAcceptQuest: TryAcceptQuest;
     tryCompleteQuest: TryCompleteQuest;
+    tryAbandonQuest: TryCompleteQuest;
     acceptQuest: AcceptQuest;
     completeQuest: CompleteQuest;
 }

@@ -31,6 +31,8 @@ export interface PlayingNetworkApi {
 
     acceptQuest(id: QuestId): void;
 
+    abandonQuest(id: QuestId): void;
+
     completeQuest(id: QuestId): void;
 
     closeInteraction(): void;
@@ -131,6 +133,10 @@ export class PlayingState extends NetworkingState<PlayingStateData> implements P
 
     acceptQuest(id: QuestId) {
         this.context.ws.send(`command:accept-quest:${id}`);
+    }
+
+    abandonQuest(id: QuestId) {
+        this.context.ws.send(`command:abandon-quest:${id}`);
     }
 
     completeQuest(id: QuestId) {

@@ -96,6 +96,15 @@ export class PlayingRequestHandler extends ClientState<PlayerData> {
                 this.data.zone.eventBus.emit('tryCompleteQuest', { entity, questId });
                 break;
             }
+            case 'abandon-quest': {
+                const questId = +params as QuestId;
+                if (isNaN(questId)) {
+                    return;
+                }
+
+                this.data.zone.eventBus.emit('tryAbandonQuest', { entity, questId });
+                break;
+            }
         }
     }
 
