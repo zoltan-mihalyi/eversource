@@ -912,7 +912,7 @@
     "name": "Dark Champion",
     "scale": 1,
     "level": 15,
-    "story": "Greetings, champion!"
+    "story": "Greetings, %class%!"
   },
   "silver": {
     "appearance": {

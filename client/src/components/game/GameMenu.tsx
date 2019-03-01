@@ -6,7 +6,6 @@ import { ActionButton } from '../common/Button/ActionButton';
 import { Positioned } from '../common/Positioned';
 
 interface Props {
-    playerLevel: number;
     questLog: Map<QuestId, QuestLogItem>;
     onLeave: () => void;
     onAbandonQuest: (questId: QuestId) => void;
@@ -20,7 +19,7 @@ export class GameMenu extends React.PureComponent<Props, State> {
     state: State = { current: null };
 
     render() {
-        const { playerLevel, questLog, onLeave } = this.props;
+        const { questLog, onLeave } = this.props;
         const { current } = this.state;
 
         let content;
@@ -38,7 +37,7 @@ export class GameMenu extends React.PureComponent<Props, State> {
             );
         } else {
             content = (
-                <QuestLog playerLevel={playerLevel} questLog={questLog} onClose={this.close} onAbandonQuest={this.props.onAbandonQuest}/>
+                <QuestLog questLog={questLog} onClose={this.close} onAbandonQuest={this.props.onAbandonQuest}/>
             );
         }
 

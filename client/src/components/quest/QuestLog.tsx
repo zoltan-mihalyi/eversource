@@ -9,9 +9,9 @@ import { SplitLayout } from '../common/SplitLayout';
 import { QuestContent } from './QuestContent';
 import { ActionButton } from '../common/Button/ActionButton';
 import { Panel } from '../common/Panel';
+import CharacterContext from '../CharacterContext';
 
 interface Props {
-    playerLevel: number;
     questLog: Map<QuestId, QuestLogItem>;
     onClose: () => void;
     onAbandonQuest: (questId: QuestId) => void;
@@ -43,7 +43,7 @@ export class QuestLog extends React.PureComponent<Props, State> {
     }
 
     render() {
-        const { playerLevel, questLog } = this.props;
+        const { questLog } = this.props;
         const { selected } = this.state;
         const selectedItem = selected && questLog.get(selected)!;
 
@@ -52,12 +52,14 @@ export class QuestLog extends React.PureComponent<Props, State> {
                 <SplitLayout>
                     <Scrollable>
                         <List>
-                            {Array.from(questLog).map(([key, item]) => (
-                                <ListItem level={questLevel(playerLevel, item.info.level)} selected={selected === key} key={key}
-                                          checked={isComplete(item)} onClick={() => this.select(key)}>
-                                    [{item.info.level}] {item.info.name}
-                                </ListItem>
-                            ))}
+                            <CharacterContext.Consumer>
+                                {(character) => Array.from(questLog).map(([key, item]) => (
+                                    <ListItem level={questLevel(character.level, item.info.level)} selected={selected === key} key={key}
+                                              checked={isComplete(item)} onClick={() => this.select(key)}>
+                                        [{item.info.level}] {item.info.name}
+                                    </ListItem>
+                                ))}
+                            </CharacterContext.Consumer>
                         </List>
                     </Scrollable>
                     <Panel>

@@ -13,8 +13,8 @@ import { QuestLogItem } from '../../../common/protocol/QuestLogItem';
 import { PlayerState } from '../../../common/protocol/PlayerState';
 import { EntityId } from '../../../common/es/Entity';
 import { NetworkComponents } from '../../../common/components/NetworkComponents';
-import ResourceDictionary = PIXI.loaders.ResourceDictionary;
 import { Nullable } from '../../../common/util/Types';
+import ResourceDictionary = PIXI.loaders.ResourceDictionary;
 
 export interface PlayingStateData {
     map: LoadedMap;
@@ -87,9 +87,7 @@ export class PlayingState extends NetworkingState<PlayingStateData> implements P
     }
 
     questLog(diffs: Diff<QuestId, QuestLogItem>[]) {
-
-        const oldQuestLog = this.currentQuestLog;
-        const questLog = new Map(oldQuestLog);
+        const questLog = new Map(this.currentQuestLog);
 
         for (const diff of diffs) {
             switch (diff.type) {

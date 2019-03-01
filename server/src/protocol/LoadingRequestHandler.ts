@@ -56,7 +56,7 @@ export class LoadingRequestHandler extends ClientState<CharacterDetails> {
         });
 
         this.context.sendCommand('ready', void 0);
-        this.manager.enter(PlayingRequestHandler, { zone, entity });
+        this.manager.enter(PlayingRequestHandler, { zone, entity, characterInfo: info });
     }
 
     handleExit() {

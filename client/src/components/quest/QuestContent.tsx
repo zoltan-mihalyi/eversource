@@ -8,6 +8,7 @@ import { TaskInfoItem } from './TaskInfoItem';
 import { Enumeration } from '../common/Enumeration';
 import { QuestStyle } from './QuestStyle';
 import { red } from '../theme';
+import { ResolvedText } from './ResolvedText';
 
 
 type ClassKeys = 'failed';
@@ -26,9 +27,9 @@ interface Props {
 const RawQuestContent: React.FunctionComponent<Props & WithStyles<ClassKeys>> = ({ info, classes, status }) => (
     <QuestStyle>
         <h2>{info.name}</h2>
-        <p>{info.description}</p>
+        <ResolvedText text={info.description}/>
         <h3>Completion</h3>
-        <p>{info.taskDescription}</p>
+        <ResolvedText text={info.taskDescription}/>
         {info.tasks.length === 0 ? null : (
             status === 'failed' ? (
                 <p className={classes.failed}>Quest failed</p>

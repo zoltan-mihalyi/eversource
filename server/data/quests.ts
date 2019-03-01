@@ -13,7 +13,7 @@ export const quests: Quest[] = [{
     completion: 'Wasn\'t that hard, was it?',
     requires: [7 as QuestId],
     tasks: {
-        progress: 'Have you slain the lava slimes?',
+        progress: 'Have you slain the lava slimes, %class%?',
         list: [
             { type: 'kill', count: 10, title: 'Intruders slain', npcIds: ['slime_lava', 'slime_lava_rock'] },
         ],
@@ -25,7 +25,7 @@ export const quests: Quest[] = [{
     name: 'What next',
     startsAt: 'cacal',
     endsAt: 'nefag',
-    description: 'You killed slimes, tell it to Nefag!',
+    description: 'You are a nice %sex%! You killed the slimes, tell it to Nefag!',
     taskDescription: 'Nefag is a forester standing on the remainings of the forest. Talk to him!',
     completion: 'Thank you, traveller!',
     requires: [1 as QuestId],
@@ -80,7 +80,7 @@ export const quests: Quest[] = [{
     completion: 'Hmm, interesting.',
     requires: [],
     tasks: {
-        progress: 'Have you find them?',
+        progress: 'Have you find them, %name%?',
         list: [
             { count: 1, type: 'visit', areaName: 'slimes', title: 'Visit eastern slimes' },
         ],
@@ -114,7 +114,7 @@ export const quests: Quest[] = [{
     name: 'Poor\'s feast',
     startsAt: 'nefag',
     endsAt: 'nefag',
-    description: 'Look at these vegetables! They look fine, but do they taste good as well?',
+    description: 'Hello, %class%! Look at these vegetables! They look fine, but do they taste good as well?',
     taskDescription: 'Taste the vegetables!',
     completion: 'Well, I think I will give it a try.',
     requires: [],

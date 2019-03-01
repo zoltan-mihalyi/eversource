@@ -7,6 +7,8 @@ import { Dialog } from '../common/Dialog';
 import { Scrollable } from '../common/Scrollable';
 import { InteractionItemList } from './InteractionItemList';
 import { Positioned } from '../common/Positioned';
+import { ResolvedText } from './ResolvedText';
+import { QuestStyle } from './QuestStyle';
 
 interface Props {
     interactions: InteractionTable;
@@ -46,29 +48,32 @@ export class InteractionDialog extends React.PureComponent<Props, State> {
     }
 
     render() {
-        const { name, story, acceptable, completable, completableLater } = this.props.interactions;
+        const { interactions } = this.props;
+        const { name, story, acceptable, completable, completableLater } = interactions;
         const { selectedId } = this.state;
-        const selected = selectedId === null ? null : findQuest(this.props.interactions, selectedId)!;
+        const selected = selectedId === null ? null : findQuest(interactions, selectedId)!;
 
         return (
             <Positioned horizontal="left" vertical="top">
                 <Dialog title={name} onClose={this.props.onClose}>
                     {selected ? (
-                        <QuestInteractionTable info={selected} state={getQuestState(this.props.interactions, selected)}
+                        <QuestInteractionTable info={selected} state={getQuestState(interactions, selected)}
                                                onAccept={this.onAccept} onComplete={this.onComplete}
                                                onBack={this.clearSelection}/>
                     ) : (
                         <Scrollable fixedHeight padding variant="paper">
-                            {story}
-                            <InteractionItemList>
-                                {acceptable.map((q, i) => <InteractionItem key={i} state={QuestItemState.ACCEPTABLE} quest={q}
-                                                                           onSelect={this.onSelect}/>)}
-                                {completable.map((q, i) => <InteractionItem key={i} state={QuestItemState.COMPLETABLE} quest={q}
-                                                                            onSelect={this.onSelect}/>)}
-                                {completableLater.map((q, i) => <InteractionItem key={i} state={QuestItemState.COMPLETABLE_LATER}
-                                                                                 quest={q}
-                                                                                 onSelect={this.onSelect}/>)}
-                            </InteractionItemList>
+                            <QuestStyle>
+                                <ResolvedText text={story}/>
+                                <InteractionItemList>
+                                    {acceptable.map((q, i) => <InteractionItem key={i} state={QuestItemState.ACCEPTABLE} quest={q}
+                                                                               onSelect={this.onSelect}/>)}
+                                    {completable.map((q, i) => <InteractionItem key={i} state={QuestItemState.COMPLETABLE} quest={q}
+                                                                                onSelect={this.onSelect}/>)}
+                                    {completableLater.map((q, i) => <InteractionItem key={i} state={QuestItemState.COMPLETABLE_LATER}
+                                                                                     quest={q}
+                                                                                     onSelect={this.onSelect}/>)}
+                                </InteractionItemList>
+                            </QuestStyle>
                         </Scrollable>
                     )}
                 </Dialog>

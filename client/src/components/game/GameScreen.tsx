@@ -11,12 +11,8 @@ import { InputManager } from '../../input/InputManager';
 import { XpBar } from './XpBar';
 import { maxXpFor } from '../../../../common/algorithms';
 import { Gui } from '../common/Gui';
-import { EntityId } from '../../../../common/es/Entity';
+import CharacterContext, { EMPTY_CHARACTER } from '../CharacterContext';
 
-const EMPTY_CHARACTER: CharacterState = {
-    level: 1,
-    xp: 0,
-};
 
 interface Props {
     setScale: (width: number, height: number, scale: number) => void;
@@ -52,17 +48,19 @@ export class GameScreen extends React.Component<Props, State> {
 
         return (
             <Gui>
-                <div ref={this.containerRef}/>
-                {debug && <DebugInfo/>}
-                {interaction && <InteractionDialog interactions={interaction} onAcceptQuest={this.acceptQuest}
-                                                   onCompleteQuest={this.completeQuest}
-                                                   onClose={this.closeInteraction}/>}
+                <CharacterContext.Provider value={displayCharacter}>
+                    <div ref={this.containerRef}/>
+                    {debug && <DebugInfo/>}
+                    {interaction &&
+                    <InteractionDialog interactions={interaction} onAcceptQuest={this.acceptQuest}
+                                       onCompleteQuest={this.completeQuest}
+                                       onClose={this.closeInteraction}/>}
 
-                <div ref={this.joystickContainerRef}/>
-                <GameMenu playerLevel={displayCharacter.level} questLog={questLog}
-                          onLeave={this.leave} onAbandonQuest={this.abandonQuest} />
-                <XpBar level={displayCharacter.level} xp={displayCharacter.xp}
-                       maxXp={maxXpFor(displayCharacter.level)}/>
+                    <div ref={this.joystickContainerRef}/>
+                    <GameMenu questLog={questLog} onLeave={this.leave} onAbandonQuest={this.abandonQuest}/>
+                    <XpBar level={displayCharacter.level} xp={displayCharacter.xp}
+                           maxXp={maxXpFor(displayCharacter.level)}/>
+                </CharacterContext.Provider>
             </Gui>
         );
     }

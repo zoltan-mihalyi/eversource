@@ -15,7 +15,8 @@ export class FakeUserDao implements UserDao {
                     level: 21,
                     xp: 180,
                     name: 'John' as CharacterName,
-                    classId: 'warrior' as ClassId,
+                    sex: 'male',
+                    classId: 'warrior',
                     hp: hpForLevel(21),
 
                     location: {
@@ -56,7 +57,8 @@ export class FakeUserDao implements UserDao {
                 level: 2,
                 xp: 280,
                 name: 'Robin' as CharacterName,
-                classId: 'hunter' as ClassId,
+                sex: 'male',
+                classId: 'hunter',
                 hp: hpForLevel(2) * 0.3,
 
                 location: {
@@ -97,7 +99,8 @@ export class FakeUserDao implements UserDao {
                 level: 10,
                 xp: 730,
                 name: 'Unimaginable' as CharacterName,
-                classId: 'mage' as ClassId,
+                sex: 'female',
+                classId: 'mage',
                 hp: hpForLevel(10),
 
                 location: {

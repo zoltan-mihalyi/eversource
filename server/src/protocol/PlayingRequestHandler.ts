@@ -18,9 +18,11 @@ import {
 import { Nullable } from '../../../common/util/Types';
 import { getDirection } from '../../../common/game/direction';
 import { Direction } from '../../../common/components/CommonComponents';
+import { CharacterInfo } from '../../../common/domain/CharacterInfo';
 
 export interface PlayerData {
     entity: Entity<ServerComponents>;
+    characterInfo: CharacterInfo;
     zone: Zone;
 }
 
@@ -132,13 +134,16 @@ export class PlayingRequestHandler extends ClientState<PlayerData> {
     }
 
     private sendPlayerData() {
-        const { entity } = this.data;
+        const { entity, characterInfo } = this.data;
 
         const { interacting } = entity.components;
 
         const playerState: PlayerState = {
             interaction: !interacting ? null : getInteractionTable(interacting.entity, entity.components.quests!), // TODO
             character: {
+                sex: characterInfo.sex,
+                name: characterInfo.name,
+                classId: characterInfo.classId,
                 xp: entity.components.xp!.value,
                 level: entity.components.level!.value,
             },

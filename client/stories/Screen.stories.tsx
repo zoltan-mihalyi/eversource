@@ -5,7 +5,6 @@ import { LoginScreen } from '../src/components/menu/LoginScreen';
 import { GameScreen } from '../src/components/game/GameScreen';
 import { InputManager } from '../src/input/InputManager';
 import { FAKE_API, QUEST_LOG } from './SampleData';
-import { EntityId } from '../../common/es/Entity';
 
 function noop() {
 }
@@ -30,7 +29,10 @@ function initScreen(gameScreen: GameScreen) {
     gameScreen.updatePlayerState({
         character: {
             xp: 730,
-            level:12,
+            level: 12,
+            name: 'Test',
+            sex: 'male',
+            classId: 'warrior',
         },
         interaction: null,
     });

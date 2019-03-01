@@ -16,7 +16,9 @@ const styles: StyleRules<ClassKeys> = {
         '& h3': {
             fontSize: 24,
             color: black,
-            marginBottom: 0,
+        },
+        '& p': {
+            marginTop: 0,
         },
         [SMALL_DEVICE]: {
             fontSize: 12,
