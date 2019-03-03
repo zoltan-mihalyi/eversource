@@ -4,6 +4,7 @@ import { QuestId } from '../../../common/domain/InteractionTable';
 import { QuestStatus } from '../character/CharacterDetails';
 import { Quest } from '../quest/Quest';
 import { CommonComponents, Xp } from '../../../common/components/CommonComponents';
+import { ChatMessage } from '../../../common/protocol/Messages';
 
 export interface Moving {
     readonly x: number;
@@ -78,6 +79,10 @@ type SpellAction = {
 
 export type UseAction = DestroyAction | SpellAction;
 
+interface ChatListener {
+    onChatMessage: (message: ChatMessage) => void;
+}
+
 export interface ServerComponents extends CommonComponents {
     xp: Xp;
     speed: Speed;
@@ -94,4 +99,5 @@ export interface ServerComponents extends CommonComponents {
     interacting: Interacting;
     listening: true;
     useActions: UseAction[];
+    chatListener: ChatListener;
 }

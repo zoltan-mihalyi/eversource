@@ -30,7 +30,7 @@ export interface Props {
 }
 
 const RawButton: React.FunctionComponent<Props & WithStyles<ClassKeys>> = ({ children, classes, className, onClick }) => (
-    <button className={classNameFunction(classes.root, className)} onClick={onClick}>{children}</button>
+    <button tabIndex={-1} className={classNameFunction(classes.root, className)} onClick={onClick}>{children}</button>
 );
 
 export const Button = injectSheet(styles)(RawButton);

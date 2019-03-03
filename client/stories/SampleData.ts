@@ -74,4 +74,5 @@ export const FAKE_API: PlayingNetworkApi = {
     leaveGame: noop,
     move: noop,
     completeQuest: noop,
+    sendChatMessage: noop,
 };

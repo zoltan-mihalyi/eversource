@@ -52,7 +52,10 @@ export class LoadingRequestHandler extends ClientState<CharacterDetails> {
             },
             weapon: {
                 damage: 1,
-            }
+            },
+            chatListener: {
+                onChatMessage: message => this.context.sendCommand('chatMessage', message),
+            },
         });
 
         this.context.sendCommand('ready', void 0);

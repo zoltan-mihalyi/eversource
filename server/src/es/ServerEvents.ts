@@ -63,6 +63,11 @@ interface SpellCast {
     spell: Spell;
 }
 
+interface ChatMessageEvent {
+    sender: Entity<ServerComponents>;
+    text: string;
+}
+
 export interface ServerEvents {
     init: void;
     update: Update;
@@ -78,4 +83,5 @@ export interface ServerEvents {
     tryAbandonQuest: TryCompleteQuest;
     acceptQuest: AcceptQuest;
     completeQuest: CompleteQuest;
+    chatMessage: ChatMessageEvent;
 }

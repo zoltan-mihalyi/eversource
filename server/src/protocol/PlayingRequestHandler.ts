@@ -107,6 +107,12 @@ export class PlayingRequestHandler extends ClientState<PlayerData> {
                 this.data.zone.eventBus.emit('tryAbandonQuest', { entity, questId });
                 break;
             }
+            case 'chat-message': {
+                if (params.trim() === '') {
+                    break;
+                }
+                this.data.zone.eventBus.emit('chatMessage', { sender: entity, text: params });
+            }
         }
     }
 

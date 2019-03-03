@@ -2,7 +2,7 @@ import * as PIXI from 'pixi.js';
 import { EntityContainer } from '../../../../common/es/EntityContainer';
 import { ClientComponents } from '../../es/ClientComponents';
 import { PartialPick } from '../../../../common/util/Types';
-import { black, brown } from '../../components/theme';
+import { black, brown, player as playerColor } from '../../components/theme';
 import { EventBus } from '../../../../common/es/EventBus';
 import { ClientEvents } from '../../es/ClientEvents';
 import { Synchronizer } from '../Synchronizer';
@@ -26,7 +26,7 @@ class DisplayNameSynchronizer extends Synchronizer<ClientComponents, 'display' |
         const text = new PIXI.Text(title, {
             fontFamily: 'pixel, serif',
             fontSize: 32,
-            fill: player ? '#6e96db' : brown.lighter,
+            fill: player ? playerColor : brown.lighter,
             stroke: black,
             strokeThickness: 1.4,
             align: 'left',

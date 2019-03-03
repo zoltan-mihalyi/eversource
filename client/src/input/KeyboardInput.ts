@@ -8,6 +8,9 @@ export class KeyboardInput {
     }
 
     isDown(key: number) {
+        if (document.activeElement && document.activeElement !== document.body) {
+            return false;
+        }
         return this.down.has(key);
     }
 
@@ -48,5 +51,5 @@ export const KEYS = {
     W: 87,
     A: 65,
     S: 83,
-    D: 68
+    D: 68,
 };

@@ -36,4 +36,6 @@ function initScreen(gameScreen: GameScreen) {
         },
         interaction: null,
     });
+    gameScreen.chatMessageReceived({ sender: 'John', text: 'Hello there!' });
+    gameScreen.chatMessageReceived({ sender: 'John', text: 'What happens, when a very long message is added?' });
 }

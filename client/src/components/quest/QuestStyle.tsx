@@ -21,7 +21,6 @@ const styles: StyleRules<ClassKeys> = {
             marginTop: 0,
         },
         [SMALL_DEVICE]: {
-            fontSize: 12,
             '& h2': {
                 fontSize: 16,
             },

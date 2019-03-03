@@ -7,7 +7,7 @@ import { Diff } from '../../../common/protocol/Diff';
 import { Position } from '../../../common/domain/Location';
 import { GameScreen } from '../components/game/GameScreen';
 import { LoadedMap } from '../../../common/tiled/TiledResolver';
-import { PlayerStateDiff } from '../../../common/protocol/Messages';
+import { ChatMessage, PlayerStateDiff } from '../../../common/protocol/Messages';
 import { QuestId } from '../../../common/domain/InteractionTable';
 import { QuestLogItem } from '../../../common/protocol/QuestLogItem';
 import { PlayerState } from '../../../common/protocol/PlayerState';
@@ -36,6 +36,8 @@ export interface PlayingNetworkApi {
     completeQuest(id: QuestId): void;
 
     closeInteraction(): void;
+
+    sendChatMessage(message: string): void;
 }
 
 export class PlayingState extends NetworkingState<PlayingStateData> implements PlayingNetworkApi {
@@ -57,6 +59,10 @@ export class PlayingState extends NetworkingState<PlayingStateData> implements P
 
     world(diffs: Diff<EntityId, Nullable<NetworkComponents>>[]) {
         this.game.eventBus.emit('worldUpdate', diffs);
+    }
+
+    chatMessage(message: ChatMessage) {
+        this.gameScreen.chatMessageReceived(message);
     }
 
     playerState(playerStateDiff: PlayerStateDiff) {
@@ -143,5 +149,9 @@ export class PlayingState extends NetworkingState<PlayingStateData> implements P
 
     closeInteraction() {
         this.context.ws.send(`command:interact-end`);
+    }
+
+    sendChatMessage(message: string) {
+        this.context.ws.send(`command:chat-message:${message}`);
     }
 }
