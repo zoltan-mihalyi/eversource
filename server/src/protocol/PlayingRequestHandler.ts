@@ -19,6 +19,7 @@ import { Nullable } from '../../../common/util/Types';
 import { getDirection } from '../../../common/game/direction';
 import { Direction } from '../../../common/components/CommonComponents';
 import { CharacterInfo } from '../../../common/domain/CharacterInfo';
+import { CHAT_MESSAGE_MAXIMUM_LENGTH } from '../../../common/constants';
 
 export interface PlayerData {
     entity: Entity<ServerComponents>;
@@ -111,7 +112,10 @@ export class PlayingRequestHandler extends ClientState<PlayerData> {
                 if (params.trim() === '') {
                     break;
                 }
-                this.data.zone.eventBus.emit('chatMessage', { sender: entity, text: params });
+                this.data.zone.eventBus.emit('chatMessage', {
+                    sender: entity,
+                    text: params.substring(0, CHAT_MESSAGE_MAXIMUM_LENGTH),
+                });
             }
         }
     }

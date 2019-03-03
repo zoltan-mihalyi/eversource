@@ -33,4 +33,12 @@ export const xp = {
     background: '#797979',
 };
 
+
 export const player = '#6e96db';
+
+export const attitude = {
+    self: '#00cc2c',
+    friendly: '#6e96db',
+    neutral: '#e1e000',
+    hostile: '#cc0000',
+};

@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js';
-import { Texture, BaseTexture } from 'pixi.js';
+import { BaseTexture, Texture } from 'pixi.js';
 
 export interface ParsedCommand {
     command: string;
@@ -23,7 +23,7 @@ export function parseCommand(data: string): ParsedCommand {
     }
 }
 
-export function pixiLoader(file: string):Promise<string>{
+export function pixiLoader(file: string): Promise<string> {
     return new Promise<string>((resolve, reject) => {
         const loader = new PIXI.loaders.Loader()
             .add('file', file)
@@ -47,4 +47,8 @@ function cleanup(textures: { [key: string]: Texture | BaseTexture }) {
         textures[key].destroy();
     }
 
+}
+
+export function colorToNumber(color: string) {
+    return parseInt(color.substring(1), 16);
 }

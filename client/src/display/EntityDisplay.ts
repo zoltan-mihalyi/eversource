@@ -7,6 +7,7 @@ type ContainerKey =
     | 'spriteContainer'
     | 'statusContainer'
     | 'textContainer'
+    | 'chatContainer'
     | 'interactionContainer';
 
 export class EntityDisplay extends PIXI.Container {
@@ -17,6 +18,7 @@ export class EntityDisplay extends PIXI.Container {
     private statusContainer = new PIXI.Container();
     private textContainer = new PIXI.Container();
     private interactionContainer = new PIXI.Container();
+    private chatContainer = new PIXI.Container();
 
     constructor(handler: SpriteInteractionHandler) {
         super();
@@ -28,6 +30,7 @@ export class EntityDisplay extends PIXI.Container {
             this.statusContainer,
             this.textContainer,
             this.interactionContainer,
+            this.chatContainer,
         );
     }
 
@@ -59,5 +62,6 @@ export class EntityDisplay extends PIXI.Container {
         this.statusContainer.y = spriteTop - this.statusContainer.height;
         this.textContainer.y = this.statusContainer.y - 17;
         this.interactionContainer.y = this.textContainer.y;
+        this.chatContainer.y = this.textContainer.y - this.chatContainer.height + 5;
     }
 }

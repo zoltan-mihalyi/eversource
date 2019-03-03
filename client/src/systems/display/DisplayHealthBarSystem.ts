@@ -6,8 +6,15 @@ import { Attitude, CreatureAttitude } from '../../../../common/components/Common
 import { Synchronizer } from '../Synchronizer';
 import { EventBus } from '../../../../common/es/EventBus';
 import { ClientEvents } from '../../es/ClientEvents';
+import { attitude } from '../../components/theme';
+import { colorToNumber } from '../../utils';
 
 const HP_BAR_WIDTH = 60;
+
+const SELF = colorToNumber(attitude.self);
+const FRIENDLY = colorToNumber(attitude.friendly);
+const NEUTRAL = colorToNumber(attitude.neutral);
+const HOSTILE = colorToNumber(attitude.hostile);
 
 const DEFAULT_ATTITUDE: Attitude = {
     value: CreatureAttitude.FRIENDLY,
@@ -53,14 +60,14 @@ export function displayHealthBarSystem(container: EntityContainer<ClientComponen
 
 function attitudeColor(self?: boolean, attitude: Attitude = DEFAULT_ATTITUDE): number {
     if (self) {
-        return 0x00CC2C; //TODO use common colors
+        return SELF;
     }
     switch (attitude.value) {
         case CreatureAttitude.FRIENDLY:
-            return 0x6e96db;
+            return FRIENDLY;
         case CreatureAttitude.NEUTRAL:
-            return 0xe1e000;
+            return NEUTRAL;
         case CreatureAttitude.HOSTILE:
-            return 0xcc0000;
+            return HOSTILE;
     }
 }

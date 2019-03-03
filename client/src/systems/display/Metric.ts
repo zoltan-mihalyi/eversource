@@ -7,13 +7,9 @@ export interface FragmentPosition {
 }
 
 export class Metric {
-    private scale = 1;
+    public scale = 1;
 
     constructor(private readonly tileWidth: number, private readonly tileHeight: number) {
-    }
-
-    setScale(scale: number) {
-        this.scale = scale;
     }
 
     round(position: Position): Position {

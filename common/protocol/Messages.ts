@@ -25,6 +25,7 @@ export type PlayerStateDiff = {
 
 export interface ChatMessage {
     sender: string;
+    entityId?: EntityId;
     text: string;
 }
 

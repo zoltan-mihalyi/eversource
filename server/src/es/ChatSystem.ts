@@ -30,7 +30,8 @@ export function chatSystem(index: rbush.RBush<PositionBox>, eventBus: EventBus<S
 
             chatListener.onChatMessage({
                 sender: name.value,
-                text
+                entityId: sender.id,
+                text,
             });
         }
     });

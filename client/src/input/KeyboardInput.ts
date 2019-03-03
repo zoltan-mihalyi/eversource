@@ -8,9 +8,6 @@ export class KeyboardInput {
     }
 
     isDown(key: number) {
-        if (document.activeElement && document.activeElement !== document.body) {
-            return false;
-        }
         return this.down.has(key);
     }
 
@@ -30,6 +27,9 @@ export class KeyboardInput {
     private keyDown = (e: KeyboardEvent) => {
         const keyCode = getKeyCode(e);
         if (this.down.has(keyCode)) {
+            return;
+        }
+        if (document.activeElement && document.activeElement !== document.body) {
             return;
         }
 

@@ -62,6 +62,7 @@ export class PlayingState extends NetworkingState<PlayingStateData> implements P
     }
 
     chatMessage(message: ChatMessage) {
+        this.game.eventBus.emit('chatMessage', message);
         this.gameScreen.chatMessageReceived(message);
     }
 
