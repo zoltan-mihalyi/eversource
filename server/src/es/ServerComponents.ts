@@ -68,16 +68,9 @@ export interface Quests {
     questsDone: Set<QuestId>;
 }
 
-type DestroyAction = {
-    type: 'destroy';
-};
-
-type SpellAction = {
-    type: 'spell';
+export interface UseSpell {
     spellId: string;
-};
-
-export type UseAction = DestroyAction | SpellAction;
+}
 
 interface ChatListener {
     onChatMessage: (message: ChatMessage) => void;
@@ -98,6 +91,6 @@ export interface ServerComponents extends CommonComponents {
     interactable: Interactable;
     interacting: Interacting;
     listening: true;
-    useActions: UseAction[];
+    useSpell: UseSpell;
     chatListener: ChatListener;
 }

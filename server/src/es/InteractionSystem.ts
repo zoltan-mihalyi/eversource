@@ -46,19 +46,10 @@ export function interactionSystem(entityContainer: EntityContainer<ServerCompone
             return;
         }
 
-        const { useActions } = target.components;
+        const { useSpell } = target.components;
 
-        if (useActions) {
-            for (const useAction of useActions) {
-                switch (useAction.type) {
-                    case 'destroy':
-                        eventBus.emit('kill', { killer: source, killed: target });
-                        break;
-                    case 'spell':
-                        eventBus.emit('spellCast', { caster: source, target, spell: getSpell(useAction.spellId) });
-                        break;
-                }
-            }
+        if (useSpell) {
+            eventBus.emit('spellCast', { caster: source, target, spell: getSpell(useSpell.spellId) });
             return;
         }
 
