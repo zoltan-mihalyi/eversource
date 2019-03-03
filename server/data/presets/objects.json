@@ -4,35 +4,27 @@
     "image": "plants",
     "animation": "potato",
     "scale": 1,
-    "useSpell": {
-      "spellId": "consume_vegetable"
-    }
+    "useSpell": "consume_vegetable"
   },
   "carrot": {
     "name": "Carrot",
     "image": "plants",
     "animation": "carrot",
     "scale": 1,
-    "useSpell": {
-      "spellId": "consume_vegetable"
-    }
+    "useSpell": "consume_vegetable"
   },
   "corn": {
     "name": "Corn",
     "image": "plants",
     "animation": "corn",
     "scale": 0.8,
-    "useSpell": {
-      "spellId": "consume_vegetable"
-    }
+    "useSpell": "consume_vegetable"
   },
   "squash": {
     "name": "Squash",
     "image": "plants",
     "animation": "squash",
     "scale": 1.3,
-    "useSpell": {
-      "spellId": "consume_vegetable"
-    }
+    "useSpell": "consume_vegetable"
   }
 }

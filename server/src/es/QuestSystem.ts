@@ -5,9 +5,9 @@ import { Task } from '../quest/Quest';
 import { QuestId, TaskInfo } from '../../../common/domain/InteractionTable';
 import { QuestProgression } from '../character/CharacterDetails';
 import { QuestLog, Quests } from './ServerComponents';
-import { getSpell } from '../../data/spells';
+import { Spells } from '../Spell';
 
-export function questSystem(eventBus: EventBus<ServerEvents>) {
+export function questSystem(eventBus: EventBus<ServerEvents>, spells: Spells) {
     eventBus.on('kill', ({ killer, killed }) => {
         const killerQuests = killer.components.quests;
         const npcId = killed.components.npcId;
@@ -35,7 +35,7 @@ export function questSystem(eventBus: EventBus<ServerEvents>) {
         }
 
         updateQuestLog(quests, task => {
-            return task.type === 'spell' && task.spellIds.findIndex(spellId => getSpell(spellId) === spell) !== -1;
+            return task.type === 'spell' && task.spellIds.findIndex(spellId => spells[spellId] === spell) !== -1;
         });
     });
 

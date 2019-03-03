@@ -28,6 +28,7 @@ function newWorld(mapLoader: MapLoader, presets: Partial<AllPresets> = {}) {
         monster: {},
         humanoid: {},
         object: {},
+        spells: {},
         ...presets,
     });
     runningWorlds.add(world);

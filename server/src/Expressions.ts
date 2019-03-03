@@ -2,12 +2,12 @@ interface BaseExpression {
     type: string;
 }
 
-interface ConstantExpression<T> extends BaseExpression {
+export interface ConstantExpression<T> extends BaseExpression {
     type: 'constant';
     value: T;
 }
 
-interface RandomOptionExpression<T> {
+export interface RandomOptionExpression<T> {
     type: 'randomOption';
     values: Expression<T>[];
 }

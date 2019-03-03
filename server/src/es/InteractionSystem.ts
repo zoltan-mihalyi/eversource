@@ -9,7 +9,6 @@ import { EntityContainer } from '../../../common/es/EntityContainer';
 import { Entity } from '../../../common/es/Entity';
 import { Position } from '../../../common/domain/Location';
 import { CreatureAttitude } from '../../../common/components/CommonComponents';
-import { getSpell } from '../../data/spells';
 
 export function interactionSystem(entityContainer: EntityContainer<ServerComponents>, eventBus: EventBus<ServerEvents>) {
     const interactingEntities = entityContainer.createQuery('interacting');
@@ -49,7 +48,7 @@ export function interactionSystem(entityContainer: EntityContainer<ServerCompone
         const { useSpell } = target.components;
 
         if (useSpell) {
-            eventBus.emit('spellCast', { caster: source, target, spell: getSpell(useSpell.spellId) });
+            eventBus.emit('spellCast', { caster: source, target, spell: useSpell });
             return;
         }
 

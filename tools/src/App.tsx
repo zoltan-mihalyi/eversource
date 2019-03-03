@@ -2,9 +2,10 @@ import * as React from 'react';
 import { PalettesTool } from './palettes/PalettesTool';
 import { MonsterPresetTool } from './presets/monsters/MonsterPresetTool';
 import { HumanoidPresetsTool } from './presets/humanoids/HumanoidPresetsTool';
+import { SpellsTool } from './spells/SpellsTool';
 
 interface State {
-    screen: 'humanoids' | 'monsters' | 'palettes' | null;
+    screen: 'humanoids' | 'monsters' | 'spells' | 'palettes' | null;
 }
 
 export class App extends React.Component<{}, State> {
@@ -29,6 +30,9 @@ export class App extends React.Component<{}, State> {
                             <button className="big" onClick={this.showMonsters}>Monsters</button>
                         </div>
                         <div>
+                            <button className="big" onClick={this.showSpells}>Spells</button>
+                        </div>
+                        <div>
                             <button className="big" onClick={this.showPalettes}>Palettes</button>
                         </div>
                     </div>
@@ -40,6 +44,10 @@ export class App extends React.Component<{}, State> {
             case 'monsters':
                 return (
                     <MonsterPresetTool onExit={this.showMainMenu}/>
+                );
+            case 'spells':
+                return (
+                    <SpellsTool onExit={this.showMainMenu}/>
                 );
             case 'palettes':
                 return (
@@ -57,6 +65,9 @@ export class App extends React.Component<{}, State> {
     };
     private showMonsters = () => {
         this.setState({ screen: 'monsters' });
+    };
+    private showSpells = () => {
+        this.setState({ screen: 'spells' });
     };
     private showPalettes = () => {
         this.setState({ screen: 'palettes' });

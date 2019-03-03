@@ -5,6 +5,7 @@ import { QuestStatus } from '../character/CharacterDetails';
 import { Quest } from '../quest/Quest';
 import { CommonComponents, Xp } from '../../../common/components/CommonComponents';
 import { ChatMessage } from '../../../common/protocol/Messages';
+import { Spell } from '../Spell';
 
 export interface Moving {
     readonly x: number;
@@ -68,10 +69,6 @@ export interface Quests {
     questsDone: Set<QuestId>;
 }
 
-export interface UseSpell {
-    spellId: string;
-}
-
 interface ChatListener {
     onChatMessage: (message: ChatMessage) => void;
 }
@@ -91,6 +88,6 @@ export interface ServerComponents extends CommonComponents {
     interactable: Interactable;
     interacting: Interacting;
     listening: true;
-    useSpell: UseSpell;
+    useSpell: Spell;
     chatListener: ChatListener;
 }

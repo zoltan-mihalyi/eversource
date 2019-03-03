@@ -10,9 +10,10 @@ const PORT = process.env.PORT ? +process.env.PORT : 8000;
 const mapLoader = new TmxMapLoader('../common/maps');
 
 const presets: AllPresets = {
-    humanoid: JSON.parse(fs.readFileSync('./data/presets/humanoids.json', 'utf-8')),
-    monster: JSON.parse(fs.readFileSync('./data/presets/monsters.json', 'utf-8')),
-    object: JSON.parse(fs.readFileSync('./data/presets/objects.json', 'utf-8')),
+    humanoid: readJson('presets/humanoids'),
+    monster: readJson('presets/monsters'),
+    object: readJson('presets/objects'),
+    spells: readJson('spells'),
 };
 
 const world = new WorldImpl(mapLoader, presets);
@@ -24,3 +25,7 @@ const httpServer = app.listen(PORT, () => console.log(`Server running on port ${
 const gameServer = new Server(new FakeDao(), world, {
     server: httpServer,
 });
+
+function readJson(fileName: string) {
+    return JSON.parse(fs.readFileSync(`./data/${fileName}.json`, 'utf-8'));
+}

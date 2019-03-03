@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { EditProps } from '../ShowPreset';
+import { EditPresetProps } from '../ShowPreset';
 import { MonsterPreset } from '../../../../server/src/world/Presets';
 import { PropTable } from '../PropTable';
 import * as path from "path";
@@ -17,7 +17,7 @@ interface All {
     appearance: [string, string] | [string];
 }
 
-export class MonsterEdit extends React.PureComponent<EditProps<MonsterPreset>> {
+export class MonsterEdit extends React.PureComponent<EditPresetProps<MonsterPreset>> {
     render() {
         const { preset } = this.props;
 

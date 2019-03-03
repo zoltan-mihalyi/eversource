@@ -6,12 +6,21 @@ export function spellSystem(eventBus: EventBus<ServerEvents>) {
     eventBus.on('spellCast', ({ caster, target, spell }) => {
         for (const effect of spell.effects) {
             const effectTarget = effect.target === 'caster' ? caster : target;
+
             switch (effect.type) {
                 case 'heal':
                     eventBus.emit('damage', {
                         source: caster,
                         target: effectTarget,
                         type: 'heal',
+                        amount: effect.amount,
+                    });
+                    break;
+                case 'damage':
+                    eventBus.emit('damage', {
+                        source: caster,
+                        target: effectTarget,
+                        type: 'physical',
                         amount: effect.amount,
                     });
                     break;

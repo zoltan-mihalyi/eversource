@@ -33,7 +33,7 @@ describe('QuestSystem', function () {
     it('should add task progression', async function () {
         questLog.set(1 as QuestId, [0]); // TODO mock quests
 
-        questSystem(eventBus);
+        questSystem(eventBus, {});
 
         eventBus.emit('kill', {
             killer: player,
@@ -46,7 +46,7 @@ describe('QuestSystem', function () {
     it('should do nothing with complete tasks', async function () {
         questLog.set(1 as QuestId, [10]); // TODO mock quests
 
-        questSystem(eventBus);
+        questSystem(eventBus, {});
 
         eventBus.emit('kill', {
             killer: player,
@@ -59,7 +59,7 @@ describe('QuestSystem', function () {
     it('should do nothing with failed quests', async function () {
         questLog.set(1 as QuestId, 'failed'); // TODO mock quests
 
-        questSystem(eventBus);
+        questSystem(eventBus, {});
 
         eventBus.emit('kill', {
             killer: player,
@@ -72,7 +72,7 @@ describe('QuestSystem', function () {
     it('should handle area events', async function () {
         questLog.set(6 as QuestId, [0]); // TODO mock quests
 
-        questSystem(eventBus);
+        questSystem(eventBus, {});
 
         eventBus.emit('area', {
             visitor: player,

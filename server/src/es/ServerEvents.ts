@@ -1,7 +1,7 @@
 import { Quests, ServerComponents } from './ServerComponents';
 import { Entity } from '../../../common/es/Entity';
 import { QuestId, QuestInfo } from '../../../common/domain/InteractionTable';
-import { Spell } from '../../data/spells';
+import { Spell } from '../Spell';
 
 export interface Hit {
     source: Entity<ServerComponents>;

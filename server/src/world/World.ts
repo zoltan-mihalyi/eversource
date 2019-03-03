@@ -15,6 +15,7 @@ import { questEnds, questStarts } from '../quest/QuestIndexer';
 import { hpForLevel } from '../../../common/algorithms';
 import { AIMovingController, ServerComponents } from '../es/ServerComponents';
 import { Direction } from '../../../common/components/CommonComponents';
+import { Spells } from '../Spell';
 
 export interface World {
     getZone(zoneId: ZoneId): Promise<Zone>;
@@ -27,6 +28,8 @@ export interface AllPresets {
     humanoid: HumanoidPresets;
     monster: MonsterPresets;
     object: ObjectPresets;
+
+    spells: Spells;
 }
 
 export class WorldImpl implements World {
@@ -58,7 +61,7 @@ export class WorldImpl implements World {
         const mapData = await this.mapLoader.load(zoneId);
 
         console.log(`Loaded ${zoneId} in ${new Date().getTime() - start.getTime()} ms`);
-        const zone = new Zone(mapData.grid);
+        const zone = new Zone(mapData.grid, this.presets.spells);
 
         const { presets } = this;
 
@@ -114,7 +117,7 @@ export class WorldImpl implements World {
                     },
                 };
                 if (useSpell) {
-                    template.useSpell = useSpell;
+                    template.useSpell = presets.spells[useSpell];
                 }
 
                 zone.addSpawner(10000, template);

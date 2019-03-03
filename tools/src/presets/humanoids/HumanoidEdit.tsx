@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { EditProps } from '../ShowPreset';
+import { EditPresetProps } from '../ShowPreset';
 import { HumanoidPreset } from '../../../../server/src/world/Presets';
 import { PropTable } from '../PropTable';
 import * as path from "path";
@@ -34,7 +34,7 @@ const equipmentValues: { [P in keyof Equipment]: string[] } = {
     mask: reader.filesInDir('mask/female'),
 };
 
-export class HumanoidEdit extends React.PureComponent<EditProps<HumanoidPreset>> {
+export class HumanoidEdit extends React.PureComponent<EditPresetProps<HumanoidPreset>> {
     render() {
         const { preset } = this.props;
 

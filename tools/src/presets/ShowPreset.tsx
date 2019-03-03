@@ -20,7 +20,7 @@ import { nextValue } from '../../../common/util/utils';
 
 PIXI.settings.SCALE_MODE = PIXI.SCALE_MODES.NEAREST;
 
-export interface EditProps<T> {
+export interface EditPresetProps<T> {
     preset: T;
     onChange: (update: Partial<T>) => void;
 }
@@ -28,17 +28,14 @@ export interface EditProps<T> {
 export type createView<T> = (preset: T) => View;
 
 interface Props<T> {
-    name: string;
+    item: T;
+    onChange: (item: T) => void;
     canCast: boolean;
-    originalPreset: T;
-    Edit: React.ComponentType<EditProps<T>>;
+    Edit: React.ComponentType<EditPresetProps<T>>;
     createView: createView<T>;
-    save: (preset: T) => void;
-    exit: () => void;
 }
 
-interface State<T> {
-    preset: T;
+interface State {
     activity: Activity;
     direction: Direction;
 }
@@ -56,7 +53,7 @@ const DIRECTIONS: Direction[] = [
     'up',
 ];
 
-export class ShowPreset<T extends CreaturePreset> extends React.Component<Props<T>, State<T>> {
+export class ShowPreset<T extends CreaturePreset> extends React.Component<Props<T>, State> {
     private app: PIXI.Application;
     private container = new PIXI.Container();
     private entity: Entity<ClientComponents>;
@@ -66,7 +63,6 @@ export class ShowPreset<T extends CreaturePreset> extends React.Component<Props<
         this.state = {
             activity: 'walking',
             direction: 'down',
-            preset: props.originalPreset,
         };
 
         this.app = new PIXI.Application({
@@ -112,34 +108,30 @@ export class ShowPreset<T extends CreaturePreset> extends React.Component<Props<
     }
 
     render() {
-        const { preset } = this.state;
-        const { canCast, Edit } = this.props;
+        const { item, canCast, Edit } = this.props;
 
         return (
-            <div>
-                <button className="big" onClick={this.save}>Save</button>
-                <button className="big" onClick={this.props.exit}>Exit</button>
-                <h1 className="character-name">{this.props.name}</h1>
+            <>
                 <div className="config">
                     <div>
                         <span className="prop-name">name </span>
-                        <input value={preset.name} onChange={this.changeName}/>
+                        <input value={item.name} onChange={this.changeName}/>
                         <span className="prop-name">story </span>
-                        <input value={preset.story} onChange={this.changeStory}/>
+                        <input value={item.story} onChange={this.changeStory}/>
                         <span className="prop-name">level </span>
-                        <input className="small-input" value={preset.level} type="number" min="1" step="1"
+                        <input className="small-input" value={item.level} type="number" min="1" step="1"
                                onChange={this.changeLevel}/>
                         {' '}
-                        <select value={preset.attitude} onChange={this.changeAttitude}>
+                        <select value={item.attitude} onChange={this.changeAttitude}>
                             <option value="friendly">Friendly</option>
                             <option value="neutral">Neutral</option>
                             <option value="hostile">Hostile</option>
                         </select>
                         <span className="prop-name">scale </span>
-                        <input className="small-input" type="number" value={preset.scale || 1} step={0.01} min={0.01}
+                        <input className="small-input" type="number" value={item.scale || 1} step={0.01} min={0.01}
                                onChange={this.changeScale}/>
                     </div>
-                    <Edit preset={preset} onChange={this.onChange}/>
+                    <Edit preset={item} onChange={this.changePreset}/>
 
                     <div className="prop-table">
                         <select onChange={this.changeAnim} value={this.state.activity} size={3}>
@@ -155,7 +147,7 @@ export class ShowPreset<T extends CreaturePreset> extends React.Component<Props<
                         </select>
                         <div>
                             <p className="prop-name">Effects</p>
-                            {preset.effects && preset.effects.map(((effect, i) => (
+                            {item.effects && item.effects.map(((effect, i) => (
                                 <EffectEdit key={i} index={i} effect={effect} onChange={this.changeEffect}
                                             onRemove={this.removeEffect}/>
                             )))}
@@ -164,22 +156,16 @@ export class ShowPreset<T extends CreaturePreset> extends React.Component<Props<
                     </div>
                 </div>
                 <div className="display" ref={this.containerRef}/>
-            </div>
+            </>
         );
     }
 
     private changePreset(newValues: Partial<CreaturePreset>) {
-        this.setState({
-            preset: {
-                ...this.state.preset as any,
-                ...newValues as any,
-            },
+        this.props.onChange({
+            ...this.props.item as any,
+            ...newValues as any,
         });
     }
-
-    private save = () => {
-        this.props.save(this.state.preset);
-    };
 
     private changeName = (e: React.SyntheticEvent<HTMLInputElement>) => {
         this.changePreset({
@@ -211,20 +197,20 @@ export class ShowPreset<T extends CreaturePreset> extends React.Component<Props<
     };
 
     private changeEffect = (index: number, effect: Effect) => {
-        const effects = this.state.preset.effects!.slice();
+        const effects = this.props.item.effects!.slice();
         effects[index] = effect;
 
         this.changePreset({ effects });
     };
 
     private addEffect = () => {
-        const effects: Effect[] = [...this.state.preset.effects || [], { type: 'alpha', param: 1 }];
+        const effects: Effect[] = [...this.props.item.effects || [], { type: 'alpha', param: 1 }];
 
         this.changePreset({ effects });
     };
 
     private removeEffect = (index: number) => {
-        const effects = this.state.preset.effects!.slice();
+        const effects = this.props.item.effects!.slice();
         effects.splice(index, 1);
 
         this.changePreset({
@@ -232,24 +218,16 @@ export class ShowPreset<T extends CreaturePreset> extends React.Component<Props<
         });
     };
 
-    private onChange = (update: Partial<T>) => {
-        this.setState({
-            preset: {
-                ...this.state.preset as any,
-                ...update as any,
-            },
-        });
-    };
-
     private updateCharacter() {
-        const { preset, activity, direction } = this.state;
+        const { activity, direction } = this.state;
+        const { item } = this.props;
 
         const entity = this.entity;
         entity.set('activity', activity);
         entity.set('direction', direction);
-        entity.set('view', this.props.createView(preset));
+        entity.set('view', this.props.createView(item));
 
-        const { name, level, attitude, scale, effects } = preset;
+        const { name, level, attitude, scale, effects } = item;
 
         entity.set('name', { value: name });
         entity.set('level', { value: level });
