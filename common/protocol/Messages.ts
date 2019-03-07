@@ -23,6 +23,12 @@ export type PlayerStateDiff = {
     [P in keyof PlayerState]?: Partial<PlayerState[P]>;
 }
 
+export interface ChatMessage {
+    sender: string;
+    entityId?: EntityId;
+    text: string;
+}
+
 export interface ResponseTypes {
     error: ErrorCode;
     leaved: LeaveReason;
@@ -30,6 +36,7 @@ export interface ResponseTypes {
     ready: void;
     world: Diff<EntityId, Nullable<NetworkComponents>>[];
     playerState: PlayerStateDiff;
+    chatMessage: ChatMessage;
     questLog: Diff<QuestId, QuestLogItem>[];
 }
 

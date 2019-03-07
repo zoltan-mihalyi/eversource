@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { Positioned } from '../common/Positioned';
 import { injectSheet } from '../utils';
 import { StyleRules, WithStyles } from '../interfaces';
 import { brown, xp } from '../theme';
@@ -39,13 +38,11 @@ interface Props {
 }
 
 const RawXpBar: React.FunctionComponent<Props & WithStyles<ClassKeys>> = ({ classes, level, xp, maxXp }) => (
-    <Positioned horizontal="stretch" vertical="bottom">
-        <div className={classes.root}>
-            <div className={classes.current} style={{ width: (xp / maxXp * 100) + '%' }}/>
-            <div className={classes.level}>Level: {level}</div>
-            <div className={classes.text}>{xp}/{maxXp}</div>
-        </div>
-    </Positioned>
+    <div className={classes.root}>
+        <div className={classes.current} style={{ width: (xp / maxXp * 100) + '%' }}/>
+        <div className={classes.level}>Level: {level}</div>
+        <div className={classes.text}>{xp}/{maxXp}</div>
+    </div>
 );
 
 export const XpBar = injectSheet(styles)(RawXpBar);

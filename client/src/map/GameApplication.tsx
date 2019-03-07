@@ -61,7 +61,7 @@ export class GameApplication extends PIXI.Application {
     }
 
     setScale = (width: number, height: number, scale: number) => {
-        this.metric.setScale(scale);
+        this.metric.scale = scale;
         this.viewContainer.scale.set(scale);
 
         this.renderer.resize(width, height);

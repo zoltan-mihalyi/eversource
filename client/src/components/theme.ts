@@ -6,7 +6,7 @@ export const brown = {
     normalDark: '#986a20',
     normal: '#b78c41',
     lighter: '#ccbd7b',
-    lightest: '#eae2bc'
+    lightest: '#eae2bc',
 };
 
 export const red = {
@@ -29,6 +29,16 @@ export const quest = {
 };
 
 export const xp = {
-    foreground:'#472093',
-    background: '#797979'
+    foreground: '#472093',
+    background: '#797979',
+};
+
+
+export const player = '#6e96db';
+
+export const attitude = {
+    self: '#00cc2c',
+    friendly: '#6e96db',
+    neutral: '#e1e000',
+    hostile: '#cc0000',
 };

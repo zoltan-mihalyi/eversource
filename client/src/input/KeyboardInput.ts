@@ -29,6 +29,9 @@ export class KeyboardInput {
         if (this.down.has(keyCode)) {
             return;
         }
+        if (document.activeElement && document.activeElement !== document.body) {
+            return;
+        }
 
         this.pressed.add(keyCode);
         this.down.add(keyCode);
@@ -48,5 +51,5 @@ export const KEYS = {
     W: 87,
     A: 65,
     S: 83,
-    D: 68
+    D: 68,
 };

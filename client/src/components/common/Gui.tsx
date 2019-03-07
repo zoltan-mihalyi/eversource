@@ -32,6 +32,9 @@ const styles: StyleRules<ClassKeys> = {
             '::-webkit-scrollbar': {
                 width: 6,
             },
+            'p, div': {
+                fontSize: 12,
+            },
         },
     },
     root: {

@@ -1,6 +1,6 @@
 import { Appearance, Equipment } from '../../../common/components/View';
 import { CreatureAttitude, Effect } from '../../../common/components/CommonComponents';
-import { UseAction } from '../es/ServerComponents';
+import { UseSpell } from '../es/ServerComponents';
 
 
 export interface BasePreset {
@@ -46,7 +46,7 @@ export interface MonsterPresets {
 export interface ObjectPreset extends BasePreset {
     image: string;
     animation: string;
-    useActions?: UseAction[];
+    useSpell?: UseSpell;
 }
 
 export interface ObjectPresets {

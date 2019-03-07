@@ -4,59 +4,35 @@
     "image": "plants",
     "animation": "potato",
     "scale": 1,
-    "useActions": [
-      {
-        "type": "destroy"
-      },
-      {
-        "type": "spell",
-        "spellId": "consume_vegetable"
-      }
-    ]
+    "useSpell": {
+      "spellId": "consume_vegetable"
+    }
   },
   "carrot": {
     "name": "Carrot",
     "image": "plants",
     "animation": "carrot",
     "scale": 1,
-    "useActions": [
-      {
-        "type": "destroy"
-      },
-      {
-        "type": "spell",
-        "spellId": "consume_vegetable"
-      }
-    ]
+    "useSpell": {
+      "spellId": "consume_vegetable"
+    }
   },
   "corn": {
     "name": "Corn",
     "image": "plants",
     "animation": "corn",
     "scale": 0.8,
-    "useActions": [
-      {
-        "type": "destroy"
-      },
-      {
-        "type": "spell",
-        "spellId": "consume_vegetable"
-      }
-    ]
+    "useSpell": {
+      "spellId": "consume_vegetable"
+    }
   },
   "squash": {
     "name": "Squash",
     "image": "plants",
     "animation": "squash",
     "scale": 1.3,
-    "useActions": [
-      {
-        "type": "destroy"
-      },
-      {
-        "type": "spell",
-        "spellId": "consume_vegetable"
-      }
-    ]
+    "useSpell": {
+      "spellId": "consume_vegetable"
+    }
   }
 }

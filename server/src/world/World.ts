@@ -8,7 +8,7 @@ import {
     MonsterPresets,
     MovementConfig,
     ObjectPresets,
-    resolvePresetAttitude
+    resolvePresetAttitude,
 } from './Presets';
 import { TiledProperties } from '../../../common/tiled/interfaces';
 import { questEnds, questStarts } from '../quest/QuestIndexer';
@@ -102,7 +102,7 @@ export class WorldImpl implements World {
                 });
             } else if (object.type === 'object') {
                 const preset = presets.object[object.name];
-                const { image, animation, useActions } = preset;
+                const { image, animation, useSpell } = preset;
 
                 const template: Partial<ServerComponents> = {
                     ...baseFromPreset(preset, object.name),
@@ -113,8 +113,8 @@ export class WorldImpl implements World {
                         animation,
                     },
                 };
-                if (useActions) {
-                    template.useActions = useActions;
+                if (useSpell) {
+                    template.useSpell = useSpell;
                 }
 
                 zone.addSpawner(10000, template);

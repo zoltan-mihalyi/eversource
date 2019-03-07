@@ -2,7 +2,7 @@ import * as React from 'react';
 import { PlayingNetworkApi } from '../../protocol/PlayingState';
 import { QuestId } from '../../../../common/domain/InteractionTable';
 import { InteractionDialog } from '../quest/InteractionDialog';
-import { CharacterState, PlayerState } from '../../../../common/protocol/PlayerState';
+import { PlayerState } from '../../../../common/protocol/PlayerState';
 import { QuestLogItem } from '../../../../common/protocol/QuestLogItem';
 import { GameMenu } from './GameMenu';
 import { DebugInfo } from '../gui/DebugInfo';
@@ -12,7 +12,11 @@ import { XpBar } from './XpBar';
 import { maxXpFor } from '../../../../common/algorithms';
 import { Gui } from '../common/Gui';
 import CharacterContext, { EMPTY_CHARACTER } from '../CharacterContext';
+import { ChatBox } from '../chat/ChatBox';
+import { Positioned } from '../common/Positioned';
+import { ChatMessage } from '../../../../common/protocol/Messages';
 
+const MAX_MESSAGES = 100;
 
 interface Props {
     setScale: (width: number, height: number, scale: number) => void;
@@ -23,6 +27,7 @@ interface Props {
 }
 
 interface State {
+    messages: ChatMessage[];
     playerState: PlayerState;
     questLog: Map<QuestId, QuestLogItem>;
     debug: boolean;
@@ -34,8 +39,10 @@ interface ImageStyle extends CSSStyleDeclaration {
 
 export class GameScreen extends React.Component<Props, State> {
     private canvas: HTMLCanvasElement | null = null;
+    private chatBoxInput = React.createRef<HTMLInputElement>();
 
     state: State = {
+        messages: [],
         playerState: { interaction: null, character: null },
         questLog: new Map<QuestId, QuestLogItem>(),
         debug: settings.get('debug') || false,
@@ -50,6 +57,16 @@ export class GameScreen extends React.Component<Props, State> {
             <Gui>
                 <CharacterContext.Provider value={displayCharacter}>
                     <div ref={this.containerRef}/>
+
+                    <Positioned horizontal="left" vertical="bottom">
+                        <ChatBox inputRef={this.chatBoxInput} sendMessage={this.sendChatMessage}
+                                 messages={this.state.messages}/>
+                    </Positioned>
+                    <Positioned horizontal="stretch" vertical="bottom">
+                        <XpBar level={displayCharacter.level} xp={displayCharacter.xp}
+                               maxXp={maxXpFor(displayCharacter.level)}/>
+                    </Positioned>
+
                     {debug && <DebugInfo/>}
                     {interaction &&
                     <InteractionDialog interactions={interaction} onAcceptQuest={this.acceptQuest}
@@ -58,8 +75,6 @@ export class GameScreen extends React.Component<Props, State> {
 
                     <div ref={this.joystickContainerRef}/>
                     <GameMenu questLog={questLog} onLeave={this.leave} onAbandonQuest={this.abandonQuest}/>
-                    <XpBar level={displayCharacter.level} xp={displayCharacter.xp}
-                           maxXp={maxXpFor(displayCharacter.level)}/>
                 </CharacterContext.Provider>
             </Gui>
         );
@@ -67,15 +82,28 @@ export class GameScreen extends React.Component<Props, State> {
 
     componentDidMount() {
         this.props.onMount(this);
-        document.body.addEventListener('keydown', this.onKeyDown);
+        document.body.addEventListener('keypress', this.onKeyDown);
     }
 
     componentWillUnmount() {
-        document.body.removeEventListener('keydown', this.onKeyDown);
+        document.body.removeEventListener('keypress', this.onKeyDown);
     }
 
     updatePlayerState(playerState: PlayerState) { // TODO interface
         this.setState({ playerState });
+    }
+
+    chatMessageReceived(message: ChatMessage) {
+        this.setState((state) => {
+            const messages = [...state.messages, message];
+            if (messages.length > MAX_MESSAGES) {
+                messages.shift();
+            }
+
+            return {
+                messages,
+            };
+        });
     }
 
     updateQuestLog(questLog: Map<QuestId, QuestLogItem>) {
@@ -95,6 +123,12 @@ export class GameScreen extends React.Component<Props, State> {
             const debug = !this.state.debug;
             this.setState({ debug });
             settings.set('debug', debug);
+        } else if (event.which === 13) {
+            const chatBox = this.chatBoxInput.current;
+            if (chatBox) {
+                event.stopPropagation();
+                chatBox.focus();
+            }
         }
     };
 
@@ -171,6 +205,10 @@ export class GameScreen extends React.Component<Props, State> {
 
     private closeInteraction = () => {
         this.props.playingNetworkApi.closeInteraction();
+    };
+
+    private sendChatMessage = (message: string) => {
+        this.props.playingNetworkApi.sendChatMessage(message);
     };
 }
 

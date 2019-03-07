@@ -1,4 +1,4 @@
-import { PlayerStateDiff, ResponseCommand, ResponseTypes } from '../../../common/protocol/Messages';
+import { ChatMessage, PlayerStateDiff, ResponseCommand, ResponseTypes } from '../../../common/protocol/Messages';
 import { State } from '../../../common/util/StateManager';
 import { ErrorCode } from '../../../common/protocol/ErrorCode';
 import { CharacterInfo } from '../../../common/domain/CharacterInfo';
@@ -53,6 +53,9 @@ export abstract class NetworkingState<T> extends State<NetworkingContext, T> imp
     }
 
     world(diffs: Diff<EntityId, Nullable<NetworkComponents>>[]) {
+    }
+
+    chatMessage(message: ChatMessage) {
     }
 
     playerState(playerState: PlayerStateDiff) {
