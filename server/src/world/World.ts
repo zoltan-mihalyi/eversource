@@ -11,14 +11,16 @@ import {
     resolvePresetAttitude,
 } from './Presets';
 import { TiledProperties } from '../../../common/tiled/interfaces';
-import { questEnds, questStarts } from '../quest/QuestIndexer';
 import { hpForLevel } from '../../../common/algorithms';
 import { AIMovingController, ServerComponents } from '../es/ServerComponents';
 import { Direction } from '../../../common/components/CommonComponents';
 import { Spells } from '../Spell';
+import { QuestIndexer } from '../quest/QuestIndexer';
 
 export interface World {
     getZone(zoneId: ZoneId): Promise<Zone>;
+
+    readonly questIndexer: QuestIndexer;
 }
 
 const FPS = 50;
@@ -37,7 +39,7 @@ export class WorldImpl implements World {
     private readonly zones = new Map<ZoneId, Zone>();
     private readonly timer: NodeJS.Timer;
 
-    constructor(private mapLoader: MapLoader, private presets: AllPresets) {
+    constructor(private mapLoader: MapLoader, private presets: AllPresets, readonly questIndexer: QuestIndexer) {
         this.timer = setInterval(this.update, INTERVAL);
     }
 
@@ -61,7 +63,7 @@ export class WorldImpl implements World {
         const mapData = await this.mapLoader.load(zoneId);
 
         console.log(`Loaded ${zoneId} in ${new Date().getTime() - start.getTime()} ms`);
-        const zone = new Zone(mapData.grid, this.presets.spells);
+        const zone = new Zone(mapData.grid, this.presets.spells, this.questIndexer);
 
         const { presets } = this;
 
@@ -80,7 +82,7 @@ export class WorldImpl implements World {
                 };
 
                 zone.addSpawner(10000, {
-                    ...creatureBaseFromPreset(preset, object.name, properties, false),
+                    ...creatureBaseFromPreset(this.questIndexer, preset, object.name, properties, false),
                     position,
                     view: {
                         type: 'humanoid',
@@ -94,7 +96,7 @@ export class WorldImpl implements World {
                 const { image, palette } = preset;
 
                 zone.addSpawner(10000, {
-                    ...creatureBaseFromPreset(preset, object.name, properties, true),
+                    ...creatureBaseFromPreset(this.questIndexer, preset, object.name, properties, true),
                     position,
                     view: {
                         type: 'simple',
@@ -108,7 +110,7 @@ export class WorldImpl implements World {
                 const { image, animation, useSpell } = preset;
 
                 const template: Partial<ServerComponents> = {
-                    ...baseFromPreset(preset, object.name),
+                    ...baseFromPreset(this.questIndexer, preset, object.name),
                     position,
                     view: {
                         type: 'object',
@@ -143,7 +145,9 @@ export class WorldImpl implements World {
     };
 }
 
-function baseFromPreset(preset: BasePreset, npcId: string): Partial<ServerComponents> {
+function baseFromPreset(questIndexer: QuestIndexer, preset: BasePreset, npcId: string): Partial<ServerComponents> {
+    const { questStarts, questEnds } = questIndexer;
+
     const result: Partial<ServerComponents> = {
         npcId,
         name: {
@@ -173,11 +177,13 @@ function baseFromPreset(preset: BasePreset, npcId: string): Partial<ServerCompon
     return result;
 }
 
-function creatureBaseFromPreset(preset: CreaturePreset, npcId: string, properties: TiledProperties, monster: boolean): Partial<ServerComponents> {
+function creatureBaseFromPreset(questIndexer: QuestIndexer, preset: CreaturePreset, npcId: string, properties: TiledProperties,
+                                monster: boolean): Partial<ServerComponents> {
+
     const hp = hpForLevel(preset.level);
 
     return {
-        ...baseFromPreset(preset, npcId),
+        ...baseFromPreset(questIndexer, preset, npcId),
         activity: 'standing',
         direction: objectDirection(properties),
         hp: {

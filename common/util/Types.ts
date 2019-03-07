@@ -1,5 +1,3 @@
-export type NonEmptyArray<T> = T[] & [T];
-
 export type PartialPick<T, K extends keyof T> = Readonly<Partial<T> & Pick<T, K>>;
 
 export type Nullable<T> = {

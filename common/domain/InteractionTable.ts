@@ -9,7 +9,6 @@ export interface TaskInfo {
 }
 
 export interface QuestBase {
-    id: QuestId;
     level: number;
     name: string;
     description: string;
@@ -18,6 +17,7 @@ export interface QuestBase {
 }
 
 export interface QuestInfo extends QuestBase {
+    id: QuestId;
     xpReward: number;
     progress?: string;
     tasks: TaskInfo[];

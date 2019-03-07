@@ -1,13 +1,13 @@
 import { ServerEvents } from './ServerEvents';
 import { EventBus } from '../../../common/es/EventBus';
-import { questsById } from '../quest/QuestIndexer';
 import { Task } from '../quest/Quest';
 import { QuestId, TaskInfo } from '../../../common/domain/InteractionTable';
 import { QuestProgression } from '../character/CharacterDetails';
 import { QuestLog, Quests } from './ServerComponents';
 import { Spells } from '../Spell';
+import { QuestIndexer } from '../quest/QuestIndexer';
 
-export function questSystem(eventBus: EventBus<ServerEvents>, spells: Spells) {
+export function questSystem(eventBus: EventBus<ServerEvents>, spells: Spells, questIndexer: QuestIndexer) {
     eventBus.on('kill', ({ killer, killed }) => {
         const killerQuests = killer.components.quests;
         const npcId = killed.components.npcId;
@@ -40,11 +40,8 @@ export function questSystem(eventBus: EventBus<ServerEvents>, spells: Spells) {
     });
 
     eventBus.on('acceptQuest', ({ quests, quest }) => {
-        const questId = quest.id;
-
-        const tasks = questsById[questId]!.tasks;
-        const progression = tasks ? tasks.list.map(() => 0) : [];
-        quests.questLog.set(questId, progression);
+        const progression = quest.tasks.map(() => 0);
+        quests.questLog.set(quest.id, progression);
     });
 
     eventBus.on('completeQuest', ({ quests, quest }) => {
@@ -67,26 +64,27 @@ export function questSystem(eventBus: EventBus<ServerEvents>, spells: Spells) {
 
         quests.questLog.delete(questId);
     });
-}
 
-function updateQuestLog(quests: Quests, match: (task: Task) => boolean) {
-    const { questLog } = quests;
+    function updateQuestLog(quests: Quests, match: (task: Task) => boolean) {
+        const { questLog } = quests;
 
-    questLog.forEach((q, questId) => {
-        if (q === 'failed') {
-            return;
-        }
-        const tasks = questsById[questId]!.tasks;
-        if (!tasks) {
-            return;
-        }
-
-        tasks.list.forEach((task, i) => {
-            if (match(task)) {
-                updateQuest(questLog, questId, task, i);
+        questLog.forEach((q, questId) => {
+            if (q === 'failed') {
+                return;
             }
+            const tasks = questIndexer.quests.get(questId)!.tasks;
+            if (!tasks) {
+                return;
+            }
+
+            tasks.list.forEach((task, i) => {
+                if (match(task)) {
+                    updateQuest(questLog, questId, task, i);
+                }
+            });
         });
-    });
+    }
+
 }
 
 function updateQuest(questLog: QuestLog, questId: QuestId, task: TaskInfo, taskIndex: number) {

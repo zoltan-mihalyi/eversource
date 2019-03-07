@@ -10,7 +10,7 @@ const DEFAULT_EXPRESSION: ConstantExpression<string> = { type: 'constant', value
 
 export const StringExpressionEdit = unionEdit<Expression<string>>({
     constant: {
-        component: (() => objectEdit<ConstantExpression<string>>({
+        component: (() => objectEdit<ConstantExpression<string>, 'type'>({
             value: { component: TextEdit }
         })),
         defaultValue: DEFAULT_EXPRESSION
@@ -21,6 +21,6 @@ export const StringExpressionEdit = unionEdit<Expression<string>>({
     }
 });
 
-const RandomOptionStringExpressionEdit: EditComponent<RandomOptionExpression<string>> = objectEdit<RandomOptionExpression<string>>({
+const RandomOptionStringExpressionEdit: EditComponent<RandomOptionExpression<string>> = objectEdit<RandomOptionExpression<string>, 'type'>({
     values: { component: arrayEdit<Expression<string>>(DEFAULT_EXPRESSION, StringExpressionEdit) }
 });
