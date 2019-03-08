@@ -10,27 +10,27 @@ const TargetEdit = optionEdit(['target', 'caster']);
 
 export const SpellEffectEdit = unionEdit<SpellEffect>({
     heal: {
-        component: () => objectEdit<HealEffect>({
+        component: () => objectEdit<HealEffect, 'type'>({
             target: { component: TargetEdit },
             amount: { component: NumberEdit }
         }),
         defaultValue: { type: 'heal', target: 'target', amount: 100 }
     },
     damage: {
-        component: () => objectEdit<DamageEffect>({
+        component: () => objectEdit<DamageEffect, 'type'>({
             target: { component: TargetEdit },
             amount: { component: NumberEdit }
         }),
         defaultValue: { type: 'damage', target: 'target', amount: 100 }
     },
     destroy: {
-        component: () => objectEdit<DestroyEffect>({
+        component: () => objectEdit<DestroyEffect, 'type'>({
             target: { component: TargetEdit },
         }),
         defaultValue: { type: 'destroy', target: 'target' }
     },
     chat: {
-        component: () => objectEdit<ChatEffect>({
+        component: () => objectEdit<ChatEffect, 'type'>({
             target: { component: TargetEdit },
             text: { component: StringExpressionEdit },
         }),

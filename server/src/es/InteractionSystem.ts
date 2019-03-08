@@ -2,15 +2,15 @@ import { EventBus } from '../../../common/es/EventBus';
 import { ServerEvents } from './ServerEvents';
 import { InteractionTable, QuestId, QuestInfo } from '../../../common/domain/InteractionTable';
 import { Quests, ServerComponents } from './ServerComponents';
-import { questInfoMap } from '../quest/QuestIndexer';
 import { Quest } from '../quest/Quest';
 import { QuestStatus } from '../character/CharacterDetails';
 import { EntityContainer } from '../../../common/es/EntityContainer';
 import { Entity } from '../../../common/es/Entity';
 import { Position } from '../../../common/domain/Location';
 import { CreatureAttitude } from '../../../common/components/CommonComponents';
+import { QuestIndexer } from '../quest/QuestIndexer';
 
-export function interactionSystem(entityContainer: EntityContainer<ServerComponents>, eventBus: EventBus<ServerEvents>) {
+export function interactionSystem(entityContainer: EntityContainer<ServerComponents>, eventBus: EventBus<ServerEvents>, questIndexer: QuestIndexer) {
     const interactingEntities = entityContainer.createQuery('interacting');
     const listeningEntities = entityContainer.createQuery('listening');
 
@@ -57,7 +57,7 @@ export function interactionSystem(entityContainer: EntityContainer<ServerCompone
         if (!quests) {
             return;
         }
-        const interactionTable = getInteractionTable(target, quests);
+        const interactionTable = getInteractionTable(target, quests, questIndexer);
         if (!interactionTable) {
             return;
         }
@@ -96,6 +96,23 @@ export function interactionSystem(entityContainer: EntityContainer<ServerCompone
             quest: questContext.quest,
         });
     });
+
+    function findQuest(entity: Entity<ServerComponents>, questId: QuestId, type: 'acceptable' | 'completable'): QuestContext | undefined {
+        const { interacting, quests } = entity.components;
+        if (!interacting || !quests) {
+            return;
+        }
+
+        const interactionTable = getInteractionTable(interacting.entity, quests, questIndexer);
+        if (!interactionTable) {
+            return;
+        }
+        const quest = interactionTable[type].find(q => q.id === questId);
+        if (!quest) {
+            return;
+        }
+        return { quest, quests };
+    }
 }
 
 interface QuestContext {
@@ -103,25 +120,7 @@ interface QuestContext {
     quests: Quests;
 }
 
-function findQuest(entity: Entity<ServerComponents>, questId: QuestId, type: 'acceptable' | 'completable'): QuestContext | undefined {
-    const { interacting, quests } = entity.components;
-    if (!interacting || !quests) {
-        return;
-    }
-
-    const interactionTable = getInteractionTable(interacting.entity, quests);
-    if (!interactionTable) {
-        return;
-    }
-    const quest = interactionTable[type].find(q => q.id === questId);
-    if (!quest) {
-        return;
-    }
-    return { quest, quests };
-}
-
-
-export function getInteractionTable(entity: Entity<ServerComponents>, quests: Quests): InteractionTable | null {
+export function getInteractionTable(entity: Entity<ServerComponents>, quests: Quests, questIndexer: QuestIndexer): InteractionTable | null {
     const { name, interactable } = entity.components;
     if (!interactable || !name) {
         return null;
@@ -135,7 +134,7 @@ export function getInteractionTable(entity: Entity<ServerComponents>, quests: Qu
     for (const quest of interactable.quests) {
         const isNewQuest = !questsDone.has(quest.id) && !questLog.has(quest.id);
         if (isNewQuest && preconditionMet(questsDone, quest)) {
-            acceptable.push(questInfoMap.get(quest.id)!);
+            acceptable.push(questIndexer.questInfoMap.get(quest.id)!);
         }
     }
 
@@ -144,7 +143,7 @@ export function getInteractionTable(entity: Entity<ServerComponents>, quests: Qu
         if (questStatus === void 0) {
             continue;
         }
-        const questInfo = questInfoMap.get(quest.id)!;
+        const questInfo = questIndexer.questInfoMap.get(quest.id)!;
         if (questStatus !== 'failed' && allTaskComplete(quest, questStatus)) {
             completable.push(questInfo);
         } else {

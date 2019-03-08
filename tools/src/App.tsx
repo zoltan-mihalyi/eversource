@@ -3,9 +3,10 @@ import { PalettesTool } from './palettes/PalettesTool';
 import { MonsterPresetTool } from './presets/monsters/MonsterPresetTool';
 import { HumanoidPresetsTool } from './presets/humanoids/HumanoidPresetsTool';
 import { SpellsTool } from './spells/SpellsTool';
+import { QuestsTool } from './quests/QuestsTool';
 
 interface State {
-    screen: 'humanoids' | 'monsters' | 'spells' | 'palettes' | null;
+    screen: 'humanoids' | 'monsters' | 'spells' | 'quests' | 'palettes' | null;
 }
 
 export class App extends React.Component<{}, State> {
@@ -23,13 +24,14 @@ export class App extends React.Component<{}, State> {
                 return (
                     <div>
                         <header>Eversource Tools</header>
+                        <h2>Presets</h2>
                         <div>
                             <button className="big" onClick={this.showHumanoids}>Humanoids</button>
-                        </div>
-                        <div>
                             <button className="big" onClick={this.showMonsters}>Monsters</button>
                         </div>
+                        <h2>Others</h2>
                         <div>
+                            <button className="big" onClick={this.showQuests}>Quests</button>
                             <button className="big" onClick={this.showSpells}>Spells</button>
                         </div>
                         <div>
@@ -45,6 +47,10 @@ export class App extends React.Component<{}, State> {
                 return (
                     <MonsterPresetTool onExit={this.showMainMenu}/>
                 );
+            case 'quests':
+                return (
+                    <QuestsTool onExit={this.showMainMenu}/>
+                );
             case 'spells':
                 return (
                     <SpellsTool onExit={this.showMainMenu}/>
@@ -52,7 +58,7 @@ export class App extends React.Component<{}, State> {
             case 'palettes':
                 return (
                     <PalettesTool onExit={this.showMainMenu}/>
-                )
+                );
         }
     }
 
@@ -68,6 +74,9 @@ export class App extends React.Component<{}, State> {
     };
     private showSpells = () => {
         this.setState({ screen: 'spells' });
+    };
+    private showQuests = () => {
+        this.setState({ screen: 'quests' });
     };
     private showPalettes = () => {
         this.setState({ screen: 'palettes' });

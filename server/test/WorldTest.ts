@@ -7,6 +7,7 @@ import { Grid } from '../../common/Grid';
 import { HumanoidPresets, MonsterPresets, ObjectPresets } from '../src/world/Presets';
 import { TiledObject } from '../../common/tiled/interfaces';
 import { HumanoidView, ObjectView, SimpleView } from '../../common/components/View';
+import { QuestIndexer } from '../src/quest/QuestIndexer';
 
 const zoneId = 'zone' as ZoneId;
 
@@ -30,7 +31,7 @@ function newWorld(mapLoader: MapLoader, presets: Partial<AllPresets> = {}) {
         object: {},
         spells: {},
         ...presets,
-    });
+    }, new QuestIndexer({}));
     runningWorlds.add(world);
     return world;
 }

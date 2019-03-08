@@ -3,23 +3,19 @@ import { Zone } from '../world/Zone';
 import { CharacterSelectionRequestHandler } from './CharacterSelectionRequestHandler';
 import { PlayerState } from '../../../common/protocol/PlayerState';
 import { QuestId } from '../../../common/domain/InteractionTable';
-import { questInfoMap } from '../quest/QuestIndexer';
 import { DynamicDiffable } from './diffable/DynamicDiffable';
 import { DiffablePlayerState } from './diffable/DiffablePlayerState';
 import { QuestLogItem } from '../../../common/protocol/QuestLogItem';
 import { Entity, EntityId } from '../../../common/es/Entity';
 import { Quests, ServerComponents } from '../es/ServerComponents';
 import { getInteractionTable } from '../es/InteractionSystem';
-import {
-    NetworkComponents,
-    PossibleInteraction,
-    PossibleInteractions,
-} from '../../../common/components/NetworkComponents';
+import { NetworkComponents, PossibleInteraction, PossibleInteractions, } from '../../../common/components/NetworkComponents';
 import { Nullable } from '../../../common/util/Types';
 import { getDirection } from '../../../common/game/direction';
 import { Direction } from '../../../common/components/CommonComponents';
 import { CharacterInfo } from '../../../common/domain/CharacterInfo';
 import { CHAT_MESSAGE_MAXIMUM_LENGTH } from '../../../common/constants';
+import { QuestIndexer } from '../quest/QuestIndexer';
 
 export interface PlayerData {
     entity: Entity<ServerComponents>;
@@ -138,7 +134,7 @@ export class PlayingRequestHandler extends ClientState<PlayerData> {
     private indexEntities(entities: Entity<ServerComponents>[]): Map<EntityId, Nullable<NetworkComponents>> {
         const result = new Map<EntityId, Nullable<NetworkComponents>>();
         for (const entity of entities) {
-            result.set(entity.id, getFor(this.data.entity, entity));
+            result.set(entity.id, this.getFor(entity));
         }
         return result;
     }
@@ -149,7 +145,7 @@ export class PlayingRequestHandler extends ClientState<PlayerData> {
         const { interacting } = entity.components;
 
         const playerState: PlayerState = {
-            interaction: !interacting ? null : getInteractionTable(interacting.entity, entity.components.quests!), // TODO
+            interaction: !interacting ? null : getInteractionTable(interacting.entity, entity.components.quests!, this.context.world.questIndexer), // TODO
             character: {
                 sex: characterInfo.sex,
                 name: characterInfo.name,
@@ -167,6 +163,7 @@ export class PlayingRequestHandler extends ClientState<PlayerData> {
     }
 
     private sendQuestLog() {
+        const { questInfoMap } = this.context.world.questIndexer;
         const questLog = this.data.entity.components.quests!.questLog;
 
         const qLogByQ = new Map<QuestId, QuestLogItem>();
@@ -195,6 +192,30 @@ export class PlayingRequestHandler extends ClientState<PlayerData> {
         }
     }
 
+    private getFor(entity: Entity<ServerComponents>): Nullable<NetworkComponents> {
+        const viewer = this.data.entity;
+
+        return {
+            ...pickOrNull(entity.components, [
+                'position',
+                'level',
+                'hp',
+                'view',
+                'direction',
+                'animation',
+                'activity',
+                'attitude',
+                'name',
+                'scale',
+                'effects',
+                'player',
+            ]),
+            direction: getFacingDirection(viewer, entity),
+            playerControllable: viewer === entity ? true : null,
+            possibleInteractions: getPossibleInteractions(entity, viewer.components.quests!, this.context.world.questIndexer) || null, // TODO
+        };
+    }
+
     private networkUpdate = () => {
         this.sendPlayerData();
         this.sendQuestLog();
@@ -206,28 +227,6 @@ function validNumber(num: number): boolean {
     return !isNaN(num) && isFinite(num);
 }
 
-function getFor(viewer: Entity<ServerComponents>, entity: Entity<ServerComponents>): Nullable<NetworkComponents> {
-
-    return {
-        ...pickOrNull(entity.components, [
-            'position',
-            'level',
-            'hp',
-            'view',
-            'direction',
-            'animation',
-            'activity',
-            'attitude',
-            'name',
-            'scale',
-            'effects',
-            'player',
-        ]),
-        direction: getFacingDirection(viewer, entity),
-        playerControllable: viewer === entity ? true : null,
-        possibleInteractions: getPossibleInteractions(entity, viewer.components.quests!) || null, // TODO
-    };
-}
 
 function getFacingDirection(viewer: Entity<ServerComponents>, entity: Entity<ServerComponents>): Direction | null {
     let direction = entity.components.direction || null;
@@ -241,8 +240,8 @@ function getFacingDirection(viewer: Entity<ServerComponents>, entity: Entity<Ser
     return direction;
 }
 
-function getPossibleInteractions(entity: Entity<ServerComponents>, quests: Quests): PossibleInteractions | null {
-    const interactionTable = getInteractionTable(entity, quests);
+function getPossibleInteractions(entity: Entity<ServerComponents>, quests: Quests, questIndexer: QuestIndexer): PossibleInteractions | null {
+    const interactionTable = getInteractionTable(entity, quests, questIndexer);
     if (interactionTable === null) {
         return null;
     }

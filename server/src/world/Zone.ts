@@ -20,13 +20,14 @@ import { ServerEntityContainer } from '../es/ServerEntityContainer';
 import { spellSystem } from '../es/SpellSystem';
 import { chatSystem } from '../es/ChatSystem';
 import { Spells } from '../Spell';
+import { QuestIndexer } from '../quest/QuestIndexer';
 
 export class Zone {
     private entityContainer = new ServerEntityContainer();
     readonly eventBus = new EventBus<ServerEvents>(); // TODO private
     private readonly index: rbush.RBush<PositionBox>;
 
-    constructor(private grid: Grid, spells: Spells) {
+    constructor(private grid: Grid, spells: Spells, questIndexer: QuestIndexer) {
         spawnSystem(this.entityContainer, this.eventBus);
 
         this.index = spatialIndexingSystem(this.entityContainer, this.eventBus);
@@ -36,8 +37,8 @@ export class Zone {
         attackSystem(this.eventBus);
         damageSystem(this.eventBus);
         hpRegenSystem(this.entityContainer, this.eventBus);
-        interactionSystem(this.entityContainer, this.eventBus);
-        questSystem(this.eventBus, spells);
+        interactionSystem(this.entityContainer, this.eventBus, questIndexer);
+        questSystem(this.eventBus, spells, questIndexer);
         xpSystem(this.eventBus);
         spellSystem(this.eventBus);
         chatSystem(this.index, this.eventBus);

@@ -4,6 +4,7 @@ import { TmxMapLoader } from './world/MapLoader';
 import { FakeDao } from './impl/FakeDao';
 import * as express from 'express';
 import * as fs from 'fs';
+import { QuestIndexer } from './quest/QuestIndexer';
 
 const PORT = process.env.PORT ? +process.env.PORT : 8000;
 
@@ -16,7 +17,7 @@ const presets: AllPresets = {
     spells: readJson('spells'),
 };
 
-const world = new WorldImpl(mapLoader, presets);
+const world = new WorldImpl(mapLoader, presets, new QuestIndexer(readJson('quests')));
 
 const app = express();
 app.use(express.static('../cordova/www'));

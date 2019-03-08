@@ -1,4 +1,3 @@
-import { EntityContainer } from '../../../common/es/EntityContainer';
 import { EventBus } from '../../../common/es/EventBus';
 import { QuestLog, ServerComponents } from '../../src/es/ServerComponents';
 import { ServerEvents } from '../../src/es/ServerEvents';
@@ -8,7 +7,61 @@ import { QuestId } from '../../../common/domain/InteractionTable';
 import { QuestStatus } from '../../src/character/CharacterDetails';
 import { Entity } from '../../../common/es/Entity';
 import { ServerEntityContainer } from '../../src/es/ServerEntityContainer';
+import { PresetQuest } from '../../src/quest/Quest';
+import { QuestIndexer } from '../../src/quest/QuestIndexer';
 
+const quests: { [key: number]: PresetQuest } = {
+    1: {
+        "level": 1,
+        "difficulty": "normal",
+        "name": "A simple quest",
+        "startsAt": "cacal",
+        "endsAt": "cacal",
+        "description": "The lava slimes are causing so much trouble these days!",
+        "taskDescription": "Lava slimes live near lava holes. Get rid of them!",
+        "completion": "Wasn't that hard, was it?",
+        "requires": [
+            7 as QuestId
+        ],
+        "tasks": {
+            "progress": "Have you slain the lava slimes, %class%?",
+            "list": [
+                {
+                    "type": "kill",
+                    "count": 10,
+                    "title": "Intruders slain",
+                    "npcIds": [
+                        "slime_lava",
+                        "slime_lava_rock"
+                    ]
+                }
+            ]
+        }
+    },
+    6: {
+        "level": 4,
+        "difficulty": "normal",
+        "name": "Strange guests",
+        "startsAt": "dark",
+        "endsAt": "protector",
+        "description": "Investigate the lava slimes!",
+        "taskDescription": "There are a bunch of lava slimes eastward. Find them!",
+        "completion": "Hmm, interesting.",
+        "requires": [],
+        "tasks": {
+            "progress": "Have you find them, %name%?",
+            "list": [
+                {
+                    "count": 1,
+                    "type": "visit",
+                    "areaName": "slimes",
+                    "title": "Visit eastern slimes"
+                }
+            ]
+        }
+    },
+};
+let questIndexer = new QuestIndexer(quests);
 
 describe('QuestSystem', function () {
     let container: ServerEntityContainer;
@@ -33,7 +86,7 @@ describe('QuestSystem', function () {
     it('should add task progression', async function () {
         questLog.set(1 as QuestId, [0]); // TODO mock quests
 
-        questSystem(eventBus, {});
+        questSystem(eventBus, {}, questIndexer);
 
         eventBus.emit('kill', {
             killer: player,
@@ -46,7 +99,7 @@ describe('QuestSystem', function () {
     it('should do nothing with complete tasks', async function () {
         questLog.set(1 as QuestId, [10]); // TODO mock quests
 
-        questSystem(eventBus, {});
+        questSystem(eventBus, {}, questIndexer);
 
         eventBus.emit('kill', {
             killer: player,
@@ -59,7 +112,7 @@ describe('QuestSystem', function () {
     it('should do nothing with failed quests', async function () {
         questLog.set(1 as QuestId, 'failed'); // TODO mock quests
 
-        questSystem(eventBus, {});
+        questSystem(eventBus, {}, questIndexer);
 
         eventBus.emit('kill', {
             killer: player,
@@ -72,7 +125,7 @@ describe('QuestSystem', function () {
     it('should handle area events', async function () {
         questLog.set(6 as QuestId, [0]); // TODO mock quests
 
-        questSystem(eventBus, {});
+        questSystem(eventBus, {}, questIndexer);
 
         eventBus.emit('area', {
             visitor: player,

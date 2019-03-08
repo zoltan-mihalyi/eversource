@@ -1,11 +1,11 @@
 import { Position } from '../../../common/domain/Location';
 import { Entity } from '../../../common/es/Entity';
-import { QuestId } from '../../../common/domain/InteractionTable';
 import { QuestStatus } from '../character/CharacterDetails';
-import { Quest } from '../quest/Quest';
 import { CommonComponents, Xp } from '../../../common/components/CommonComponents';
 import { ChatMessage } from '../../../common/protocol/Messages';
 import { Spell } from '../Spell';
+import { QuestId } from '../../../common/domain/InteractionTable';
+import { Quest } from '../quest/Quest';
 
 export interface Moving {
     readonly x: number;
