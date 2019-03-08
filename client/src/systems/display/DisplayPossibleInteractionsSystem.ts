@@ -17,13 +17,15 @@ export function displayPossibleInteractionsSystem(container: EntityContainer<Cli
 
     function updateInteractions({ display, possibleInteractions }: PartialPick<ClientComponents, 'display' | 'possibleInteractions'>) {
         const scale = 1 / possibleInteractions.length;
-        const content = possibleInteractions.map((interaction, i) => {
-            const q = textureLoader.createAnimatedSprite('misc', interaction);
-            q.x = (i - (possibleInteractions.length - 1) / 2) * scale * 20;
-            q.y = -scale * 6;
-            q.scale.set(scale);
-            return q;
-        });
+        const content = possibleInteractions
+            .filter(interaction => interaction !== 'story')
+            .map((interaction, i) => {
+                const q = textureLoader.createAnimatedSprite('misc', interaction);
+                q.x = (i - (possibleInteractions.length - 1) / 2) * scale * 20;
+                q.y = -scale * 6;
+                q.scale.set(scale);
+                return q;
+            });
 
         display.setContent('interactionContainer', content);
         display.spriteContainer.setInteractable(true);

@@ -260,7 +260,7 @@ function getPossibleInteractions(entity: Entity<ServerComponents>, quests: Quest
     }
 
     if (interactions.length === 0) {
-        return null;
+        return ['story'];
     }
     return interactions as PossibleInteractions;
 }
