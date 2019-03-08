@@ -37,7 +37,7 @@ export class ListEdit<T extends Named> extends React.PureComponent<Props<T>, Sta
 
     render() {
         const { EditComponent } = this.props;
-        const { items, selected, modified } = this.state;
+        const { items, selected, modified, search } = this.state;
 
         if (selected) {
             return (
@@ -54,7 +54,8 @@ export class ListEdit<T extends Named> extends React.PureComponent<Props<T>, Sta
                 <button className="big" disabled={!modified} onClick={this.save}>Save</button>
                 <button className="big exit" onClick={this.props.onExit}>X</button>
                 <div>
-                    <input style={{ width: 200 }} className="big" onChange={this.changeSearch} placeholder="search"/>
+                    <input value={search} style={{ width: 200 }} className="big" onChange={this.changeSearch}
+                           placeholder="search"/>
                     &nbsp;
                     <input style={{ width: 200 }} className="big" ref={this.addName} placeholder="add"/>
                     <button className="big" onClick={this.add}>+</button>
@@ -62,7 +63,8 @@ export class ListEdit<T extends Named> extends React.PureComponent<Props<T>, Sta
                 <table>
                     <tbody>
                     {ids.map((id) => (
-                        <ListEditRow key={id} id={id} name={filteredItems[id].name} remove={this.remove} rename={this.rename}
+                        <ListEditRow key={id} id={id} name={filteredItems[id].name} remove={this.remove}
+                                     rename={this.rename}
                                      copy={this.copy} select={this.select}/>
                     ))}
                     </tbody>

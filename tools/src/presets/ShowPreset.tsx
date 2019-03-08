@@ -160,12 +160,12 @@ export class ShowPreset<T extends CreaturePreset> extends React.Component<Props<
         );
     }
 
-    private changePreset(newValues: Partial<CreaturePreset>) {
+    private changePreset = (newValues: Partial<CreaturePreset>) => {
         this.props.onChange({
             ...this.props.item as any,
             ...newValues as any,
         });
-    }
+    };
 
     private changeName = (e: React.SyntheticEvent<HTMLInputElement>) => {
         this.changePreset({
