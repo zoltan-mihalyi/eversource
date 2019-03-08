@@ -21,22 +21,18 @@ input.big {
     font-size: xx-large;
 }
 
-.menu ul {
-    padding: 0;
+.menu table {
+    font-size: x-large;
+    font-family: Arial, sans-serif;
 }
 
-.menu li a {
+.menu table a {
     margin-left: 10px;
-    color: black;
-    font-size: xx-large;
+    color: #0601c3;
     text-decoration: none;
 }
 
-.menu li a.selected {
-    color: #335700;
-}
-
-.menu li a:hover {
+.menu table a:hover {
     color: #ccbd7b;
 }
 

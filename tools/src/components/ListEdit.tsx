@@ -2,6 +2,11 @@ import * as React from 'react';
 import { ItemEdit } from './ItemEdit';
 import * as fs from "fs";
 import { EditProps } from './edit/Edit';
+import { ListEditRow } from './ListEditRow';
+
+interface Named {
+    name: string;
+}
 
 interface Props<T> {
     fileName: string;
@@ -11,19 +16,22 @@ interface Props<T> {
 }
 
 interface State<T> {
+    search: string;
     selected: string | null;
-    items: { [name: string]: T };
+    items: Items<T>;
     modified: boolean;
 }
 
-export class ListEdit<T> extends React.PureComponent<Props<T>, State<T>> {
+type Items<T> = { [name: string]: T };
+
+export class ListEdit<T extends Named> extends React.PureComponent<Props<T>, State<T>> {
     private addName = React.createRef<HTMLInputElement>();
 
     constructor(props: Props<T>) {
         super(props);
 
         const items = JSON.parse(fs.readFileSync(props.fileName, 'utf-8'));
-        this.state = { items, selected: null, modified: false };
+        this.state = { items, selected: null, modified: false, search: '' };
     }
 
 
@@ -38,26 +46,47 @@ export class ListEdit<T> extends React.PureComponent<Props<T>, State<T>> {
             );
         }
 
+        const filteredItems = this.getFilteredItems();
+        const ids = Object.keys(filteredItems).sort();
+
         return (
             <div className="menu">
                 <button className="big" disabled={!modified} onClick={this.save}>Save</button>
                 <button className="big exit" onClick={this.props.onExit}>X</button>
                 <div>
-                    <input style={{ width: 200 }} className="big" ref={this.addName}/>
+                    <input style={{ width: 200 }} className="big" onChange={this.changeSearch} placeholder="search"/>
+                    &nbsp;
+                    <input style={{ width: 200 }} className="big" ref={this.addName} placeholder="add"/>
                     <button className="big" onClick={this.add}>+</button>
                 </div>
-                <ul>
-                    {Object.keys(items).map((name) => (
-                        <li key={name}>
-                            <button onClick={() => this.rename(name)}>Rename</button>
-                            <button onClick={() => this.delete(name)}>X</button>
-                            <a className={name === selected ? 'selected' : ''} href="#"
-                               onClick={() => this.select(name)}>{name}</a>
-                        </li>
+                <table>
+                    <tbody>
+                    {ids.map((id) => (
+                        <ListEditRow key={id} id={id} name={filteredItems[id].name} remove={this.remove} rename={this.rename}
+                                     copy={this.copy} select={this.select}/>
                     ))}
-                </ul>
+                    </tbody>
+                </table>
             </div>
         );
+    }
+
+    private getFilteredItems(): Items<T> {
+        const { items, search } = this.state;
+        if (!search) {
+            return items;
+        }
+
+        const filteredItems: Items<T> = {};
+
+        for (const id of Object.keys(items)) {
+            const item = items[id];
+            if (matches(id, search) || matches(item.name, search)) {
+                filteredItems[id] = item;
+            }
+        }
+
+        return filteredItems;
     }
 
     private save = () => {
@@ -65,26 +94,36 @@ export class ListEdit<T> extends React.PureComponent<Props<T>, State<T>> {
         fs.writeFileSync(this.props.fileName, JSON.stringify(this.state.items, null, 2));
     };
 
-    private rename(name: string) {
-        const newName = prompt('New name', name);
-        if (name === newName || !newName) {
-            return;
-        }
-
-        if (this.state.items[newName]) {
+    private rename = (id: string, newId: string) => {
+        if (this.state.items[newId]) {
             alert('Already exists!');
             return;
         }
 
-        const items: { [name: string]: T } = {};
+        const items: Items<T> = {};
         for (const key of Object.keys(this.state.items)) {
-            items[key === name ? newName : key] = this.state.items[key];
+            items[key === id ? newId : key] = this.state.items[key];
         }
         this.setState({
             items,
             modified: true,
         });
-    }
+    };
+
+    private copy = (id: string, newId: string) => {
+        if (this.state.items[newId]) {
+            alert('Already exists!');
+            return;
+        }
+
+        this.setState({
+            items: {
+                ...this.state.items,
+                [newId]: this.state.items[id],
+            },
+            modified: true,
+        });
+    };
 
     private add = () => {
         const item = this.props.defaultItem;
@@ -124,24 +163,29 @@ export class ListEdit<T> extends React.PureComponent<Props<T>, State<T>> {
         }, this.save);
     };
 
-    private delete(name: string) {
-        if (!confirm('Delete ' + name + '?')) {
-            return;
-        }
+    private remove = (id: string) => {
         const items = {
             ...this.state.items,
         };
-        delete items[name];
+        delete items[id];
         const { selected } = this.state;
         this.setState({
             items,
-            selected: selected === name ? null : selected,
+            selected: selected === id ? null : selected,
             modified: true,
         });
+    };
+
+    private select = (id: string) => {
+        this.setState({ selected: id });
+    };
+
+    private changeSearch = (e: React.SyntheticEvent<HTMLInputElement>) => {
+        this.setState({ search: e.currentTarget.value });
     }
 
-    private select(name: string) {
-        this.setState({ selected: name });
-    }
+}
 
+function matches(text: string, filter: string) {
+    return text.toLocaleLowerCase().indexOf(filter.toLocaleLowerCase()) !== -1;
 }
