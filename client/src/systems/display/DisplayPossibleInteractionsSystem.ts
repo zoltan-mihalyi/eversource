@@ -1,7 +1,7 @@
 import { EntityContainer } from '../../../../common/es/EntityContainer';
 import { ClientComponents } from '../../es/ClientComponents';
 import { PartialPick } from '../../../../common/util/Types';
-import { TextureLoader } from '../../map/TextureLoader';
+import { TextureLoader } from '../../loader/TextureLoader';
 import { GOLDEN } from '../../display/Cursors';
 
 export function displayPossibleInteractionsSystem(container: EntityContainer<ClientComponents>, textureLoader: TextureLoader) {

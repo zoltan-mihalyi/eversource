@@ -34,7 +34,7 @@ class PropertyEdit<T, K extends keyof T> extends React.PureComponent<PropertyEdi
 
 
 export type PropertyConfig<T> = {
-    [P in keyof T]: { component: EditComponent<T[P]> };
+    [P in keyof T]-?: { component: EditComponent<T[P]> };
 }
 
 export function objectEdit<T, O extends keyof T = never>(config: PropertyConfig<Omit<T, O>>): EditComponent<T> {

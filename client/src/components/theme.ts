@@ -1,3 +1,5 @@
+import { ItemQuality } from '../../../common/protocol/Inventory';
+
 export const black = '#000000';
 
 export const brown = {
@@ -42,3 +44,12 @@ export const attitude = {
     neutral: '#e1e000',
     hostile: '#cc0000',
 };
+
+export const quality: { [P in ItemQuality]: string } = {
+    common: '#f1e7d0',
+    rare: '#3e6dde',
+    epic: '#9325d7',
+    legendary: '#fb4473',
+};
+
+export const lore = '#eebd15';

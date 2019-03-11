@@ -1,6 +1,6 @@
 import { EntityContainer } from '../../../common/es/EntityContainer';
 import { ClientComponents } from '../es/ClientComponents';
-import { TextureLoader } from '../map/TextureLoader';
+import { TextureLoader } from '../loader/TextureLoader';
 import { PartialPick } from '../../../common/util/Types';
 import { Entity } from '../../../common/es/Entity';
 import { getDirectoryAndFileName } from '../display/SimpleSprite';

@@ -9,7 +9,7 @@ import { SplitLayout } from '../common/SplitLayout';
 import { QuestContent } from './QuestContent';
 import { ActionButton } from '../common/Button/ActionButton';
 import { Panel } from '../common/Panel';
-import CharacterContext from '../CharacterContext';
+import CharacterContext from '../context/CharacterContext';
 
 interface Props {
     questLog: Map<QuestId, QuestLogItem>;

@@ -11,10 +11,13 @@ import { InputManager } from '../../input/InputManager';
 import { XpBar } from './XpBar';
 import { maxXpFor } from '../../../../common/algorithms';
 import { Gui } from '../common/Gui';
-import CharacterContext, { EMPTY_CHARACTER } from '../CharacterContext';
+import CharacterContext, { EMPTY_CHARACTER } from '../context/CharacterContext';
 import { ChatBox } from '../chat/ChatBox';
 import { Positioned } from '../common/Positioned';
 import { ChatMessage } from '../../../../common/protocol/Messages';
+import { InventoryItemInfo } from '../../../../common/protocol/Inventory';
+import { TextureLoader } from '../../loader/TextureLoader';
+import TextureLoaderContext from '../context/TextureLoaderContext';
 
 const MAX_MESSAGES = 100;
 
@@ -24,11 +27,13 @@ interface Props {
     canvas: HTMLCanvasElement;
     onMount: (gameScreen: GameScreen) => void;
     playingNetworkApi: PlayingNetworkApi;
+    textureLoader: TextureLoader;
 }
 
 interface State {
     messages: ChatMessage[];
     playerState: PlayerState;
+    inventory: InventoryItemInfo[];
     questLog: Map<QuestId, QuestLogItem>;
     debug: boolean;
 }
@@ -44,38 +49,43 @@ export class GameScreen extends React.Component<Props, State> {
     state: State = {
         messages: [],
         playerState: { interaction: null, character: null },
+        inventory: [],
         questLog: new Map<QuestId, QuestLogItem>(),
         debug: settings.get('debug') || false,
     };
 
     render() {
-        const { playerState: { interaction, character }, questLog, debug } = this.state;
+        const { textureLoader } = this.props;
+        const { playerState: { interaction, character }, inventory, questLog, debug } = this.state;
 
         const displayCharacter = character || EMPTY_CHARACTER;
 
         return (
             <Gui>
-                <CharacterContext.Provider value={displayCharacter}>
-                    <div ref={this.containerRef}/>
+                <TextureLoaderContext.Provider value={textureLoader}>
+                    <CharacterContext.Provider value={displayCharacter}>
+                        <div ref={this.containerRef}/>
 
-                    <Positioned horizontal="left" vertical="bottom">
-                        <ChatBox inputRef={this.chatBoxInput} sendMessage={this.sendChatMessage}
-                                 messages={this.state.messages}/>
-                    </Positioned>
-                    <Positioned horizontal="stretch" vertical="bottom">
-                        <XpBar level={displayCharacter.level} xp={displayCharacter.xp}
-                               maxXp={maxXpFor(displayCharacter.level)}/>
-                    </Positioned>
+                        <Positioned horizontal="left" vertical="bottom">
+                            <ChatBox inputRef={this.chatBoxInput} sendMessage={this.sendChatMessage}
+                                     messages={this.state.messages}/>
+                        </Positioned>
+                        <Positioned horizontal="stretch" vertical="bottom">
+                            <XpBar level={displayCharacter.level} xp={displayCharacter.xp}
+                                   maxXp={maxXpFor(displayCharacter.level)}/>
+                        </Positioned>
 
-                    {debug && <DebugInfo/>}
-                    {interaction &&
-                    <InteractionDialog interactions={interaction} onAcceptQuest={this.acceptQuest}
-                                       onCompleteQuest={this.completeQuest}
-                                       onClose={this.closeInteraction}/>}
+                        {debug && <DebugInfo/>}
+                        {interaction &&
+                        <InteractionDialog interactions={interaction} onAcceptQuest={this.acceptQuest}
+                                           onCompleteQuest={this.completeQuest}
+                                           onClose={this.closeInteraction}/>}
 
-                    <div ref={this.joystickContainerRef}/>
-                    <GameMenu questLog={questLog} onLeave={this.leave} onAbandonQuest={this.abandonQuest}/>
-                </CharacterContext.Provider>
+                        <div ref={this.joystickContainerRef}/>
+                        <GameMenu character={displayCharacter} questLog={questLog} inventory={inventory} onLeave={this.leave}
+                                  onAbandonQuest={this.abandonQuest}/>
+                    </CharacterContext.Provider>
+                </TextureLoaderContext.Provider>
             </Gui>
         );
     }
@@ -108,6 +118,10 @@ export class GameScreen extends React.Component<Props, State> {
 
     updateQuestLog(questLog: Map<QuestId, QuestLogItem>) {
         this.setState({ questLog });
+    }
+
+    updateInventory(inventory: InventoryItemInfo[]) {
+        this.setState({ inventory });
     }
 
     private joystickContainerRef = (div: HTMLDivElement | null) => {

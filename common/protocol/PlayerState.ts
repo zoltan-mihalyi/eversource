@@ -7,6 +7,7 @@ export interface CharacterState {
     classId: ClassId;
     level: number;
     xp: number;
+    inventorySize: number;
 }
 
 export interface PlayerState {

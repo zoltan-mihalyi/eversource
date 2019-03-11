@@ -14,6 +14,8 @@ import { PlayerState } from '../../../common/protocol/PlayerState';
 import { EntityId } from '../../../common/es/Entity';
 import { NetworkComponents } from '../../../common/components/NetworkComponents';
 import { Nullable } from '../../../common/util/Types';
+import { InventoryItemInfo, SlotId } from '../../../common/protocol/Inventory';
+import { MapDiffUnpacker } from './MapDiffUnpacker';
 import ResourceDictionary = PIXI.loaders.ResourceDictionary;
 
 export interface PlayingStateData {
@@ -44,7 +46,8 @@ export class PlayingState extends NetworkingState<PlayingStateData> implements P
     private readonly game: GameApplication;
     private gameScreen!: GameScreen;
     private currentPlayerState: PlayerState = { interaction: null, character: null };
-    private currentQuestLog: Map<QuestId, QuestLogItem> = new Map<QuestId, QuestLogItem>();
+    private questLogMap = new MapDiffUnpacker<QuestId, QuestLogItem>();
+    private inventoryMap = new MapDiffUnpacker<SlotId, InventoryItemInfo>();
 
     constructor(manager: StateManager<any, NetworkingContext>, context: NetworkingContext, data: PlayingStateData) {
         super(manager, context, data);
@@ -94,23 +97,14 @@ export class PlayingState extends NetworkingState<PlayingStateData> implements P
     }
 
     questLog(diffs: Diff<QuestId, QuestLogItem>[]) {
-        const questLog = new Map(this.currentQuestLog);
+        this.questLogMap.update(diffs);
 
-        for (const diff of diffs) {
-            switch (diff.type) {
-                case 'create':
-                    questLog.set(diff.id, diff.data);
-                    break;
-                case 'change':
-                    questLog.set(diff.id, { ...questLog.get(diff.id)!, ...diff.changes });
-                    break;
-                case 'remove':
-                    questLog.delete(diff.id);
-            }
-        }
+        this.gameScreen.updateQuestLog(this.questLogMap.getCurrent());
+    }
 
-        this.currentQuestLog = questLog;
-        this.gameScreen.updateQuestLog(questLog);
+    inventory(diffs: Diff<SlotId, InventoryItemInfo>[]) {
+        this.inventoryMap.update(diffs);
+        this.gameScreen.updateInventory(Array.from(this.inventoryMap.getCurrent().values()));
     }
 
     protected abort() {

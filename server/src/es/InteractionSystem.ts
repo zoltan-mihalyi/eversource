@@ -3,12 +3,13 @@ import { ServerEvents } from './ServerEvents';
 import { InteractionTable, QuestId, QuestInfo } from '../../../common/domain/InteractionTable';
 import { Quests, ServerComponents } from './ServerComponents';
 import { Quest } from '../quest/Quest';
-import { QuestStatus } from '../character/CharacterDetails';
+import { QuestProgression } from '../character/CharacterDetails';
 import { EntityContainer } from '../../../common/es/EntityContainer';
 import { Entity } from '../../../common/es/Entity';
 import { Position } from '../../../common/domain/Location';
 import { CreatureAttitude } from '../../../common/components/CommonComponents';
 import { QuestIndexer } from '../quest/QuestIndexer';
+import { CharacterInventory } from '../character/CharacterInventory';
 
 export function interactionSystem(entityContainer: EntityContainer<ServerComponents>, eventBus: EventBus<ServerEvents>, questIndexer: QuestIndexer) {
     const interactingEntities = entityContainer.createQuery('interacting');
@@ -52,12 +53,7 @@ export function interactionSystem(entityContainer: EntityContainer<ServerCompone
             return;
         }
 
-        const { quests } = source.components;
-
-        if (!quests) {
-            return;
-        }
-        const interactionTable = getInteractionTable(target, quests, questIndexer);
+        const interactionTable = getInteractionTable(source, target, questIndexer);
         if (!interactionTable) {
             return;
         }
@@ -103,7 +99,7 @@ export function interactionSystem(entityContainer: EntityContainer<ServerCompone
             return;
         }
 
-        const interactionTable = getInteractionTable(interacting.entity, quests, questIndexer);
+        const interactionTable = getInteractionTable(entity, interacting.entity, questIndexer);
         if (!interactionTable) {
             return;
         }
@@ -120,8 +116,15 @@ interface QuestContext {
     quests: Quests;
 }
 
-export function getInteractionTable(entity: Entity<ServerComponents>, quests: Quests, questIndexer: QuestIndexer): InteractionTable | null {
-    const { name, interactable } = entity.components;
+export function getInteractionTable(source: Entity<ServerComponents>, target: Entity<ServerComponents>,
+                                    questIndexer: QuestIndexer): InteractionTable | null {
+
+    const { quests, inventory } = source.components;
+    if (!quests || !inventory) {
+        return null;
+    }
+
+    const { name, interactable } = target.components;
     if (!interactable || !name) {
         return null;
     }
@@ -144,7 +147,8 @@ export function getInteractionTable(entity: Entity<ServerComponents>, quests: Qu
             continue;
         }
         const questInfo = questIndexer.questInfoMap.get(quest.id)!;
-        if (questStatus !== 'failed' && allTaskComplete(quest, questStatus)) {
+        const requirementsProgression = questRequirementsProgression(quest, inventory);
+        if (questStatus !== 'failed' && allTaskComplete(quest, questStatus, requirementsProgression)) {
             completable.push(questInfo);
         } else {
             completableLater.push(questInfo);
@@ -154,11 +158,21 @@ export function getInteractionTable(entity: Entity<ServerComponents>, quests: Qu
     return {
         name: name.value,
         story: interactable.story,
-        entityId: entity.id,
+        entityId: target.id,
         acceptable,
         completable,
         completableLater,
     };
+}
+
+export function questRequirementsProgression(quest: Quest, inventory: CharacterInventory): number[] {
+    const { tasks } = quest;
+    if (!tasks) {
+        return [];
+    }
+    return tasks.requirements.map((req) => {
+        return Math.min(req.count, inventory.getCount(req.itemId));
+    });
 }
 
 function preconditionMet(done: Set<QuestId>, quest: Quest) {
@@ -170,14 +184,19 @@ function preconditionMet(done: Set<QuestId>, quest: Quest) {
     return true;
 }
 
-function allTaskComplete(quest: Quest, questStatus: QuestStatus): boolean {
+function allTaskComplete(quest: Quest, progression: QuestProgression, requirementsProgression: number[]): boolean {
     const tasks = quest.tasks;
     if (!tasks) {
         return true;
     }
 
     for (let i = 0; i < tasks.list.length; i++) {
-        if (questStatus[i] !== tasks.list[i].count) {
+        if (progression[i] !== tasks.list[i].count) {
+            return false;
+        }
+    }
+    for (let i = 0; i < tasks.requirements.length; i++) {
+        if (requirementsProgression[i] !== tasks.requirements[i].count) {
             return false;
         }
     }

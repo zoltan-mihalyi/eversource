@@ -1,14 +1,25 @@
 import { X, Y, ZoneId } from '../../../common/domain/Location';
 import { UserDao } from '../dao/UserDao';
-import { CharacterId, CharacterInfo, CharacterName, ClassId } from '../../../common/domain/CharacterInfo';
+import { CharacterId, CharacterInfo, CharacterName } from '../../../common/domain/CharacterInfo';
 import { CharacterDetails } from '../character/CharacterDetails';
 import { hpForLevel } from '../../../common/algorithms';
+import { ItemId } from '../../../common/protocol/Inventory';
+import { InventoryItem} from '../Item';
+import { CharacterInventory } from '../character/CharacterInventory';
+
+function inventoryItem(itemId: number, count = 1): InventoryItem {
+    return {
+        itemId: itemId as ItemId,
+        count,
+    };
+}
 
 export class FakeUserDao implements UserDao {
     private characters: CharacterDetails[] = [
         {
             questsDone: new Set(),
             questLog: new Map(),
+            items: [inventoryItem(1)],
             info:
                 {
                     id: '1' as CharacterId,
@@ -52,6 +63,7 @@ export class FakeUserDao implements UserDao {
         {
             questsDone: new Set(),
             questLog: new Map(),
+            items: [inventoryItem(1, 5), inventoryItem(2), inventoryItem(3, 11)],
             info: {
                 id: '2' as CharacterId,
                 level: 2,
@@ -94,6 +106,7 @@ export class FakeUserDao implements UserDao {
         {
             questsDone: new Set(),
             questLog: new Map(),
+            items: [inventoryItem(3)],
             info: {
                 id: '3' as CharacterId,
                 level: 10,

@@ -1,10 +1,18 @@
 import { QuestBase, QuestId } from '../../../common/domain/InteractionTable';
+import { ItemId } from '../../../common/protocol/Inventory';
 
-interface BaseTask {
+export interface BaseTask {
     type: string;
     count: number;
     title: string;
 }
+
+export interface ItemRequirement extends BaseTask {
+    type: 'item';
+    itemId: ItemId;
+}
+
+export type QuestRequirement = ItemRequirement;
 
 export interface VisitAreaTask extends BaseTask {
     type: 'visit';
@@ -21,15 +29,12 @@ export interface SpellTask extends BaseTask {
     spellIds: string[];
 }
 
-export interface ItemTask extends BaseTask {
-    type: 'item';
-}
-
-export type Task = VisitAreaTask | KillTask | ItemTask | SpellTask;
+export type Task = VisitAreaTask | KillTask | SpellTask;
 
 export interface Tasks {
     progress: string;
     list: Task[];
+    requirements: QuestRequirement[];
 }
 
 export type QuestDifficulty = 'easy' | 'normal' | 'hard';

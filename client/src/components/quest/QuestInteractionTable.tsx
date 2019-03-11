@@ -7,6 +7,7 @@ import { Scrollable } from '../common/Scrollable';
 import { ActionButton } from '../common/Button/ActionButton';
 import { QuestStyle } from './QuestStyle';
 import { ResolvedText } from './ResolvedText';
+import { QuestRequirements } from './QuestRequirements';
 
 interface Props {
     info: QuestInfo;
@@ -44,6 +45,7 @@ export class QuestInteractionTable extends React.PureComponent<Props> {
                     <QuestStyle>
                         <h2>{info.name}</h2>
                         <ResolvedText text={info.completion}/>
+                        <QuestRequirements requirements={info.requirements}/>
                         <Rewards info={info}/>
                     </QuestStyle>
                 );
@@ -52,6 +54,7 @@ export class QuestInteractionTable extends React.PureComponent<Props> {
                     <QuestStyle>
                         <h2>{info.name}</h2>
                         <ResolvedText text={info.progress!}/>
+                        <QuestRequirements requirements={info.requirements}/>
                     </QuestStyle>
                 );
         }

@@ -16,5 +16,14 @@ export function injectSheet<T extends string>(styles: StyleRules<T>): Wrapper<T>
 }
 
 export const SMALL_DEVICE = '@media (max-width: 1000px)';
+export const NOT_SMALL_DEVICE = '@media (min-width: 1001px)';
 
 export const SMALLEST_DEVICE = '@media (max-width: 380px)';
+
+export function times<T>(n: number, fn: (i: number) => T): T[] {
+    const result: T[] = [];
+    for (let i = 0; i < n; i++) {
+        result[i] = fn(i);
+    }
+    return result;
+}

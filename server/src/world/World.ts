@@ -16,11 +16,13 @@ import { AIMovingController, ServerComponents } from '../es/ServerComponents';
 import { Direction } from '../../../common/components/CommonComponents';
 import { Spells } from '../Spell';
 import { QuestIndexer } from '../quest/QuestIndexer';
+import { Items } from '../Item';
 
 export interface World {
     getZone(zoneId: ZoneId): Promise<Zone>;
 
     readonly questIndexer: QuestIndexer;
+    readonly items: Items;
 }
 
 const FPS = 50;
@@ -32,15 +34,19 @@ export interface AllPresets {
     object: ObjectPresets;
 
     spells: Spells;
+    items: Items;
 }
 
 export class WorldImpl implements World {
+    readonly items: Items;
+
     private readonly zonePromises = new Map<ZoneId, Promise<Zone>>();
     private readonly zones = new Map<ZoneId, Zone>();
     private readonly timer: NodeJS.Timer;
 
     constructor(private mapLoader: MapLoader, private presets: AllPresets, readonly questIndexer: QuestIndexer) {
         this.timer = setInterval(this.update, INTERVAL);
+        this.items = presets.items;
     }
 
     stop() {

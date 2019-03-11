@@ -67,7 +67,7 @@ class TileSetDetails {
 }
 
 export class TextureLoader {
-    private tileSetLoader = new TileSetDetailsLoader(this.process, this.baseDir);
+    readonly tileSetLoader = new TileSetDetailsLoader(this.process, this.baseDir);
     private palettesLoader = new PalettesLoader(this.process, this.baseDir);
 
     constructor(private renderer: AnyRenderer, private readonly process: CancellableProcess,

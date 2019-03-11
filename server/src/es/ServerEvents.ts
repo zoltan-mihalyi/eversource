@@ -2,6 +2,7 @@ import { Quests, ServerComponents } from './ServerComponents';
 import { Entity } from '../../../common/es/Entity';
 import { QuestId, QuestInfo } from '../../../common/domain/InteractionTable';
 import { Spell } from '../Spell';
+import { CharacterInventory } from '../character/CharacterInventory';
 
 export interface Hit {
     source: Entity<ServerComponents>;
@@ -61,6 +62,11 @@ interface SpellCast {
     caster: Entity<ServerComponents>;
     target: Entity<ServerComponents>;
     spell: Spell;
+}
+
+interface InventoryUpdate {
+    entity: Entity<ServerComponents>;
+    inventory: CharacterInventory;
 }
 
 interface ChatMessageEvent {

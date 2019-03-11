@@ -21,7 +21,7 @@ const quests: { [key: number]: PresetQuest } = {
         "taskDescription": "Lava slimes live near lava holes. Get rid of them!",
         "completion": "Wasn't that hard, was it?",
         "requires": [
-            7 as QuestId
+            7 as QuestId,
         ],
         "tasks": {
             "progress": "Have you slain the lava slimes, %class%?",
@@ -32,11 +32,12 @@ const quests: { [key: number]: PresetQuest } = {
                     "title": "Intruders slain",
                     "npcIds": [
                         "slime_lava",
-                        "slime_lava_rock"
-                    ]
-                }
-            ]
-        }
+                        "slime_lava_rock",
+                    ],
+                },
+            ],
+            "requirements": [],
+        },
     },
     6: {
         "level": 4,
@@ -55,13 +56,14 @@ const quests: { [key: number]: PresetQuest } = {
                     "count": 1,
                     "type": "visit",
                     "areaName": "slimes",
-                    "title": "Visit eastern slimes"
-                }
-            ]
-        }
+                    "title": "Visit eastern slimes",
+                },
+            ],
+            "requirements": [],
+        },
     },
 };
-let questIndexer = new QuestIndexer(quests);
+let questIndexer = new QuestIndexer(quests, {});
 
 describe('QuestSystem', function () {
     let container: ServerEntityContainer;
@@ -84,7 +86,7 @@ describe('QuestSystem', function () {
     });
 
     it('should add task progression', async function () {
-        questLog.set(1 as QuestId, [0]); // TODO mock quests
+        questLog.set(1 as QuestId, [0]);
 
         questSystem(eventBus, {}, questIndexer);
 
@@ -97,7 +99,7 @@ describe('QuestSystem', function () {
     });
 
     it('should do nothing with complete tasks', async function () {
-        questLog.set(1 as QuestId, [10]); // TODO mock quests
+        questLog.set(1 as QuestId, [10]);
 
         questSystem(eventBus, {}, questIndexer);
 
@@ -110,7 +112,7 @@ describe('QuestSystem', function () {
     });
 
     it('should do nothing with failed quests', async function () {
-        questLog.set(1 as QuestId, 'failed'); // TODO mock quests
+        questLog.set(1 as QuestId, 'failed');
 
         questSystem(eventBus, {}, questIndexer);
 
@@ -123,7 +125,7 @@ describe('QuestSystem', function () {
     });
 
     it('should handle area events', async function () {
-        questLog.set(6 as QuestId, [0]); // TODO mock quests
+        questLog.set(6 as QuestId, [0]);
 
         questSystem(eventBus, {}, questIndexer);
 

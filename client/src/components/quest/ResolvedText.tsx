@@ -1,6 +1,6 @@
 import { CharacterState } from '../../../../common/protocol/PlayerState';
 import * as React from 'react';
-import CharacterContext from '../CharacterContext';
+import CharacterContext from '../context/CharacterContext';
 
 interface Props {
     text: string;

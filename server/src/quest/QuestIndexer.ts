@@ -1,7 +1,8 @@
 import { groupBy, Grouped } from '../utils';
-import { QuestId, QuestInfo } from '../../../common/domain/InteractionTable';
+import { QuestId, QuestInfo, RequirementInfo, TaskInfo } from '../../../common/domain/InteractionTable';
 import { questXpReward } from '../../../common/algorithms';
-import { PresetQuest, Quest } from './Quest';
+import { PresetQuest, Quest, Tasks } from './Quest';
+import { itemInfo, Items } from '../Item';
 
 export class QuestIndexer {
     readonly quests = new Map<QuestId, Quest>();
@@ -9,13 +10,13 @@ export class QuestIndexer {
     readonly questEnds: Grouped<Quest>;
     readonly questInfoMap = new Map<QuestId, QuestInfo>();
 
-    constructor(presetQuests: { [questId: number]: PresetQuest }) {
+    constructor(presetQuests: { [questId: number]: PresetQuest }, items: Items) {
         const quests: Quest[] = [];
         for (const key of Object.keys(presetQuests)) {
             const questId = +key as QuestId;
             const quest: Quest = {
                 id: questId,
-                ...presetQuests[questId]
+                ...presetQuests[questId],
             };
             this.quests.set(questId, quest);
             quests.push(quest);
@@ -26,7 +27,8 @@ export class QuestIndexer {
 
         for (const quest of quests) {
             const questTasks = quest.tasks;
-            const tasks = questTasks ? questTasks.list.map(({ title, count }) => ({ title, count })) : [];
+            const tasks = getTasks(questTasks);
+            const requirements = getRequirements(items, questTasks);
             const questInfo: QuestInfo = {
                 id: quest.id,
                 level: quest.level,
@@ -36,6 +38,7 @@ export class QuestIndexer {
                 taskDescription: quest.taskDescription,
                 completion: quest.completion,
                 tasks,
+                requirements,
             };
             if (questTasks) {
                 questInfo.progress = questTasks.progress;
@@ -43,4 +46,21 @@ export class QuestIndexer {
             this.questInfoMap.set(quest.id, questInfo);
         }
     }
+}
+
+function getTasks(questTasks?: Tasks): TaskInfo[] {
+    if (!questTasks) {
+        return [];
+    }
+
+    return [...questTasks.list, ...questTasks.requirements].map(({ title, count }) => ({ title, count }));
+}
+
+function getRequirements(items: Items, questTasks?: Tasks): RequirementInfo[] {
+    if (!questTasks) {
+        return [];
+    }
+    return questTasks.requirements.map(({ count, itemId }) => ({
+        item: Object.assign(itemInfo(items, itemId), { count }),
+    }));
 }

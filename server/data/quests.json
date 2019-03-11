@@ -23,7 +23,8 @@
             "slime_lava_rock"
           ]
         }
-      ]
+      ],
+      "requirements": []
     }
   },
   "2": {
@@ -73,11 +74,13 @@
     "requires": [],
     "tasks": {
       "progress": "Have you found the queen bee? It is the biggest one with golden sting!",
-      "list": [
+      "list": [],
+      "requirements": [
         {
           "type": "item",
           "count": 1,
-          "title": "Sting of the queen bee"
+          "title": "Sting of the queen bee",
+          "itemId": 2
         }
       ]
     }
@@ -101,7 +104,8 @@
           "areaName": "slimes",
           "title": "Visit eastern slimes"
         }
-      ]
+      ],
+      "requirements": []
     }
   },
   "7": {
@@ -146,6 +150,30 @@
           "spellIds": [
             "consume_vegetable"
           ]
+        }
+      ],
+      "requirements": []
+    }
+  },
+  "10": {
+    "name": "Pick it",
+    "level": 1,
+    "difficulty": "easy",
+    "startsAt": "cacal",
+    "endsAt": "cacal",
+    "requires": [],
+    "completion": "Good job!",
+    "description": "Pick up the item!",
+    "taskDescription": "Pick it up!",
+    "tasks": {
+      "progress": "Are you done?",
+      "list": [],
+      "requirements": [
+        {
+          "type": "item",
+          "title": "Bring the item",
+          "count": 3,
+          "itemId": 1
         }
       ]
     }

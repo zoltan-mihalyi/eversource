@@ -2,7 +2,7 @@ import * as PIXI from 'pixi.js';
 import { EntityContainer } from '../../../../common/es/EntityContainer';
 import { ClientComponents } from '../../es/ClientComponents';
 import { PartialPick } from '../../../../common/util/Types';
-import { TextureLoader } from '../../map/TextureLoader';
+import { TextureLoader } from '../../loader/TextureLoader';
 
 export function displayShadowSystem(container: EntityContainer<ClientComponents>, textureLoader: TextureLoader) {
     const entities = container.createQuery('display', 'shadowSize');

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as path from 'path';
 import * as PIXI from '../../../client/src/pixi';
-import { TextureLoader } from '../../../client/src/map/TextureLoader';
+import { TextureLoader } from '../../../client/src/loader/TextureLoader';
 import { CancellableProcess } from '../../../common/util/CancellableProcess';
 import { wwwDir } from '../Utils';
 import { BasePreset, CreaturePreset, resolvePresetAttitude } from '../../../server/src/world/Presets';

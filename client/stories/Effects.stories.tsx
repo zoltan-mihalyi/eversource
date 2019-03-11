@@ -1,6 +1,6 @@
 import { storiesOf } from '@storybook/react';
 import * as React from 'react';
-import { TextureLoader } from '../src/map/TextureLoader';
+import { TextureLoader } from '../src/loader/TextureLoader';
 import { CancellableProcess } from '../../common/util/CancellableProcess';
 import { app, TestScreen } from './TestScreen';
 import { Direction, Effect } from '../../common/components/CommonComponents';
@@ -13,8 +13,7 @@ import { ClientEvents } from '../src/es/ClientEvents';
 import { EntityId } from '../../common/es/Entity';
 import { X, Y } from '../../common/domain/Location';
 import { nextValue } from '../../common/util/utils';
-
-const textureLoader = new TextureLoader(app.renderer, new CancellableProcess(), 32);
+import { textureLoader } from './SampleData';
 
 const DIRECTIONS: Direction[] = [
     'right',

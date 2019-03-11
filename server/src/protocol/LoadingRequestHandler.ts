@@ -4,6 +4,7 @@ import { CancellableProcess } from '../../../common/util/CancellableProcess';
 import { hpForLevel } from '../../../common/algorithms';
 import { CharacterDetails } from '../character/CharacterDetails';
 import { CreatureAttitude } from '../../../common/components/CommonComponents';
+import { CharacterInventory } from '../character/CharacterInventory';
 
 export class LoadingRequestHandler extends ClientState<CharacterDetails> {
     private serverLoading = false;
@@ -15,11 +16,12 @@ export class LoadingRequestHandler extends ClientState<CharacterDetails> {
         }
         this.serverLoading = true;
 
-        const { info } = this.data;
+        const { info, items } = this.data;
 
         const { name, location: { zoneId, position } } = info;
 
-        const zone = await this.process.runPromise(this.context.world.getZone(zoneId));
+        const { world } = this.context;
+        const zone = await this.process.runPromise(world.getZone(zoneId));
 
         const entity = zone.createEntity({
             level: { value: info.level },
@@ -56,6 +58,7 @@ export class LoadingRequestHandler extends ClientState<CharacterDetails> {
             chatListener: {
                 onChatMessage: message => this.context.sendCommand('chatMessage', message),
             },
+            inventory: new CharacterInventory(world.items, items)
         });
 
         this.context.sendCommand('ready', void 0);

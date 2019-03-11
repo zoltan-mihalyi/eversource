@@ -6,6 +6,7 @@ import { ChatMessage } from '../../../common/protocol/Messages';
 import { Spell } from '../Spell';
 import { QuestId } from '../../../common/domain/InteractionTable';
 import { Quest } from '../quest/Quest';
+import { CharacterInventory } from '../character/CharacterInventory';
 
 export interface Moving {
     readonly x: number;
@@ -90,4 +91,5 @@ export interface ServerComponents extends CommonComponents {
     listening: true;
     useSpell: Spell;
     chatListener: ChatListener;
+    inventory: CharacterInventory;
 }

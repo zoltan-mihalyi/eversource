@@ -15,9 +15,10 @@ const presets: AllPresets = {
     monster: readJson('presets/monsters'),
     object: readJson('presets/objects'),
     spells: readJson('spells'),
+    items: readJson('items'),
 };
 
-const world = new WorldImpl(mapLoader, presets, new QuestIndexer(readJson('quests')));
+const world = new WorldImpl(mapLoader, presets, new QuestIndexer(readJson('quests'), presets.items));
 
 const app = express();
 app.use(express.static('../cordova/www'));

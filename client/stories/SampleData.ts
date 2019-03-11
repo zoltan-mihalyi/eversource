@@ -1,12 +1,28 @@
 import { InteractionTable, QuestId, QuestInfo } from '../../common/domain/InteractionTable';
 import { QuestLogItem } from '../../common/protocol/QuestLogItem';
 import { QuestStatus } from '../../server/src/character/CharacterDetails';
-import { PlayingNetworkApi } from '../src/protocol/PlayingState';
 import { EntityId } from '../../common/es/Entity';
 import { CharacterState } from '../../common/protocol/PlayerState';
+import { ItemInfo } from '../../common/protocol/ItemInfo';
+import { TextureLoader } from '../src/loader/TextureLoader';
+import { app } from './TestScreen';
+import { CancellableProcess } from '../../common/util/CancellableProcess';
+import { ItemId } from '../../common/protocol/Inventory';
+import { PlayingNetworkApi } from '../src/protocol/PlayingState';
 
 function noop() {
 }
+
+const ITEM_INFO: ItemInfo = {
+    id: 0 as ItemId,
+    name: 'Sting of the Queen Bee',
+    image: 'plants',
+    animation: 'carrot',
+    count: 1,
+    questItem: true,
+    quality: 'rare',
+    lore: 'Be careful, it is dangerous!',
+};
 
 export function questInfo(id: number, name: string, extra?: Partial<QuestInfo>): QuestInfo {
     return {
@@ -15,6 +31,7 @@ export function questInfo(id: number, name: string, extra?: Partial<QuestInfo>):
         xpReward: 40,
         name,
         tasks: [{ count: 10, title: 'Intruders slain' }, { count: 1, title: 'Area explored' }],
+        requirements: [{ item: ITEM_INFO }],
         completion: 'Good job, %name%! You are a good %sex%!',
         description: 'The lava slimes are causing so much trouble these days! We need an experienced %class% to solve this.',
         taskDescription: 'Slay the intruders and explore the area!',
@@ -58,12 +75,13 @@ QUEST_LOG.set(5 as QuestId, questLogItem(5, 'A quest with long task', [8, 1], {
 QUEST_LOG.set(6 as QuestId, questLogItem(6, 'A low level quest', [0, 0], { level: 2 }));
 QUEST_LOG.set(7 as QuestId, questLogItem(7, 'A very low level quest', [0, 0], { level: 1 }));
 
-export const CHARACTER_STATE:CharacterState = {
+export const CHARACTER_STATE: CharacterState = {
     level: 6,
     classId: 'warrior',
     name: 'John',
     sex: 'male',
     xp: 100,
+    inventorySize: 10,
 };
 
 export const FAKE_API: PlayingNetworkApi = {
@@ -76,3 +94,5 @@ export const FAKE_API: PlayingNetworkApi = {
     completeQuest: noop,
     sendChatMessage: noop,
 };
+
+export const textureLoader = new TextureLoader(app.renderer, new CancellableProcess(), 32);

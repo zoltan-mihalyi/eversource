@@ -81,6 +81,7 @@ export class App extends React.Component<{}, State> implements Display {
                 return (
                     <GameScreen inputManager={screen.game.inputManager} canvas={screen.game.view}
                                 setScale={screen.game.setScale} onMount={screen.onMount}
+                                textureLoader={screen.game.textureLoader}
                                 playingNetworkApi={screen.playingNetworkApi}/>
                 );
         }

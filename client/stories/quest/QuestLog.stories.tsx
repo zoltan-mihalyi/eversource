@@ -5,7 +5,7 @@ import { QuestId } from '../../../common/domain/InteractionTable';
 import { QuestLogItem } from '../../../common/protocol/QuestLogItem';
 import { CHARACTER_STATE, QUEST_LOG } from '../SampleData';
 import { Gui } from '../../src/components/common/Gui';
-import CharacterContext from '../../src/components/CharacterContext';
+import CharacterContext from '../../src/components/context/CharacterContext';
 
 
 function noop() {

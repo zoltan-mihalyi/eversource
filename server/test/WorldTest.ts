@@ -18,7 +18,7 @@ function createMapLoader(objects: TiledObject[] = []) {
             objects,
             tileWidth: 32,
             tileHeight: 32,
-        }))
+        })),
     };
 }
 
@@ -30,8 +30,9 @@ function newWorld(mapLoader: MapLoader, presets: Partial<AllPresets> = {}) {
         humanoid: {},
         object: {},
         spells: {},
+        items: {},
         ...presets,
-    }, new QuestIndexer({}));
+    }, new QuestIndexer({}, {}));
     runningWorlds.add(world);
     return world;
 }
@@ -77,8 +78,8 @@ describe('World', function () {
                 properties: {},
             } as TiledObject,
             {
-                properties: {}
-            } as TiledObject
+                properties: {},
+            } as TiledObject,
         ]);
         const presets: HumanoidPresets = {
             orc: {
@@ -104,8 +105,8 @@ describe('World', function () {
                     "cape": [],
                     "belt": [],
                     "mask": [],
-                }
-            }
+                },
+            },
         };
         const world = newWorld(mapLoader, { humanoid: presets });
         const zone = await world.getZone(zoneId);
@@ -128,8 +129,8 @@ describe('World', function () {
                 properties: {},
             } as TiledObject,
             {
-                properties: {}
-            } as TiledObject
+                properties: {},
+            } as TiledObject,
         ]);
         const presets: MonsterPresets = {
             lava_slime: {
@@ -137,7 +138,7 @@ describe('World', function () {
                 "level": 1,
                 "image": "slime",
                 "palette": "lava",
-            }
+            },
         };
         const world = newWorld(mapLoader, { monster: presets });
         const zone = await world.getZone(zoneId);
@@ -159,14 +160,14 @@ describe('World', function () {
                 width: 32,
                 height: 32,
                 properties: {},
-            } as TiledObject
+            } as TiledObject,
         ]);
         const presets: ObjectPresets = {
             carrot: {
                 "name": "Carrot",
                 "image": "plants",
                 "animation": "carrot",
-            }
+            },
         };
         const world = newWorld(mapLoader, { object: presets });
         const zone = await world.getZone(zoneId);

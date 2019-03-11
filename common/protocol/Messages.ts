@@ -7,6 +7,7 @@ import { QuestLogItem } from './QuestLogItem';
 import { EntityId } from '../es/Entity';
 import { NetworkComponents } from '../components/NetworkComponents';
 import { Nullable } from '../util/Types';
+import { InventoryItemInfo, SlotId } from './Inventory';
 
 export interface RequestTypes {
     enter: string;
@@ -38,8 +39,9 @@ export interface ResponseTypes {
     playerState: PlayerStateDiff;
     chatMessage: ChatMessage;
     questLog: Diff<QuestId, QuestLogItem>[];
+    inventory: Diff<SlotId, InventoryItemInfo>[];
 }
 
 export type ResponseCommand = keyof ResponseTypes;
 
-export const PROTOCOL_VERSION = 12;
+export const PROTOCOL_VERSION = 13;

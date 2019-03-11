@@ -47,7 +47,7 @@ export class ListEdit<T extends Named> extends React.PureComponent<Props<T>, Sta
         }
 
         const filteredItems = this.getFilteredItems();
-        const ids = Object.keys(filteredItems).sort();
+        const ids = Object.keys(filteredItems).sort(numberOrStringSorter);
 
         return (
             <div className="menu">
@@ -190,4 +190,18 @@ export class ListEdit<T extends Named> extends React.PureComponent<Props<T>, Sta
 
 function matches(text: string, filter: string) {
     return text.toLocaleLowerCase().indexOf(filter.toLocaleLowerCase()) !== -1;
+}
+
+function numberOrStringSorter(a: string, b: string): number {
+    const aNum = +a;
+    const bNum = +b;
+    if (aNum && bNum) {
+        if (aNum < bNum)
+            return -1;
+        if (aNum > bNum)
+            return 1;
+        return 0;
+
+    }
+    return a.localeCompare(b);
 }

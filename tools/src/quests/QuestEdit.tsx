@@ -13,6 +13,7 @@ import { TasksEdit } from './TaskEdit';
 const DEFAULT_TASKS: Tasks = {
     progress: 'Are you done?',
     list: [],
+    requirements:[],
 };
 
 export const QuestEdit = objectEdit<PresetQuest>({

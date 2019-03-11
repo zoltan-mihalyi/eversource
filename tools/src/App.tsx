@@ -5,9 +5,10 @@ import { HumanoidPresetsTool } from './presets/humanoids/HumanoidPresetsTool';
 import { SpellsTool } from './spells/SpellsTool';
 import { QuestsTool } from './quests/QuestsTool';
 import { ObjectPresetTool } from './presets/objects/ObjectPresetTool';
+import { ItemsTool } from './items/ItemsTool';
 
 interface State {
-    screen: 'humanoids' | 'monsters' | 'objects' | 'spells' | 'quests' | 'palettes' | null;
+    screen: 'humanoids' | 'monsters' | 'objects' | 'items' | 'spells' | 'quests' | 'palettes' | null;
 }
 
 export class App extends React.Component<{}, State> {
@@ -33,6 +34,7 @@ export class App extends React.Component<{}, State> {
                         </div>
                         <h2>Others</h2>
                         <div>
+                            <button className="big" onClick={this.showItems}>Items</button>
                             <button className="big" onClick={this.showQuests}>Quests</button>
                             <button className="big" onClick={this.showSpells}>Spells</button>
                         </div>
@@ -52,6 +54,10 @@ export class App extends React.Component<{}, State> {
             case 'objects':
                 return (
                     <ObjectPresetTool onExit={this.showMainMenu}/>
+                );
+            case 'items':
+                return (
+                    <ItemsTool onExit={this.showMainMenu}/>
                 );
             case 'quests':
                 return (
@@ -83,6 +89,9 @@ export class App extends React.Component<{}, State> {
     };
     private showSpells = () => {
         this.setState({ screen: 'spells' });
+    };
+    private showItems = () => {
+        this.setState({ screen: 'items' });
     };
     private showQuests = () => {
         this.setState({ screen: 'quests' });

@@ -11,7 +11,7 @@ import { ClientEvents } from '../es/ClientEvents';
 import { Metric } from '../systems/display/Metric';
 import { completeDisplaySystem } from '../systems/display/CompleteDisplaySystem';
 import { PlayingNetworkApi } from '../protocol/PlayingState';
-import { TextureLoader } from './TextureLoader';
+import { TextureLoader } from '../loader/TextureLoader';
 import ResourceDictionary = PIXI.loaders.ResourceDictionary;
 
 const CHUNK_WIDTH = 16;

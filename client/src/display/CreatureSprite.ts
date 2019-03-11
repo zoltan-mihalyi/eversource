@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js';
-import { TextureLoader } from '../map/TextureLoader';
+import { TextureLoader } from '../loader/TextureLoader';
 import { Activity, Direction } from '../../../common/components/CommonComponents';
 import { View } from '../../../common/components/View';
 

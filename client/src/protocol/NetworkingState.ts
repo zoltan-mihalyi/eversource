@@ -9,6 +9,7 @@ import { QuestLogItem } from '../../../common/protocol/QuestLogItem';
 import { EntityId } from '../../../common/es/Entity';
 import { NetworkComponents } from '../../../common/components/NetworkComponents';
 import { Nullable } from '../../../common/util/Types';
+import { InventoryItemInfo, SlotId } from '../../../common/protocol/Inventory';
 
 export type ResponseHandler = {
     [P in ResponseCommand]: (data: ResponseTypes[P]) => void;
@@ -62,6 +63,9 @@ export abstract class NetworkingState<T> extends State<NetworkingContext, T> imp
     }
 
     questLog(diffs: Diff<QuestId, QuestLogItem>[]) {
+    }
+
+    inventory(diffs: Diff<SlotId, InventoryItemInfo>[]) {
     }
 
     protected abort() {

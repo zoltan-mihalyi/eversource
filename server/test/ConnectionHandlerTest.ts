@@ -3,10 +3,13 @@ import { CharacterId, CharacterInfo, CharacterName, ClassId } from '../../common
 import { X, Y, ZoneId } from '../../common/domain/Location';
 import { UserDao } from '../src/dao/UserDao';
 import * as sinon from 'sinon';
+import { SinonStub } from 'sinon';
 import * as assert from 'assert';
 import { NetworkLoop } from '../src/NetworkLoop';
 import { CharacterDetails, QuestStatus } from '../src/character/CharacterDetails';
 import { QuestId } from '../../common/domain/InteractionTable';
+import { World } from '../src/world/World';
+import { QuestIndexer } from '../src/quest/QuestIndexer';
 
 function tick(): Promise<void> {
     return new Promise<void>(resolve => setTimeout(resolve, 1));
@@ -15,6 +18,7 @@ function tick(): Promise<void> {
 const characters: CharacterInfo[] = [
     {
         name: 'John' as CharacterName,
+        sex: 'male',
         level: 12,
         xp: 10,
         id: '1' as CharacterId,
@@ -53,6 +57,7 @@ const characters: CharacterInfo[] = [
 
 const characterDetails: CharacterDetails = {
     info: characters[0],
+    items: [],
     questsDone: new Set<QuestId>(),
     questLog: new Map<QuestId, QuestStatus>(),
 };
@@ -77,9 +82,11 @@ function fakeZone() {
     };
 }
 
-function fakeWorld(zone = fakeZone()) {
+function fakeWorld(zone = fakeZone()): World & { getZone: SinonStub } {
 
     return {
+        questIndexer: new QuestIndexer({}, {}),
+        items: {},
         getZone: sinon.mock().callsFake((zoneId) => {
             return Promise.resolve(zone);
         }),

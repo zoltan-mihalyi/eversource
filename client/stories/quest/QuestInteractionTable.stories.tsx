@@ -5,7 +5,7 @@ import { CHARACTER_STATE, questInfo } from '../SampleData';
 import { QuestItemState } from '../../src/components/quest/QuestItemState';
 import { Dialog } from '../../src/components/common/Dialog';
 import { Gui } from '../../src/components/common/Gui';
-import CharacterContext from '../../src/components/CharacterContext';
+import CharacterContext from '../../src/components/context/CharacterContext';
 
 function noop() {
 }

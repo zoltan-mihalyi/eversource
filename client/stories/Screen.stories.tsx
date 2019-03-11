@@ -4,7 +4,7 @@ import { Gui } from '../src/components/common/Gui';
 import { LoginScreen } from '../src/components/menu/LoginScreen';
 import { GameScreen } from '../src/components/game/GameScreen';
 import { InputManager } from '../src/input/InputManager';
-import { FAKE_API, QUEST_LOG } from './SampleData';
+import { FAKE_API, QUEST_LOG, textureLoader } from './SampleData';
 
 function noop() {
 }
@@ -21,7 +21,7 @@ storiesOf('Screen', module)
     ))
     .add('GameScreen', () => (
         <GameScreen setScale={noop} canvas={canvas} inputManager={inputManager} onMount={initScreen}
-                    playingNetworkApi={FAKE_API}/>
+                    playingNetworkApi={FAKE_API} textureLoader={textureLoader}/>
     ));
 
 function initScreen(gameScreen: GameScreen) {
@@ -33,6 +33,7 @@ function initScreen(gameScreen: GameScreen) {
             name: 'Test',
             sex: 'male',
             classId: 'warrior',
+            inventorySize: 10,
         },
         interaction: null,
     });

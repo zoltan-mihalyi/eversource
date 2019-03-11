@@ -2,7 +2,7 @@ import { EntityContainer } from '../../../../common/es/EntityContainer';
 import { ClientComponents } from '../../es/ClientComponents';
 import * as PIXI from 'pixi.js';
 import { PartialPick } from '../../../../common/util/Types';
-import { TextureLoader } from '../../map/TextureLoader';
+import { TextureLoader } from '../../loader/TextureLoader';
 import { buildHumanoidSprite } from '../../display/HumanoidSprite';
 import { buildSimpleSprite } from '../../display/SimpleSprite';
 import { Displayable } from '../../display/CreatureSprite';

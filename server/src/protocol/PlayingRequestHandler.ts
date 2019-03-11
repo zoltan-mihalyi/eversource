@@ -3,19 +3,25 @@ import { Zone } from '../world/Zone';
 import { CharacterSelectionRequestHandler } from './CharacterSelectionRequestHandler';
 import { PlayerState } from '../../../common/protocol/PlayerState';
 import { QuestId } from '../../../common/domain/InteractionTable';
-import { DynamicDiffable } from './diffable/DynamicDiffable';
+import { DynamicDiffable, mapDiffs } from './diffable/DynamicDiffable';
 import { DiffablePlayerState } from './diffable/DiffablePlayerState';
 import { QuestLogItem } from '../../../common/protocol/QuestLogItem';
 import { Entity, EntityId } from '../../../common/es/Entity';
-import { Quests, ServerComponents } from '../es/ServerComponents';
-import { getInteractionTable } from '../es/InteractionSystem';
-import { NetworkComponents, PossibleInteraction, PossibleInteractions, } from '../../../common/components/NetworkComponents';
+import { ServerComponents } from '../es/ServerComponents';
+import { getInteractionTable, questRequirementsProgression } from '../es/InteractionSystem';
+import {
+    NetworkComponents,
+    PossibleInteraction,
+    PossibleInteractions,
+} from '../../../common/components/NetworkComponents';
 import { Nullable } from '../../../common/util/Types';
 import { getDirection } from '../../../common/game/direction';
 import { Direction } from '../../../common/components/CommonComponents';
 import { CharacterInfo } from '../../../common/domain/CharacterInfo';
 import { CHAT_MESSAGE_MAXIMUM_LENGTH } from '../../../common/constants';
 import { QuestIndexer } from '../quest/QuestIndexer';
+import { InventoryItemInfo, SlotId } from '../../../common/protocol/Inventory';
+import { InventoryItem, itemInfo } from '../Item';
 
 export interface PlayerData {
     entity: Entity<ServerComponents>;
@@ -27,6 +33,7 @@ export class PlayingRequestHandler extends ClientState<PlayerData> {
     private readonly worldDiff = new DynamicDiffable<EntityId, Nullable<NetworkComponents>>();
     private readonly playerStateDiff = new DiffablePlayerState();
     private readonly questLogDiff = new DynamicDiffable<QuestId, QuestLogItem>();
+    private readonly inventoryDiff = new DynamicDiffable<SlotId, InventoryItem>();
     private detectionDistance = 15;
 
     leave() {
@@ -145,13 +152,14 @@ export class PlayingRequestHandler extends ClientState<PlayerData> {
         const { interacting } = entity.components;
 
         const playerState: PlayerState = {
-            interaction: !interacting ? null : getInteractionTable(interacting.entity, entity.components.quests!, this.context.world.questIndexer), // TODO
+            interaction: !interacting ? null : getInteractionTable(entity, interacting.entity, this.context.world.questIndexer), // TODO
             character: {
                 sex: characterInfo.sex,
                 name: characterInfo.name,
                 classId: characterInfo.classId,
                 xp: entity.components.xp!.value,
                 level: entity.components.level!.value,
+                inventorySize: 32,
             },
         };
 
@@ -163,17 +171,47 @@ export class PlayingRequestHandler extends ClientState<PlayerData> {
     }
 
     private sendQuestLog() {
-        const { questInfoMap } = this.context.world.questIndexer;
-        const questLog = this.data.entity.components.quests!.questLog;
+        const { questInfoMap, quests } = this.context.world.questIndexer;
+        const { quests: playerQuests, inventory } = this.data.entity.components;
+        const questLog = playerQuests!.questLog;
 
         const qLogByQ = new Map<QuestId, QuestLogItem>();
 
-        questLog.forEach((status, id) => qLogByQ.set(id, { info: questInfoMap.get(id)!, status }));
+        questLog.forEach((taskStatus, id) => {
+            const status = taskStatus === 'failed' ? taskStatus : [
+                ...taskStatus,
+                ...questRequirementsProgression(quests.get(id)!, inventory!),
+            ];
+
+            qLogByQ.set(id, { info: questInfoMap.get(id)!, status });
+        });
 
         const diffs = this.questLogDiff.update(qLogByQ);
 
         if (diffs !== null) {
             this.context.sendCommand('questLog', diffs);
+        }
+    }
+
+    private sendInventory() {
+        const diffs = this.inventoryDiff.update(this.data.entity.components.inventory!.getMap());
+        const items = this.context.world.items;
+
+        if (diffs !== null) {
+            this.context.sendCommand('inventory', mapDiffs(diffs, (data, slotId) => {
+                const { count, itemId } = data;
+
+                const result: Partial<InventoryItemInfo> = {
+                    count,
+                    slotId,
+                };
+
+                if (itemId) {
+                    Object.assign(result, itemInfo(items, itemId));
+                }
+
+                return result;
+            }));
         }
     }
 
@@ -212,13 +250,14 @@ export class PlayingRequestHandler extends ClientState<PlayerData> {
             ]),
             direction: getFacingDirection(viewer, entity),
             playerControllable: viewer === entity ? true : null,
-            possibleInteractions: getPossibleInteractions(entity, viewer.components.quests!, this.context.world.questIndexer) || null, // TODO
+            possibleInteractions: getPossibleInteractions(viewer, entity, this.context.world.questIndexer) || null, // TODO
         };
     }
 
     private networkUpdate = () => {
         this.sendPlayerData();
         this.sendQuestLog();
+        this.sendInventory();
         this.sendWorldData();
     };
 }
@@ -240,8 +279,10 @@ function getFacingDirection(viewer: Entity<ServerComponents>, entity: Entity<Ser
     return direction;
 }
 
-function getPossibleInteractions(entity: Entity<ServerComponents>, quests: Quests, questIndexer: QuestIndexer): PossibleInteractions | null {
-    const interactionTable = getInteractionTable(entity, quests, questIndexer);
+function getPossibleInteractions(source: Entity<ServerComponents>, target: Entity<ServerComponents>,
+                                 questIndexer: QuestIndexer): PossibleInteractions | null {
+
+    const interactionTable = getInteractionTable(source, target, questIndexer);
     if (interactionTable === null) {
         return null;
     }

@@ -4,7 +4,7 @@ import { GameContext, GameLevel } from './GameLevel';
 import { InputManager, MovementIntent } from '../input/InputManager';
 import { registerCursors } from '../display/Cursors';
 import { PlayingNetworkApi, PlayingStateData } from '../protocol/PlayingState';
-import { TextureLoader } from './TextureLoader';
+import { TextureLoader } from '../loader/TextureLoader';
 import { CancellableProcess } from '../../../common/util/CancellableProcess';
 import { EventBus } from '../../../common/es/EventBus';
 import { ClientEvents } from '../es/ClientEvents';
@@ -22,19 +22,19 @@ export class GameApplication extends PIXI.Application {
     private gameLevel: GameLevel;
     private readonly process = new CancellableProcess();
     readonly eventBus = new EventBus<ClientEvents>();
+    readonly textureLoader: TextureLoader;
     private metric: Metric;
 
     constructor(data: PlayingStateData, private playingNetworkApi: PlayingNetworkApi) {
         super({ antialias: false });
 
-
         const { map, resources, position } = data;
         this.metric = new Metric(map.map.tilewidth, map.map.tileheight);
 
-        const textureLoader = new TextureLoader(this.renderer, this.process, map.map.tileheight);
+        this.textureLoader = new TextureLoader(this.renderer, this.process, map.map.tileheight);
         const entityContainer = new EntityContainer<ClientComponents>();
         const gameContext: GameContext = {
-            textureLoader,
+            textureLoader: this.textureLoader,
             playingNetworkApi,
             metric: this.metric,
             entityContainer,
