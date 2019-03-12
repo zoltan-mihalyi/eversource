@@ -4,6 +4,7 @@ import * as React from 'react';
 import { HumanoidEdit } from './HumanoidEdit';
 import { BASE_PRESET } from '../utils';
 import { HumanoidView } from '../../../../common/components/View';
+import { CreatureEdit } from '../CreatureEdit';
 
 const DEFAULT: HumanoidPreset = {
     ...BASE_PRESET,
@@ -35,8 +36,8 @@ interface Props {
 }
 
 export const HumanoidPresetsTool: React.SFC<Props> = ({ onExit }) => (
-    <PresetsTool file={'humanoids'} defaultPreset={DEFAULT} onExit={onExit} Edit={HumanoidEdit}
-                 createView={createView} canCast={true}/>
+    <PresetsTool<HumanoidPreset> file={'humanoids'} defaultPreset={DEFAULT} onExit={onExit} BaseEdit={CreatureEdit} Edit={HumanoidEdit}
+                                 createView={createView} canCast={true}/>
 );
 
 function createView(preset: HumanoidPreset): HumanoidView {

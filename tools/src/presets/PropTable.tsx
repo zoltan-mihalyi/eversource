@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { SimpleSelect } from './SimpleSelect';
 
-type Properties<T>= {
+type Properties<T> = {
     [P in keyof T]: [string, string] | [string] | [] | string;
 };
 
@@ -9,6 +9,7 @@ interface Props<T> {
     data: T;
     values: { [P in keyof T]: string[] };
     forceSelect: (keyof T)[];
+    forceSelect2?: (keyof T)[];
     readExtraValues: (key: keyof T, value: string) => string[];
     onChange: (data: T) => void;
 }
@@ -55,7 +56,7 @@ export class PropTable<T extends Properties<T>> extends React.Component<Props<T>
     }
 
     private renderPropValue(key: keyof T) {
-        const { data, values } = this.props;
+        const { data, values, forceSelect, forceSelect2, readExtraValues } = this.props;
         const { extraValues } = this.state;
 
         const valuesForKey = values[key];
@@ -65,20 +66,27 @@ export class PropTable<T extends Properties<T>> extends React.Component<Props<T>
                                  onChange={val => this.setValue(key, val)}/>
         }
 
+
         return (
             <>
-                <SimpleSelect allowEmpty={this.props.forceSelect.indexOf(key)===-1} values={values[key]}
+                <SimpleSelect allowEmpty={forceSelect.indexOf(key) === -1} values={values[key]}
                               value={propValue[0]} onChange={v => {
+                    const extraValues = readExtraValues(key, v);
                     this.setState({
                         extraValues: {
                             ...this.state.extraValues as any,
-                            [key]: this.props.readExtraValues(key, v),
+                            [key]: extraValues,
                         },
                     });
-                    this.setValue(key, v === '' ? [] : [v])
+                    if (forceSelect2 && forceSelect2.indexOf(key) !== -1) {
+                        this.setValue(key, [v, extraValues[0]])
+                    } else {
+                        this.setValue(key, v === '' ? [] : [v])
+                    }
                 }}/>
 
-                <SimpleSelect values={extraValues[key] || []} value={propValue[1]} allowEmpty={true}
+                <SimpleSelect values={extraValues[key] || []} value={propValue[1]}
+                              allowEmpty={forceSelect2 !== void 0 && forceSelect2.indexOf(key) === -1}
                               onChange={v => {
                                   const primary = data[key][0];
                                   this.setValue(key, v === '' ? [primary] : [primary, v])

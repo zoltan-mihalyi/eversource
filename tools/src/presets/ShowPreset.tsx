@@ -4,7 +4,7 @@ import * as PIXI from '../../../client/src/pixi';
 import { TextureLoader } from '../../../client/src/map/TextureLoader';
 import { CancellableProcess } from '../../../common/util/CancellableProcess';
 import { wwwDir } from '../Utils';
-import { CreaturePreset, PresetAttitude, resolvePresetAttitude } from '../../../server/src/world/Presets';
+import { BasePreset, CreaturePreset, resolvePresetAttitude } from '../../../server/src/world/Presets';
 import { EffectEdit } from './EffectEdit';
 import { Activity, Direction, Effect } from '../../../common/components/CommonComponents';
 import { View } from '../../../common/components/View';
@@ -31,6 +31,7 @@ interface Props<T> {
     item: T;
     onChange: (item: T) => void;
     canCast: boolean;
+    BaseEdit: React.ComponentType<EditPresetProps<T>>;
     Edit: React.ComponentType<EditPresetProps<T>>;
     createView: createView<T>;
 }
@@ -53,7 +54,7 @@ const DIRECTIONS: Direction[] = [
     'up',
 ];
 
-export class ShowPreset<T extends CreaturePreset> extends React.Component<Props<T>, State> {
+export class ShowPreset<T extends BasePreset> extends React.Component<Props<T>, State> {
     private app: PIXI.Application;
     private container = new PIXI.Container();
     private entity: Entity<ClientComponents>;
@@ -108,7 +109,7 @@ export class ShowPreset<T extends CreaturePreset> extends React.Component<Props<
     }
 
     render() {
-        const { item, canCast, Edit } = this.props;
+        const { item, canCast, BaseEdit, Edit } = this.props;
 
         return (
             <>
@@ -118,42 +119,37 @@ export class ShowPreset<T extends CreaturePreset> extends React.Component<Props<
                         <input value={item.name} onChange={this.changeName}/>
                         <span className="prop-name">story </span>
                         <input value={item.story} onChange={this.changeStory}/>
-                        <span className="prop-name">level </span>
-                        <input className="small-input" value={item.level} type="number" min="1" step="1"
-                               onChange={this.changeLevel}/>
-                        {' '}
-                        <select value={item.attitude} onChange={this.changeAttitude}>
-                            <option value="friendly">Friendly</option>
-                            <option value="neutral">Neutral</option>
-                            <option value="hostile">Hostile</option>
-                        </select>
+
+                        <BaseEdit preset={item} onChange={this.changePreset}/>
+
                         <span className="prop-name">scale </span>
                         <input className="small-input" type="number" value={item.scale || 1} step={0.01} min={0.01}
                                onChange={this.changeScale}/>
                     </div>
                     <Edit preset={item} onChange={this.changePreset}/>
 
-                    <div className="prop-table">
-                        <select onChange={this.changeAnim} value={this.state.activity} size={3}>
-                            <option value="standing">Standing</option>
-                            <option value="walking">Walking</option>
-                            {canCast && <option value="casting">Casting</option>}
-                        </select>
-                        <select onChange={this.changeDir} value={this.state.direction} size={4}>
-                            <option value="left">Left</option>
-                            <option value="up">Up</option>
-                            <option value="right">Right</option>
-                            <option value="down">Down</option>
-                        </select>
-                        <div>
-                            <p className="prop-name">Effects</p>
-                            {item.effects && item.effects.map(((effect, i) => (
-                                <EffectEdit key={i} index={i} effect={effect} onChange={this.changeEffect}
-                                            onRemove={this.removeEffect}/>
-                            )))}
-                            <button onClick={this.addEffect}>+</button>
+                    {isCreaturePreset(item) && (<div className="prop-table">
+                            <select onChange={this.changeAnim} value={this.state.activity} size={3}>
+                                <option value="standing">Standing</option>
+                                <option value="walking">Walking</option>
+                                {canCast && <option value="casting">Casting</option>}
+                            </select>
+                            <select onChange={this.changeDir} value={this.state.direction} size={4}>
+                                <option value="left">Left</option>
+                                <option value="up">Up</option>
+                                <option value="right">Right</option>
+                                <option value="down">Down</option>
+                            </select>
+                            <div>
+                                <p className="prop-name">Effects</p>
+                                {item.effects && item.effects.map(((effect, i) => (
+                                    <EffectEdit key={i} index={i} effect={effect} onChange={this.changeEffect}
+                                                onRemove={this.removeEffect}/>
+                                )))}
+                                <button onClick={this.addEffect}>+</button>
+                            </div>
                         </div>
-                    </div>
+                    )}
                 </div>
                 <div className="display" ref={this.containerRef}/>
             </>
@@ -176,18 +172,6 @@ export class ShowPreset<T extends CreaturePreset> extends React.Component<Props<
     private changeStory = (e: React.SyntheticEvent<HTMLInputElement>) => {
         this.changePreset({
             story: e.currentTarget.value,
-        });
-    };
-
-    private changeLevel = (e: React.SyntheticEvent<HTMLInputElement>) => {
-        this.changePreset({
-            level: +e.currentTarget.value,
-        });
-    };
-
-    private changeAttitude = (e: React.SyntheticEvent<HTMLSelectElement>) => {
-        this.changePreset({
-            attitude: e.currentTarget.value as PresetAttitude,
         });
     };
     private changeScale = (e: React.SyntheticEvent<HTMLInputElement>) => {
@@ -227,12 +211,17 @@ export class ShowPreset<T extends CreaturePreset> extends React.Component<Props<
         entity.set('direction', direction);
         entity.set('view', this.props.createView(item));
 
-        const { name, level, attitude, scale, effects } = item;
+        const { name, scale, effects } = item;
 
         entity.set('name', { value: name });
-        entity.set('level', { value: level });
+        if (isCreaturePreset(item)) {
+            const { level, attitude } = item;
 
-        set('attitude', attitude, (attitude) => ({ value: resolvePresetAttitude(attitude, false) }));
+            entity.set('level', { value: level });
+            set('attitude', attitude, (attitude) => ({ value: resolvePresetAttitude(attitude, false) }));
+        }
+
+
         set('scale', scale, (scale) => ({ value: scale }));
         set('effects', effects, effects => effects);
 
@@ -263,4 +252,8 @@ export class ShowPreset<T extends CreaturePreset> extends React.Component<Props<
             direction: event.currentTarget.value as Direction,
         });
     };
+}
+
+function isCreaturePreset(preset: BasePreset): preset is CreaturePreset { // TODO not here
+    return 'level' in preset;
 }

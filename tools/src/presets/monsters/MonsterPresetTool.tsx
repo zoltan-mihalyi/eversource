@@ -4,6 +4,7 @@ import * as React from 'react';
 import { MonsterEdit } from './MonsterEdit';
 import { BASE_PRESET } from '../utils';
 import { SimpleView } from '../../../../common/components/View';
+import { CreatureEdit } from '../CreatureEdit';
 
 const DEFAULT: MonsterPreset = {
     ...BASE_PRESET,
@@ -16,8 +17,8 @@ interface Props {
 }
 
 export const MonsterPresetTool: React.SFC<Props> = ({ onExit }) => (
-    <PresetsTool file={'monsters'} defaultPreset={DEFAULT} onExit={onExit} createView={createView}
-                 Edit={MonsterEdit} canCast={false}/>
+    <PresetsTool<MonsterPreset> file={'monsters'} defaultPreset={DEFAULT} onExit={onExit} createView={createView}
+                 BaseEdit={CreatureEdit} Edit={MonsterEdit} canCast={false}/>
 );
 
 function createView(preset: MonsterPreset): SimpleView {
