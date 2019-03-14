@@ -6,6 +6,9 @@ import * as fs from "fs";
 import * as path from "path";
 import { wwwDir } from '../../Utils';
 import { TileSet } from '../../../../common/tiled/interfaces';
+import { optionalEdit } from '../../components/edit/OptionalEdit';
+import { TextEdit } from '../../components/edit/TextEdit';
+import { objectEdit } from '../../components/edit/ObjectEdit';
 
 const base = path.join(wwwDir, 'spritesheets', 'object');
 
@@ -20,6 +23,10 @@ const possibleValues: { [P in keyof All]: string[] } = {
         .map(file => file.substring(0, file.length - suffix.length)),
 };
 
+const ObjectPresetPropsEditor = objectEdit<ObjectPreset, 'image' | 'animation' | 'name' | 'story' | 'scale' | 'effects'>({
+    useSpell: { component: optionalEdit<string, undefined>('', TextEdit, void 0) }
+});
+
 export class ObjectEdit extends React.PureComponent<EditPresetProps<ObjectPreset>> {
     render() {
         const { preset } = this.props;
@@ -31,6 +38,7 @@ export class ObjectEdit extends React.PureComponent<EditPresetProps<ObjectPreset
             <>
                 <PropTable data={all} values={possibleValues} forceSelect={['appearance']} forceSelect2={['appearance']}
                            readExtraValues={readExtraValues} onChange={this.onChangeAppearance}/>
+                <ObjectPresetPropsEditor value={preset} onChange={this.props.onChange}/>
             </>
         );
     }
