@@ -39,5 +39,33 @@
         "chance": 1
       }
     ]
+  },
+  "pyrite": {
+    "name": "Pyrite",
+    "image": "plants",
+    "animation": "pyrite",
+    "useSpell": "pick_up",
+    "spawnTime":  60
+  },
+  "fresh_grass": {
+    "name": "Fresh grass",
+    "image": "plants",
+    "animation": "fresh_grass",
+    "useSpell": "pick_up",
+    "spawnTime":  60
+  },
+  "rafflesia": {
+    "name": "Rafflesia tuan-mudae",
+    "image": "plants",
+    "animation": "rafflesia",
+    "useSpell": "pick_up",
+    "spawnTime":  60
+  },
+  "shadow_mushroom": {
+    "name": "Shadow Mushroom",
+    "image": "plants",
+    "animation": "shadow_mushroom",
+    "useSpell": "pick_up",
+    "spawnTime":  60
   }
 }

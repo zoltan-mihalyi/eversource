@@ -219,24 +219,48 @@
       "progress": "Where is my Pyrite? I mean, the ingredients?",
       "list": [
         {
-          "type": "item",
+          "type": "spell",
           "count": 1,
-          "title": "Shadow Mushroom"
+          "title": "Shadow Mushroom",
+          "spellIds": [
+            "pick_up"
+          ],
+          "npcIds": [
+            "shadow_mushroom"
+          ]
         },
         {
-          "type": "item",
+          "type": "spell",
           "count": 1,
-          "title": "Fresh Grass"
+          "title": "Fresh Grass",
+          "spellIds": [
+            "pick_up"
+          ],
+          "npcIds": [
+            "fresh_grass"
+          ]
         },
         {
-          "type": "item",
+          "type": "spell",
           "count": 1,
-          "title": "Rafflesia tuan-mudae"
+          "title": "Rafflesia tuan-mudae",
+          "spellIds": [
+            "pick_up"
+          ],
+          "npcIds": [
+            "rafflesia"
+          ]
         },
         {
-          "type": "item",
+          "type": "spell",
           "count": 3,
-          "title": "Pyrite"
+          "title": "Pyrite",
+          "spellIds": [
+            "pick_up"
+          ],
+          "npcIds": [
+            "pyrite"
+          ]
         }
       ]
     }

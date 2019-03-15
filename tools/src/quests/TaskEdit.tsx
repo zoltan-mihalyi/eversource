@@ -67,6 +67,7 @@ const TaskEdit = unionEdit<Task>({
         component: () => objectEdit<SpellTask, 'type'>({
             ...TASK_PROPERTY_CONFIG,
             spellIds: { component: arrayEdit<string>('', TextEdit) },
+            npcIds: { component: optionalEdit<string[], undefined>([''], arrayEdit<string>('', TextEdit), void 0) },
         }),
         defaultValue: { type: 'spell', track: DEFAULT_TRACK, spellIds: [], ...BASE_TASK },
     },

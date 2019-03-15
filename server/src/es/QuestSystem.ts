@@ -39,6 +39,16 @@ export function questSystem(eventBus: EventBus<ServerEvents>, { questIndexer }: 
         }
 
         updateQuestLog(quests, task => {
+            if (task.type !== 'spell') {
+                return 'none';
+            }
+            if (task.npcIds) {
+                const { npcId } = target.components;
+                if (!task.npcIds.find(id => id === npcId)) {
+                    return 'none';
+                }
+            }
+
             return increase(spellMatchesTask(task, spell));
         });
     });

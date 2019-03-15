@@ -54,6 +54,7 @@ export interface ObjectPreset extends BasePreset {
     animation: string;
     useSpell?: string;
     loot?: LootElement[];
+    spawnTime?: number;
 }
 
 export interface ObjectPresets {

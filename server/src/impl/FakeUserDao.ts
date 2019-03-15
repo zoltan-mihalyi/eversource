@@ -23,8 +23,8 @@ export class FakeUserDao implements UserDao {
             info:
                 {
                     id: '1' as CharacterId,
-                    level: 21,
-                    xp: 180,
+                    level: 2,
+                    xp: 42,
                     name: 'John' as CharacterName,
                     sex: 'male',
                     classId: 'warrior',
@@ -33,7 +33,7 @@ export class FakeUserDao implements UserDao {
                     location: {
                         position: {
                             x: 139 as X,
-                            y: 92 as Y,
+                            y: 142 as Y,
                         },
                         zoneId: 'enchanted_forest' as ZoneId,
                     },

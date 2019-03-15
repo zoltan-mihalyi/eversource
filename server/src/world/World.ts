@@ -110,7 +110,7 @@ export class WorldImpl implements World {
                     template.loot = loot;
                 }
 
-                zone.addSpawner(10000, template);
+                zone.addSpawner((preset.spawnTime || 10) * 1000, template);
             } else if (object.type === 'area') {
                 zone.addArea(
                     position,

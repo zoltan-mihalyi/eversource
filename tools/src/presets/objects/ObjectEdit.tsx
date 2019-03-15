@@ -11,6 +11,7 @@ import { objectEdit } from '../../components/edit/ObjectEdit';
 import { LootElementEdit } from './LootElementEdit';
 import { arrayEdit } from '../../components/edit/ArrayEdit';
 import { ItemId } from '../../../../common/protocol/Inventory';
+import { NumberEdit } from '../../components/edit/NumberEdit';
 import { SpellIdEdit } from '../common/IdEdits';
 
 const base = path.join(wwwDir, 'spritesheets', 'object');
@@ -28,6 +29,7 @@ const possibleValues: { [P in keyof All]: string[] } = {
 
 const DEFAULT_LOOT_ELEMENT: LootElement = { itemId: 0 as ItemId, minCount: 1, maxCount: 1, chance: 1 };
 const ObjectPresetPropsEditor = objectEdit<ObjectPreset, 'image' | 'animation' | 'name' | 'story' | 'scale' | 'effects'>({
+    spawnTime: { component: optionalEdit<number, undefined>(10, NumberEdit, void 0) },
     useSpell: { component: optionalEdit<string, undefined>('', SpellIdEdit, void 0) },
     loot: { component: optionalEdit<LootElement[], undefined>([], arrayEdit<LootElement>(DEFAULT_LOOT_ELEMENT, LootElementEdit), void 0) },
 });

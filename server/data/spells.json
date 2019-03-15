@@ -86,5 +86,14 @@
         "amount": 200
       }
     ]
+  },
+  "pick_up": {
+    "name": "Pick up",
+    "effects": [
+      {
+        "type": "destroy",
+        "target": "target"
+      }
+    ]
   }
 }

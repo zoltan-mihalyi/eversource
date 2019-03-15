@@ -28,6 +28,7 @@ export interface KillTask extends BaseTask {
 export interface SpellTask extends BaseTask {
     type: 'spell';
     spellIds: string[];
+    npcIds?: string[];
 }
 
 export type Task = VisitAreaTask | KillTask | SpellTask;
