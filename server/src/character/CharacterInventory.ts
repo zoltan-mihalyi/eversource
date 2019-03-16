@@ -87,12 +87,25 @@ export class CharacterInventory {
     }
 
     remove(items: InventoryItem[]): CharacterInventory {
-        const copy = new CharacterInventory(this.items);
-        copy.map = new Map<SlotId, InventoryItem>(this.map);
-        copy.nextId = this.nextId;
+        const copy = this.clone();
         for (const item of items) {
             copy.removeItem(item);
         }
+        return copy;
+    }
+
+    add(items: InventoryItem[]): CharacterInventory {
+        const copy = this.clone();
+        for (const item of items) {
+            copy.addItem(item);
+        }
+        return copy;
+    }
+
+    private clone() {
+        const copy = new CharacterInventory(this.items);
+        copy.map = new Map<SlotId, InventoryItem>(this.map);
+        copy.nextId = this.nextId;
         return copy;
     }
 }

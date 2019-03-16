@@ -26,5 +26,18 @@
     "animation": "squash",
     "scale": 1.3,
     "useSpell": "consume_vegetable"
+  },
+  "artichoke": {
+    "name": "Artichoke",
+    "image": "plants",
+    "animation": "artichoke",
+    "loot": [
+      {
+        "itemId": 1,
+        "minCount": 1,
+        "maxCount": 1,
+        "chance": 1
+      }
+    ]
   }
 }

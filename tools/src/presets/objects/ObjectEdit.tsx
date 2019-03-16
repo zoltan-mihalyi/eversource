@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { EditPresetProps } from '../ShowPreset';
-import { ObjectPreset } from '../../../../server/src/world/Presets';
+import { LootElement, ObjectPreset } from '../../../../server/src/world/Presets';
 import { PropTable } from '../PropTable';
 import * as fs from "fs";
 import * as path from "path";
@@ -9,6 +9,9 @@ import { TileSet } from '../../../../common/tiled/interfaces';
 import { optionalEdit } from '../../components/edit/OptionalEdit';
 import { TextEdit } from '../../components/edit/TextEdit';
 import { objectEdit } from '../../components/edit/ObjectEdit';
+import { LootElementEdit } from './LootElementEdit';
+import { arrayEdit } from '../../components/edit/ArrayEdit';
+import { ItemId } from '../../../../common/protocol/Inventory';
 
 const base = path.join(wwwDir, 'spritesheets', 'object');
 
@@ -23,15 +26,17 @@ const possibleValues: { [P in keyof All]: string[] } = {
         .map(file => file.substring(0, file.length - suffix.length)),
 };
 
+const DEFAULT_LOOT_ELEMENT: LootElement = { itemId: 0 as ItemId, minCount: 1, maxCount: 1, chance: 1 };
 const ObjectPresetPropsEditor = objectEdit<ObjectPreset, 'image' | 'animation' | 'name' | 'story' | 'scale' | 'effects'>({
-    useSpell: { component: optionalEdit<string, undefined>('', TextEdit, void 0) }
+    useSpell: { component: optionalEdit<string, undefined>('', TextEdit, void 0) },
+    loot: { component: optionalEdit<LootElement[], undefined>([], arrayEdit<LootElement>(DEFAULT_LOOT_ELEMENT, LootElementEdit), void 0) },
 });
 
 export class ObjectEdit extends React.PureComponent<EditPresetProps<ObjectPreset>> {
     render() {
         const { preset } = this.props;
         const all: All = {
-            appearance: [preset.image, preset.animation]
+            appearance: [preset.image, preset.animation],
         };
 
         return (

@@ -3,6 +3,7 @@ import { Entity } from '../../../common/es/Entity';
 import { QuestId, QuestInfo } from '../../../common/domain/InteractionTable';
 import { Spell } from '../Spell';
 import { CharacterInventory } from '../character/CharacterInventory';
+import { LootElement } from '../world/Presets';
 
 export interface Hit {
     source: Entity<ServerComponents>;
@@ -14,6 +15,11 @@ export interface Damage {
     amount: number;
     source: Entity<ServerComponents>;
     target: Entity<ServerComponents>;
+}
+
+export interface Loot {
+    entity: Entity<ServerComponents>;
+    loot: LootElement[];
 }
 
 export interface Kill {
@@ -83,6 +89,7 @@ export interface ServerEvents {
     spellCast: SpellCast;
     area: Area;
     damage: Damage;
+    loot: Loot;
     tryInteract: TryInteract;
     tryAcceptQuest: TryAcceptQuest;
     tryCompleteQuest: TryCompleteQuest;

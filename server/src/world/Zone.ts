@@ -21,6 +21,7 @@ import { spellSystem } from '../es/SpellSystem';
 import { chatSystem } from '../es/ChatSystem';
 import { Spells } from '../Spell';
 import { QuestIndexer } from '../quest/QuestIndexer';
+import { lootSystem } from '../es/LootSystem';
 
 export class Zone {
     private entityContainer = new ServerEntityContainer();
@@ -42,6 +43,7 @@ export class Zone {
         xpSystem(this.eventBus);
         spellSystem(this.eventBus);
         chatSystem(this.index, this.eventBus);
+        lootSystem(this.eventBus);
     }
 
     createEntity(components: Partial<ServerComponents>): Entity<ServerComponents> {

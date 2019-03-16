@@ -7,6 +7,7 @@ import { Spell } from '../Spell';
 import { QuestId } from '../../../common/domain/InteractionTable';
 import { Quest } from '../quest/Quest';
 import { CharacterInventory } from '../character/CharacterInventory';
+import { LootElement } from '../world/Presets';
 
 export interface Moving {
     readonly x: number;
@@ -90,6 +91,7 @@ export interface ServerComponents extends CommonComponents {
     interacting: Interacting;
     listening: true;
     useSpell: Spell;
+    loot: LootElement[];
     chatListener: ChatListener;
     inventory: CharacterInventory;
 }

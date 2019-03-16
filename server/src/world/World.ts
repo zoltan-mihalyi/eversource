@@ -113,7 +113,7 @@ export class WorldImpl implements World {
                 });
             } else if (object.type === 'object') {
                 const preset = presets.object[object.name];
-                const { image, animation, useSpell } = preset;
+                const { image, animation, useSpell, loot } = preset;
 
                 const template: Partial<ServerComponents> = {
                     ...baseFromPreset(this.questIndexer, preset, object.name),
@@ -126,6 +126,9 @@ export class WorldImpl implements World {
                 };
                 if (useSpell) {
                     template.useSpell = presets.spells[useSpell];
+                }
+                if (loot) {
+                    template.loot = loot;
                 }
 
                 zone.addSpawner(10000, template);

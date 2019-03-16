@@ -1418,6 +1418,39 @@
                  "width":32,
                  "x":3360,
                  "y":6848
+                }, 
+                {
+                 "height":32,
+                 "id":142,
+                 "name":"artichoke",
+                 "rotation":0,
+                 "type":"object",
+                 "visible":true,
+                 "width":32,
+                 "x":3040,
+                 "y":6656
+                }, 
+                {
+                 "height":32,
+                 "id":143,
+                 "name":"artichoke",
+                 "rotation":0,
+                 "type":"object",
+                 "visible":true,
+                 "width":32,
+                 "x":3072,
+                 "y":6688
+                }, 
+                {
+                 "height":32,
+                 "id":144,
+                 "name":"artichoke",
+                 "rotation":0,
+                 "type":"object",
+                 "visible":true,
+                 "width":32,
+                 "x":3072,
+                 "y":6720
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -1425,7 +1458,7 @@
          "x":0,
          "y":0
         }],
- "nextobjectid":142,
+ "nextobjectid":145,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.1.6",

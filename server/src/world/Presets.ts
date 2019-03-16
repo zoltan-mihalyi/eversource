@@ -1,5 +1,6 @@
 import { Appearance, Equipment } from '../../../common/components/View';
 import { CreatureAttitude, Effect } from '../../../common/components/CommonComponents';
+import { ItemId } from '../../../common/protocol/Inventory';
 
 export interface BasePreset {
     name: string;
@@ -41,10 +42,18 @@ export interface MonsterPresets {
     [id: string]: MonsterPreset;
 }
 
+export interface LootElement {
+    minCount: number;
+    maxCount: number;
+    chance: number;
+    itemId: ItemId;
+}
+
 export interface ObjectPreset extends BasePreset {
     image: string;
     animation: string;
     useSpell?: string;
+    loot?: LootElement[];
 }
 
 export interface ObjectPresets {

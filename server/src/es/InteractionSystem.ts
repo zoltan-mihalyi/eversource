@@ -10,6 +10,8 @@ import { Position } from '../../../common/domain/Location';
 import { CreatureAttitude } from '../../../common/components/CommonComponents';
 import { QuestIndexer } from '../quest/QuestIndexer';
 import { CharacterInventory } from '../character/CharacterInventory';
+import { LootElement } from '../world/Presets';
+import { InventoryItem } from '../Item';
 
 export function interactionSystem(entityContainer: EntityContainer<ServerComponents>, eventBus: EventBus<ServerEvents>, questIndexer: QuestIndexer) {
     const interactingEntities = entityContainer.createQuery('interacting');
@@ -46,10 +48,15 @@ export function interactionSystem(entityContainer: EntityContainer<ServerCompone
             return;
         }
 
-        const { useSpell } = target.components;
+        const { useSpell, loot } = target.components;
 
         if (useSpell) {
             eventBus.emit('spellCast', { caster: source, target, spell: useSpell });
+            return;
+        }
+        if (loot) {
+            eventBus.emit('loot', { entity: source, loot });
+            eventBus.emit('kill', { killer: source, killed: target });
             return;
         }
 

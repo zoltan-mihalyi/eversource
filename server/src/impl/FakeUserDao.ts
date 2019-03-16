@@ -63,7 +63,7 @@ export class FakeUserDao implements UserDao {
         {
             questsDone: new Set(),
             questLog: new Map(),
-            items: [inventoryItem(1, 5), inventoryItem(2), inventoryItem(3, 11)],
+            items: [inventoryItem(1, 1), inventoryItem(2), inventoryItem(3, 11)],
             info: {
                 id: '2' as CharacterId,
                 level: 2,
