@@ -23,6 +23,57 @@
     "quality": "rare",
     "stackSize": 5
   },
+  "4": {
+    "name": "Pyrite",
+    "image": "plants",
+    "animation": "pyrite",
+    "quality": "common",
+    "stackSize": 10,
+    "questId": 11,
+    "lore": "Fool's gold",
+    "condition": {
+      "type": "task"
+    }
+  },
+  "5": {
+    "name": "Shadow Mushroom",
+    "image": "plants",
+    "animation": "shadow_mushroom",
+    "quality": "common",
+    "questId": 11,
+    "condition": {
+      "type": "task"
+    }
+  },
+  "6": {
+    "name": "Fresh Grass",
+    "image": "plants",
+    "animation": "fresh_grass",
+    "quality": "common",
+    "questId": 11,
+    "condition": {
+      "type": "task"
+    }
+  },
+  "7": {
+    "name": "Rafflesia Flower",
+    "image": "plants",
+    "animation": "rafflesia",
+    "quality": "common",
+    "questId": 11,
+    "lore": "It stinks!",
+    "condition": {
+      "type": "task"
+    }
+  },
+  "8": {
+    "name": "Elixir of Revealing",
+    "image": "common",
+    "animation": "elixir-magenta",
+    "quality": "common",
+    "questId": 12,
+    "lore": "Reveals the secrets of summoned creatures"
+  },
   "100": {
     "name": "Nefag's Letter",
     "image": "common",

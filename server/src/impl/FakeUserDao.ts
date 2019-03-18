@@ -32,8 +32,8 @@ export class FakeUserDao implements UserDao {
 
                     location: {
                         position: {
-                            x: 139 as X,
-                            y: 142 as Y,
+                            x: 160 as X,
+                            y: 116 as Y,
                         },
                         zoneId: 'enchanted_forest' as ZoneId,
                     },

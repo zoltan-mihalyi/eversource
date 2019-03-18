@@ -44,28 +44,56 @@
     "name": "Pyrite",
     "image": "plants",
     "animation": "pyrite",
-    "useSpell": "pick_up",
-    "spawnTime":  60
-  },
-  "fresh_grass": {
-    "name": "Fresh grass",
-    "image": "plants",
-    "animation": "fresh_grass",
-    "useSpell": "pick_up",
-    "spawnTime":  60
-  },
-  "rafflesia": {
-    "name": "Rafflesia tuan-mudae",
-    "image": "plants",
-    "animation": "rafflesia",
-    "useSpell": "pick_up",
-    "spawnTime":  60
+    "spawnTime": 60,
+    "loot": [
+      {
+        "itemId": 4,
+        "minCount": 2,
+        "maxCount": 4,
+        "chance": 1
+      }
+    ]
   },
   "shadow_mushroom": {
     "name": "Shadow Mushroom",
     "image": "plants",
     "animation": "shadow_mushroom",
-    "useSpell": "pick_up",
-    "spawnTime":  60
+    "spawnTime": 60,
+    "loot": [
+      {
+        "itemId": 5,
+        "minCount": 1,
+        "maxCount": 1,
+        "chance": 1
+      }
+    ]
+  },
+  "fresh_grass": {
+    "name": "Fresh grass",
+    "image": "plants",
+    "animation": "fresh_grass",
+    "spawnTime": 60,
+    "loot": [
+      {
+        "itemId": 6,
+        "minCount": 1,
+        "maxCount": 1,
+        "chance": 1
+      }
+    ]
+  },
+  "rafflesia": {
+    "name": "Rafflesia tuan-mudae",
+    "image": "plants",
+    "animation": "rafflesia",
+    "spawnTime": 60,
+    "loot": [
+      {
+        "itemId": 7,
+        "minCount": 1,
+        "maxCount": 1,
+        "chance": 1
+      }
+    ]
   }
 }

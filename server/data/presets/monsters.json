@@ -271,11 +271,17 @@
     "scale": 0.7
   },
   "soul_white": {
-    "name": "Pure Soul",
+    "name": "Spirit of the Forest",
     "level": 10,
     "image": "soul",
     "palette": "white",
-    "scale": 0.8
+    "scale": 0.8,
+    "story": "Welcome, %class%! Long time ago I was a human, like you.",
+    "attitude": "friendly",
+    "movement": {
+      "radiusX": 0,
+      "radiusY": 0
+    }
   },
   "soul_red": {
     "name": "Blood Soul",

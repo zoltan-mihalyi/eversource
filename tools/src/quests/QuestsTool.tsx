@@ -1,8 +1,7 @@
 import * as React from 'react';
 import { ListEdit } from '../components/ListEdit';
 import { QuestEdit } from './QuestEdit';
-import { PresetQuest, Quest } from '../../../server/src/quest/Quest';
-import { QuestId } from '../../../common/domain/InteractionTable';
+import { PresetQuest } from '../../../server/src/quest/Quest';
 
 const FILE_NAME = '../server/data/quests.json';
 

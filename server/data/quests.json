@@ -206,63 +206,151 @@
     }
   },
   "11": {
-    "level": 4,
+    "level": 2,
     "difficulty": "normal",
-    "name": "Revealing the summoner",
+    "name": "The summoner",
     "startsAt": "wizard",
     "endsAt": "wizard",
     "description": "So you want to know who summons the golems, right? I know an ancient elixir which reveals the summoner of any summoned creature. Maybe I can make it If you bring me the ingredients.",
     "taskDescription": "Bring the ingredients of the elixir!",
-    "completion": "Ah finally! Pyrite! \nOh, I almost forgot, here is your elixir!",
-    "requires": [],
+    "completion": "Ah finally! Pyrite!",
+    "requires": [
+      15
+    ],
     "tasks": {
       "progress": "Where is my Pyrite? I mean, the ingredients?",
-      "list": [
+      "list": [],
+      "requirements": [
         {
-          "type": "spell",
-          "count": 1,
-          "title": "Shadow Mushroom",
-          "spellIds": [
-            "pick_up"
-          ],
-          "npcIds": [
-            "shadow_mushroom"
-          ]
+          "type": "item",
+          "track": {
+            "title": "Pyrite found"
+          },
+          "itemId": 4,
+          "count": 10
         },
         {
-          "type": "spell",
-          "count": 1,
-          "title": "Fresh Grass",
-          "spellIds": [
-            "pick_up"
-          ],
-          "npcIds": [
-            "fresh_grass"
-          ]
+          "type": "item",
+          "track": {
+            "title": "Shadow Mushroom picked up"
+          },
+          "itemId": 5,
+          "count": 1
         },
         {
-          "type": "spell",
-          "count": 1,
-          "title": "Rafflesia tuan-mudae",
-          "spellIds": [
-            "pick_up"
-          ],
-          "npcIds": [
-            "rafflesia"
-          ]
+          "type": "item",
+          "track": {
+            "title": "Fresh Grass harvested"
+          },
+          "itemId": 6,
+          "count": 1
         },
         {
-          "type": "spell",
-          "count": 3,
-          "title": "Pyrite",
-          "spellIds": [
-            "pick_up"
-          ],
-          "npcIds": [
-            "pyrite"
-          ]
+          "type": "item",
+          "track": {
+            "title": "Rafflesia gathered"
+          },
+          "itemId": 7,
+          "count": 1
         }
       ]
     }
+  },
+  "12": {
+    "name": "Revealing the summoner",
+    "level": 2,
+    "difficulty": "normal",
+    "startsAt": "wizard",
+    "endsAt": "spirit",
+    "requires": [
+      11
+    ],
+    "completion": "Good job!",
+    "description": "Take this elixir, it can reveal who summoned the golems!",
+    "taskDescription": "Use the Elixir of Revealing on a Dirt Golem!",
+    "tasks": {
+      "progress": "Do you know, who summoned the golems?",
+      "list": [],
+      "requirements": [
+        {
+          "type": "item",
+          "itemId": 8,
+          "count": 1
+        }
+      ]
+    },
+    "provides": [
+      {
+        "itemId": 8,
+        "count": 1
+      }
+    ]
+  },
+  "13": {
+    "name": "Unusual Noises",
+    "level": 1,
+    "difficulty": "normal",
+    "startsAt": "soul_white",
+    "endsAt": "soul_white",
+    "requires": [],
+    "completion": "There is a huge sawmill in the place of the forest. There are some guards around.",
+    "description": "Young %sex%! Can you help me? I heard strange noises from the northern forest. Maybe some danger is lurking around.",
+    "taskDescription": "Visit the northern forest!",
+    "tasks": {
+      "progress": "The noises are getting stronger and stronger...",
+      "list": [
+        {
+          "type": "visit",
+          "track": {
+            "title": "Northern forest visited"
+          },
+          "areaName": "northern_forest",
+          "count": 1
+        }
+      ],
+      "requirements": []
+    }
+  },
+  "14": {
+    "name": "Taking back the forest",
+    "level": 1,
+    "difficulty": "normal",
+    "startsAt": "soul_white",
+    "endsAt": "soul_white",
+    "requires": [
+      13
+    ],
+    "completion": "I have killed some, but there are more and more...",
+    "description": "Oh no, the forest! I should have take care more! But my power is running out...\nWhoever have done this, should be punished!",
+    "taskDescription": "Eliminate the guards, whoever they are!",
+    "tasks": {
+      "progress": "Come back, when you eliminated the guards!",
+      "list": [
+        {
+          "type": "kill",
+          "track": {
+            "title": "Sawmill guards slain"
+          },
+          "npcIds": [
+            "golem_dirt"
+          ],
+          "count": 6
+        }
+      ],
+      "requirements": []
+    }
+  },
+  "15": {
+    "name": "Meeting the Wise",
+    "level": 2,
+    "difficulty": "easy",
+    "startsAt": "soul_white",
+    "endsAt": "wizard",
+    "requires": [
+      14
+    ],
+    "completion": "Albertus, aren't you?",
+    "description": "There are more and more? It seems these guards are some kind of summoned creatures. But we cannot stop them until we know who controls them. Maybe Albertus can help us, %name%, he is a wise wizard, who lives in this forest.",
+    "taskDescription": "Seek Albertus, the wizard!"
   }
 }
