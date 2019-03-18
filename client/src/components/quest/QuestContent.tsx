@@ -36,9 +36,7 @@ const RawQuestContent: React.FunctionComponent<Props & WithStyles<ClassKeys>> = 
             ) : (
                 <Enumeration>
                     {info.tasks.map((task, i) => (
-                        <li key={i}>
-                            <TaskInfoItem task={task} status={status ? status[i] : null}/>
-                        </li>
+                        <TaskInfoItem key={i} task={task} status={status ? status[i] : null}/>
                     ))}
                 </Enumeration>
             )

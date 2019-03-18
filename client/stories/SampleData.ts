@@ -30,7 +30,11 @@ export function questInfo(id: number, name: string, extra?: Partial<QuestInfo>):
         level: 5,
         xpReward: 40,
         name,
-        tasks: [{ count: 10, title: 'Intruders slain' }, { count: 1, title: 'Area explored' }],
+        tasks: [
+            { count: 10, track: { title: 'Intruders slain' } },
+            { count: 1 }, // hidden
+            { count: 1, track: { title: 'Area explored' } },
+        ],
         requirements: [{ item: ITEM_INFO }],
         completion: 'Good job, %name%! You are a good %sex%!',
         description: 'The lava slimes are causing so much trouble these days! We need an experienced %class% to solve this.',
@@ -58,22 +62,23 @@ export const INTERACTIONS: InteractionTable = {
 
 export const QUEST_LOG = new Map<QuestId, QuestLogItem>();
 
-QUEST_LOG.set(1 as QuestId, questLogItem(1, 'A simple quest', [1, 0]));
-QUEST_LOG.set(2 as QuestId, questLogItem(2, 'Completed quest', [10, 1]));
-QUEST_LOG.set(3 as QuestId, questLogItem(3, 'A mysterious quest with a very long name', [10, 0], { level: 56 }));
+QUEST_LOG.set(1 as QuestId, questLogItem(1, 'A simple quest', [1, 1, 0]));
+QUEST_LOG.set(2 as QuestId, questLogItem(2, 'Completed quest', [10, 1, 1]));
+QUEST_LOG.set(3 as QuestId, questLogItem(3, 'A mysterious quest with a very long name', [10, 1, 0], { level: 56 }));
 QUEST_LOG.set(4 as QuestId, questLogItem(4, 'A Failed quest', 'failed', { level: 8 }));
-QUEST_LOG.set(5 as QuestId, questLogItem(5, 'A quest with long task', [8, 1], {
+QUEST_LOG.set(5 as QuestId, questLogItem(5, 'A quest with long task', [8, 1, 1], {
     level: 12,
     tasks: [{
-        title: 'A bit longer task name',
+        track: { title: 'A bit longer task name' },
         count: 32,
     }, {
-        title: 'An unnecessarily long task name',
+        track: { title: 'An unnecessarily long task name' },
         count: 150,
     }],
 }));
-QUEST_LOG.set(6 as QuestId, questLogItem(6, 'A low level quest', [0, 0], { level: 2 }));
-QUEST_LOG.set(7 as QuestId, questLogItem(7, 'A very low level quest', [0, 0], { level: 1 }));
+QUEST_LOG.set(6 as QuestId, questLogItem(6, 'A low level quest', [0, 1, 0], { level: 2 }));
+QUEST_LOG.set(7 as QuestId, questLogItem(7, 'A very low level quest', [0, 1, 0], { level: 1 }));
+QUEST_LOG.set(8 as QuestId, questLogItem(8, 'Hidden task not completed', [10, 0, 1]));
 
 export const CHARACTER_STATE: CharacterState = {
     level: 6,

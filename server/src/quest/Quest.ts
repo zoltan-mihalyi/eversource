@@ -1,10 +1,11 @@
-import { QuestBase, QuestId } from '../../../common/domain/InteractionTable';
+import { QuestBase, QuestId, TaskTrack } from '../../../common/domain/InteractionTable';
 import { ItemId } from '../../../common/protocol/Inventory';
+import { InventoryItem } from '../Item';
 
 export interface BaseTask {
     type: string;
     count: number;
-    title: string;
+    track?: TaskTrack;
 }
 
 export interface ItemRequirement extends BaseTask {
@@ -45,6 +46,7 @@ export interface PresetQuest extends QuestBase {
     endsAt: string;
     requires: QuestId[];
     tasks?: Tasks;
+    provides?: InventoryItem[];
 }
 
 export interface Quest extends PresetQuest {

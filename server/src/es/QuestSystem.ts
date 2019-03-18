@@ -43,10 +43,15 @@ export function questSystem(eventBus: EventBus<ServerEvents>, spells: Spells, qu
         });
     });
 
-    eventBus.on('acceptQuest', ({ quests, quest }) => {
-        const tasks = questIndexer.quests.get(quest.id)!.tasks;
+    eventBus.on('acceptQuest', ({ entity, quests, questId }) => {
+        const quest = questIndexer.quests.get(questId)!;
+        const tasks = quest.tasks;
         const progression = tasks ? tasks.list.map(() => 0) : [];
-        quests.questLog.set(quest.id, progression);
+        quests.questLog.set(questId, progression);
+        const { inventory } = entity.components;
+        if (inventory && quest.provides) {
+            entity.set('inventory', inventory.add(quest.provides));
+        }
     });
 
     eventBus.on('completeQuest', ({ entity, quests, quest }) => {
@@ -97,7 +102,7 @@ export function questSystem(eventBus: EventBus<ServerEvents>, spells: Spells, qu
 
 }
 
-function updateQuest(questLog: QuestLog, questId: QuestId, task: TaskInfo, taskIndex: number, update: QuestUpdate) {
+function updateQuest(questLog: QuestLog, questId: QuestId, task: Task, taskIndex: number, update: QuestUpdate) {
     if (update === 'none') {
         return;
     }

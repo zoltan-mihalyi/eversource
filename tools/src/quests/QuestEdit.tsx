@@ -9,12 +9,24 @@ import { EditComponent } from '../components/edit/Edit';
 import { QuestId } from '../../../common/domain/InteractionTable';
 import { optionalEdit } from '../components/edit/OptionalEdit';
 import { TasksEdit } from './TaskEdit';
+import { InventoryItem } from '../../../server/src/Item';
+import { ItemId } from '../../../common/protocol/Inventory';
 
 const DEFAULT_TASKS: Tasks = {
     progress: 'Are you done?',
     list: [],
-    requirements:[],
+    requirements: [],
 };
+
+const DEFAULT_ITEM: InventoryItem = {
+    itemId: 1 as ItemId,
+    count: 1,
+};
+
+const InventoryItemEdit = objectEdit<InventoryItem>({
+    count: { component: NumberEdit },
+    itemId: { component: NumberEdit as EditComponent<any> },
+});
 
 export const QuestEdit = objectEdit<PresetQuest>({
     name: { component: TextEdit },
@@ -26,5 +38,6 @@ export const QuestEdit = objectEdit<PresetQuest>({
     startsAt: { component: TextEdit },
     endsAt: { component: TextEdit },
     requires: { component: arrayEdit<QuestId>(0 as QuestId, NumberEdit as EditComponent<any>) },
-    tasks: { component: optionalEdit<Tasks, undefined>(DEFAULT_TASKS, TasksEdit, void 0) }
+    provides: { component: optionalEdit<InventoryItem[], undefined>([], arrayEdit(DEFAULT_ITEM, InventoryItemEdit), void 0) },
+    tasks: { component: optionalEdit<Tasks, undefined>(DEFAULT_TASKS, TasksEdit, void 0) },
 });

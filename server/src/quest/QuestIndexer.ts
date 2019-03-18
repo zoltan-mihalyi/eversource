@@ -53,7 +53,7 @@ function getTasks(questTasks?: Tasks): TaskInfo[] {
         return [];
     }
 
-    return [...questTasks.list, ...questTasks.requirements].map(({ title, count }) => ({ title, count }));
+    return [...questTasks.list, ...questTasks.requirements].map(({ track, count }) => ({ track, count }));
 }
 
 function getRequirements(items: Items, questTasks?: Tasks): RequirementInfo[] {

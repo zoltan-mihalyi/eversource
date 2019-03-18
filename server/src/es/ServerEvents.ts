@@ -54,8 +54,9 @@ interface TryAcceptQuest {
 }
 
 interface AcceptQuest {
+    entity: Entity<ServerComponents>;
     quests: Quests;
-    quest: QuestInfo;
+    questId: QuestId;
 }
 
 interface CompleteQuest {

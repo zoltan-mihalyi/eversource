@@ -17,17 +17,24 @@ interface Props {
 }
 
 const RawTaskInfoItem: React.FunctionComponent<Props & WithStyles<ClassKeys>> = ({ status, task, classes }) => {
+    const { count, track } = task;
+    if (!track) {
+        return null;
+    }
+
     if (status !== null) {
         return (
-            <span className={status === task.count ? classes.completed : void 0}>
-                {task.title} ({status}/{task.count})
-            </span>
+            <li>
+                <span className={status === count ? classes.completed : void 0}>
+                    {track.title} ({status}/{count})
+                </span>
+            </li>
         );
     } else {
         return (
-            <>
-                {task.count !== 1 ? task.count + ' ' : ''}{task.title}
-            </>
+            <li>
+                {count !== 1 ? count + ' ' : ''}{track.title}
+            </li>
         );
     }
 };

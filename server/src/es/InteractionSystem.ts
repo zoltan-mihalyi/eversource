@@ -82,8 +82,9 @@ export function interactionSystem(entityContainer: EntityContainer<ServerCompone
         }
 
         eventBus.emit('acceptQuest', {
+            entity,
             quests: questContext.quests,
-            quest: questContext.quest,
+            questId,
         });
     });
 

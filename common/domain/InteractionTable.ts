@@ -8,9 +8,13 @@ export interface RequirementInfo {
     item: ItemInfo;
 }
 
+export interface TaskTrack {
+    title: string;
+}
+
 export interface TaskInfo {
     count: number;
-    title: string;
+    track?: TaskTrack;
 }
 
 export interface QuestBase {

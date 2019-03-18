@@ -29,7 +29,7 @@ const quests: { [key: number]: PresetQuest } = {
                 {
                     "type": "kill",
                     "count": 10,
-                    "title": "Intruders slain",
+                    "track": {"title":"Intruders slain"},
                     "npcIds": [
                         "slime_lava",
                         "slime_lava_rock",
@@ -56,7 +56,7 @@ const quests: { [key: number]: PresetQuest } = {
                     "count": 1,
                     "type": "visit",
                     "areaName": "slimes",
-                    "title": "Visit eastern slimes",
+                    "track": { "title": "Visit eastern slimes" },
                 },
             ],
             "requirements": [],

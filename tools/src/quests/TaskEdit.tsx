@@ -14,6 +14,8 @@ import { unionEdit } from '../components/edit/UnionEdit';
 import { arrayEdit } from '../components/edit/ArrayEdit';
 import { EditComponent } from '../components/edit/Edit';
 import { ItemId } from '../../../common/protocol/Inventory';
+import { optionalEdit } from '../components/edit/OptionalEdit';
+import { TaskTrack } from '../../../common/domain/InteractionTable';
 
 const BASE_TASK: Pick<Task, 'count'> = {
     count: 1,
@@ -21,20 +23,28 @@ const BASE_TASK: Pick<Task, 'count'> = {
 
 const DEFAULT_TASK: VisitAreaTask = {
     type: 'visit',
-    title: 'Visit area',
+    track: { title: 'Visit area' },
     areaName: 'area',
     count: 1,
 };
 
 const DEFAULT_REQUIREMENT: ItemRequirement = {
     type: 'item',
-    title: 'Magic Mushroom',
+    track: { title: 'Magic Mushroom' },
     itemId: 0 as ItemId,
     count: 1,
 };
 
-const TASK_PROPERTY_CONFIG: PropertyConfig<Pick<Task, 'title' | 'count'>> = {
+const DEFAULT_TRACK: TaskTrack = {
+    title: 'Intruders slain',
+};
+
+const TrackEdit = optionalEdit<TaskTrack, undefined>(DEFAULT_TRACK, objectEdit({
     title: { component: TextEdit },
+}), void 0);
+
+const TASK_PROPERTY_CONFIG: PropertyConfig<Pick<Task, 'track' | 'count'>> = {
+    track: { component: TrackEdit },
     count: { component: NumberEdit },
 };
 
@@ -51,14 +61,14 @@ const TaskEdit = unionEdit<Task>({
             ...TASK_PROPERTY_CONFIG,
             npcIds: { component: arrayEdit<string>('', TextEdit) },
         }),
-        defaultValue: { type: 'kill', title: 'Intruders slain', npcIds: [], ...BASE_TASK },
+        defaultValue: { type: 'kill', track: DEFAULT_TRACK , npcIds: [], ...BASE_TASK },
     },
     spell: {
         component: () => objectEdit<SpellTask, 'type'>({
             ...TASK_PROPERTY_CONFIG,
             spellIds: { component: arrayEdit<string>('', TextEdit) },
         }),
-        defaultValue: { type: 'spell', title: 'Vegetables tasted', spellIds: [], ...BASE_TASK },
+        defaultValue: { type: 'spell', track: DEFAULT_TRACK, spellIds: [], ...BASE_TASK },
     },
 });
 
@@ -68,7 +78,7 @@ const RequirementEdit = unionEdit<QuestRequirement>({
             ...TASK_PROPERTY_CONFIG,
             itemId: { component: NumberEdit as EditComponent<any> },
         }),
-        defaultValue: { type: 'item', title: 'Bring the item', itemId: 0 as ItemId, ...BASE_TASK },
+        defaultValue: { type: 'item', track: DEFAULT_TRACK, itemId: 0 as ItemId, ...BASE_TASK },
     },
 });
 
