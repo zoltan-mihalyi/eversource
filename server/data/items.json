@@ -74,6 +74,18 @@
     "questId": 12,
     "lore": "Reveals the secrets of summoned creatures"
   },
+  "9": {
+    "name": "Memo Berry",
+    "image": "plants",
+    "animation": "memo_berry",
+    "quality": "common",
+    "lore": "A special berry used in medicine",
+    "stackSize": 20,
+    "questId": 16,
+    "condition": {
+      "type": "task"
+    }
+  },
   "100": {
     "name": "Nefag's Letter",
     "image": "common",

@@ -6,6 +6,7 @@ import { hpForLevel } from '../../../common/algorithms';
 import { ItemId } from '../../../common/protocol/Inventory';
 import { InventoryItem} from '../Item';
 import { CharacterInventory } from '../character/CharacterInventory';
+import { QuestId } from '../../../common/domain/InteractionTable';
 
 function inventoryItem(itemId: number, count = 1): InventoryItem {
     return {
@@ -17,7 +18,7 @@ function inventoryItem(itemId: number, count = 1): InventoryItem {
 export class FakeUserDao implements UserDao {
     private characters: CharacterDetails[] = [
         {
-            questsDone: new Set(),
+            questsDone: new Set([13 as QuestId, 14 as QuestId, 15 as QuestId]),
             questLog: new Map(),
             items: [inventoryItem(1)],
             info:

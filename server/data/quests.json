@@ -2,7 +2,7 @@
   "1": {
     "level": 1,
     "difficulty": "normal",
-    "name": "A simple quest",
+    "name": "A Simple Quest",
     "startsAt": "cacal",
     "endsAt": "cacal",
     "description": "The lava slimes are causing so much trouble these days!",
@@ -32,7 +32,7 @@
   "2": {
     "level": 1,
     "difficulty": "easy",
-    "name": "What next",
+    "name": "What Next",
     "startsAt": "cacal",
     "endsAt": "nefag",
     "description": "You are a nice %sex%! You killed the slimes, tell it to Nefag!",
@@ -45,7 +45,7 @@
   "3": {
     "level": 3,
     "difficulty": "easy",
-    "name": "The lonely forester",
+    "name": "The Lonely Forester",
     "startsAt": "nefag",
     "endsAt": "diana",
     "description": "I am so lonely here. I am dreaming of Diana all day. Bring my letter to her!",
@@ -73,7 +73,7 @@
   "4": {
     "level": 2,
     "difficulty": "easy",
-    "name": "A forester without job",
+    "name": "A Forester Without Job",
     "startsAt": "nefag",
     "endsAt": "cacal",
     "description": "Help the forester to find a job!",
@@ -84,7 +84,7 @@
   "5": {
     "level": 6,
     "difficulty": "normal",
-    "name": "The queen bee",
+    "name": "The Queen Bee",
     "startsAt": "diana",
     "endsAt": "diana",
     "description": "I need an amulet made of the sting of the queen bee. I'll pay you well, if you help me.",
@@ -109,7 +109,7 @@
   "6": {
     "level": 4,
     "difficulty": "normal",
-    "name": "Strange guests",
+    "name": "Strange Guests",
     "startsAt": "dark",
     "endsAt": "protector",
     "description": "Investigate the lava slimes!",
@@ -134,7 +134,7 @@
   "7": {
     "level": 1,
     "difficulty": "easy",
-    "name": "Trust issues",
+    "name": "Trust Issues",
     "startsAt": "cacal",
     "endsAt": "cacal",
     "description": "I am not sure if we can trust you. Answer me: are the lava slimes your friends?",
@@ -145,7 +145,7 @@
   "8": {
     "level": 7,
     "difficulty": "hard",
-    "name": "Destroy the world",
+    "name": "Destroy the World",
     "startsAt": "cactus_bonus",
     "endsAt": "obelus",
     "description": "WA HA HA HA",
@@ -156,7 +156,7 @@
   "9": {
     "level": 3,
     "difficulty": "normal",
-    "name": "Poor's feast",
+    "name": "Poor's Feast",
     "startsAt": "nefag",
     "endsAt": "nefag",
     "description": "Hello, %class%! Look at these vegetables! They look fine, but do they taste good as well?",
@@ -208,14 +208,14 @@
   "11": {
     "level": 2,
     "difficulty": "normal",
-    "name": "The summoner",
+    "name": "The Summoner",
     "startsAt": "wizard",
     "endsAt": "wizard",
-    "description": "So you want to know who summons the golems, right? I know an ancient elixir which reveals the summoner of any summoned creature. Maybe I can make it If you bring me the ingredients.",
+    "description": "I... can remember now...\nSo you want to know who summons the golems, right? I know an ancient elixir which reveals the summoner of any summoned creature. Maybe I can make it If you bring me the ingredients.",
     "taskDescription": "Bring the ingredients of the elixir!",
     "completion": "Ah finally! Pyrite!",
     "requires": [
-      15
+      17
     ],
     "tasks": {
       "progress": "Where is my Pyrite? I mean, the ingredients?",
@@ -257,7 +257,7 @@
     }
   },
   "12": {
-    "name": "Revealing the summoner",
+    "name": "Revealing the Summoner",
     "level": 2,
     "difficulty": "normal",
     "startsAt": "wizard",
@@ -312,7 +312,7 @@
     }
   },
   "14": {
-    "name": "Taking back the forest",
+    "name": "Taking Back the Forest",
     "level": 1,
     "difficulty": "normal",
     "startsAt": "soul_white",
@@ -349,8 +349,48 @@
     "requires": [
       14
     ],
-    "completion": "Albertus, aren't you?",
+    "completion": "Iuventus ventus.",
     "description": "There are more and more? It seems these guards are some kind of summoned creatures. But we cannot stop them until we know who controls them. Maybe Albertus can help us, %name%, he is a wise wizard, who lives in this forest.",
     "taskDescription": "Seek Albertus, the wizard!"
+  },
+  "16": {
+    "name": "Meeting the Foolish",
+    "level": 3,
+    "difficulty": "easy",
+    "startsAt": "wizard",
+    "endsAt": "soul_white",
+    "requires": [
+      15
+    ],
+    "completion": "Albertus only speaks meaningless words? Oh no! He forgot to eat his memo berries!",
+    "description": "Lac gallinaceum. Hehe ehe...\nManus manum lavat. Nomen est omen. Grrr!",
+    "taskDescription": "It seems like this wizard is not sane. The Spirit should know what happened to him."
+  },
+  "17": {
+    "name": "Faded Memories",
+    "level": 3,
+    "difficulty": "normal",
+    "startsAt": "soul_white",
+    "endsAt": "wizard",
+    "requires": [
+      16
+    ],
+    "completion": "Ad astra per asperas.",
+    "description": "Albertus needs Memo Berries to regain his memories. Fortunately, these berries grow in this forest.",
+    "taskDescription": "Pick some Memo Berries, %name%, and feed it to Albertus!",
+    "tasks": {
+      "progress": "Ordo est anima rerum.",
+      "list": [],
+      "requirements": [
+        {
+          "type": "item",
+          "track": {
+            "title": "Memo berries taken"
+          },
+          "itemId": 9,
+          "count": 10
+        }
+      ]
+    }
   }
 }

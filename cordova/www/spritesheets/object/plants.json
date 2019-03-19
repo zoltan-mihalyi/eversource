@@ -30,6 +30,18 @@
         {
          "name":"shadow_mushroom"
         },
+     "12":
+        {
+         "name":"memo_berry_left"
+        },
+     "13":
+        {
+         "name":"memo_berry_right"
+        },
+     "14":
+        {
+         "name":"memo_berry"
+        },
      "2":
         {
          "name":"carrot"
@@ -74,6 +86,18 @@
          "name":"string"
         },
      "11":
+        {
+         "name":"string"
+        },
+     "12":
+        {
+         "name":"string"
+        },
+     "13":
+        {
+         "name":"string"
+        },
+     "14":
         {
          "name":"string"
         },

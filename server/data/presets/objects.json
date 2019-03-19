@@ -95,5 +95,33 @@
         "chance": 1
       }
     ]
+  },
+  "memo_berry_left": {
+    "name": "Memo Berry",
+    "image": "plants",
+    "animation": "memo_berry_left",
+    "loot": [
+      {
+        "itemId": 9,
+        "minCount": 3,
+        "maxCount": 5,
+        "chance": 1
+      }
+    ],
+    "spawnTime": 30
+  },
+  "memo_berry_right": {
+    "name": "Memo Berry",
+    "image": "plants",
+    "animation": "memo_berry_right",
+    "loot": [
+      {
+        "itemId": 9,
+        "minCount": 3,
+        "maxCount": 5,
+        "chance": 1
+      }
+    ],
+    "spawnTime": 30
   }
 }
