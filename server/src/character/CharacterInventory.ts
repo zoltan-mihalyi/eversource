@@ -1,5 +1,5 @@
 import { ItemId, SlotId } from '../../../common/protocol/Inventory';
-import { InventoryItem, Items } from '../Item';
+import { InventoryItem, Items, PresetItem } from '../Item';
 
 export class CharacterInventory {
     private nextId = 0;
@@ -92,6 +92,22 @@ export class CharacterInventory {
             copy.removeItem(item);
         }
         return copy;
+    }
+
+    removeIf(predicate: (item: PresetItem) => boolean): CharacterInventory {
+        const itemsToRemove: InventoryItem[] = [];
+        this.map.forEach((inventoryItem) => {
+            const item = this.items[inventoryItem.itemId];
+            if (predicate(item)) {
+                itemsToRemove.push(inventoryItem);
+            }
+        });
+
+        if (itemsToRemove.length === 0) {
+            return this;
+        }
+
+        return this.remove(itemsToRemove);
     }
 
     add(items: InventoryItem[]): CharacterInventory {

@@ -14,6 +14,10 @@ const styles: StyleRules<ClassKeys> = {
             paddingLeft: 10,
             textIndent: 5,
         },
+
+        '& > li': {
+            marginTop: 10,
+        },
     },
 };
 

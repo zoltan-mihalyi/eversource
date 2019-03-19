@@ -10,11 +10,14 @@ const styles: StyleRules<ClassKeys> = {
     root: {
         '& h2': {
             marginTop: 0,
+            marginBottom: 16,
             fontSize: 32,
             color: black,
         },
         '& h3': {
             fontSize: 24,
+            marginTop: 20,
+            marginBottom: 12,
             color: black,
         },
         '& p': {

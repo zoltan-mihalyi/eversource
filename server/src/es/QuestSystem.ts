@@ -1,7 +1,7 @@
 import { ServerEvents } from './ServerEvents';
 import { EventBus } from '../../../common/es/EventBus';
 import { Task } from '../quest/Quest';
-import { QuestId, RequirementInfo, TaskInfo } from '../../../common/domain/InteractionTable';
+import { QuestId, RequirementInfo } from '../../../common/domain/InteractionTable';
 import { QuestProgression } from '../character/CharacterDetails';
 import { QuestLog, Quests } from './ServerComponents';
 import { Spells } from '../Spell';
@@ -80,6 +80,10 @@ export function questSystem(eventBus: EventBus<ServerEvents>, spells: Spells, qu
         }
 
         quests.questLog.delete(questId);
+        const { inventory } = entity.components;
+        if (inventory) {
+            entity.set('inventory', inventory.removeIf(item => item.questId === questId));
+        }
     });
 
     function updateQuestLog(quests: Quests, update: (task: Task) => QuestUpdate) {
