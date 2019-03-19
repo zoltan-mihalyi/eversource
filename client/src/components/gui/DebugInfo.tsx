@@ -1,29 +1,40 @@
 import * as React from 'react';
 import { brown } from '../theme';
+import { Positioned } from '../common/Positioned';
+import { StyleRules, WithStyles } from '../interfaces';
+import { injectSheet } from '../utils';
+
+type ClassKeys = 'root';
+
+const styles: StyleRules<ClassKeys> = {
+    root: {
+        padding: 5,
+        color: brown.lightest,
+        textAlign: 'right',
+
+    }
+};
 
 interface State {
     fps: number;
 }
 
-const STYLE: React.CSSProperties = {
-    padding: 5,
-    color: brown.lightest,
-    textAlign: 'right',
-};
-
-export class DebugInfo extends React.PureComponent<{}, State> {
+class RawDebugInfo extends React.PureComponent<WithStyles<ClassKeys>, State> {
     private timer: any = null;
     private times: number[] = [];
+
     state: State = {
         fps: 0,
     };
 
     render() {
         return (
-            <div className="gui top right" style={STYLE}>
-                FPS: {this.state.fps}<br/>
-                Version: {process.env.CLIENT_VERSION}
-            </div>
+            <Positioned horizontal="right" vertical="top">
+                <div className={this.props.classes.root}>
+                    FPS: {this.state.fps}<br/>
+                    Version: {process.env.CLIENT_VERSION}
+                </div>
+            </Positioned>
         );
     }
 
@@ -46,3 +57,5 @@ export class DebugInfo extends React.PureComponent<{}, State> {
         this.timer = requestAnimationFrame(this.updateTimer);
     };
 }
+
+export const DebugInfo = injectSheet(styles)(RawDebugInfo);

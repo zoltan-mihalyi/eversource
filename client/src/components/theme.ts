@@ -2,6 +2,10 @@ import { ItemQuality } from '../../../common/protocol/Inventory';
 
 export const black = '#000000';
 
+export const dark = '#2b2b2b';
+
+export const disabled = '#949494';
+
 export const brown = {
     darkest: '#573726',
     darker: '#6e4d31',

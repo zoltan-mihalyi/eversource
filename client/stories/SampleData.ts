@@ -9,6 +9,9 @@ import { app } from './TestScreen';
 import { CancellableProcess } from '../../common/util/CancellableProcess';
 import { ItemId } from '../../common/protocol/Inventory';
 import { PlayingNetworkApi } from '../src/protocol/PlayingState';
+import { CharacterId, CharacterInfo, CharacterName } from '../../common/domain/CharacterInfo';
+import { X, Y, ZoneId } from '../../common/domain/Location';
+import { times } from '../src/components/utils';
 
 function noop() {
 }
@@ -101,3 +104,19 @@ export const FAKE_API: PlayingNetworkApi = {
 };
 
 export const textureLoader = new TextureLoader(app.renderer, new CancellableProcess(), 32);
+
+export const CHARACTERS: CharacterInfo[] = times(8, (n): CharacterInfo => ({
+    id: n.toString() as CharacterId,
+    level: 90,
+    classId: 'warrior',
+    name: 'UnimaginableTheIncredibleMage' as CharacterName,
+    sex: 'female',
+    xp: 100,
+    hp: 100,
+    appearance: null as any,
+    equipment: null as any,
+    location: {
+        zoneId: 'enchanted_forest' as ZoneId,
+        position: { x: 0 as X, y: 0 as Y }
+    },
+}));

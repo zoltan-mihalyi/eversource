@@ -2,7 +2,7 @@ import * as React from 'react';
 import Tooltip from 'react-tooltip-lite';
 import { StyleRules, WithStyles } from '../interfaces';
 import { injectSheet, NOT_SMALL_DEVICE, SMALL_DEVICE } from '../utils';
-import { black, brown, quality, quest } from '../theme';
+import { black, brown, dark, quality, quest } from '../theme';
 import { InventoryItemTooltip } from './InventoryItemTooltip';
 import { BORDER_RADIUS, SCALE, SLOT_PADDING } from './InventorySlot';
 import { InventoryItemImage } from './InventoryItemImage';
@@ -67,8 +67,7 @@ const styles: StyleRules<ClassKeys> = {
         borderRadius: BORDER_RADIUS - SLOT_PADDING,
 
         [NOT_SMALL_DEVICE]: {
-            transformOriginX: 0,
-            transformOriginY: 0,
+            transformOrigin: '0 0',
             transform: `scale(${SCALE})`,
         },
     },
@@ -135,7 +134,7 @@ class RawInventoryItemIcon extends React.Component<Props & WithStyles<ClassKeys>
                      className={classes.tooltip}>
                 <div className={classes.root}>
                     <div className={classes.backgroundDecoration}
-                         style={{ backgroundColor: item.questItem ? quest.active : brown.darkest }}/>
+                         style={{ backgroundColor: item.questItem ? quest.active : dark }}/>
                     <div className={classes.image}>
                         <InventoryItemImage item={item}/>
                     </div>

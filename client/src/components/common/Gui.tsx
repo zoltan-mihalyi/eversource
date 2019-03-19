@@ -1,16 +1,38 @@
 import * as React from 'react';
 import { injectSheet, SMALL_DEVICE } from '../utils';
 import { StyleRules, WithStyles } from '../interfaces';
-import { brown } from '../theme';
+import { brown, dark } from '../theme';
 
 
 type ClassKeys = 'root';
 
 const styles: StyleRules<ClassKeys> = {
     '@global': {
+        html: {
+            cursor: 'url("cursors/default.png"), auto',
+        },
+
         body: {
             margin: 0,
             overflow: 'hidden',
+            backgroundColor: dark,
+            scrollbarColor: `${brown.normal} ${brown.darkest}`,
+            '& *': {
+                scrollbarWidth: 'thin',
+            }
+        },
+
+        '@font-face': {
+            fontFamily: 'pixel',
+            src: 'url("css/alagard_by_pix3m-d6awiwp.ttf")',
+        },
+
+        'body, button, input, select, textarea': {
+            fontFamily: 'pixel, serif',
+        },
+
+        'input, textarea, button, label': {
+            cursor: 'inherit !important',
         },
 
         '::-webkit-scrollbar-track': {
@@ -28,6 +50,14 @@ const styles: StyleRules<ClassKeys> = {
         '::-webkit-scrollbar': {
             width: 12,
         },
+
+        '::selection': {
+            backgroundColor: brown.normalDark,
+        },
+        '::-moz-selection': {
+            backgroundColor: brown.normalDark,
+        },
+
         [SMALL_DEVICE]: {
             '::-webkit-scrollbar': {
                 width: 6,

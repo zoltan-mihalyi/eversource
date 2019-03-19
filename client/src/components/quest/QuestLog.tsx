@@ -10,6 +10,7 @@ import { QuestContent } from './QuestContent';
 import { ActionButton } from '../common/Button/ActionButton';
 import { Panel } from '../common/Panel';
 import CharacterContext from '../context/CharacterContext';
+import { TextListItem } from '../common/List/TextListItem';
 
 interface Props {
     questLog: Map<QuestId, QuestLogItem>;
@@ -54,10 +55,10 @@ export class QuestLog extends React.PureComponent<Props, State> {
                         <List>
                             <CharacterContext.Consumer>
                                 {(character) => Array.from(questLog).map(([key, item]) => (
-                                    <ListItem level={questLevel(character.level, item.info.level)} selected={selected === key} key={key}
+                                    <TextListItem level={questLevel(character.level, item.info.level)} selected={selected === key} key={key}
                                               checked={isComplete(item)} onClick={() => this.select(key)}>
                                         [{item.info.level}] {item.info.name}
-                                    </ListItem>
+                                    </TextListItem>
                                 ))}
                             </CharacterContext.Consumer>
                         </List>

@@ -1,6 +1,7 @@
 import { StyleRules, WithStyles } from '../../interfaces';
 import * as React from 'react';
-import { injectSheet, SMALL_DEVICE } from '../../utils';
+import { forwardRef } from 'react';
+import { className, injectSheet, SMALL_DEVICE } from '../../utils';
 import { black, brown } from '../../theme';
 
 
@@ -13,15 +14,19 @@ const styles: StyleRules<ClassKeys> = {
         borderColor: brown.normalDark,
         backgroundColor: brown.lighter,
         color: black,
-        width: 180,
+        width: 300,
         fontSize: 24,
         paddingLeft: 4,
         paddingRight: 4,
         margin: 4,
 
+        '&:focus': {
+            outline: 0,
+        },
+
         [SMALL_DEVICE]: {
             fontSize: 12,
-            width: 90,
+            width: 150,
             paddingLeft: 2,
             paddingRight: 2,
             margin: 2,
@@ -30,11 +35,13 @@ const styles: StyleRules<ClassKeys> = {
 };
 
 export interface Props extends React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> {
+    forwardedRef?: React.Ref<HTMLInputElement>;
 }
 
-const RawInput: React.FunctionComponent<Props & WithStyles<ClassKeys>> = ({ children, classes, theme, ...rest }) => (
-    <input className={classes.root} {...rest}>{children}</input>
+const RawInput: React.FunctionComponent<Props & WithStyles<ClassKeys>> = ({ children, classes, theme, forwardedRef, className: cName, ...rest }) => (
+    <input className={className(classes.root, cName)} ref={forwardedRef} {...rest}>{children}</input>
 );
 
-const classKeysWrapper = injectSheet(styles);
-export const Input = classKeysWrapper(RawInput);
+const RawInputWithStyle = injectSheet(styles)(RawInput);
+
+export const Input = forwardRef<HTMLInputElement, Props>((props, ref) => <RawInputWithStyle forwardedRef={ref} {...props}/>);

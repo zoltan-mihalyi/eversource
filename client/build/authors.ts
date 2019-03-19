@@ -42,7 +42,7 @@ async function getSoftwareLicenses(): Promise<string> {
         }
 
         let licenseText;
-        if (license.licenseFile!.indexOf('README') === -1) {
+        if (license.licenseFile!.toUpperCase().indexOf('README') === -1) {
             licenseText = await new Promise<string>((resolve, reject) => {
                 fs.readFile(license.licenseFile!, 'utf-8', (err, data) => {
                     if (err) {

@@ -7,6 +7,23 @@ import { Positioned } from '../common/Positioned';
 import { Inventory } from '../inventory/Inventory';
 import { InventoryItemInfo } from '../../../../common/protocol/Inventory';
 import { CharacterState } from '../../../../common/protocol/PlayerState';
+import { injectSheet, SMALL_DEVICE } from '../utils';
+import { StyleRules, WithStyles } from '../interfaces';
+
+type ClassKeys = 'first' | 'margin';
+
+const styles: StyleRules<ClassKeys> = {
+    first: {
+        marginTop: 40,
+    },
+    margin: {
+        marginTop: 20,
+
+        [SMALL_DEVICE]: {
+            marginTop: 10,
+        },
+    },
+};
 
 interface Props {
     questLog: Map<QuestId, QuestLogItem>;
@@ -20,26 +37,24 @@ interface State {
     current: 'questLog' | 'inventory' | null;
 }
 
-export class GameMenu extends React.PureComponent<Props, State> {
+class RawGameMenu extends React.PureComponent<Props & WithStyles<ClassKeys>, State> {
     state: State = { current: null };
 
     render() {
-        const { questLog, character, inventory, onLeave } = this.props;
+        const { classes, questLog, character, inventory, onLeave } = this.props;
         const { current } = this.state;
 
         let content;
         if (current === null) {
             content = (
                 <>
-                    <div style={{ marginTop: 40 }}>
+                    <div className={classes.first}>
                         <ActionButton onClick={onLeave}>Leave</ActionButton>
                     </div>
-                    <div style={{ height: 20 }}/>
-                    <div>
+                    <div className={classes.margin}>
                         <ActionButton onClick={this.selectQuestLog}>Quest Log</ActionButton>
                     </div>
-                    <div style={{ height: 20 }}/>
-                    <div>
+                    <div className={classes.margin}>
                         <ActionButton onClick={this.selectInventory}>Inventory</ActionButton>
                     </div>
                 </>
@@ -73,3 +88,5 @@ export class GameMenu extends React.PureComponent<Props, State> {
         this.setState({ current: null });
     }
 }
+
+export const GameMenu = injectSheet(styles)(RawGameMenu);

@@ -4,7 +4,10 @@ import { Gui } from '../src/components/common/Gui';
 import { LoginScreen } from '../src/components/menu/LoginScreen';
 import { GameScreen } from '../src/components/game/GameScreen';
 import { InputManager } from '../src/input/InputManager';
-import { FAKE_API, QUEST_LOG, textureLoader } from './SampleData';
+import { CHARACTERS, FAKE_API, QUEST_LOG, textureLoader } from './SampleData';
+import { CreditsScreen } from '../src/components/menu/CreditsScreen';
+import { CharacterSelectionScreen } from '../src/components/menu/CharacterSelectionScreen';
+import { LoadingScreen } from '../src/components/menu/LoadingScreen';
 
 function noop() {
 }
@@ -13,11 +16,20 @@ const canvas = document.createElement('canvas');
 const inputManager = new InputManager();
 
 storiesOf('Screen', module)
-    .addDecorator((story => (
-        <Gui>{story()}</Gui>
-    )))
     .add('LoginScreen', () => (
         <LoginScreen onSubmit={noop} showCredits={noop} loginState={{ type: 'initial' }}/>
+    ))
+    .add('ConnectingScreen', () => (
+        <LoginScreen onSubmit={noop} showCredits={noop} loginState={{ type: 'connecting' }}/>
+    ))
+    .add('CharacterSelectionScreen', () => (
+        <CharacterSelectionScreen characters={CHARACTERS} onExit={noop} onSelect={noop} />
+    ))
+    .add('LoadingScreen', () => (
+        <LoadingScreen zone="Enchanted Forest" />
+    ))
+    .add('CreditsScreen', () => (
+        <CreditsScreen onExit={noop}/>
     ))
     .add('GameScreen', () => (
         <GameScreen setScale={noop} canvas={canvas} inputManager={inputManager} onMount={initScreen}

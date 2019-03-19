@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { StyleRules, WithStyles } from '../interfaces';
 import { injectSheet, SMALL_DEVICE } from '../utils';
-import { Gui } from './Gui';
 import { Button } from './Button';
 import { Panel } from './Panel';
 import { brown, red } from '../theme';

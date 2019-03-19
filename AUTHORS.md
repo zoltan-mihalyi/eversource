@@ -1,4 +1,4 @@
-#Eversource
+# Eversource
 
 This project contains third party assets and libraries.
 Some of the assets were modified to fit better the game.

@@ -1,7 +1,13 @@
 import * as React from 'react';
 import { CharacterInfo } from '../../../../common/domain/CharacterInfo';
-import { Button } from '../gui/Button';
 import { Gui } from '../common/Gui';
+import { ActionButton } from '../common/Button/ActionButton';
+import { List } from '../common/List';
+import { ListItem } from '../common/List/ListItem';
+import { Panel } from '../common/Panel';
+import { Centered } from '../common/Centered';
+import { Scrollable } from '../common/Scrollable';
+import { CharacterInfoBox } from '../character/CharacterInfoBox';
 
 interface Props {
     onSelect: (character: CharacterInfo) => void;
@@ -15,24 +21,22 @@ export class CharacterSelectionScreen extends React.Component<Props> {
 
         return (
             <Gui>
-                <div className="container panel">
-                    <div className="content">
-                        <ul className="limited">
-                            {characters.map((character, idx) => (
-                                <li key={idx}>
-                                    <button className="item" onClick={() => onSelect(character)}>
-                                        <h2>{character.name}</h2>
-                                        <h3>Level {character.level} {character.classId}</h3>
-                                        <h3 className="secondary">{character.location.zoneId}</h3>
-                                    </button>
-                                </li>
-                            ))}
-                        </ul>
-                        <div className="center">
-                            <Button onClick={onExit}>Exit</Button>
-                        </div>
-                    </div>
-                </div>
+                <Centered>
+                    <Panel margin padding>
+                        <Scrollable>
+                            <List bordered>
+                                {characters.map((character, idx) => (
+                                    <ListItem key={idx} onClick={() => onSelect(character)}>
+                                        <CharacterInfoBox character={character}/>
+                                    </ListItem>
+                                ))}
+                            </List>
+                        </Scrollable>
+                        <Centered>
+                            <ActionButton onClick={onExit}>Exit</ActionButton>
+                        </Centered>
+                    </Panel>
+                </Centered>
             </Gui>
         );
     }

@@ -5,6 +5,7 @@ import { brown, player } from '../theme';
 import { ChatMessage } from '../../../../common/protocol/Messages';
 import { Scrollable } from '../common/Scrollable';
 import { CHAT_MESSAGE_MAXIMUM_LENGTH } from '../../../../common/constants';
+import { Input } from '../common/Input';
 
 type ClassKeys = 'root' | 'background' | 'content' | 'message' | 'sender' | 'entry' | 'input';
 
@@ -88,7 +89,7 @@ export class RawChatBox extends React.PureComponent<Props & WithStyles<ClassKeys
                     </Scrollable>
 
                     <form onSubmit={this.sendMessage}>
-                        <input ref={this.handleRef} value={this.state.message} className={classes.input} size={1}
+                        <Input ref={this.handleRef} value={this.state.message} className={classes.input} size={1}
                                maxLength={CHAT_MESSAGE_MAXIMUM_LENGTH} onChange={this.changeMessage}
                                onKeyDown={this.onKeyDown}/>
                     </form>

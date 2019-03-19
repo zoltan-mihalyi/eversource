@@ -10,6 +10,9 @@ import { ListItem } from '../src/components/common/List/ListItem';
 import { Panel } from '../src/components/common/Panel';
 import { Dialog } from '../src/components/common/Dialog';
 import { Positioned } from '../src/components/common/Positioned';
+import { Centered } from '../src/components/common/Centered';
+import { TextListItem } from '../src/components/common/List/TextListItem';
+import { Checkbox } from '../src/components/common/Input/Checkbox';
 
 function noop() {
 }
@@ -32,17 +35,55 @@ storiesOf('Common', module)
     .add('Input', () => (
         <Input value={"test"} onChange={noop}/>
     ))
+    .add('Checkbox', () => (
+        <Panel padding>
+            <div>
+                <Checkbox checked={true} onChange={noop} label="Remember password"/>
+            </div>
+            <div>
+                <Checkbox checked={false} onChange={noop} label="Accept conditions"/>
+            </div>
+            <div>
+                <Checkbox checked={true} disabled={true} onChange={noop} label="Disabled"/>
+            </div>
+        </Panel>
+    ))
     .add('List', () => (
         <Panel>
             <Scrollable>
                 <List>
                     <ListItem>Normal item</ListItem>
-                    <ListItem level="lowest">Lowest level</ListItem>
-                    <ListItem level="lower">Lower level</ListItem>
-                    <ListItem level="normal">Normal level</ListItem>
-                    <ListItem level="higher">Higher level</ListItem>
-                    <ListItem level="highest">Highest level</ListItem>
-                    <ListItem>Item with a very very long name</ListItem>
+                    <ListItem selected>Selected item</ListItem>
+                    <ListItem>Normal item</ListItem>
+                    <ListItem>Normal item</ListItem>
+                </List>
+            </Scrollable>
+        </Panel>
+    ))
+    .add('Bordered List', () => (
+        <Panel>
+            <Scrollable>
+                <List bordered>
+                    <ListItem>Normal item</ListItem>
+                    <ListItem selected>Selected item</ListItem>
+                    <ListItem>Normal item</ListItem>
+                    <ListItem>Normal item</ListItem>
+                </List>
+            </Scrollable>
+        </Panel>
+    ))
+    .add('TextList', () => (
+        <Panel>
+            <Scrollable>
+                <List>
+                    <TextListItem>Normal item</TextListItem>
+                    <TextListItem selected>Selected item</TextListItem>
+                    <TextListItem level="lowest">Lowest level</TextListItem>
+                    <TextListItem level="lower">Lower level</TextListItem>
+                    <TextListItem level="normal">Normal level</TextListItem>
+                    <TextListItem level="higher">Higher level</TextListItem>
+                    <TextListItem level="highest">Highest level</TextListItem>
+                    <TextListItem>Item with a very very long name</TextListItem>
                 </List>
             </Scrollable>
         </Panel>
@@ -51,6 +92,13 @@ storiesOf('Common', module)
         <Panel>
             Content
         </Panel>
+    ))
+    .add('Centered', () => (
+        <Centered>
+            <Panel>
+                Content
+            </Panel>
+        </Centered>
     ))
     .add('Dialog', () => (
         <Dialog title="Test dialog" onClose={noop}>
