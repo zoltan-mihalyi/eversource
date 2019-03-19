@@ -92,11 +92,13 @@ export class GameScreen extends React.Component<Props, State> {
 
     componentDidMount() {
         this.props.onMount(this);
-        document.body.addEventListener('keypress', this.onKeyDown);
+        document.body.addEventListener('keydown', this.onKeyDown);
+        document.body.addEventListener('keypress', this.onKeyPress);
     }
 
     componentWillUnmount() {
-        document.body.removeEventListener('keypress', this.onKeyDown);
+        document.body.removeEventListener('keydown', this.onKeyDown);
+        document.body.removeEventListener('keypress', this.onKeyPress);
     }
 
     updatePlayerState(playerState: PlayerState) { // TODO interface
@@ -137,7 +139,11 @@ export class GameScreen extends React.Component<Props, State> {
             const debug = !this.state.debug;
             this.setState({ debug });
             settings.set('debug', debug);
-        } else if (event.which === 13) {
+        }
+    };
+
+    private onKeyPress = (event: KeyboardEvent) => {
+        if (event.which === 13) {
             const chatBox = this.chatBoxInput.current;
             if (chatBox) {
                 event.stopPropagation();
