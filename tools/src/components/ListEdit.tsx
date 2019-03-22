@@ -3,10 +3,7 @@ import { ItemEdit } from './ItemEdit';
 import * as fs from "fs";
 import { EditProps } from './edit/Edit';
 import { ListEditRow } from './ListEditRow';
-
-interface Named {
-    name: string;
-}
+import { Named } from '../Utils';
 
 interface Props<T> {
     fileName: string;

@@ -16,6 +16,7 @@ export class CreatureEdit<T extends CreaturePreset> extends React.PureComponent<
                        onChange={this.changeLevel}/>
                 {' '}
                 <select value={preset.attitude} onChange={this.changeAttitude}>
+                    <option value=""/>
                     <option value="friendly">Friendly</option>
                     <option value="neutral">Neutral</option>
                     <option value="hostile">Hostile</option>
@@ -32,7 +33,7 @@ export class CreatureEdit<T extends CreaturePreset> extends React.PureComponent<
 
     private changeAttitude = (e: React.SyntheticEvent<HTMLSelectElement>) => {
         this.props.onChange({
-            attitude: e.currentTarget.value as PresetAttitude,
+            attitude: e.currentTarget.value as PresetAttitude || void 0,
         } as Partial<T>);
     };
 }

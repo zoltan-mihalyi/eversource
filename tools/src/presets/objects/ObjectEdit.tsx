@@ -7,11 +7,11 @@ import * as path from "path";
 import { wwwDir } from '../../Utils';
 import { TileSet } from '../../../../common/tiled/interfaces';
 import { optionalEdit } from '../../components/edit/OptionalEdit';
-import { TextEdit } from '../../components/edit/TextEdit';
 import { objectEdit } from '../../components/edit/ObjectEdit';
 import { LootElementEdit } from './LootElementEdit';
 import { arrayEdit } from '../../components/edit/ArrayEdit';
 import { ItemId } from '../../../../common/protocol/Inventory';
+import { SpellIdEdit } from '../common/IdEdits';
 
 const base = path.join(wwwDir, 'spritesheets', 'object');
 
@@ -28,7 +28,7 @@ const possibleValues: { [P in keyof All]: string[] } = {
 
 const DEFAULT_LOOT_ELEMENT: LootElement = { itemId: 0 as ItemId, minCount: 1, maxCount: 1, chance: 1 };
 const ObjectPresetPropsEditor = objectEdit<ObjectPreset, 'image' | 'animation' | 'name' | 'story' | 'scale' | 'effects'>({
-    useSpell: { component: optionalEdit<string, undefined>('', TextEdit, void 0) },
+    useSpell: { component: optionalEdit<string, undefined>('', SpellIdEdit, void 0) },
     loot: { component: optionalEdit<LootElement[], undefined>([], arrayEdit<LootElement>(DEFAULT_LOOT_ELEMENT, LootElementEdit), void 0) },
 });
 

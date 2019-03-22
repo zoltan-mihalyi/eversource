@@ -6,7 +6,7 @@ import { optionEdit } from '../components/edit/OptionEdit';
 import { optionalEdit } from '../components/edit/OptionalEdit';
 import { QuestId } from '../../../common/domain/InteractionTable';
 import { NumberEdit } from '../components/edit/NumberEdit';
-import { EditComponent } from '../components/edit/Edit';
+import { QuestIdEdit } from '../presets/common/IdEdits';
 
 export const ItemEdit = objectEdit<PresetItem>({
     name: { component: TextEdit },
@@ -14,6 +14,6 @@ export const ItemEdit = objectEdit<PresetItem>({
     animation: { component: TextEdit },
     quality: { component: optionEdit(['common', 'rare', 'epic', 'legendary']) },
     stackSize: { component: optionalEdit(0, NumberEdit, void 0) },
-    questId: { component: optionalEdit(0 as QuestId, NumberEdit as EditComponent<any>, void 0) },
+    questId: { component: optionalEdit(0 as QuestId, QuestIdEdit, void 0) },
     lore: { component: optionalEdit('', TextEdit, void 0) }
 });

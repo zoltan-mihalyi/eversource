@@ -2,6 +2,10 @@ import * as path from "path";
 
 export const wwwDir = path.resolve('..', 'cordova', 'www');
 
+export interface Named {
+    name: string;
+}
+
 function fileDialog(callback: (file: string) => void, enhance?: (input: HTMLInputElement) => void) {
     const input = document.createElement('input') as HTMLInputElement;
     input.type = 'file';

@@ -12,10 +12,10 @@ import { MultilineTextEdit, TextEdit } from '../components/edit/TextEdit';
 import { NumberEdit } from '../components/edit/NumberEdit';
 import { unionEdit } from '../components/edit/UnionEdit';
 import { arrayEdit } from '../components/edit/ArrayEdit';
-import { EditComponent } from '../components/edit/Edit';
 import { ItemId } from '../../../common/protocol/Inventory';
 import { optionalEdit } from '../components/edit/OptionalEdit';
 import { TaskTrack } from '../../../common/domain/InteractionTable';
+import { ItemIdEdit } from '../presets/common/IdEdits';
 
 const BASE_TASK: Pick<Task, 'count'> = {
     count: 1,
@@ -76,7 +76,7 @@ const RequirementEdit = unionEdit<QuestRequirement>({
     item: {
         component: () => objectEdit<ItemRequirement, 'type'>({
             ...TASK_PROPERTY_CONFIG,
-            itemId: { component: NumberEdit as EditComponent<any> },
+            itemId: { component: ItemIdEdit },
         }),
         defaultValue: { type: 'item', track: DEFAULT_TRACK, itemId: 0 as ItemId, ...BASE_TASK },
     },
