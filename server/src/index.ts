@@ -18,4 +18,3 @@ const httpServer = app.listen(PORT, () => console.log(`Server running on port ${
 const gameServer = new Server(new FakeDao(), world, {
     server: httpServer,
 });
-

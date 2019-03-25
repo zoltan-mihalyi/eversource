@@ -132,6 +132,6 @@ function increase(hasIncrease: boolean): QuestUpdate {
     return hasIncrease ? 'increase' : 'none';
 }
 
-function spellMatchesTask(task: Task, spell: Spell): boolean {
+export function spellMatchesTask(task: Task, spell: Spell): boolean {
     return task.type === 'spell' && task.spellIds.indexOf(spell.id) !== -1;
 }

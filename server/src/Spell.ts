@@ -1,7 +1,9 @@
 import { Expression } from './Expressions';
+import { Condition } from './Condition';
 
 export interface PresetSpell {
     name: string;
+    condition?: Condition;
     effects: SpellEffect[];
 }
 

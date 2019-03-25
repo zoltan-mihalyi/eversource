@@ -2,31 +2,65 @@ import { ServerEvents } from './ServerEvents';
 import { EventBus } from '../../../common/es/EventBus';
 import { LootElement } from '../world/Presets';
 import { InventoryItem } from '../Item';
+import { getRemainingCount } from '../Condition';
+import { Entity } from '../../../common/es/Entity';
+import { ServerComponents } from './ServerComponents';
+import { Tasks } from '../quest/Quest';
+import { DataContainer } from '../data/DataContainer';
+import { CharacterInventory } from '../character/CharacterInventory';
 
-export function lootSystem(eventBus: EventBus<ServerEvents>) {
+export function lootSystem(eventBus: EventBus<ServerEvents>, dataContainer: DataContainer) {
 
-    eventBus.on('loot', ({ entity, loot }) => {
+    eventBus.on('loot', ({ entity, looted, loot }) => {
         const { inventory } = entity.components;
 
-        if (inventory) {
-            entity.set('inventory', inventory.add(createItemsFromLoot(loot)));
+        if (!inventory) {
             return;
         }
-    });
-}
-
-function createItemsFromLoot(loot: LootElement[]): InventoryItem[] {
-    const items: InventoryItem[] = [];
-    for (const lootElement of loot) {
-        if (Math.random() > lootElement.chance) {
-            continue;
+        const items = createItemsFromLoot(entity, inventory, loot);
+        if (items.length === 0) {
+            return;
         }
 
-        const extraCount = Math.floor(Math.random() * (lootElement.maxCount - lootElement.minCount));
-        items.push({
-            itemId: lootElement.itemId,
-            count: lootElement.minCount + extraCount,
-        });
+        entity.set('inventory', inventory.add(items));
+        eventBus.emit('kill', { killer: entity, killed: looted });
+    });
+
+    function createItemsFromLoot(entity: Entity<ServerComponents>, inventory: CharacterInventory, loot: LootElement[]): InventoryItem[] {
+        const inventoryItems: InventoryItem[] = [];
+        for (const lootElement of loot) {
+            const { condition } = dataContainer.items[lootElement.itemId];
+
+
+            if (Math.random() > lootElement.chance) {
+                continue;
+            }
+
+            const getRemainingItemCount = (tasks: Tasks): number => {
+                for (let i = 0; i < tasks.requirements.length; i++) {
+                    const task = tasks.requirements[i];
+                    if (task.itemId === lootElement.itemId) {
+                        return task.count - inventory.getCount(task.itemId);
+                    }
+                }
+                return 0;
+            };
+
+            const maxLoot = condition ? getRemainingCount(condition, entity, dataContainer, getRemainingItemCount) : Infinity;
+
+            const extraCount = Math.floor(Math.random() * (lootElement.maxCount - lootElement.minCount));
+            const count = Math.min(maxLoot, lootElement.minCount + extraCount);
+
+            if (count === 0) {
+                continue;
+            }
+
+            inventoryItems.push({
+                itemId: lootElement.itemId,
+                count,
+            });
+        }
+        return inventoryItems;
     }
-    return items;
+
 }

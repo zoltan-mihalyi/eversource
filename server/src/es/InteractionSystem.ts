@@ -52,12 +52,11 @@ export function interactionSystem(entityContainer: EntityContainer<ServerCompone
         const { useSpell, loot } = target.components;
 
         if (useSpell) {
-            eventBus.emit('spellCast', { caster: source, target, spell: useSpell });
+            eventBus.emit('trySpellCast', { caster: source, target, spell: useSpell });
             return;
         }
         if (loot) {
-            eventBus.emit('loot', { entity: source, loot });
-            eventBus.emit('kill', { killer: source, killed: target });
+            eventBus.emit('loot', { entity: source, looted: target, loot });
             return;
         }
 

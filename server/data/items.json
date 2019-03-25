@@ -4,7 +4,10 @@
     "image": "plants",
     "animation": "artichoke",
     "quality": "epic",
-    "questId": 10
+    "questId": 10,
+    "condition": {
+      "type": "task"
+    }
   },
   "2": {
     "name": "Sting of The Queen Bee",

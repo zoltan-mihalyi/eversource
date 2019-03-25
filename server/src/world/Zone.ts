@@ -40,9 +40,9 @@ export class Zone {
         interactionSystem(this.entityContainer, this.eventBus, dataContainer);
         questSystem(this.eventBus, dataContainer);
         xpSystem(this.eventBus);
-        spellSystem(this.eventBus);
+        spellSystem(this.eventBus, dataContainer);
         chatSystem(this.index, this.eventBus);
-        lootSystem(this.eventBus);
+        lootSystem(this.eventBus, dataContainer);
     }
 
     createEntity(components: Partial<ServerComponents>): Entity<ServerComponents> {

@@ -19,6 +19,7 @@ export interface Damage {
 
 export interface Loot {
     entity: Entity<ServerComponents>;
+    looted: Entity<ServerComponents>;
     loot: LootElement[];
 }
 
@@ -71,11 +72,6 @@ interface SpellCast {
     spell: Spell;
 }
 
-interface InventoryUpdate {
-    entity: Entity<ServerComponents>;
-    inventory: CharacterInventory;
-}
-
 interface ChatMessageEvent {
     sender: Entity<ServerComponents>;
     text: string;
@@ -87,6 +83,7 @@ export interface ServerEvents {
     networkUpdate: void;
     hit: Hit;
     kill: Kill;
+    trySpellCast: SpellCast;
     spellCast: SpellCast;
     area: Area;
     damage: Damage;

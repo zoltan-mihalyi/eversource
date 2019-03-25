@@ -128,7 +128,7 @@ export class WorldImpl implements World {
 
     private update = () => {
         this.zones.forEach((zone) => {
-            zone.update(INTERVAL);
+                zone.update(INTERVAL);
         });
     };
 }
