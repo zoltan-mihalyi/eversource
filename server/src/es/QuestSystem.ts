@@ -4,13 +4,13 @@ import { Task } from '../quest/Quest';
 import { QuestId, RequirementInfo } from '../../../common/domain/InteractionTable';
 import { QuestProgression } from '../character/CharacterDetails';
 import { QuestLog, Quests } from './ServerComponents';
-import { Spells } from '../Spell';
-import { QuestIndexer } from '../quest/QuestIndexer';
 import { InventoryItem } from '../Item';
+import { DataContainer } from '../data/DataContainer';
+import { Spell } from '../Spell';
 
 type QuestUpdate = 'none' | 'increase' | { setValue: number };
 
-export function questSystem(eventBus: EventBus<ServerEvents>, spells: Spells, questIndexer: QuestIndexer) {
+export function questSystem(eventBus: EventBus<ServerEvents>, { questIndexer }: DataContainer) {
 
     eventBus.on('kill', ({ killer, killed }) => {
         const killerQuests = killer.components.quests;
@@ -39,7 +39,7 @@ export function questSystem(eventBus: EventBus<ServerEvents>, spells: Spells, qu
         }
 
         updateQuestLog(quests, task => {
-            return increase(task.type === 'spell' && task.spellIds.findIndex(spellId => spells[spellId] === spell) !== -1); // TODO spell should contain id
+            return increase(spellMatchesTask(task, spell));
         });
     });
 
@@ -130,4 +130,8 @@ function updateQuest(questLog: QuestLog, questId: QuestId, task: Task, taskIndex
 
 function increase(hasIncrease: boolean): QuestUpdate {
     return hasIncrease ? 'increase' : 'none';
+}
+
+function spellMatchesTask(task: Task, spell: Spell): boolean {
+    return task.type === 'spell' && task.spellIds.indexOf(spell.id) !== -1;
 }

@@ -9,7 +9,7 @@ import { NetworkLoop } from '../src/NetworkLoop';
 import { CharacterDetails, QuestStatus } from '../src/character/CharacterDetails';
 import { QuestId } from '../../common/domain/InteractionTable';
 import { World } from '../src/world/World';
-import { QuestIndexer } from '../src/quest/QuestIndexer';
+import { fakeDataContainer } from './sampleData';
 
 function tick(): Promise<void> {
     return new Promise<void>(resolve => setTimeout(resolve, 1));
@@ -85,8 +85,7 @@ function fakeZone() {
 function fakeWorld(zone = fakeZone()): World & { getZone: SinonStub } {
 
     return {
-        questIndexer: new QuestIndexer({}, {}),
-        items: {},
+        dataContainer: fakeDataContainer(),
         getZone: sinon.mock().callsFake((zoneId) => {
             return Promise.resolve(zone);
         }),

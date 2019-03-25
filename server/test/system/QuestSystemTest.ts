@@ -9,6 +9,7 @@ import { Entity } from '../../../common/es/Entity';
 import { ServerEntityContainer } from '../../src/es/ServerEntityContainer';
 import { PresetQuest } from '../../src/quest/Quest';
 import { QuestIndexer } from '../../src/quest/QuestIndexer';
+import { fakeDataContainer } from '../sampleData';
 
 const quests: { [key: number]: PresetQuest } = {
     1: {
@@ -29,7 +30,7 @@ const quests: { [key: number]: PresetQuest } = {
                 {
                     "type": "kill",
                     "count": 10,
-                    "track": {"title":"Intruders slain"},
+                    "track": { "title": "Intruders slain" },
                     "npcIds": [
                         "slime_lava",
                         "slime_lava_rock",
@@ -64,6 +65,7 @@ const quests: { [key: number]: PresetQuest } = {
     },
 };
 let questIndexer = new QuestIndexer(quests, {});
+let dataContainer = fakeDataContainer({ questIndexer });
 
 describe('QuestSystem', function () {
     let container: ServerEntityContainer;
@@ -88,7 +90,7 @@ describe('QuestSystem', function () {
     it('should add task progression', async function () {
         questLog.set(1 as QuestId, [0]);
 
-        questSystem(eventBus, {}, questIndexer);
+        questSystem(eventBus, dataContainer);
 
         eventBus.emit('kill', {
             killer: player,
@@ -101,7 +103,7 @@ describe('QuestSystem', function () {
     it('should do nothing with complete tasks', async function () {
         questLog.set(1 as QuestId, [10]);
 
-        questSystem(eventBus, {}, questIndexer);
+        questSystem(eventBus, dataContainer);
 
         eventBus.emit('kill', {
             killer: player,
@@ -114,7 +116,7 @@ describe('QuestSystem', function () {
     it('should do nothing with failed quests', async function () {
         questLog.set(1 as QuestId, 'failed');
 
-        questSystem(eventBus, {}, questIndexer);
+        questSystem(eventBus, dataContainer);
 
         eventBus.emit('kill', {
             killer: player,
@@ -127,7 +129,7 @@ describe('QuestSystem', function () {
     it('should handle area events', async function () {
         questLog.set(6 as QuestId, [0]);
 
-        questSystem(eventBus, {}, questIndexer);
+        questSystem(eventBus, dataContainer);
 
         eventBus.emit('area', {
             visitor: player,

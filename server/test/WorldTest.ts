@@ -1,4 +1,4 @@
-import { AllPresets, WorldImpl } from '../src/world/World';
+import { WorldImpl } from '../src/world/World';
 import * as sinon from 'sinon';
 import * as assert from 'assert';
 import { ZoneId } from '../../common/domain/Location';
@@ -7,7 +7,8 @@ import { Grid } from '../../common/Grid';
 import { HumanoidPresets, MonsterPresets, ObjectPresets } from '../src/world/Presets';
 import { TiledObject } from '../../common/tiled/interfaces';
 import { HumanoidView, ObjectView, SimpleView } from '../../common/components/View';
-import { QuestIndexer } from '../src/quest/QuestIndexer';
+import { DataContainer } from '../src/data/DataContainer';
+import { fakeDataContainer } from './sampleData';
 
 const zoneId = 'zone' as ZoneId;
 
@@ -24,15 +25,8 @@ function createMapLoader(objects: TiledObject[] = []) {
 
 const runningWorlds = new Set<WorldImpl>();
 
-function newWorld(mapLoader: MapLoader, presets: Partial<AllPresets> = {}) {
-    const world = new WorldImpl(mapLoader, {
-        monster: {},
-        humanoid: {},
-        object: {},
-        spells: {},
-        items: {},
-        ...presets,
-    }, new QuestIndexer({}, {}));
+function newWorld(mapLoader: MapLoader, replace: Partial<DataContainer> = {}) {
+    const world = new WorldImpl(mapLoader, fakeDataContainer(replace));
     runningWorlds.add(world);
     return world;
 }

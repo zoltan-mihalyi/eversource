@@ -151,8 +151,9 @@ export class PlayingRequestHandler extends ClientState<PlayerData> {
 
         const { interacting } = entity.components;
 
+        const questIndexer = this.context.world.dataContainer.questIndexer;
         const playerState: PlayerState = {
-            interaction: !interacting ? null : getInteractionTable(entity, interacting.entity, this.context.world.questIndexer), // TODO
+            interaction: !interacting ? null : getInteractionTable(entity, interacting.entity, questIndexer),
             character: {
                 sex: characterInfo.sex,
                 name: characterInfo.name,
@@ -171,7 +172,7 @@ export class PlayingRequestHandler extends ClientState<PlayerData> {
     }
 
     private sendQuestLog() {
-        const { questInfoMap, quests } = this.context.world.questIndexer;
+        const { questInfoMap, quests } = this.context.world.dataContainer.questIndexer;
         const { quests: playerQuests, inventory } = this.data.entity.components;
         const questLog = playerQuests!.questLog;
 
@@ -195,7 +196,7 @@ export class PlayingRequestHandler extends ClientState<PlayerData> {
 
     private sendInventory() {
         const diffs = this.inventoryDiff.update(this.data.entity.components.inventory!.getMap());
-        const items = this.context.world.items;
+        const items = this.context.world.dataContainer.items;
 
         if (diffs !== null) {
             this.context.sendCommand('inventory', mapDiffs(diffs, (data, slotId) => {
@@ -250,7 +251,7 @@ export class PlayingRequestHandler extends ClientState<PlayerData> {
             ]),
             direction: getFacingDirection(viewer, entity),
             playerControllable: viewer === entity ? true : null,
-            possibleInteractions: getPossibleInteractions(viewer, entity, this.context.world.questIndexer) || null, // TODO
+            possibleInteractions: getPossibleInteractions(viewer, entity, this.context.world.dataContainer.questIndexer) || null, // TODO
         };
     }
 

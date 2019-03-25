@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { ListEdit } from '../components/ListEdit';
-import { Spell } from '../../../server/src/Spell';
+import { PresetSpell } from '../../../server/src/Spell';
 import { SpellEdit } from './SpellEdit';
 
 const FILE_NAME = '../server/data/spells.json';
 
-const DEFAULT_SPELL: Spell = {
+const DEFAULT_SPELL: PresetSpell = {
     name: 'Magic strike',
     effects: [],
 };

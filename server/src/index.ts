@@ -1,24 +1,15 @@
 import { Server } from './Server';
-import { AllPresets, WorldImpl } from './world/World';
+import { WorldImpl } from './world/World';
 import { TmxMapLoader } from './world/MapLoader';
 import { FakeDao } from './impl/FakeDao';
 import * as express from 'express';
-import * as fs from 'fs';
-import { QuestIndexer } from './quest/QuestIndexer';
+import { createDataContainerFromFiles } from './data/DataContainer';
 
 const PORT = process.env.PORT ? +process.env.PORT : 8000;
 
 const mapLoader = new TmxMapLoader('../common/maps');
 
-const presets: AllPresets = {
-    humanoid: readJson('presets/humanoids'),
-    monster: readJson('presets/monsters'),
-    object: readJson('presets/objects'),
-    spells: readJson('spells'),
-    items: readJson('items'),
-};
-
-const world = new WorldImpl(mapLoader, presets, new QuestIndexer(readJson('quests'), presets.items));
+const world = new WorldImpl(mapLoader, createDataContainerFromFiles('./data'));
 
 const app = express();
 app.use(express.static('../cordova/www'));
@@ -28,6 +19,3 @@ const gameServer = new Server(new FakeDao(), world, {
     server: httpServer,
 });
 
-function readJson(fileName: string) {
-    return JSON.parse(fs.readFileSync(`./data/${fileName}.json`, 'utf-8'));
-}

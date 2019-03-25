@@ -10,10 +10,11 @@ import { Position } from '../../../common/domain/Location';
 import { CreatureAttitude } from '../../../common/components/CommonComponents';
 import { QuestIndexer } from '../quest/QuestIndexer';
 import { CharacterInventory } from '../character/CharacterInventory';
-import { LootElement } from '../world/Presets';
-import { InventoryItem } from '../Item';
+import { DataContainer } from '../data/DataContainer';
 
-export function interactionSystem(entityContainer: EntityContainer<ServerComponents>, eventBus: EventBus<ServerEvents>, questIndexer: QuestIndexer) {
+export function interactionSystem(entityContainer: EntityContainer<ServerComponents>, eventBus: EventBus<ServerEvents>,
+                                  { questIndexer }: DataContainer) {
+
     const interactingEntities = entityContainer.createQuery('interacting');
     const listeningEntities = entityContainer.createQuery('listening');
 

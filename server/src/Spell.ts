@@ -1,8 +1,12 @@
 import { Expression } from './Expressions';
 
-export interface Spell {
+export interface PresetSpell {
     name: string;
     effects: SpellEffect[];
+}
+
+export interface Spell extends PresetSpell {
+    id: string;
 }
 
 export type EffectTarget = 'caster' | 'target';
@@ -32,4 +36,6 @@ export interface ChatEffect extends BaseEffect {
 
 export type SpellEffect = HealEffect | DamageEffect | DestroyEffect | ChatEffect;
 
-export interface Spells { [id: string]: Spell }
+export interface Spells {
+    [id: string]: Spell;
+}

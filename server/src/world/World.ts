@@ -1,52 +1,30 @@
 import { Position, X, Y, ZoneId } from '../../../common/domain/Location';
 import { MapLoader } from './MapLoader';
 import { Zone } from './Zone';
-import {
-    BasePreset,
-    CreaturePreset,
-    HumanoidPresets,
-    MonsterPresets,
-    MovementConfig,
-    ObjectPresets,
-    resolvePresetAttitude,
-} from './Presets';
+import { BasePreset, CreaturePreset, MovementConfig, resolvePresetAttitude, } from './Presets';
 import { TiledProperties } from '../../../common/tiled/interfaces';
 import { hpForLevel } from '../../../common/algorithms';
 import { AIMovingController, ServerComponents } from '../es/ServerComponents';
 import { Direction } from '../../../common/components/CommonComponents';
-import { Spells } from '../Spell';
 import { QuestIndexer } from '../quest/QuestIndexer';
-import { Items } from '../Item';
+import { DataContainer } from '../data/DataContainer';
 
 export interface World {
     getZone(zoneId: ZoneId): Promise<Zone>;
 
-    readonly questIndexer: QuestIndexer;
-    readonly items: Items;
+    readonly dataContainer: DataContainer;
 }
 
 const FPS = 50;
 const INTERVAL = 1000 / FPS;
 
-export interface AllPresets {
-    humanoid: HumanoidPresets;
-    monster: MonsterPresets;
-    object: ObjectPresets;
-
-    spells: Spells;
-    items: Items;
-}
-
 export class WorldImpl implements World {
-    readonly items: Items;
-
     private readonly zonePromises = new Map<ZoneId, Promise<Zone>>();
     private readonly zones = new Map<ZoneId, Zone>();
     private readonly timer: NodeJS.Timer;
 
-    constructor(private mapLoader: MapLoader, private presets: AllPresets, readonly questIndexer: QuestIndexer) {
+    constructor(private mapLoader: MapLoader, readonly dataContainer: DataContainer) {
         this.timer = setInterval(this.update, INTERVAL);
-        this.items = presets.items;
     }
 
     stop() {
@@ -68,10 +46,11 @@ export class WorldImpl implements World {
 
         const mapData = await this.mapLoader.load(zoneId);
 
-        console.log(`Loaded ${zoneId} in ${new Date().getTime() - start.getTime()} ms`);
-        const zone = new Zone(mapData.grid, this.presets.spells, this.questIndexer);
+        const { dataContainer } = this;
 
-        const { presets } = this;
+        console.log(`Loaded ${zoneId} in ${new Date().getTime() - start.getTime()} ms`);
+        const zone = new Zone(mapData.grid, dataContainer);
+
 
         for (const object of mapData.objects) {
             const position = {
@@ -80,7 +59,7 @@ export class WorldImpl implements World {
             };
             const properties = object.properties || {};
             if (object.type === 'npc') {
-                const preset = presets.humanoid[object.name];
+                const preset = dataContainer.humanoid[object.name];
                 const { appearance, equipment } = preset;
 
                 const controllers: Partial<ServerComponents> = properties.controller !== 'walking' ? {} : {
@@ -88,7 +67,7 @@ export class WorldImpl implements World {
                 };
 
                 zone.addSpawner(10000, {
-                    ...creatureBaseFromPreset(this.questIndexer, preset, object.name, properties, false),
+                    ...creatureBaseFromPreset(dataContainer.questIndexer, preset, object.name, properties, false),
                     position,
                     view: {
                         type: 'humanoid',
@@ -98,11 +77,11 @@ export class WorldImpl implements World {
                     ...controllers,
                 });
             } else if (object.type === 'monster') {
-                const preset = presets.monster[object.name];
+                const preset = dataContainer.monster[object.name];
                 const { image, palette } = preset;
 
                 zone.addSpawner(10000, {
-                    ...creatureBaseFromPreset(this.questIndexer, preset, object.name, properties, true),
+                    ...creatureBaseFromPreset(dataContainer.questIndexer, preset, object.name, properties, true),
                     position,
                     view: {
                         type: 'simple',
@@ -112,11 +91,11 @@ export class WorldImpl implements World {
                     aiMovingController: getController(position, preset.movement),
                 });
             } else if (object.type === 'object') {
-                const preset = presets.object[object.name];
+                const preset = dataContainer.object[object.name];
                 const { image, animation, useSpell, loot } = preset;
 
                 const template: Partial<ServerComponents> = {
-                    ...baseFromPreset(this.questIndexer, preset, object.name),
+                    ...baseFromPreset(dataContainer.questIndexer, preset, object.name),
                     position,
                     view: {
                         type: 'object',
@@ -125,7 +104,7 @@ export class WorldImpl implements World {
                     },
                 };
                 if (useSpell) {
-                    template.useSpell = presets.spells[useSpell];
+                    template.useSpell = dataContainer.spells[useSpell];
                 }
                 if (loot) {
                     template.loot = loot;

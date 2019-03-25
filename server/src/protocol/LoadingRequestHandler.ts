@@ -58,7 +58,7 @@ export class LoadingRequestHandler extends ClientState<CharacterDetails> {
             chatListener: {
                 onChatMessage: message => this.context.sendCommand('chatMessage', message),
             },
-            inventory: new CharacterInventory(world.items, items)
+            inventory: new CharacterInventory(world.dataContainer.items, items)
         });
 
         this.context.sendCommand('ready', void 0);
