@@ -86,7 +86,7 @@ export class PropTable<T extends Properties<T>> extends React.Component<Props<T>
                 }}/>
 
                 <SimpleSelect values={extraValues[key] || []} value={propValue[1]}
-                              allowEmpty={forceSelect2 !== void 0 && forceSelect2.indexOf(key) === -1}
+                              allowEmpty={forceSelect2 === void 0 || forceSelect2.indexOf(key) === -1}
                               onChange={v => {
                                   const primary = data[key][0];
                                   this.setValue(key, v === '' ? [primary] : [primary, v])
