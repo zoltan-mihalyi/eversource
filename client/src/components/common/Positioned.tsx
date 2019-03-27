@@ -8,6 +8,10 @@ type ClassKeys = 'root' | 'left' | 'stretch' | 'right' | 'top' | 'bottom';
 const styles: StyleRules<ClassKeys> = {
     root: {
         position: 'absolute',
+        pointerEvents: 'none',
+        '& > *': {
+            pointerEvents: 'auto'
+        }
     },
     left: {
         left: 0,

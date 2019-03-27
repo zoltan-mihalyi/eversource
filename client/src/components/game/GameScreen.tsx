@@ -2,7 +2,7 @@ import * as React from 'react';
 import { PlayingNetworkApi } from '../../protocol/PlayingState';
 import { QuestId } from '../../../../common/domain/InteractionTable';
 import { InteractionDialog } from '../quest/InteractionDialog';
-import { PlayerState } from '../../../../common/protocol/PlayerState';
+import { CharacterState, PlayerState } from '../../../../common/protocol/PlayerState';
 import { QuestLogItem } from '../../../../common/protocol/QuestLogItem';
 import { GameMenu } from './GameMenu';
 import { DebugInfo } from '../gui/DebugInfo';
@@ -18,6 +18,10 @@ import { ChatMessage } from '../../../../common/protocol/Messages';
 import { InventoryItemInfo } from '../../../../common/protocol/Inventory';
 import { TextureLoader } from '../../loader/TextureLoader';
 import TextureLoaderContext from '../context/TextureLoaderContext';
+import { Notifications } from './notification/Notifications';
+import { level, quest, red, xp } from '../theme';
+import { isComplete } from '../quest/QuestLog';
+import { NotificationText } from './notification/NotificationText';
 
 const MAX_MESSAGES = 100;
 
@@ -45,6 +49,7 @@ interface ImageStyle extends CSSStyleDeclaration {
 export class GameScreen extends React.Component<Props, State> {
     private canvas: HTMLCanvasElement | null = null;
     private chatBoxInput = React.createRef<HTMLInputElement>();
+    private notifications = React.createRef<Notifications>();
 
     state: State = {
         messages: [],
@@ -69,6 +74,9 @@ export class GameScreen extends React.Component<Props, State> {
                         <Positioned horizontal="left" vertical="bottom">
                             <ChatBox inputRef={this.chatBoxInput} sendMessage={this.sendChatMessage}
                                      messages={this.state.messages}/>
+                        </Positioned>
+                        <Positioned horizontal="stretch" vertical="top">
+                            <Notifications ref={this.notifications} maxRows={3} timeInMs={4000}/>
                         </Positioned>
                         <Positioned horizontal="stretch" vertical="bottom">
                             <XpBar level={displayCharacter.level} xp={displayCharacter.xp}
@@ -102,6 +110,11 @@ export class GameScreen extends React.Component<Props, State> {
     }
 
     updatePlayerState(playerState: PlayerState) { // TODO interface
+        const { character } = this.state.playerState;
+        if (character && playerState.character) {
+            this.addCharacterNotifications(character, playerState.character);
+        }
+
         this.setState({ playerState });
     }
 
@@ -119,11 +132,69 @@ export class GameScreen extends React.Component<Props, State> {
     }
 
     updateQuestLog(questLog: Map<QuestId, QuestLogItem>) {
+        this.state.questLog.forEach((questLogItem, questId) => {
+            const newQuestLogItem = questLog.get(questId);
+            if (!newQuestLogItem || newQuestLogItem.status === questLogItem.status) {
+                return;
+            }
+
+            this.addQuestLogItemChangeNotifications(questLogItem, newQuestLogItem);
+        });
+
         this.setState({ questLog });
     }
 
     updateInventory(inventory: InventoryItemInfo[]) {
         this.setState({ inventory });
+    }
+
+    private addQuestLogItemChangeNotifications(questLogItem: QuestLogItem, newQuestLogItem: QuestLogItem) {
+        if (newQuestLogItem.status === 'failed') {
+            this.addSimpleNotification(`${newQuestLogItem.info.name} failed.`, red.normal);
+        } else if (questLogItem.status !== 'failed') {
+            for (let i = 0; i < newQuestLogItem.status.length; i++) {
+                const taskStatus = newQuestLogItem.status[i];
+                if (taskStatus === questLogItem.status[i]) {
+                    continue;
+                }
+                const taskInfo = newQuestLogItem.info.tasks[i];
+                if (!taskInfo.track) {
+                    continue;
+                }
+                this.addSimpleNotification(`${taskInfo.track.title} ${taskStatus}/${taskInfo.count}`, quest.active);
+            }
+        }
+
+        if (isComplete(newQuestLogItem)) {
+            this.addSimpleNotification(`✓ ${newQuestLogItem.info.name}`, quest.active);
+        }
+    }
+
+    private addCharacterNotifications(prevCharacter: CharacterState, character: CharacterState) {
+        if (character === prevCharacter) {
+            return;
+        }
+
+        if (character.xp !== prevCharacter.xp) {
+            let xpGain = -prevCharacter.xp;
+            let level = prevCharacter.level;
+            while (level < character.level) {
+                xpGain += maxXpFor(level);
+                level++;
+            }
+            xpGain += character.xp;
+            this.addSimpleNotification(`${xpGain} XP`, xp.bright);
+        }
+
+        if (character.level !== prevCharacter.level) {
+            this.addSimpleNotification(`Level ${character.level} reached!`, level.higher);
+        }
+    }
+
+    private addSimpleNotification(text: string, color: string) {
+        this.notifications.current!.add(
+            <NotificationText color={color}>{text}</NotificationText>
+        );
     }
 
     private joystickContainerRef = (div: HTMLDivElement | null) => {

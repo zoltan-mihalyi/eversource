@@ -21,7 +21,7 @@ const styles: StyleRules<ClassKeys> = {
         position: 'absolute',
         height: '100%',
         top: 0,
-        backgroundColor: xp.foreground,
+        backgroundImage: `linear-gradient(${xp.bright}, ${xp.foreground})`,
     },
     level: {
         position: 'absolute',

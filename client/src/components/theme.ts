@@ -35,6 +35,7 @@ export const quest = {
 };
 
 export const xp = {
+    bright: '#8a60eb',
     foreground: '#472093',
     background: '#797979',
 };

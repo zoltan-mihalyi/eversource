@@ -87,7 +87,7 @@ export class QuestLog extends React.PureComponent<Props, State> {
     }
 }
 
-function isComplete(item: QuestLogItem): boolean {
+export function isComplete(item: QuestLogItem): boolean {
     let complete = true;
     item.info.tasks.forEach((task, i) => {
         if (item.status[i] !== task.count) {
