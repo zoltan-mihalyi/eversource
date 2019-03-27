@@ -61,7 +61,7 @@ export class Server {
         }
         let request;
         try {
-            request = JSON.parse(message);
+            request = JSON.parse(message) || {};
         } catch (e) {
             return ErrorCode.INVALID_REQUEST;
         }
