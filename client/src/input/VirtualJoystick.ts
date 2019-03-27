@@ -19,7 +19,7 @@ export class VirtualJoystick {
                 position: { right: '90px', bottom: '90px' },
                 color: 'white',
             });
-            this.joystick.get(0).el.style.zIndex = '';
+            this.joystick.get(void 0 as any).el.style.zIndex = '';
             this.joystick.on('move', this.onJoystickUpdate);
             this.joystick.on('end', this.onJoystickUpdate);
         });
