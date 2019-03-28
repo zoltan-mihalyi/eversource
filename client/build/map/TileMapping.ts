@@ -56,6 +56,11 @@ export class LargeToSmallMapping {
             const tileIds = this.smallTileIdsByTerrains.get(terrainsKey(smallTerrain))!;
             result.push(getCorrespondingSmallId(largeTileIdsNum, tileIds, idx));
         }
+        if (result.length > 1) { // more than 1 terrain
+            const bottomTerrain = this.terrainIndexMap[terrainsForTile[0]];
+            const tileIds = this.smallTileIdsByTerrains.get(terrainsKey([bottomTerrain, bottomTerrain, bottomTerrain, bottomTerrain]))!;
+            result.unshift(getCorrespondingSmallId(largeTileIdsNum, tileIds, idx));
+        }
         return result;
     }
 }
