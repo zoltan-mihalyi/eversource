@@ -26,13 +26,14 @@ export class LargeToSmallMapping {
             return [largeId];
         }
         const tile = this.large.tiles![largeId];
-        if(!tile){
+        if (!tile) {
             throw new Error(`${largeId} does not have terrain!`);
         }
         const terrains = tile.terrain!;
 
         const key = terrainsKey(terrains);
         const largeTileIdsForTerrain = this.largeTileIdsByTerrains.get(key)!;
+        const largeTileIdsNum = largeTileIdsForTerrain.length;
         const idx = largeTileIdsForTerrain.indexOf(largeId);
 
         const terrainsForTile = [];
@@ -50,9 +51,10 @@ export class LargeToSmallMapping {
             const smallTerrain = new Array<TerrainId>(4);
             for (let i = 0; i < 4; i++) {
                 const partTerrain = terrains[i];
-                smallTerrain[i] = (partTerrain === -1 || partTerrain !==layerTerrain ? -1 : this.terrainIndexMap[partTerrain]) as TerrainId;
+                smallTerrain[i] = (partTerrain === -1 || partTerrain !== layerTerrain ? -1 : this.terrainIndexMap[partTerrain]) as TerrainId;
             }
-            result.push(this.smallTileIdsByTerrains.get(terrainsKey(smallTerrain))![idx]);
+            const tileIds = this.smallTileIdsByTerrains.get(terrainsKey(smallTerrain))!;
+            result.push(getCorrespondingSmallId(largeTileIdsNum, tileIds, idx));
         }
         return result;
     }
@@ -92,4 +94,13 @@ function fillMap(tileIdsByTerrains: Map<TerrainsKey, TileId[]>, tileSet: TileSet
 
 function terrainsKey(terrains: TerrainId[]): TerrainsKey {
     return terrains.join(',') as TerrainsKey;
+}
+
+function getCorrespondingSmallId(largeTileIds: number, smallTileIds: TileId[], idx: number): TileId {
+    if (idx === 0) {
+        return smallTileIds[0];
+    }
+    // [0, 1, 2, 3] => [0, , , , , 1, 2, 3]
+    const sizeDiff = smallTileIds.length - largeTileIds;
+    return smallTileIds[idx + sizeDiff];
 }
