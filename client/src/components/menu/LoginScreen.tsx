@@ -10,7 +10,7 @@ import { Input } from '../common/Input';
 import { ActionButton } from '../common/Button/ActionButton';
 import { Checkbox } from '../common/Input/Checkbox';
 
-type ClassKeys = 'title' | 'action';
+type ClassKeys = 'title' | 'action' | 'hidden';
 
 const styles: StyleRules<ClassKeys> = {
     title: {
@@ -35,7 +35,10 @@ const styles: StyleRules<ClassKeys> = {
     },
     action: {
         marginTop: 20,
-    }
+    },
+    hidden: {
+        display: 'none',
+    },
 };
 
 interface Props {
@@ -64,6 +67,7 @@ interface State {
 }
 
 class RawLoginScreen extends React.Component<Props & WithStyles<ClassKeys>, State> {
+    private form = React.createRef<HTMLFormElement>();
     private passwordInput = React.createRef<HTMLInputElement>();
 
     constructor(props: Props & WithStyles<ClassKeys>) {
@@ -99,7 +103,7 @@ class RawLoginScreen extends React.Component<Props & WithStyles<ClassKeys>, Stat
                 return (
                     <>
                         <Panel padding>
-                            <form onSubmit={this.onSubmit}>
+                            <form ref={this.form} onSubmit={this.onSubmit}>
                                 {loginState.type === 'error' ? (
                                     <p>Error: {loginState.message}</p>
                                 ) : null}
@@ -113,13 +117,15 @@ class RawLoginScreen extends React.Component<Props & WithStyles<ClassKeys>, Stat
                                 </Centered>
                                 <Centered>
                                     <div className={classes.action}>
-                                        <ActionButton>Log in</ActionButton>
+                                        <ActionButton onClick={this.submit}>Log in</ActionButton>
                                     </div>
                                 </Centered>
                                 <div>
-                                    <Checkbox onChange={this.saveUsernameChanged} disabled={username === ''} checked={saveUsername}
+                                    <Checkbox onChange={this.saveUsernameChanged} disabled={username === ''}
+                                              checked={saveUsername}
                                               label="Save user name"/>
                                 </div>
+                                <input type="submit" className={classes.hidden}/>
                             </form>
                         </Panel>
 
@@ -145,7 +151,7 @@ class RawLoginScreen extends React.Component<Props & WithStyles<ClassKeys>, Stat
 
     private changeUsernameSave(saveUsername: string | null) {
         this.setState({
-            saveUsername: saveUsername !== null
+            saveUsername: saveUsername !== null,
         });
         settings.set('username', saveUsername);
     }
@@ -157,6 +163,10 @@ class RawLoginScreen extends React.Component<Props & WithStyles<ClassKeys>, Stat
 
     private saveUsernameChanged = (checked: boolean) => {
         this.changeUsernameSave(checked ? this.state.username : null);
+    };
+
+    private submit = () => {
+        this.form.current!.dispatchEvent(new Event('submit'));
     };
 
     private onSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
