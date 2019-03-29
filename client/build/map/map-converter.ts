@@ -50,7 +50,7 @@ function splitLayers(original: TileLayer, data: number[], mapping: LargeToSmallM
         return mapping.mapId(packedId - begin as TileId).map(id => id + begin);
     });
 
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < 5; i++) {
         result.push({
             ...original,
             name: `${original.name}$${i}`,
