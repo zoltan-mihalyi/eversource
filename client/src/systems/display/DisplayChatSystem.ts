@@ -37,6 +37,7 @@ export function displayChatSystem(container: EntityContainer<ClientComponents>, 
         });
         text.scale.set(1 / metric.scale);
         text.x = -Math.floor(text.width / 2); // avoid blurry text
+        text.y = +text.style.fontSize / 2;
 
         const bg = new PIXI.Graphics();
         bg.lineStyle(1, LIGHTEST, 0.75);

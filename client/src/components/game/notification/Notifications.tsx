@@ -28,7 +28,6 @@ export class Notifications extends React.PureComponent<Props, State> {
 
     render() {
         const { notifications } = this.state;
-        console.log(notifications.length);
 
         return notifications.map(notification => (
             <NotificationItem key={notification.id} notification={notification}/>

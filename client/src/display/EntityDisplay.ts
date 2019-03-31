@@ -59,9 +59,9 @@ export class EntityDisplay extends PIXI.Container {
 
     updateStackingElementsPosition() {
         const spriteTop = this.spriteContainer.scale.y * this.spriteContainer.getLocalBounds().y;
-        this.statusContainer.y = spriteTop - this.statusContainer.height;
-        this.textContainer.y = this.statusContainer.y - 17;
-        this.interactionContainer.y = this.textContainer.y;
-        this.chatContainer.y = this.textContainer.y - this.chatContainer.height + 5;
+        this.statusContainer.y = spriteTop - this.statusContainer.height + 4;
+        this.textContainer.y = this.statusContainer.y - this.textContainer.height;
+        this.chatContainer.y = this.textContainer.y - this.chatContainer.height - 1;
+        this.interactionContainer.y = this.chatContainer.y;
     }
 }

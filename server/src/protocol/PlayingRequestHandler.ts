@@ -304,7 +304,7 @@ function getPossibleInteractions(source: Entity<ServerComponents>, target: Entit
     if (interactions.length === 0) {
         return ['story'];
     }
-    return interactions as PossibleInteractions;
+    return interactions;
 }
 
 function pickOrNull<T, K extends keyof T>(obj: T, keys: K[]): Nullable<Required<Pick<T, K>>> {

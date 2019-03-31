@@ -5,13 +5,20 @@ import { EntityId } from '../../common/es/Entity';
 import { CharacterState } from '../../common/protocol/PlayerState';
 import { ItemInfo } from '../../common/protocol/ItemInfo';
 import { TextureLoader } from '../src/loader/TextureLoader';
-import { app } from './TestScreen';
 import { CancellableProcess } from '../../common/util/CancellableProcess';
 import { ItemId } from '../../common/protocol/Inventory';
 import { PlayingNetworkApi } from '../src/protocol/PlayingState';
 import { CharacterId, CharacterInfo, CharacterName } from '../../common/domain/CharacterInfo';
 import { X, Y, ZoneId } from '../../common/domain/Location';
 import { times } from '../src/components/utils';
+import * as PIXI from "pixi.js";
+
+export const app = new PIXI.Application();
+export const appContainer = new PIXI.Container();
+appContainer.x = 400;
+appContainer.y = 400;
+appContainer.scale.set(4);
+app.stage.addChild(appContainer);
 
 function noop() {
 }
