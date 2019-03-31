@@ -47,19 +47,12 @@ export class GameLevel {
             context.entityContainer,
             context.eventBus,
             context.metric,
-            context.textureLoader
+            context.textureLoader,
         );
 
         this.container.addChild(this.chunkBaseContainer);
         this.container.addChild(this.objectContainer);
         this.container.addChild(this.chunkAboveContainer);
-
-        for (let chunkX = 0; chunkX < map.map.width; chunkX += CHUNK_WIDTH) {
-            for (let chunkY = 0; chunkY <= map.map.height; chunkY += CHUNK_HEIGHT) {
-                const chunk = new Chunk(this.map, this.tileSet, chunkX as X, chunkY as Y, CHUNK_WIDTH, CHUNK_HEIGHT);
-                this.chunks.set(chunkPosition(chunkX as X, chunkY as Y), chunk);
-            }
-        }
     }
 
     setVisibleArea(x: X, y: Y, width: number, height: number) {
@@ -79,7 +72,7 @@ export class GameLevel {
 
         for (let chunkX = startX; chunkX <= endX; chunkX += CHUNK_WIDTH) {
             for (let chunkY = startY; chunkY <= endY; chunkY += CHUNK_HEIGHT) {
-                const chunk = this.chunks.get(chunkPosition(chunkX as X, chunkY as Y));
+                const chunk = this.getChunk(chunkX as X, chunkY as Y);
                 if (!chunk) {
                     continue;
                 }
@@ -91,6 +84,16 @@ export class GameLevel {
                 this.chunkAboveContainer.addChild(chunk.above);
             }
         }
+    }
+
+    private getChunk(chunkX: X, chunkY: Y) {
+        const key = chunkPosition(chunkX, chunkY);
+        let chunk = this.chunks.get(key);
+        if (!chunk) {
+            chunk = new Chunk(this.map, this.tileSet, chunkX, chunkY, CHUNK_WIDTH, CHUNK_HEIGHT);
+            this.chunks.set(key, chunk);
+        }
+        return chunk;
     }
 }
 
