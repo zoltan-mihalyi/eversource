@@ -1,9 +1,11 @@
+import * as PIXI from 'pixi.js';
 import { EntityContainer } from '../../../common/es/EntityContainer';
 import { ClientComponents } from '../es/ClientComponents';
 import { TextureLoader } from '../loader/TextureLoader';
 import { PartialPick } from '../../../common/util/Types';
 import { Entity } from '../../../common/es/Entity';
 import { getDirectoryAndFileName } from '../display/SimpleSprite';
+import { HumanoidView, SimpleView } from '../../../common/components/View';
 
 export function metadataLoaderSystem(container: EntityContainer<ClientComponents>, textureLoader: TextureLoader) {
     const entities = container.createQuery('display', 'view');
@@ -12,24 +14,36 @@ export function metadataLoaderSystem(container: EntityContainer<ClientComponents
     entities.on('update', update);
 
     function update({ display, view }: PartialPick<ClientComponents, 'display' | 'view'>, entitiy: Entity<ClientComponents>) {
-        if (view.type === 'humanoid') {
-            entitiy.set('fixAnimationSpeed', null);
-            entitiy.set('shadowSize', 1);
-            return;
-        } else if (view.type === 'object') {
+        if (view.type === 'object') {
             entitiy.set('fixAnimationSpeed', null);
             return;
         }
 
-        textureLoader.loadDetails(display, getDirectoryAndFileName(view)[1], (details) => {
+        const tileSet = getTileSet(view);
+        textureLoader.loadDetails(display, tileSet, (details) => {
             const { tileSet } = details;
             const properties = tileSet.properties || {};
             const animationSpeed = properties.animationSpeed;
             const size = properties.size;
 
-            entitiy.set('shadowSize', typeof size === 'number' ? size : 1);
+            display.spriteContainer.hitArea = typeof properties.hitArea === 'string'
+                ? rectFromString(properties.hitArea)
+                : null as any;
+
             entitiy.set('fixAnimationSpeed', typeof animationSpeed === 'number' ? animationSpeed : null);
         });
 
     }
+}
+
+function getTileSet(view: SimpleView | HumanoidView): string {
+    if (view.type === 'simple') {
+        return getDirectoryAndFileName(view)[1];
+    } else {
+        return 'character';
+    }
+}
+
+function rectFromString(hitAreaString: string): PIXI.Rectangle {
+    return new PIXI.Rectangle(...hitAreaString.split(',').map(Number));
 }

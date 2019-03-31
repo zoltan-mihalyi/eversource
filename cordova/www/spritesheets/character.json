@@ -4,6 +4,14 @@
  "imagewidth":832,
  "margin":0,
  "name":"character",
+ "properties":
+    {
+     "hitArea":"-16,-48,32,52"
+    },
+ "propertytypes":
+    {
+     "hitArea":"string"
+    },
  "spacing":0,
  "tilecount":273,
  "tileheight":64,
