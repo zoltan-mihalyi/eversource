@@ -100,8 +100,15 @@ export class TmxMapLoader implements MapLoader {
         const topLayer = layers.find(layer => layer.name === 'Top') as ResolvedTileLayer | undefined;
         if (topLayer) {
             topLayer.tiles.forEach((tile, index) => {
-                if (tile && !(tile.properties).type) {
+                if (!tile) {
+                    return;
+                }
+
+                const type = (tile.properties).type;
+                if (!type) {
                     data[index] = GridBlock.FULL;
+                } else if (type === 'bridge') {
+                    data[index] = GridBlock.EMPTY;
                 }
             });
         }
