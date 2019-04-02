@@ -33,15 +33,18 @@ export abstract class NetworkingState<T> extends State<NetworkingContext, T> imp
     onOpen() {
     }
 
-    onClose() {
-        this.context.display.showConnectionError(CONNECTION_CLOSED);
+    onError(message: string) {
+        this.context.display.showError(message);
         this.abort();
+        this.context.closeConnection();
+    }
+
+    onClose() {
+        this.onError(CONNECTION_CLOSED);
     }
 
     error(code: ErrorCode) {
-        this.context.display.showConnectionError(errorMessages[code]);
-        this.abort();
-        this.context.closeConnection();
+        this.onError(errorMessages[code]);
     }
 
     ready() {

@@ -11,7 +11,7 @@ export interface Display {
 
     showCharacterLoading(): void;
 
-    showConnectionError(message: string): void;
+    showError(message: string): void;
 
     showCharacterSelection(characters: CharacterInfo[], onSelect: (character: CharacterInfo) => void, onExit: () => void): void;
 
