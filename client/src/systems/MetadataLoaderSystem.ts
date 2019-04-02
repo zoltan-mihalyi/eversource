@@ -30,6 +30,7 @@ export function metadataLoaderSystem(container: EntityContainer<ClientComponents
                 ? rectFromString(properties.hitArea)
                 : null as any;
 
+            entitiy.set('shadowSize', typeof size === 'number' ? size : 1);
             entitiy.set('fixAnimationSpeed', typeof animationSpeed === 'number' ? animationSpeed : null);
         });
 
