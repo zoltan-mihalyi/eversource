@@ -35,7 +35,7 @@ export interface ResponseTypes {
     leaved: LeaveReason;
     characters: CharacterInfo[];
     ready: void;
-    world: Diff<EntityId, Nullable<NetworkComponents>>[];
+    world: Diff<EntityId, Nullable<Partial<NetworkComponents>>>[];
     playerState: PlayerStateDiff;
     chatMessage: ChatMessage;
     questLog: Diff<QuestId, QuestLogItem>[];

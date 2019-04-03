@@ -9,19 +9,18 @@ import { QuestLogItem } from '../../../common/protocol/QuestLogItem';
 import { Entity, EntityId } from '../../../common/es/Entity';
 import { ServerComponents } from '../es/ServerComponents';
 import { getInteractionTable, questRequirementsProgression } from '../es/InteractionSystem';
-import {
-    NetworkComponents,
-    PossibleInteraction,
-    PossibleInteractions,
-} from '../../../common/components/NetworkComponents';
+import { NetworkComponents, PossibleInteraction, PossibleInteractions, } from '../../../common/components/NetworkComponents';
 import { Nullable } from '../../../common/util/Types';
 import { getDirection } from '../../../common/game/direction';
-import { Direction } from '../../../common/components/CommonComponents';
+import { CommonComponents, Direction } from '../../../common/components/CommonComponents';
 import { CharacterInfo } from '../../../common/domain/CharacterInfo';
 import { CHAT_MESSAGE_MAXIMUM_LENGTH } from '../../../common/constants';
 import { QuestIndexer } from '../quest/QuestIndexer';
 import { InventoryItemInfo, SlotId } from '../../../common/protocol/Inventory';
 import { InventoryItem, itemInfo } from '../Item';
+import { Diff } from '../../../common/protocol/Diff';
+import { COMMON_COMPONENTS } from '../es/NetworkSystem';
+
 
 export interface PlayerData {
     entity: Entity<ServerComponents>;
@@ -29,12 +28,20 @@ export interface PlayerData {
     zone: Zone;
 }
 
+interface Asd {
+    entity: Entity<ServerComponents>;
+    changes: Set<keyof ServerComponents>;
+}
+
 export class PlayingRequestHandler extends ClientState<PlayerData> {
+    private readonly viewChanges = new Map<EntityId, Asd>();
     private readonly worldDiff = new DynamicDiffable<EntityId, Nullable<NetworkComponents>>();
     private readonly playerStateDiff = new DiffablePlayerState();
     private readonly questLogDiff = new DynamicDiffable<QuestId, QuestLogItem>();
     private readonly inventoryDiff = new DynamicDiffable<SlotId, InventoryItem>();
     private detectionDistance = 15;
+
+    // private viewOfEntities=
 
     leave() {
         this.cleanup();
@@ -222,12 +229,63 @@ export class PlayingRequestHandler extends ClientState<PlayerData> {
         const distance = this.detectionDistance;
         const { x, y } = entity.components.position!; // TODO
         const entities = zone.query(x - distance, y - distance, x + distance, y + distance);
-        const entityMap = this.indexEntities(entities);
 
-        const diffs = this.worldDiff.update(entityMap);
+        const visibleEntities = new Set(entities.map(entity => entity.id));
+        const dd: Diff<EntityId, Nullable<Partial<NetworkComponents>>>[] = [];
 
-        if (diffs !== null) {
-            this.context.sendCommand('world', diffs);
+        this.viewChanges.forEach((asd, id) => {
+            if (!visibleEntities.has(id)) {
+                dd.push({
+                    type: 'remove',
+                    id
+                });
+                this.viewChanges.delete(id);
+
+                const viewers = asd.entity.components.viewers!;
+                viewers.delete(asd.changes);
+                if (viewers.size === 0) {
+                    asd.entity.unset('viewers');
+                }
+            }
+        });
+
+        for (const e of entities) {
+            const asd = this.viewChanges.get(e.id);
+            if (!asd) {
+                dd.push({
+                    type: 'create',
+                    id: e.id,
+                    data: { ...pickOrNull(e.components, COMMON_COMPONENTS), direction: e.components.direction || null }, //TODO direction, etc.
+                });
+                const changes = new Set<keyof ServerComponents>();
+                this.viewChanges.set(e.id, { entity: e, changes });
+
+                let viewers = e.components.viewers;
+                if (!viewers) {
+                    viewers = new Set<Set<keyof ServerComponents>>();
+                    e.set('viewers', viewers);
+                }
+                viewers.add(changes);
+            } else {
+                if (asd.changes.size > 0) {
+                    const changedKeys = Array.from(asd.changes);
+                    dd.push({
+                        type: 'change',
+                        id: e.id,
+                        changes: pickOrNull(e.components, changedKeys),
+                    });
+                    asd.changes.clear();
+                }
+            }
+        }
+
+
+        // const entityMap = this.indexEntities(entities);
+        //
+        // const diffs = this.worldDiff.update(entityMap);
+
+        if (dd.length) {
+            this.context.sendCommand('world', dd);
         }
     }
 
@@ -235,20 +293,7 @@ export class PlayingRequestHandler extends ClientState<PlayerData> {
         const viewer = this.data.entity;
 
         return {
-            ...pickOrNull(entity.components, [
-                'position',
-                'level',
-                'hp',
-                'view',
-                'direction',
-                'animation',
-                'activity',
-                'attitude',
-                'name',
-                'scale',
-                'effects',
-                'player',
-            ]),
+            ...pickOrNull(entity.components, COMMON_COMPONENTS),
             direction: getFacingDirection(viewer, entity),
             playerControllable: viewer === entity ? true : null,
             possibleInteractions: getPossibleInteractions(viewer, entity, this.context.world.dataContainer.questIndexer) || null, // TODO

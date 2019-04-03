@@ -94,4 +94,5 @@ export interface ServerComponents extends CommonComponents {
     loot: LootElement[];
     chatListener: ChatListener;
     inventory: CharacterInventory;
+    viewers: Set<Set<keyof ServerComponents>>;
 }
