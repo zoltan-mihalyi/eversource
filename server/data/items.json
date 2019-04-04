@@ -69,7 +69,7 @@
       ]
     }
   },
-  "303": {
+  "203": {
     "name": "Chain Hood",
     "image": "equipment1",
     "animation": "chain-hood",
@@ -78,6 +78,425 @@
       "slotId": "head",
       "image": [
         "chain_hood"
+      ]
+    }
+  },
+  "204": {
+    "name": "Red Bandana",
+    "image": "equipment1",
+    "animation": "bandana-red",
+    "quality": "common",
+    "equip": {
+      "slotId": "head",
+      "image": [
+        "bandana"
+      ]
+    },
+    "lore": "Like a pirate! Harr!"
+  },
+  "250": {
+    "name": "Golden Ornate Helm",
+    "image": "equipment1",
+    "animation": "ornate-metal-helm-gold",
+    "quality": "epic",
+    "equip": {
+      "slotId": "head",
+      "image": [
+        "ornate_metal_helm",
+        "gold"
+      ]
+    }
+  },
+  "300": {
+    "name": "Brown Cape",
+    "image": "equipment2",
+    "animation": "cape-brown",
+    "quality": "common",
+    "equip": {
+      "slotId": "cape",
+      "image": [
+        "normal"
+      ]
+    }
+  },
+  "301": {
+    "name": "Red Cape",
+    "image": "equipment2",
+    "animation": "cape-red",
+    "quality": "common",
+    "equip": {
+      "slotId": "cape",
+      "image": [
+        "normal",
+        "red"
+      ]
+    }
+  },
+  "400": {
+    "name": "Brown Long Sleeve Shirt",
+    "image": "equipment2",
+    "animation": "long-sleeve-shirt-brown",
+    "quality": "common",
+    "equip": {
+      "slotId": "shirt",
+      "image": [
+        "long_sleeve"
+      ]
+    }
+  },
+  "401": {
+    "name": "White Long Sleeve Shirt",
+    "image": "equipment2",
+    "animation": "long-sleeve-shirt-white",
+    "quality": "common",
+    "equip": {
+      "slotId": "shirt",
+      "image": [
+        "long_sleeve",
+        "white"
+      ]
+    }
+  },
+  "402": {
+    "name": "Black Long Sleeve Shirt",
+    "image": "equipment2",
+    "animation": "long-sleeve-shirt-brown",
+    "quality": "common",
+    "equip": {
+      "slotId": "shirt",
+      "image": [
+        "long_sleeve",
+        "black"
+      ]
+    }
+  },
+  "403": {
+    "name": "Blue Long Sleeve Shirt",
+    "image": "equipment2",
+    "animation": "long-sleeve-shirt-blue",
+    "quality": "common",
+    "equip": {
+      "slotId": "shirt",
+      "image": [
+        "long_sleeve",
+        "blue"
+      ]
+    }
+  },
+  "500": {
+    "name": "Cloth Belt",
+    "image": "equipment2",
+    "animation": "belt-cloth",
+    "quality": "common",
+    "equip": {
+      "slotId": "belt",
+      "image": [
+        "cloth"
+      ]
+    }
+  },
+  "601": {
+    "name": "Plate Chest",
+    "image": "equipment1",
+    "animation": "plate-chest-steel",
+    "quality": "common",
+    "equip": {
+      "slotId": "chest",
+      "image": [
+        "plate"
+      ]
+    }
+  },
+  "603": {
+    "name": "Golden Chest",
+    "image": "equipment1",
+    "animation": "plate-chest-gold",
+    "quality": "epic",
+    "equip": {
+      "slotId": "chest",
+      "image": [
+        "plate",
+        "gold"
+      ]
+    }
+  },
+  "620": {
+    "name": "Mail Chest",
+    "image": "equipment1",
+    "animation": "chest-mail",
+    "quality": "common",
+    "equip": {
+      "slotId": "chest",
+      "image": [
+        "mail"
+      ]
+    }
+  },
+  "700": {
+    "name": "Brown Shoes",
+    "image": "equipment2",
+    "animation": "shoes-brown",
+    "quality": "common",
+    "equip": {
+      "slotId": "feet",
+      "image": [
+        "shoes"
+      ]
+    }
+  },
+  "701": {
+    "name": "Maroon Shoes",
+    "image": "equipment2",
+    "animation": "shoes-maroon",
+    "quality": "common",
+    "equip": {
+      "slotId": "feet",
+      "image": [
+        "shoes",
+        "maroon"
+      ]
+    }
+  },
+  "702": {
+    "name": "Black Shoes",
+    "image": "equipment2",
+    "animation": "shoes-black",
+    "quality": "common",
+    "equip": {
+      "slotId": "feet",
+      "image": [
+        "shoes",
+        "black"
+      ]
+    }
+  },
+  "750": {
+    "name": "Steel Boots",
+    "image": "equipment1",
+    "animation": "metal-boots-steel",
+    "quality": "common",
+    "equip": {
+      "slotId": "feet",
+      "image": [
+        "plate"
+      ]
+    }
+  },
+  "751": {
+    "name": "Bronze Boots",
+    "image": "equipment1",
+    "animation": "metal-boots-bronze",
+    "quality": "common",
+    "equip": {
+      "slotId": "feet",
+      "image": [
+        "plate",
+        "bronze"
+      ]
+    }
+  },
+  "752": {
+    "name": "Silver Boots",
+    "image": "equipment1",
+    "animation": "metal-boots-silver",
+    "quality": "common",
+    "equip": {
+      "slotId": "feet",
+      "image": [
+        "plate",
+        "silver"
+      ]
+    }
+  },
+  "753": {
+    "name": "Golden Boots",
+    "image": "equipment1",
+    "animation": "metal-boots-gold",
+    "quality": "epic",
+    "equip": {
+      "slotId": "feet",
+      "image": [
+        "plate",
+        "gold"
+      ]
+    }
+  },
+  "754": {
+    "name": "Dark Boots",
+    "image": "equipment1",
+    "animation": "metal-boots-dark",
+    "quality": "common",
+    "equip": {
+      "slotId": "feet",
+      "image": [
+        "plate",
+        "dark"
+      ]
+    }
+  },
+  "800": {
+    "name": "Brown Pants",
+    "image": "equipment2",
+    "animation": "pants-brown",
+    "quality": "common",
+    "equip": {
+      "slotId": "legs",
+      "image": [
+        "pants"
+      ]
+    }
+  },
+  "850": {
+    "name": "Steel Greaves",
+    "image": "equipment1",
+    "animation": "metal-greaves-steel",
+    "quality": "common",
+    "equip": {
+      "slotId": "legs",
+      "image": [
+        "plate"
+      ]
+    }
+  },
+  "851": {
+    "name": "Bronze Greaves",
+    "image": "equipment1",
+    "animation": "metal-greaves-bronze",
+    "quality": "common",
+    "equip": {
+      "slotId": "legs",
+      "image": [
+        "plate",
+        "bronze"
+      ]
+    }
+  },
+  "852": {
+    "name": "Silver Greaves",
+    "image": "equipment1",
+    "animation": "metal-greaves-silver",
+    "quality": "common",
+    "equip": {
+      "slotId": "legs",
+      "image": [
+        "plate",
+        "silver"
+      ]
+    }
+  },
+  "853": {
+    "name": "Golden Greaves",
+    "image": "equipment1",
+    "animation": "metal-greaves-gold",
+    "quality": "epic",
+    "equip": {
+      "slotId": "legs",
+      "image": [
+        "plate",
+        "gold"
+      ]
+    }
+  },
+  "854": {
+    "name": "Dark Greaves",
+    "image": "equipment1",
+    "animation": "metal-greaves-dark",
+    "quality": "common",
+    "equip": {
+      "slotId": "legs",
+      "image": [
+        "plate",
+        "dark"
+      ]
+    }
+  },
+  "900": {
+    "name": "Steel Arms",
+    "image": "equipment1",
+    "animation": "plate-arms-steel",
+    "quality": "common",
+    "equip": {
+      "slotId": "arms",
+      "image": [
+        "plate"
+      ]
+    }
+  },
+  "903": {
+    "name": "Golden Arms",
+    "image": "equipment1",
+    "animation": "plate-arms-gold",
+    "quality": "epic",
+    "equip": {
+      "slotId": "arms",
+      "image": [
+        "plate",
+        "gold"
+      ]
+    }
+  },
+  "1000": {
+    "name": "Steel Gloves",
+    "image": "equipment1",
+    "animation": "gloves-steel",
+    "quality": "common",
+    "equip": {
+      "slotId": "hands",
+      "image": [
+        "gloves",
+        "steel"
+      ]
+    }
+  },
+  "1001": {
+    "name": "Bronze Gloves",
+    "image": "equipment1",
+    "animation": "gloves-bronze",
+    "quality": "common",
+    "equip": {
+      "slotId": "hands",
+      "image": [
+        "gloves",
+        "bronze"
+      ]
+    }
+  },
+  "1002": {
+    "name": "Silver Gloves",
+    "image": "equipment1",
+    "animation": "gloves-silver",
+    "quality": "common",
+    "equip": {
+      "slotId": "hands",
+      "image": [
+        "gloves",
+        "silver"
+      ]
+    }
+  },
+  "1003": {
+    "name": "Golden Gloves",
+    "image": "equipment1",
+    "animation": "gloves-gold",
+    "quality": "epic",
+    "equip": {
+      "slotId": "hands",
+      "image": [
+        "gloves",
+        "gold"
+      ]
+    }
+  },
+  "1004": {
+    "name": "Dark Gloves",
+    "image": "equipment1",
+    "animation": "gloves-dark",
+    "quality": "common",
+    "equip": {
+      "slotId": "hands",
+      "image": [
+        "gloves",
+        "dark"
       ]
     }
   }

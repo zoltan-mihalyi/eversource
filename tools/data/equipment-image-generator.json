@@ -1,0 +1,44 @@
+{
+  "shirt": {
+    "offsetY": 23
+  },
+  "head": {
+    "offsetY": 8,
+    "legion1": {
+      "offsetY": 9
+    },
+    "legion2": {
+      "offsetX": -3,
+      "offsetY": 4
+    },
+    "legion3": {
+      "offsetY": 4
+    },
+    "bandana": {
+      "offsetY": 0
+    }
+  },
+  "arms": {
+    "offsetX": -10,
+    "offsetY": 22
+  },
+  "chest": {
+    "offsetY": 24
+  },
+  "belt": {
+    "offsetY": 30
+  },
+  "cape": {
+    "offsetY": 30
+  },
+  "hands": {
+    "offsetX": -12,
+    "offsetY": 32
+  },
+  "legs": {
+    "offsetY": 33
+  },
+  "feet": {
+    "offsetY": 40
+  }
+}

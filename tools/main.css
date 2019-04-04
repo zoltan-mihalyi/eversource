@@ -15,6 +15,7 @@ header {
 
 button.big {
     font-size: xx-large;
+    margin: 4px;
 }
 
 input.big {

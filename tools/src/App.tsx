@@ -6,6 +6,8 @@ import { SpellsTool } from './spells/SpellsTool';
 import { QuestsTool } from './quests/QuestsTool';
 import { ObjectPresetTool } from './presets/objects/ObjectPresetTool';
 import { ItemsTool } from './items/ItemsTool';
+import { openFileDialog } from './Utils';
+import { generateEquipmentImage } from './EquipmentImageGenerator';
 
 interface State {
     screen: 'humanoids' | 'monsters' | 'objects' | 'items' | 'spells' | 'quests' | 'palettes' | null;
@@ -40,6 +42,11 @@ export class App extends React.Component<{}, State> {
                         </div>
                         <div>
                             <button className="big" onClick={this.showPalettes}>Palettes</button>
+                        </div>
+                        <div>
+                            <button className="big" onClick={this.generateEquipmentImage}>
+                                Generate Equipment images
+                            </button>
                         </div>
                     </div>
                 );
@@ -98,5 +105,9 @@ export class App extends React.Component<{}, State> {
     };
     private showPalettes = () => {
         this.setState({ screen: 'palettes' });
+    };
+
+    private generateEquipmentImage = () => {
+        openFileDialog(generateEquipmentImage);
     };
 }
