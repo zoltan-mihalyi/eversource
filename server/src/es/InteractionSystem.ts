@@ -6,7 +6,7 @@ import { Quest } from '../quest/Quest';
 import { QuestProgression } from '../character/CharacterDetails';
 import { EntityContainer } from '../../../common/es/EntityContainer';
 import { Entity } from '../../../common/es/Entity';
-import { Position } from '../../../common/domain/Location';
+import { Position, distanceY } from '../../../common/domain/Location';
 import { CreatureAttitude } from '../../../common/components/CommonComponents';
 import { QuestIndexer } from '../quest/QuestIndexer';
 import { CharacterInventory } from '../character/CharacterInventory';
@@ -221,6 +221,6 @@ function inInteractionRadius(actor: Partial<ServerComponents>, target: Partial<S
 
 function distance(p1: Position, p2: Position): number {
     const dx = p1.x - p2.x;
-    const dy = p1.y - p2.y;
+    const dy = distanceY(p1.y, p2.y);
     return Math.sqrt(dx * dx + dy * dy);
 }

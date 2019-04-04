@@ -2,7 +2,7 @@ import { EntityContainer } from '../../../common/es/EntityContainer';
 import { Moving, ServerComponents } from './ServerComponents';
 import { EventBus } from '../../../common/es/EventBus';
 import { ServerEvents } from './ServerEvents';
-import { Position, X, Y } from '../../../common/domain/Location';
+import { Position, X, Y, distanceY } from '../../../common/domain/Location';
 
 const STANDING: Moving = {
     x: 0,
@@ -25,7 +25,7 @@ export function aiMovingSystem(container: EntityContainer<ServerComponents>, eve
             const { initial, radiusX, radiusY, target, running, interval } = aiMovingController;
 
             const dx = target.x - position.x;
-            const dy = target.y - position.y;
+            const dy = distanceY(target.y, position.y);
 
             const speed = 0.4; // TODO
 

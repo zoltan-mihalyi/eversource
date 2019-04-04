@@ -9,11 +9,7 @@ import { QuestLogItem } from '../../../common/protocol/QuestLogItem';
 import { Entity, EntityId } from '../../../common/es/Entity';
 import { ServerComponents } from '../es/ServerComponents';
 import { getInteractionTable, questRequirementsProgression } from '../es/InteractionSystem';
-import {
-    NetworkComponents,
-    PossibleInteraction,
-    PossibleInteractions,
-} from '../../../common/components/NetworkComponents';
+import { NetworkComponents, PossibleInteraction, PossibleInteractions, } from '../../../common/components/NetworkComponents';
 import { Nullable } from '../../../common/util/Types';
 import { getDirection } from '../../../common/game/direction';
 import { Direction } from '../../../common/components/CommonComponents';
@@ -22,6 +18,7 @@ import { CHAT_MESSAGE_MAXIMUM_LENGTH } from '../../../common/constants';
 import { QuestIndexer } from '../quest/QuestIndexer';
 import { InventoryItemInfo, SlotId } from '../../../common/protocol/Inventory';
 import { InventoryItem, itemInfo } from '../Item';
+import { distanceY } from '../../../common/domain/Location';
 
 export interface PlayerData {
     entity: Entity<ServerComponents>;
@@ -274,7 +271,7 @@ function getFacingDirection(viewer: Entity<ServerComponents>, entity: Entity<Ser
     const { interacting, position } = viewer.components;
     if (position && interacting && interacting.entity === entity && entity.components.position) {
         const entityPosition = entity.components.position;
-        direction = getDirection(position.x - entityPosition.x, position.y - entityPosition.y) || direction;
+        direction = getDirection(position.x - entityPosition.x, distanceY(position.y, entityPosition.y)) || direction;
     }
 
     return direction;

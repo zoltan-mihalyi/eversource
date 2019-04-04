@@ -3,7 +3,7 @@ import { EventBus } from '../../../common/es/EventBus';
 import { ServerEvents } from './ServerEvents';
 import { EntityContainer } from '../../../common/es/EntityContainer';
 import { Grid, GridBlock } from '../../../common/Grid';
-import { Position, X, Y } from '../../../common/domain/Location';
+import { Position, X, Y, distanceY, denormalizeDistanceY } from '../../../common/domain/Location';
 import { getDirection } from '../../../common/game/direction';
 
 export function movingSystem(grid: Grid, entityContainer: EntityContainer<ServerComponents>, eventBus: EventBus<ServerEvents>) {
@@ -27,13 +27,13 @@ export function movingSystem(grid: Grid, entityContainer: EntityContainer<Server
 
             const size = scale === void 0 ? 0 : scale.value;
 
-            const newPosition = tryMove(grid, position, size, dx, dy);
+            const newPosition = tryMove(grid, position, size, dx, denormalizeDistanceY(dy));
             entity.set('position', newPosition);
 
             const { activity } = components;
             if (activity) {
                 const dx = newPosition.x - position.x;
-                const dy = newPosition.y - position.y;
+                const dy = distanceY(newPosition.y, position.y);
 
                 const direction = getDirection(dx, dy);
                 if (direction) {
