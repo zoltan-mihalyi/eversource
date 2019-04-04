@@ -17,7 +17,6 @@ const styles: StyleRules<ClassKeys> = {
         [SMALL_DEVICE]: {
             fontSize: 12,
         },
-        overflow: 'hidden',
     },
     margin: {
         margin: 14,
