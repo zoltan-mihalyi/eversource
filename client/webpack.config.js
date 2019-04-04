@@ -3,7 +3,7 @@ const childProcess = require('child_process');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 require('ts-node').register();
 
-const VERSION = childProcess.execSync('git rev-parse --short HEAD').toString();
+const VERSION = (process.env.SOURCE_VERSION || childProcess.execSync('git rev-parse HEAD').toString()).substring(0, 7);
 
 module.exports = {
     entry: "./src/index.tsx",
