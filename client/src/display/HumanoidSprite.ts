@@ -37,7 +37,7 @@ export function buildHumanoidSprite(displayable: Displayable<HumanoidView>) {
             continue;
         }
 
-        if (equipment.head[0] && equipment.head[0] !== 'tiara') {
+        if (equipment.head[0] && (equipment.head[0].indexOf('hood') !== -1 || equipment.head[0].indexOf('helm') !== -1)) {
             if (part === 'hair' || part === 'ears') {
                 continue;
             }
@@ -58,7 +58,17 @@ export function buildHumanoidSprite(displayable: Displayable<HumanoidView>) {
                 paletteFile = `character/${getPaletteFile(part, value)}`;
         }
 
-        parts.push(createAnimatedSprite(displayable, 'character', image, paletteFile, color));
+        const animatedSprite = createAnimatedSprite(displayable, 'character', image, paletteFile, color);
+
+        if (part === 'hair' && equipment.head[0] && equipment.head[0].indexOf('tiara') !== 0) {
+            const mask = new PIXI.Graphics();
+            mask.beginFill(0x000000);
+            mask.drawRect(-20, -36.5, 40, 40);
+            animatedSprite.mask = mask;
+            animatedSprite.addChild(mask);
+        }
+
+        parts.push(animatedSprite);
     }
 
     return parts;

@@ -453,7 +453,7 @@
       ],
       "hair": [
         "bedhead",
-        "brunette"
+        "white"
       ],
       "eyes": [
         "normal"
@@ -503,7 +503,10 @@
       "nose": [
         "bignose"
       ],
-      "hair": [],
+      "hair": [
+        "bangslong",
+        "brown"
+      ],
       "eyes": [],
       "ears": [],
       "facial": [
@@ -550,7 +553,10 @@
       "nose": [
         "bignose"
       ],
-      "hair": [],
+      "hair": [
+        "pixie",
+        "blonde2"
+      ],
       "eyes": [
         "normal",
         "gray"
@@ -629,7 +635,10 @@
         "dark"
       ],
       "nose": [],
-      "hair": [],
+      "hair": [
+        "bedhead",
+        "gray2"
+      ],
       "eyes": [],
       "ears": [],
       "facial": []
@@ -775,7 +784,10 @@
       "nose": [
         "buttonnose"
       ],
-      "hair": [],
+      "hair": [
+        "pixie",
+        "brown"
+      ],
       "eyes": [
         "normal"
       ],
