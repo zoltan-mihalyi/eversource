@@ -3,11 +3,11 @@ import { QuestLogItem } from '../../common/protocol/QuestLogItem';
 import { QuestStatus } from '../../server/src/character/CharacterDetails';
 import { EntityId } from '../../common/es/Entity';
 import { CharacterState } from '../../common/protocol/PlayerState';
-import { ItemId, ItemInfo } from '../../common/protocol/ItemInfo';
+import { ItemId, ItemInfo, ItemInfoWithCount, SlotId } from '../../common/protocol/ItemInfo';
 import { TextureLoader } from '../src/loader/TextureLoader';
 import { CancellableProcess } from '../../common/util/CancellableProcess';
 import { PlayingNetworkApi } from '../src/protocol/PlayingState';
-import { CharacterId, CharacterInfo, CharacterName } from '../../common/domain/CharacterInfo';
+import { CharacterId, CharacterInfo, CharacterName, EquipmentSlotId } from '../../common/domain/CharacterInfo';
 import { X, Y, ZoneId } from '../../common/domain/Location';
 import { times } from '../src/components/utils';
 import * as PIXI from "pixi.js";
@@ -125,3 +125,20 @@ export const CHARACTERS: CharacterInfo[] = times(8, (n): CharacterInfo => ({
         position: { x: 0 as X, y: 0 as Y }
     },
 }));
+
+export function createEquipmentItem(equipmentSlotId: EquipmentSlotId): ItemInfoWithCount {
+    return {
+        itemInfo: {
+            id: 123 as ItemId,
+            name: `Rusty ${equipmentSlotId[0].toUpperCase()}${equipmentSlotId.substring(1)}`,
+            equip: {
+                slotId: equipmentSlotId,
+            },
+            image: 'equipment1',
+            animation: 'legion-helmet-1-gold',
+            quality: 'rare',
+            questItem: false,
+        },
+        count: 1,
+    };
+}

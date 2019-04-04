@@ -1,5 +1,5 @@
 import { ConnectionHandler } from '../src/protocol/ConnectionHandler';
-import { CharacterId, CharacterInfo, CharacterName, ClassId } from '../../common/domain/CharacterInfo';
+import { CharacterId, CharacterInfo, CharacterName, ClassId, EquipmentSlotId } from '../../common/domain/CharacterInfo';
 import { X, Y, ZoneId } from '../../common/domain/Location';
 import { UserDao } from '../src/dao/UserDao';
 import * as sinon from 'sinon';
@@ -10,6 +10,7 @@ import { CharacterDetails, QuestStatus } from '../src/character/CharacterDetails
 import { QuestId } from '../../common/domain/InteractionTable';
 import { World } from '../src/world/World';
 import { fakeDataContainer } from './sampleData';
+import { InventoryItem } from '../src/Item';
 
 function tick(): Promise<void> {
     return new Promise<void>(resolve => setTimeout(resolve, 1));
@@ -40,18 +41,7 @@ const characters: CharacterInfo[] = [
             nose: [],
             facial: [],
         },
-        equipment: {
-            chest: [],
-            feet: [],
-            head: [],
-            legs: [],
-            shirt: [],
-            arms: [],
-            hands: [],
-            cape: [],
-            belt: [],
-            mask: [],
-        },
+        equipment: new Map<EquipmentSlotId, InventoryItem>(),
     },
 ];
 

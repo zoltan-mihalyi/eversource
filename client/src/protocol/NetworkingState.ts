@@ -1,7 +1,7 @@
 import { ChatMessage, PlayerStateDiff, ResponseCommand, ResponseTypes } from '../../../common/protocol/Messages';
 import { State } from '../../../common/util/StateManager';
 import { ErrorCode } from '../../../common/protocol/ErrorCode';
-import { CharacterInfo } from '../../../common/domain/CharacterInfo';
+import { CharacterInfo, EquipmentSlotId } from '../../../common/domain/CharacterInfo';
 import { Display } from './Display';
 import { Diff } from '../../../common/protocol/Diff';
 import { QuestId } from '../../../common/domain/InteractionTable';
@@ -10,6 +10,7 @@ import { EntityId } from '../../../common/es/Entity';
 import { NetworkComponents } from '../../../common/components/NetworkComponents';
 import { Nullable } from '../../../common/util/Types';
 import { ItemInfoWithCount, SlotId } from '../../../common/protocol/ItemInfo';
+import { ItemInfo } from '../../../common/protocol/ItemInfo';
 
 export type ResponseHandler = {
     [P in ResponseCommand]: (data: ResponseTypes[P]) => void;
@@ -69,6 +70,9 @@ export abstract class NetworkingState<T> extends State<NetworkingContext, T> imp
     }
 
     inventory(diffs: Diff<SlotId, ItemInfoWithCount>[]) {
+    }
+
+    equipment(diffs: Diff<EquipmentSlotId, ItemInfoWithCount>[]) {
     }
 
     protected abort() {

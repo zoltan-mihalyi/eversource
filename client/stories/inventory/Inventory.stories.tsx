@@ -5,7 +5,8 @@ import { ItemInfoWithCount, ItemId, ItemQuality, SlotId } from '../../../common/
 import { Gui } from '../../src/components/common/Gui';
 import { times } from '../../src/components/utils';
 import TextureLoaderContext from '../../src/components/context/TextureLoaderContext';
-import { textureLoader } from '../SampleData';
+import { createEquipmentItem, textureLoader } from '../SampleData';
+import { EQUIPMENT_SLOTS } from '../../../common/components/View';
 
 const QUALITIES: ItemQuality[] = ['common', 'rare', 'epic', 'legendary'];
 const ITEM_NAMES: { [key: string]: string } = {
@@ -66,6 +67,9 @@ storiesOf('Inventory', module)
     ))
     .add('normal', () => (
         <Inventory items={times(6, createItem)} slots={16} onClose={noop}/>
+    ))
+    .add('equipment', () => (
+        <Inventory items={EQUIPMENT_SLOTS.map(createEquipmentItem)} slots={16} onClose={noop}/>
     ))
     .add('64', () => (
         <Inventory items={times(64, createItem2)} slots={80} onClose={noop}/>

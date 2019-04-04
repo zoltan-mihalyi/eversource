@@ -17,12 +17,13 @@ import {
 import { Nullable } from '../../../common/util/Types';
 import { getDirection } from '../../../common/game/direction';
 import { Direction } from '../../../common/components/CommonComponents';
-import { CharacterInfo } from '../../../common/domain/CharacterInfo';
+import { CharacterInfo, EquipmentSlotId } from '../../../common/domain/CharacterInfo';
 import { CHAT_MESSAGE_MAXIMUM_LENGTH } from '../../../common/constants';
 import { QuestIndexer } from '../quest/QuestIndexer';
 import { ItemInfoWithCount, SlotId } from '../../../common/protocol/ItemInfo';
 import { InventoryItem, itemInfo } from '../Item';
 import { distanceY } from '../../../common/domain/Location';
+import { Diff } from '../../../common/protocol/Diff';
 
 export interface PlayerData {
     entity: Entity<ServerComponents>;
@@ -35,6 +36,7 @@ export class PlayingRequestHandler extends ClientState<PlayerData> {
     private readonly playerStateDiff = new DiffablePlayerState();
     private readonly questLogDiff = new DynamicDiffable<QuestId, QuestLogItem>();
     private readonly inventoryDiff = new DynamicDiffable<SlotId, InventoryItem>();
+    private readonly equipmentDiff = new DynamicDiffable<EquipmentSlotId, InventoryItem>();
     private detectionDistance = 15;
 
     leave() {
@@ -197,23 +199,38 @@ export class PlayingRequestHandler extends ClientState<PlayerData> {
 
     private sendInventory() {
         const diffs = this.inventoryDiff.update(this.data.entity.components.inventory!.getMap());
+
+        if (diffs === null) {
+            return;
+        }
+        this.context.sendCommand('inventory', this.mapItemInfo(diffs));
+    }
+
+    private sendEquipment() {
+        const diffs = this.equipmentDiff.update(this.data.entity.components.equipment!);
+
+        if (diffs === null) {
+            return;
+        }
+        this.context.sendCommand('equipment', this.mapItemInfo(diffs));
+    }
+
+    private mapItemInfo<T>(diffs: Diff<T, InventoryItem>[]): Diff<T, ItemInfoWithCount>[] {
         const items = this.context.world.dataContainer.items;
 
-        if (diffs !== null) {
-            this.context.sendCommand('inventory', mapDiffs(diffs, (data, slotId) => {
-                const { count, itemId } = data;
+        return mapDiffs(diffs, (data) => {
+            const { count, itemId } = data;
 
-                const result: Partial<ItemInfoWithCount> = {
-                    count,
-                };
+            const result: Partial<ItemInfoWithCount> = {
+                count,
+            };
 
-                if (itemId) {
-                    result.itemInfo = itemInfo(items, itemId);
-                }
+            if (itemId) {
+                result.itemInfo = itemInfo(items, itemId);
+            }
 
-                return result;
-            }));
-        }
+            return result;
+        });
     }
 
     private sendWorldData() {
@@ -259,6 +276,7 @@ export class PlayingRequestHandler extends ClientState<PlayerData> {
         this.sendPlayerData();
         this.sendQuestLog();
         this.sendInventory();
+        this.sendEquipment();
         this.sendWorldData();
     };
 }

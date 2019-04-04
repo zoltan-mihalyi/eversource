@@ -2,7 +2,7 @@ import * as React from 'react';
 import { StyleRules, WithStyles } from '../interfaces';
 import { black, brown, lore, quality, quest } from '../theme';
 import { ItemInfo } from '../../../../common/protocol/ItemInfo';
-import { injectSheet, SMALL_DEVICE } from '../utils';
+import { equipmentSlotName, injectSheet, SMALL_DEVICE } from '../utils';
 
 type ClassKeys = 'root' | 'questItem' | 'lore';
 
@@ -60,6 +60,7 @@ export const RawInventoryItemTooltip: React.FunctionComponent<Props & WithStyles
     <div className={classes.root}>
         <h3 style={{ color: quality[item.quality] }}>{item.name}</h3>
         {item.questItem && <p className={classes.questItem}>Quest Item</p>}
+        {item.equip && <p>{equipmentSlotName(item.equip.slotId)}</p>}
         {item.lore && <p className={classes.lore}>{item.lore}</p>}
     </div>
 );

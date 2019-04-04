@@ -1,4 +1,4 @@
-import { CharacterInfo } from '../domain/CharacterInfo';
+import { CharacterInfo, EquipmentSlotId } from '../domain/CharacterInfo';
 import { ErrorCode } from './ErrorCode';
 import { Diff } from './Diff';
 import { PlayerState } from './PlayerState';
@@ -8,6 +8,7 @@ import { EntityId } from '../es/Entity';
 import { NetworkComponents } from '../components/NetworkComponents';
 import { Nullable } from '../util/Types';
 import { ItemInfoWithCount, SlotId } from './ItemInfo';
+import { ItemInfo } from './ItemInfo';
 
 export interface RequestTypes {
     enter: string;
@@ -40,6 +41,7 @@ export interface ResponseTypes {
     chatMessage: ChatMessage;
     questLog: Diff<QuestId, QuestLogItem>[];
     inventory: Diff<SlotId, ItemInfoWithCount>[];
+    equipment: Diff<EquipmentSlotId, ItemInfoWithCount>[];
 }
 
 export type ResponseCommand = keyof ResponseTypes;

@@ -22,6 +22,8 @@ import { Notifications } from './notification/Notifications';
 import { level, quest, red, xp } from '../theme';
 import { isComplete } from '../quest/QuestLog';
 import { NotificationText } from './notification/NotificationText';
+import { EquipmentSlotId } from '../../../../common/domain/CharacterInfo';
+import { ItemInfo } from '../../../../common/protocol/ItemInfo';
 
 const MAX_MESSAGES = 100;
 
@@ -38,6 +40,7 @@ interface State {
     messages: ChatMessage[];
     playerState: PlayerState;
     inventory: ItemInfoWithCount[];
+    equipment: Map<EquipmentSlotId, ItemInfoWithCount>;
     questLog: Map<QuestId, QuestLogItem>;
     debug: boolean;
 }
@@ -55,13 +58,14 @@ export class GameScreen extends React.Component<Props, State> {
         messages: [],
         playerState: { interaction: null, character: null },
         inventory: [],
+        equipment: new Map<EquipmentSlotId, ItemInfoWithCount>(),
         questLog: new Map<QuestId, QuestLogItem>(),
         debug: settings.get('debug') || false,
     };
 
     render() {
         const { textureLoader } = this.props;
-        const { playerState: { interaction, character }, inventory, questLog, debug } = this.state;
+        const { playerState: { interaction, character }, inventory, equipment, questLog, debug } = this.state;
 
         const displayCharacter = character || EMPTY_CHARACTER;
 
@@ -90,8 +94,8 @@ export class GameScreen extends React.Component<Props, State> {
                                            onClose={this.closeInteraction}/>}
 
                         <div ref={this.joystickContainerRef}/>
-                        <GameMenu character={displayCharacter} questLog={questLog} inventory={inventory} onLeave={this.leave}
-                                  onAbandonQuest={this.abandonQuest}/>
+                        <GameMenu character={displayCharacter} questLog={questLog} inventory={inventory} equipment={equipment}
+                                  onLeave={this.leave} onAbandonQuest={this.abandonQuest}/>
                     </CharacterContext.Provider>
                 </TextureLoaderContext.Provider>
             </Gui>
@@ -146,6 +150,10 @@ export class GameScreen extends React.Component<Props, State> {
 
     updateInventory(inventory: ItemInfoWithCount[]) {
         this.setState({ inventory });
+    }
+
+    updateEquipment(equipment: Map<EquipmentSlotId, ItemInfoWithCount>) {
+        this.setState({ equipment });
     }
 
     private addQuestLogItemChangeNotifications(questLogItem: QuestLogItem, newQuestLogItem: QuestLogItem) {

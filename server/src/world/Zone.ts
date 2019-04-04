@@ -21,6 +21,7 @@ import { spellSystem } from '../es/SpellSystem';
 import { chatSystem } from '../es/ChatSystem';
 import { lootSystem } from '../es/LootSystem';
 import { DataContainer } from '../data/DataContainer';
+import { equipmentViewSystem } from '../es/EquipmentViewSystem';
 
 export class Zone {
     private entityContainer = new ServerEntityContainer();
@@ -43,6 +44,7 @@ export class Zone {
         spellSystem(this.eventBus, dataContainer);
         chatSystem(this.index, this.eventBus);
         lootSystem(this.eventBus, dataContainer);
+        equipmentViewSystem(this.entityContainer, dataContainer);
     }
 
     createEntity(components: Partial<ServerComponents>): Entity<ServerComponents> {

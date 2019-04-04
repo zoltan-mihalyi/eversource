@@ -21,7 +21,7 @@ let playerState: PlayerState & { character: CharacterState } = {
         name: 'Test',
         sex: 'male',
         classId: 'warrior',
-        inventorySize: 10,
+        inventorySize: 15,
     },
     interaction: null,
 };

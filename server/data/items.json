@@ -30,5 +30,55 @@
     "quality": "common",
     "questId": 3,
     "lore": "It has the scent of love"
+  },
+  "200": {
+    "name": "Golden Legion Helmet",
+    "image": "equipment1",
+    "animation": "legion-helmet-1-gold",
+    "quality": "epic",
+    "equip": {
+      "slotId": "head",
+      "image": [
+        "legion1"
+      ]
+    }
+  },
+  "201": {
+    "name": "Brass Legion Helmet",
+    "image": "equipment1",
+    "animation": "legion-helmet-1-brass",
+    "quality": "rare",
+    "equip": {
+      "slotId": "head",
+      "image": [
+        "legion1",
+        "brass"
+      ]
+    }
+  },
+  "202": {
+    "name": "Steel Legion Helmet",
+    "image": "equipment1",
+    "animation": "legion-helmet-1-steel",
+    "quality": "common",
+    "equip": {
+      "slotId": "head",
+      "image": [
+        "legion1",
+        "steel"
+      ]
+    }
+  },
+  "303": {
+    "name": "Chain Hood",
+    "image": "equipment1",
+    "animation": "chain-hood",
+    "quality": "common",
+    "equip": {
+      "slotId": "head",
+      "image": [
+        "chain_hood"
+      ]
+    }
   }
 }

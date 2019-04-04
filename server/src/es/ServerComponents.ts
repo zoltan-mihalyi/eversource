@@ -8,6 +8,8 @@ import { QuestId } from '../../../common/domain/InteractionTable';
 import { Quest } from '../quest/Quest';
 import { CharacterInventory } from '../character/CharacterInventory';
 import { LootElement } from '../world/Presets';
+import { Appearance, ObjectView, SimpleView } from '../../../common/components/View';
+import { Equipment } from '../../../common/domain/CharacterInfo';
 
 export interface Moving {
     readonly x: number;
@@ -75,6 +77,13 @@ interface ChatListener {
     onChatMessage: (message: ChatMessage) => void;
 }
 
+interface HumanoidViewBase {
+    readonly type: 'humanoid';
+    readonly appearance: Appearance;
+}
+
+export type ViewBase = HumanoidViewBase | SimpleView | ObjectView;
+
 export interface ServerComponents extends CommonComponents {
     xp: Xp;
     speed: Speed;
@@ -94,4 +103,6 @@ export interface ServerComponents extends CommonComponents {
     loot: LootElement[];
     chatListener: ChatListener;
     inventory: CharacterInventory;
+    equipment: Equipment;
+    viewBase: ViewBase;
 }

@@ -5,7 +5,7 @@ import { PropTable } from '../PropTable';
 import * as path from "path";
 import { wwwDir } from '../../Utils';
 import { DirectoryReader, getVariations } from '../utils';
-import { Appearance, Equipment } from '../../../../common/components/View';
+import { Appearance, EquipmentView } from '../../../../common/components/View';
 import { getPaletteFile } from '../../../../client/src/display/HumanoidSprite';
 
 const base = path.join(wwwDir, 'spritesheets', 'character');
@@ -21,7 +21,7 @@ const appearanceValues: { [P in keyof Appearance]: string[] } = {
     hair: reader.filesInDir('hair/female'),
 };
 
-const equipmentValues: { [P in keyof Equipment]: string[] } = {
+const equipmentValues: { [P in keyof EquipmentView]: string[] } = {
     cape: reader.filesInDir('cape/female'),
     belt: reader.filesInDir('belt/female'),
     chest: reader.filesInDir('chest/female'),
@@ -52,7 +52,7 @@ export class HumanoidEdit extends React.PureComponent<EditPresetProps<HumanoidPr
         this.props.onChange({ appearance: data });
     };
 
-    private onChangeEquipment = (data: Equipment) => {
+    private onChangeEquipment = (data: EquipmentView) => {
         this.props.onChange({ equipment: data });
     };
 }

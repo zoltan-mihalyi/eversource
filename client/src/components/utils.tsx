@@ -2,6 +2,7 @@ import originalInjectSheet from 'react-jss';
 import { StyleRules, WithStyles } from './interfaces';
 import * as React from 'react';
 import { Omit } from '../../../common/util/Omit';
+import { EquipmentSlotId } from '../../../common/domain/CharacterInfo';
 
 export function className(...classes: (string | null | boolean | undefined)[]) {
     return classes.filter(name => name).join(' ');
@@ -26,4 +27,8 @@ export function times<T>(n: number, fn: (i: number) => T): T[] {
         result[i] = fn(i);
     }
     return result;
+}
+
+export function equipmentSlotName(equipmentSlotId: EquipmentSlotId): string {
+    return equipmentSlotId[0].toUpperCase() + equipmentSlotId.substring(1);
 }

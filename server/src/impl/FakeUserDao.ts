@@ -45,18 +45,9 @@ export class FakeUserDao implements UserDao {
                         eyes: ['normal', 'red'],
                         nose: ['bignose'],
                     },
-                    equipment: {
-                        shirt: ['long_sleeve', 'white'],
-                        head: ['bandana'],
-                        cape: [],
-                        belt: ['cloth'],
-                        arms: [],
-                        chest: [],
-                        legs: ['pants'],
-                        hands: [],
-                        feet: ['shoes', 'black'],
-                        mask: ['sunglasses'],
-                    },
+                    equipment: map({
+                        head: { itemId: 200 as ItemId, count: 1 },
+                    }),
                 },
         },
         {
@@ -88,18 +79,9 @@ export class FakeUserDao implements UserDao {
                     eyes: [],
                     nose: ['straightnose'],
                 },
-                equipment: {
-                    shirt: [],
-                    head: ['ornate_metal_helm', 'gold'],
-                    cape: ['normal', 'red'],
-                    belt: [],
-                    arms: ['plate', 'gold'],
-                    chest: ['plate', 'gold'],
-                    legs: ['plate', 'gold'],
-                    hands: ['gloves', 'gold'],
-                    feet: ['plate', 'gold'],
-                    mask: [],
-                },
+                equipment: map({
+                    head: { itemId: 201 as ItemId, count: 1 },
+                }),
             },
         },
         {
@@ -131,18 +113,9 @@ export class FakeUserDao implements UserDao {
                     eyes: ['normal'],
                     nose: ['buttonnose'],
                 },
-                equipment: {
-                    shirt: [],
-                    head: ['chain_hood'],
-                    cape: ['normal'],
-                    belt: [],
-                    arms: [],
-                    chest: ['mail'],
-                    legs: [],
-                    hands: [],
-                    feet: ['shoes', 'maroon'],
-                    mask: [],
-                },
+                equipment: map({
+                    head: { itemId: 303 as ItemId, count: 1 },
+                }),
             },
         },
     ];
@@ -154,4 +127,13 @@ export class FakeUserDao implements UserDao {
     getCharacterIfExists(id: string): CharacterDetails | null {
         return this.characters.find(char => char.info.id === id) || null;
     }
+}
+
+function map<K extends string, V>(obj: { [P in K]: V }): Map<K, V> {
+    const result = new Map<K, V>();
+    for (const key of Object.keys(obj) as K[]) {
+        result.set(key, obj[key]);
+    }
+
+    return result;
 }

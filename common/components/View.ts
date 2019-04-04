@@ -1,4 +1,5 @@
 import { ColoredImage, RequiredColoredImage } from '../domain/ColoredImage';
+import { EquipmentSlotId } from '../domain/CharacterInfo';
 
 export interface Appearance {
     sex: 'male' | 'female';
@@ -10,23 +11,16 @@ export interface Appearance {
     hair: ColoredImage;
 }
 
-export interface Equipment {
-    shirt: ColoredImage;
-    head: ColoredImage;
-    cape: ColoredImage;
-    belt: ColoredImage;
-    arms: ColoredImage;
-    chest: ColoredImage;
-    legs: ColoredImage;
-    hands: ColoredImage;
-    feet: ColoredImage;
-    mask: ColoredImage;
+export const EQUIPMENT_SLOTS: EquipmentSlotId[] = ['shirt', 'head', 'cape', 'belt', 'arms', 'chest', 'legs', 'hands', 'feet'];
+
+export type EquipmentView = {
+    [P in EquipmentSlotId | 'mask']: ColoredImage;
 }
 
 export interface HumanoidView {
     readonly type: 'humanoid';
     readonly appearance: Appearance;
-    readonly equipment: Equipment;
+    readonly equipment: EquipmentView;
 }
 
 export interface SimpleView {

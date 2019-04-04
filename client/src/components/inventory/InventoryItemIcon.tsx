@@ -15,6 +15,7 @@ const CROP = (IMAGE_SIZE - CROPPED_SIZE) / 2;
 
 type ClassKeys = 'root' | 'tooltip' | 'image' | 'backgroundDecoration' | 'decoration' | 'overlay' | 'count';
 
+const ITEM_BORDER_WIDTH = 1;
 const styles: StyleRules<ClassKeys> = {
     root: {
         overflow: 'hidden',
@@ -27,7 +28,9 @@ const styles: StyleRules<ClassKeys> = {
         width: CROPPED_SIZE,
         height: CROPPED_SIZE,
 
+        borderRadius: BORDER_RADIUS,
         [NOT_SMALL_DEVICE]: {
+            borderRadius: BORDER_RADIUS * SCALE,
             width: CROPPED_SIZE * SCALE,
             height: CROPPED_SIZE * SCALE,
         },
@@ -42,16 +45,16 @@ const styles: StyleRules<ClassKeys> = {
         right: 0,
         bottom: 0,
 
-        borderRadius: BORDER_RADIUS - SLOT_PADDING,
+        borderRadius: BORDER_RADIUS + ITEM_BORDER_WIDTH - SLOT_PADDING,
         [NOT_SMALL_DEVICE]: {
-            borderRadius: BORDER_RADIUS * SCALE - SLOT_PADDING,
+            borderRadius: (BORDER_RADIUS + ITEM_BORDER_WIDTH) * SCALE - SLOT_PADDING,
         },
     },
     decoration: {
         boxSizing: 'border-box',
 
         borderStyle: 'solid',
-        borderWidth: 1,
+        borderWidth: ITEM_BORDER_WIDTH,
         borderLeftColor: brown.normal,
         borderTopColor: brown.lighter,
         borderRightColor: brown.darker,
