@@ -106,6 +106,8 @@ export const FAKE_API: PlayingNetworkApi = {
     move: noop,
     completeQuest: noop,
     sendChatMessage: noop,
+    equip: noop,
+    unequip: noop,
 };
 
 export const textureLoader = new TextureLoader(app.renderer, new CancellableProcess(), 32);

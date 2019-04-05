@@ -15,7 +15,7 @@ import CharacterContext, { EMPTY_CHARACTER } from '../context/CharacterContext';
 import { ChatBox } from '../chat/ChatBox';
 import { Positioned } from '../common/Positioned';
 import { ChatMessage } from '../../../../common/protocol/Messages';
-import { ItemInfoWithCount } from '../../../../common/protocol/ItemInfo';
+import { ItemInfoWithCount, SlotId } from '../../../../common/protocol/ItemInfo';
 import { TextureLoader } from '../../loader/TextureLoader';
 import TextureLoaderContext from '../context/TextureLoaderContext';
 import { Notifications } from './notification/Notifications';
@@ -23,7 +23,6 @@ import { level, quest, red, xp } from '../theme';
 import { isComplete } from '../quest/QuestLog';
 import { NotificationText } from './notification/NotificationText';
 import { EquipmentSlotId } from '../../../../common/domain/CharacterInfo';
-import { ItemInfo } from '../../../../common/protocol/ItemInfo';
 
 const MAX_MESSAGES = 100;
 
@@ -39,7 +38,7 @@ interface Props {
 interface State {
     messages: ChatMessage[];
     playerState: PlayerState;
-    inventory: ItemInfoWithCount[];
+    inventory: Map<SlotId, ItemInfoWithCount>;
     equipment: Map<EquipmentSlotId, ItemInfoWithCount>;
     questLog: Map<QuestId, QuestLogItem>;
     debug: boolean;
@@ -57,7 +56,7 @@ export class GameScreen extends React.Component<Props, State> {
     state: State = {
         messages: [],
         playerState: { interaction: null, character: null },
-        inventory: [],
+        inventory: new Map<SlotId, ItemInfoWithCount>(),
         equipment: new Map<EquipmentSlotId, ItemInfoWithCount>(),
         questLog: new Map<QuestId, QuestLogItem>(),
         debug: settings.get('debug') || false,
@@ -94,8 +93,10 @@ export class GameScreen extends React.Component<Props, State> {
                                            onClose={this.closeInteraction}/>}
 
                         <div ref={this.joystickContainerRef}/>
-                        <GameMenu character={displayCharacter} questLog={questLog} inventory={inventory} equipment={equipment}
-                                  onLeave={this.leave} onAbandonQuest={this.abandonQuest}/>
+                        <GameMenu character={displayCharacter} questLog={questLog} inventory={inventory}
+                                  equipment={equipment}
+                                  onLeave={this.leave} onAbandonQuest={this.abandonQuest} onEquip={this.equip}
+                                  onUnequip={this.unequip}/>
                     </CharacterContext.Provider>
                 </TextureLoaderContext.Provider>
             </Gui>
@@ -148,7 +149,7 @@ export class GameScreen extends React.Component<Props, State> {
         this.setState({ questLog });
     }
 
-    updateInventory(inventory: ItemInfoWithCount[]) {
+    updateInventory(inventory: Map<SlotId, ItemInfoWithCount>) {
         this.setState({ inventory });
     }
 
@@ -308,6 +309,14 @@ export class GameScreen extends React.Component<Props, State> {
 
     private sendChatMessage = (message: string) => {
         this.props.playingNetworkApi.sendChatMessage(message);
+    };
+
+    private equip = (slotId: SlotId, equipmentSlotId: EquipmentSlotId) => {
+        this.props.playingNetworkApi.equip(slotId, equipmentSlotId);
+    };
+
+    private unequip = (equipmentSlotId: EquipmentSlotId) => {
+        this.props.playingNetworkApi.unequip(equipmentSlotId);
     };
 }
 

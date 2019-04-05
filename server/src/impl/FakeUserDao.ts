@@ -57,7 +57,11 @@ export class FakeUserDao implements UserDao {
         {
             questsDone: new Set(),
             questLog: new Map(),
-            items: [inventoryItem(1, 1), inventoryItem(2), inventoryItem(3, 11)],
+            items: [
+                inventoryItem(1, 1),
+                inventoryItem(2),
+                inventoryItem(3, 11),
+                ...[204, 202, 300, 401, 601, 1000, 900, 850, 750].map((count) => inventoryItem(count))],
             info: {
                 id: '2' as CharacterId,
                 level: 2,
@@ -78,7 +82,7 @@ export class FakeUserDao implements UserDao {
                     sex: 'male',
                     body: ['normal'],
                     facial: [],
-                    hair: ['bedhead'],
+                    hair: ['bedhead', 'white-blonde'],
                     ears: [],
                     eyes: [],
                     nose: ['straightnose'],
@@ -86,7 +90,7 @@ export class FakeUserDao implements UserDao {
                 equipment: map({
                     head: { itemId: 250 as ItemId, count: 1 },
                     cape: { itemId: 301 as ItemId, count: 1 },
-                    arms: { itemId: 900 as ItemId, count: 1 },
+                    arms: { itemId: 903 as ItemId, count: 1 },
                     chest: { itemId: 603 as ItemId, count: 1 },
                     legs: { itemId: 853 as ItemId, count: 1 },
                     hands: { itemId: 1003 as ItemId, count: 1 },
@@ -118,7 +122,7 @@ export class FakeUserDao implements UserDao {
                     sex: 'female',
                     body: ['normal'],
                     facial: [],
-                    hair: ['xlongknot'],
+                    hair: ['xlongknot', 'redhead'],
                     ears: ['elvenears'],
                     eyes: ['normal'],
                     nose: ['buttonnose'],

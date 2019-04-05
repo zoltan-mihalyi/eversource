@@ -16,9 +16,8 @@ import { NetworkComponents } from '../../../common/components/NetworkComponents'
 import { Nullable } from '../../../common/util/Types';
 import { ItemInfoWithCount, SlotId } from '../../../common/protocol/ItemInfo';
 import { MapDiffUnpacker } from './MapDiffUnpacker';
-import ResourceDictionary = PIXI.loaders.ResourceDictionary;
 import { EquipmentSlotId } from '../../../common/domain/CharacterInfo';
-import { ItemInfo } from '../../../common/protocol/ItemInfo';
+import ResourceDictionary = PIXI.loaders.ResourceDictionary;
 
 export interface PlayingStateData {
     map: LoadedMap;
@@ -42,6 +41,10 @@ export interface PlayingNetworkApi {
     closeInteraction(): void;
 
     sendChatMessage(message: string): void;
+
+    equip(slotId: SlotId, equipmentSlotId: EquipmentSlotId): void;
+
+    unequip(equipmentSlotId: EquipmentSlotId): void;
 }
 
 export class PlayingState extends NetworkingState<PlayingStateData> implements PlayingNetworkApi {
@@ -107,7 +110,7 @@ export class PlayingState extends NetworkingState<PlayingStateData> implements P
 
     inventory(diffs: Diff<SlotId, ItemInfoWithCount>[]) {
         this.inventoryMap.update(diffs);
-        this.gameScreen.updateInventory(Array.from(this.inventoryMap.getCurrent().values()));
+        this.gameScreen.updateInventory(this.inventoryMap.getCurrent());
     }
 
     equipment(diffs: Diff<EquipmentSlotId, ItemInfoWithCount>[]) {
@@ -156,5 +159,13 @@ export class PlayingState extends NetworkingState<PlayingStateData> implements P
 
     sendChatMessage(message: string) {
         this.context.ws.send(`command:chat-message:${message}`);
+    }
+
+    equip(slotId: SlotId, equipmentSlotId: EquipmentSlotId) {
+        this.context.ws.send(`command:equip:${equipmentSlotId}:${slotId}`);
+    }
+
+    unequip(equipmentSlotId: EquipmentSlotId) {
+        this.context.ws.send(`command:equip:${equipmentSlotId}`);
     }
 }

@@ -56,7 +56,7 @@ export class DomTexture extends React.PureComponent<Props> {
             texture.baseTexture.on('loaded', cb);
             this.waiting = {
                 cb,
-                texture: texture.baseTexture
+                texture: texture.baseTexture,
             };
         }
 
@@ -70,6 +70,8 @@ export class DomTexture extends React.PureComponent<Props> {
 
     private drawCanvas() {
         const canvas = this.canvas!;
+        // noinspection SillyAssignmentJS
+        canvas.width = canvas.width;
         const { texture } = this.props;
         const source = texture.baseTexture.source!;
         canvas.getContext('2d')!.drawImage(source, -texture.frame.left, -texture.frame.top);

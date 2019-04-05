@@ -22,9 +22,9 @@ storiesOf('Equipment', module)
         </Gui>
     )))
     .add('empty', () => (
-        <EquipmentDialog equipment={new Map<EquipmentSlotId, ItemInfoWithCount>()} onClose={noop}/>
+        <EquipmentDialog equipment={new Map<EquipmentSlotId, ItemInfoWithCount>()} onClose={noop} onUnequip={noop}/>
     ))
     .add('normal', () => (
-        <EquipmentDialog equipment={NORMAL} onClose={noop}/>
+        <EquipmentDialog equipment={NORMAL} onClose={noop} onUnequip={noop}/>
     ));
 
