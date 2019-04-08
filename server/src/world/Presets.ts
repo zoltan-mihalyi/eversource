@@ -1,6 +1,6 @@
 import { Appearance, Equipment } from '../../../common/components/View';
 import { CreatureAttitude, Effect } from '../../../common/components/CommonComponents';
-import { ItemId } from '../../../common/protocol/Inventory';
+import { ItemId } from '../../../common/protocol/ItemInfo';
 
 export interface BasePreset {
     name: string;

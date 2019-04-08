@@ -3,10 +3,9 @@ import { QuestLogItem } from '../../common/protocol/QuestLogItem';
 import { QuestStatus } from '../../server/src/character/CharacterDetails';
 import { EntityId } from '../../common/es/Entity';
 import { CharacterState } from '../../common/protocol/PlayerState';
-import { ItemInfo } from '../../common/protocol/ItemInfo';
+import { ItemId, ItemInfo } from '../../common/protocol/ItemInfo';
 import { TextureLoader } from '../src/loader/TextureLoader';
 import { CancellableProcess } from '../../common/util/CancellableProcess';
-import { ItemId } from '../../common/protocol/Inventory';
 import { PlayingNetworkApi } from '../src/protocol/PlayingState';
 import { CharacterId, CharacterInfo, CharacterName } from '../../common/domain/CharacterInfo';
 import { X, Y, ZoneId } from '../../common/domain/Location';
@@ -28,7 +27,6 @@ const ITEM_INFO: ItemInfo = {
     name: 'Sting of the Queen Bee',
     image: 'plants',
     animation: 'carrot',
-    count: 1,
     questItem: true,
     quality: 'rare',
     lore: 'Be careful, it is dangerous!',
@@ -45,7 +43,7 @@ export function questInfo(id: number, name: string, extra?: Partial<QuestInfo>):
             { count: 1 }, // hidden
             { count: 1, track: { title: 'Area explored' } },
         ],
-        requirements: [{ item: ITEM_INFO }],
+        requirements: [{ itemInfo: ITEM_INFO, count: 3 }],
         completion: 'Good job, %name%! You are a good %sex%!',
         description: 'The lava slimes are causing so much trouble these days! We need an experienced %class% to solve this.',
         taskDescription: 'Slay the intruders and explore the area!',

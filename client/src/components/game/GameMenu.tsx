@@ -5,7 +5,7 @@ import { QuestLogItem } from '../../../../common/protocol/QuestLogItem';
 import { ActionButton } from '../common/Button/ActionButton';
 import { Positioned } from '../common/Positioned';
 import { Inventory } from '../inventory/Inventory';
-import { InventoryItemInfo } from '../../../../common/protocol/Inventory';
+import { ItemInfoWithCount } from '../../../../common/protocol/ItemInfo';
 import { CharacterState } from '../../../../common/protocol/PlayerState';
 import { injectSheet, SMALL_DEVICE } from '../utils';
 import { StyleRules, WithStyles } from '../interfaces';
@@ -28,7 +28,7 @@ const styles: StyleRules<ClassKeys> = {
 interface Props {
     questLog: Map<QuestId, QuestLogItem>;
     character: CharacterState;
-    inventory: InventoryItemInfo[];
+    inventory: ItemInfoWithCount[];
     onLeave: () => void;
     onAbandonQuest: (questId: QuestId) => void;
 }

@@ -1,5 +1,5 @@
 import { QuestBase, QuestId, TaskTrack } from '../../../common/domain/InteractionTable';
-import { ItemId } from '../../../common/protocol/Inventory';
+import { ItemId } from '../../../common/protocol/ItemInfo';
 import { InventoryItem } from '../Item';
 
 export interface BaseTask {

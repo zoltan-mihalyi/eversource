@@ -1,4 +1,4 @@
-import { ItemId, SlotId } from '../../../common/protocol/Inventory';
+import { ItemId, SlotId } from '../../../common/protocol/ItemInfo';
 import { InventoryItem, Items, PresetItem } from '../Item';
 
 export class CharacterInventory {

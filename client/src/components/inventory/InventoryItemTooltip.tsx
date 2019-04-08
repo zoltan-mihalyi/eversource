@@ -1,9 +1,8 @@
 import * as React from 'react';
 import { StyleRules, WithStyles } from '../interfaces';
 import { black, brown, lore, quality, quest } from '../theme';
-import { InventoryItemInfo } from '../../../../common/protocol/Inventory';
-import { injectSheet, SMALL_DEVICE } from '../utils';
 import { ItemInfo } from '../../../../common/protocol/ItemInfo';
+import { injectSheet, SMALL_DEVICE } from '../utils';
 
 type ClassKeys = 'root' | 'questItem' | 'lore';
 

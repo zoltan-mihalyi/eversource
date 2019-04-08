@@ -1,7 +1,7 @@
 import { storiesOf } from '@storybook/react';
 import * as React from 'react';
 import { Inventory } from '../../src/components/inventory/Inventory';
-import { InventoryItemInfo, ItemId, ItemQuality, SlotId } from '../../../common/protocol/Inventory';
+import { ItemInfoWithCount, ItemId, ItemQuality, SlotId } from '../../../common/protocol/ItemInfo';
 import { Gui } from '../../src/components/common/Gui';
 import { times } from '../../src/components/utils';
 import TextureLoaderContext from '../../src/components/context/TextureLoaderContext';
@@ -15,36 +15,38 @@ const ITEM_NAMES: { [key: string]: string } = {
     artichoke: 'Artichoke',
     pepper: 'Pepper',
     squash: 'Squash',
-    corn: 'Corn'
+    corn: 'Corn',
 };
 const ITEM_ANIMATIONS = Object.keys(ITEM_NAMES);
 
-function createItem(slotId: number): InventoryItemInfo {
+function createItem(): ItemInfoWithCount {
     return {
-        id: 123 as ItemId,
-        name: 'Legendary Carrot',
-        slotId: slotId as SlotId,
-        image: 'plants',
-        animation: 'carrot',
-        quality: 'legendary',
-        lore: 'This carrot was enchanted by a wizard.',
-        questItem: false,
+        itemInfo: {
+            id: 123 as ItemId,
+            name: 'Legendary Carrot',
+            image: 'plants',
+            animation: 'carrot',
+            quality: 'legendary',
+            lore: 'This carrot was enchanted by a wizard.',
+            questItem: false,
+        },
         count: 1,
     };
 }
 
-function createItem2(slotId: number): InventoryItemInfo {
+function createItem2(slotId: number): ItemInfoWithCount {
     const animation = ITEM_ANIMATIONS[slotId % ITEM_ANIMATIONS.length];
 
     return {
-        id: 123 as ItemId,
-        name: `Tasty ${ITEM_NAMES[animation]}`,
-        slotId: slotId as SlotId,
-        image: 'plants',
-        animation,
+        itemInfo: {
+            id: 123 as ItemId,
+            name: `Tasty ${ITEM_NAMES[animation]}`,
+            image: 'plants',
+            animation,
+            quality: QUALITIES[slotId % QUALITIES.length],
+            questItem: slotId % 3 === 0,
+        },
         count: (slotId % 19) + 1,
-        quality: QUALITIES[slotId % QUALITIES.length],
-        questItem: slotId % 3 === 0,
     };
 }
 

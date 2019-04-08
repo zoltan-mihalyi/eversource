@@ -15,7 +15,7 @@ export const QuestRequirements: React.FunctionComponent<Props> = ({ requirements
         <>
             <h3>Requirements</h3>
             {requirements.map((requirement, i) => (
-                <InventoryItemIcon key={i} item={requirement.item}/>
+                <InventoryItemIcon key={i} itemInfo={requirement}/>
             ))}
         </>
     );

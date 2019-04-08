@@ -7,7 +7,7 @@ import { QuestLogItem } from './QuestLogItem';
 import { EntityId } from '../es/Entity';
 import { NetworkComponents } from '../components/NetworkComponents';
 import { Nullable } from '../util/Types';
-import { InventoryItemInfo, SlotId } from './Inventory';
+import { ItemInfoWithCount, SlotId } from './ItemInfo';
 
 export interface RequestTypes {
     enter: string;
@@ -39,7 +39,7 @@ export interface ResponseTypes {
     playerState: PlayerStateDiff;
     chatMessage: ChatMessage;
     questLog: Diff<QuestId, QuestLogItem>[];
-    inventory: Diff<SlotId, InventoryItemInfo>[];
+    inventory: Diff<SlotId, ItemInfoWithCount>[];
 }
 
 export type ResponseCommand = keyof ResponseTypes;

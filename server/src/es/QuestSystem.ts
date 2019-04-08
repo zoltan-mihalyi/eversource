@@ -57,9 +57,9 @@ export function questSystem(eventBus: EventBus<ServerEvents>, { questIndexer }: 
     eventBus.on('completeQuest', ({ entity, quests, quest }) => {
         const questId = quest.id;
 
-        const requiredItems = quest.requirements.map(({ item }: RequirementInfo): InventoryItem => ({
-            itemId: item.id,
-            count: item.count,
+        const requiredItems = quest.requirements.map(({ itemInfo, count }: RequirementInfo): InventoryItem => ({
+            itemId: itemInfo.id,
+            count,
         }));
         const inventory = entity.components.inventory!.remove(requiredItems);
         entity.set('inventory', inventory);

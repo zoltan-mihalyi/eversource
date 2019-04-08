@@ -1,4 +1,4 @@
-import { ItemQuality } from '../../../common/protocol/Inventory';
+import { ItemQuality } from '../../../common/protocol/ItemInfo';
 
 export const black = '#000000';
 

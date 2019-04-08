@@ -3,9 +3,8 @@ import { UserDao } from '../dao/UserDao';
 import { CharacterId, CharacterInfo, CharacterName } from '../../../common/domain/CharacterInfo';
 import { CharacterDetails } from '../character/CharacterDetails';
 import { hpForLevel } from '../../../common/algorithms';
-import { ItemId } from '../../../common/protocol/Inventory';
-import { InventoryItem} from '../Item';
-import { CharacterInventory } from '../character/CharacterInventory';
+import { ItemId } from '../../../common/protocol/ItemInfo';
+import { InventoryItem } from '../Item';
 
 function inventoryItem(itemId: number, count = 1): InventoryItem {
     return {

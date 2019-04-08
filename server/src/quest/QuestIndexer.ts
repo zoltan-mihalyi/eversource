@@ -61,6 +61,7 @@ function getRequirements(items: Items, questTasks?: Tasks): RequirementInfo[] {
         return [];
     }
     return questTasks.requirements.map(({ count, itemId }) => ({
-        item: Object.assign(itemInfo(items, itemId), { count }),
+        itemInfo: itemInfo(items, itemId),
+        count,
     }));
 }

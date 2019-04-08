@@ -14,7 +14,7 @@ import { PlayerState } from '../../../common/protocol/PlayerState';
 import { EntityId } from '../../../common/es/Entity';
 import { NetworkComponents } from '../../../common/components/NetworkComponents';
 import { Nullable } from '../../../common/util/Types';
-import { InventoryItemInfo, SlotId } from '../../../common/protocol/Inventory';
+import { ItemInfoWithCount, SlotId } from '../../../common/protocol/ItemInfo';
 import { MapDiffUnpacker } from './MapDiffUnpacker';
 import ResourceDictionary = PIXI.loaders.ResourceDictionary;
 
@@ -47,7 +47,7 @@ export class PlayingState extends NetworkingState<PlayingStateData> implements P
     private gameScreen!: GameScreen;
     private currentPlayerState: PlayerState = { interaction: null, character: null };
     private questLogMap = new MapDiffUnpacker<QuestId, QuestLogItem>();
-    private inventoryMap = new MapDiffUnpacker<SlotId, InventoryItemInfo>();
+    private inventoryMap = new MapDiffUnpacker<SlotId, ItemInfoWithCount>();
 
     constructor(manager: StateManager<any, NetworkingContext>, context: NetworkingContext, data: PlayingStateData) {
         super(manager, context, data);
@@ -102,7 +102,7 @@ export class PlayingState extends NetworkingState<PlayingStateData> implements P
         this.gameScreen.updateQuestLog(this.questLogMap.getCurrent());
     }
 
-    inventory(diffs: Diff<SlotId, InventoryItemInfo>[]) {
+    inventory(diffs: Diff<SlotId, ItemInfoWithCount>[]) {
         this.inventoryMap.update(diffs);
         this.gameScreen.updateInventory(Array.from(this.inventoryMap.getCurrent().values()));
     }

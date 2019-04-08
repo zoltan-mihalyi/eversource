@@ -15,7 +15,7 @@ import CharacterContext, { EMPTY_CHARACTER } from '../context/CharacterContext';
 import { ChatBox } from '../chat/ChatBox';
 import { Positioned } from '../common/Positioned';
 import { ChatMessage } from '../../../../common/protocol/Messages';
-import { InventoryItemInfo } from '../../../../common/protocol/Inventory';
+import { ItemInfoWithCount } from '../../../../common/protocol/ItemInfo';
 import { TextureLoader } from '../../loader/TextureLoader';
 import TextureLoaderContext from '../context/TextureLoaderContext';
 import { Notifications } from './notification/Notifications';
@@ -37,7 +37,7 @@ interface Props {
 interface State {
     messages: ChatMessage[];
     playerState: PlayerState;
-    inventory: InventoryItemInfo[];
+    inventory: ItemInfoWithCount[];
     questLog: Map<QuestId, QuestLogItem>;
     debug: boolean;
 }
@@ -144,7 +144,7 @@ export class GameScreen extends React.Component<Props, State> {
         this.setState({ questLog });
     }
 
-    updateInventory(inventory: InventoryItemInfo[]) {
+    updateInventory(inventory: ItemInfoWithCount[]) {
         this.setState({ inventory });
     }
 

@@ -12,7 +12,7 @@ import { MultilineTextEdit, TextEdit } from '../components/edit/TextEdit';
 import { NumberEdit } from '../components/edit/NumberEdit';
 import { unionEdit } from '../components/edit/UnionEdit';
 import { arrayEdit } from '../components/edit/ArrayEdit';
-import { ItemId } from '../../../common/protocol/Inventory';
+import { ItemId } from '../../../common/protocol/ItemInfo';
 import { optionalEdit } from '../components/edit/OptionalEdit';
 import { TaskTrack } from '../../../common/domain/InteractionTable';
 import { ItemIdEdit } from '../presets/common/IdEdits';

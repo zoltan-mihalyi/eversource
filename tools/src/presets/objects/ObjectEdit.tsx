@@ -10,7 +10,7 @@ import { optionalEdit } from '../../components/edit/OptionalEdit';
 import { objectEdit } from '../../components/edit/ObjectEdit';
 import { LootElementEdit } from './LootElementEdit';
 import { arrayEdit } from '../../components/edit/ArrayEdit';
-import { ItemId } from '../../../../common/protocol/Inventory';
+import { ItemId } from '../../../../common/protocol/ItemInfo';
 import { SpellIdEdit } from '../common/IdEdits';
 
 const base = path.join(wwwDir, 'spritesheets', 'object');

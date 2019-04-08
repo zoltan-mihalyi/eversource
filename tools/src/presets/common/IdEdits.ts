@@ -1,7 +1,7 @@
+import * as fs from 'fs';
 import { idEdit, Labeled } from '../../components/edit/IdEdit';
-import * as fs from "fs";
 import { Named } from '../../Utils';
-import { ItemId } from '../../../../common/protocol/Inventory';
+import { ItemId } from '../../../../common/protocol/ItemInfo';
 import { QuestId } from '../../../../common/domain/InteractionTable';
 
 

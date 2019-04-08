@@ -9,7 +9,7 @@ import { QuestId } from '../../../common/domain/InteractionTable';
 import { optionalEdit } from '../components/edit/OptionalEdit';
 import { TasksEdit } from './TaskEdit';
 import { InventoryItem } from '../../../server/src/Item';
-import { ItemId } from '../../../common/protocol/Inventory';
+import { ItemId } from '../../../common/protocol/ItemInfo';
 import { ItemIdEdit, QuestIdEdit } from '../presets/common/IdEdits';
 
 const DEFAULT_TASKS: Tasks = {

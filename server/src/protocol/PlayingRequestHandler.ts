@@ -9,14 +9,18 @@ import { QuestLogItem } from '../../../common/protocol/QuestLogItem';
 import { Entity, EntityId } from '../../../common/es/Entity';
 import { ServerComponents } from '../es/ServerComponents';
 import { getInteractionTable, questRequirementsProgression } from '../es/InteractionSystem';
-import { NetworkComponents, PossibleInteraction, PossibleInteractions, } from '../../../common/components/NetworkComponents';
+import {
+    NetworkComponents,
+    PossibleInteraction,
+    PossibleInteractions,
+} from '../../../common/components/NetworkComponents';
 import { Nullable } from '../../../common/util/Types';
 import { getDirection } from '../../../common/game/direction';
 import { Direction } from '../../../common/components/CommonComponents';
 import { CharacterInfo } from '../../../common/domain/CharacterInfo';
 import { CHAT_MESSAGE_MAXIMUM_LENGTH } from '../../../common/constants';
 import { QuestIndexer } from '../quest/QuestIndexer';
-import { InventoryItemInfo, SlotId } from '../../../common/protocol/Inventory';
+import { ItemInfoWithCount, SlotId } from '../../../common/protocol/ItemInfo';
 import { InventoryItem, itemInfo } from '../Item';
 import { distanceY } from '../../../common/domain/Location';
 
@@ -199,13 +203,12 @@ export class PlayingRequestHandler extends ClientState<PlayerData> {
             this.context.sendCommand('inventory', mapDiffs(diffs, (data, slotId) => {
                 const { count, itemId } = data;
 
-                const result: Partial<InventoryItemInfo> = {
+                const result: Partial<ItemInfoWithCount> = {
                     count,
-                    slotId,
                 };
 
                 if (itemId) {
-                    Object.assign(result, itemInfo(items, itemId));
+                    result.itemInfo = itemInfo(items, itemId);
                 }
 
                 return result;

@@ -1,7 +1,5 @@
 import { QuestId } from '../../common/domain/InteractionTable';
-import { ItemId, ItemQuality } from '../../common/protocol/Inventory';
-import { ItemInfo } from '../../common/protocol/ItemInfo';
-import { Omit } from '../../common/util/Omit';
+import { ItemId, ItemInfo, ItemQuality } from '../../common/protocol/ItemInfo';
 import { Condition } from './Condition';
 
 export interface PresetItem {
@@ -24,7 +22,7 @@ export interface Items {
     [id: number]: PresetItem;
 }
 
-export function itemInfo(items: Items, itemId: ItemId): Omit<ItemInfo, 'count'> {
+export function itemInfo(items: Items, itemId: ItemId): ItemInfo { // Todo index once
     const { name, image, animation, quality, lore, questId } = items[itemId];
 
     return {

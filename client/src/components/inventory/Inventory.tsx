@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { InventoryItemInfo } from '../../../../common/protocol/Inventory';
+import { ItemInfoWithCount } from '../../../../common/protocol/ItemInfo';
 import { InventoryItemIcon } from './InventoryItemIcon';
 import { InventorySlot } from './InventorySlot';
 import { injectSheet, SMALL_DEVICE, times } from '../utils';
@@ -25,7 +25,7 @@ const styles: StyleRules<ClassKeys> = {
 
 interface Props {
     slots: number;
-    items: InventoryItemInfo[];
+    items: ItemInfoWithCount[];
     onClose: () => void;
 }
 
@@ -37,9 +37,9 @@ class RawInventory extends React.PureComponent<Props & WithStyles<ClassKeys>> {
             <Dialog title="Inventory" onClose={onClose}>
                 <Scrollable>
                     <div className={classes.root}>
-                        {items.map(item => (
-                            <InventorySlot key={item.slotId}>
-                                <InventoryItemIcon item={item}/>
+                        {items.map((item,i) => (
+                            <InventorySlot key={i}>
+                                <InventoryItemIcon itemInfo={item}/>
                             </InventorySlot>
                         ))}
 

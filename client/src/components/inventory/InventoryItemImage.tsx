@@ -7,7 +7,7 @@ import TextureLoaderContext from '../context/TextureLoaderContext';
 import { ItemInfo } from '../../../../common/protocol/ItemInfo';
 
 interface Props {
-    item: ItemInfo;
+    itemInfo: ItemInfo;
 }
 
 interface InnerProps extends Props {
@@ -51,12 +51,12 @@ export class RawInventoryItemImage extends React.PureComponent<InnerProps, State
     }
 
     private startRequest() {
-        const { item, textureLoader } = this.props;
+        const { itemInfo, textureLoader } = this.props;
 
         this.stopRequest();
-        const image = `object/${item.image}`;
+        const image = `object/${itemInfo.image}`;
         this.request = textureLoader.tileSetLoader.get(image, (details) => {
-            const texture = details.getAnimations(image)[item.animation][0];
+            const texture = details.getAnimations(image)[itemInfo.animation][0];
             this.setState({
                 texture
             });

@@ -6,8 +6,7 @@ import { black, brown, dark, quality, quest } from '../theme';
 import { InventoryItemTooltip } from './InventoryItemTooltip';
 import { BORDER_RADIUS, SCALE, SLOT_PADDING } from './InventorySlot';
 import { InventoryItemImage } from './InventoryItemImage';
-import { ItemInfo } from '../../../../common/protocol/ItemInfo';
-import { ItemQuality } from '../../../../common/protocol/Inventory';
+import { ItemInfoWithCount, ItemQuality } from '../../../../common/protocol/ItemInfo';
 
 const IMAGE_SIZE = 32;
 const CROPPED_SIZE = 28;
@@ -122,24 +121,24 @@ const styles: StyleRules<ClassKeys> = {
 };
 
 interface Props {
-    item: ItemInfo;
+    itemInfo: ItemInfoWithCount;
 }
 
 class RawInventoryItemIcon extends React.Component<Props & WithStyles<ClassKeys>> {
     render() {
-        const { item, classes } = this.props;
+        const { itemInfo:{count, itemInfo}, classes } = this.props;
 
         return (
-            <Tooltip arrow={false} content={<InventoryItemTooltip item={item}/>} direction="right"
+            <Tooltip arrow={false} content={<InventoryItemTooltip item={itemInfo}/>} direction="right"
                      className={classes.tooltip}>
                 <div className={classes.root}>
                     <div className={classes.backgroundDecoration}
-                         style={{ backgroundColor: item.questItem ? quest.active : dark }}/>
+                         style={{ backgroundColor: itemInfo.questItem ? quest.active : dark }}/>
                     <div className={classes.image}>
-                        <InventoryItemImage item={item}/>
+                        <InventoryItemImage itemInfo={itemInfo}/>
                     </div>
-                    <div className={classes.decoration} style={{ boxShadow: boxShadow(item.quality) }}/>
-                    {item.count > 1 && <div className={classes.count}>{item.count}</div>}
+                    <div className={classes.decoration} style={{ boxShadow: boxShadow(itemInfo.quality) }}/>
+                    {count > 1 && <div className={classes.count}>{count}</div>}
                     <div className={classes.overlay}/>
                 </div>
             </Tooltip>

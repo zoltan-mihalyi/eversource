@@ -1,11 +1,10 @@
 import { Opaque } from '../util/Opaque';
 import { EntityId } from '../es/Entity';
-import { ItemInfo } from '../protocol/ItemInfo';
+import { ItemInfoWithCount } from '../protocol/ItemInfo';
 
 export type QuestId = Opaque<number, 'QuestId'>;
 
-export interface RequirementInfo {
-    item: ItemInfo;
+export interface RequirementInfo extends ItemInfoWithCount {
 }
 
 export interface TaskTrack {
