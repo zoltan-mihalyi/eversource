@@ -46,6 +46,11 @@ export interface Effect {
     param: number;
 }
 
+export interface EffectAnimation {
+    image: string;
+    animation: string;
+}
+
 export interface CommonComponents {
     direction: Direction;
     activity: Activity;
@@ -59,4 +64,5 @@ export interface CommonComponents {
     level: Level;
     player: true;
     effects: Effect[];
+    ambientAnimations: EffectAnimation[];
 }

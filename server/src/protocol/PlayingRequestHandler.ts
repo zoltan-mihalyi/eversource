@@ -9,10 +9,14 @@ import { QuestLogItem } from '../../../common/protocol/QuestLogItem';
 import { Entity, EntityId } from '../../../common/es/Entity';
 import { ServerComponents } from '../es/ServerComponents';
 import { getInteractionTable, questRequirementsProgression } from '../es/InteractionSystem';
-import { NetworkComponents, PossibleInteraction, PossibleInteractions, } from '../../../common/components/NetworkComponents';
+import {
+    NetworkComponents,
+    PossibleInteraction,
+    PossibleInteractions,
+} from '../../../common/components/NetworkComponents';
 import { Nullable } from '../../../common/util/Types';
 import { getDirection } from '../../../common/game/direction';
-import { Direction } from '../../../common/components/CommonComponents';
+import { Direction, EffectAnimation } from '../../../common/components/CommonComponents';
 import { CharacterInfo, EquipmentSlotId } from '../../../common/domain/CharacterInfo';
 import { CHAT_MESSAGE_MAXIMUM_LENGTH } from '../../../common/constants';
 import { QuestIndexer } from '../quest/QuestIndexer';
@@ -21,6 +25,11 @@ import { InventoryItem, itemInfo } from '../Item';
 import { distanceY } from '../../../common/domain/Location';
 import { Diff } from '../../../common/protocol/Diff';
 import { EQUIPMENT_SLOTS } from '../../../common/components/View';
+
+const GLOW: EffectAnimation[] = [{
+    image: 'quest-object-glow',
+    animation: 'glow',
+}];
 
 export interface PlayerData {
     entity: Entity<ServerComponents>;
@@ -103,7 +112,11 @@ export class PlayingRequestHandler extends ClientState<PlayerData> {
                     return;
                 }
 
-                this.data.zone.eventBus.emit('tryCompleteQuest', { entity, questId: questId as QuestId, selectedItems });
+                this.data.zone.eventBus.emit('tryCompleteQuest', {
+                    entity,
+                    questId: questId as QuestId,
+                    selectedItems,
+                });
                 break;
             }
             case 'abandon-quest': {
@@ -297,6 +310,7 @@ export class PlayingRequestHandler extends ClientState<PlayerData> {
                 'effects',
                 'player',
             ]),
+            ambientAnimations: getAmbientAnimations(viewer, entity),
             direction: getFacingDirection(viewer, entity),
             playerControllable: viewer === entity ? true : null,
             possibleInteractions: getPossibleInteractions(viewer, entity, this.context.world.dataContainer.questIndexer) || null, // TODO
@@ -354,6 +368,13 @@ function getPossibleInteractions(source: Entity<ServerComponents>, target: Entit
         return ['story'];
     }
     return interactions;
+}
+
+function getAmbientAnimations(viewer: Entity<ServerComponents>, entity: Entity<ServerComponents>): EffectAnimation[] | null {
+    if (entity.components.loot) {
+        return GLOW;
+    }
+    return null;
 }
 
 function pickOrNull<T, K extends keyof T>(obj: T, keys: K[]): Nullable<Required<Pick<T, K>>> {

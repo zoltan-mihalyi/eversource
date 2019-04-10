@@ -20,6 +20,7 @@ const DIRECTIONS: Direction[] = [
 
 interface Props {
     template: Partial<ClientComponents>;
+    backgroundColor?: number;
 }
 
 const metric = new Metric(32, 32);
@@ -48,7 +49,7 @@ export class DisplayScreen extends React.PureComponent<Props> {
 
     render() {
         return (
-            <TestScreen display={this.objectContainer} eventBus={this.eventBus} backgroundColor={0xffcc88}/>
+            <TestScreen display={this.objectContainer} eventBus={this.eventBus} backgroundColor={this.props.backgroundColor || 0xffcc88}/>
         );
     }
 }

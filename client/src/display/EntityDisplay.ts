@@ -3,7 +3,7 @@ import { SpriteContainer, SpriteInteractionHandler } from './SpriteContainer';
 import { EffectCache } from '../effects/EffectCache';
 
 type ContainerKey =
-    'shadowContainer'
+    | 'shadowContainer'
     | 'spriteContainer'
     | 'statusContainer'
     | 'textContainer'
@@ -14,6 +14,8 @@ export class EntityDisplay extends PIXI.Container {
     readonly effectCache = new EffectCache();
 
     readonly spriteContainer: SpriteContainer;
+    readonly animationEffectBg = new PIXI.Container();
+    readonly animationEffectFg = new PIXI.Container();
     private shadowContainer = new PIXI.Container();
     private statusContainer = new PIXI.Container();
     private textContainer = new PIXI.Container();
@@ -26,7 +28,9 @@ export class EntityDisplay extends PIXI.Container {
 
         this.addChild(
             this.shadowContainer,
+            this.animationEffectBg,
             this.spriteContainer,
+            this.animationEffectFg,
             this.statusContainer,
             this.textContainer,
             this.interactionContainer,

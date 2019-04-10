@@ -17,6 +17,7 @@ import { ClientEvents } from '../../es/ClientEvents';
 import { Metric } from './Metric';
 import { TextureLoader } from '../../loader/TextureLoader';
 import { displayChatSystem } from './DisplayChatSystem';
+import { displayEffectAnimationSystem } from './DisplayEffectAnimationSystem';
 
 export function completeDisplaySystem(entityContainer: EntityContainer<ClientComponents>,
                                       eventBus: EventBus<ClientEvents>, metric: Metric, textureLoader:TextureLoader) {
@@ -35,5 +36,6 @@ export function completeDisplaySystem(entityContainer: EntityContainer<ClientCom
     displayAnimationSystem(entityContainer, eventBus);
     metadataLoaderSystem(entityContainer, textureLoader);
     displayChatSystem(entityContainer, eventBus, metric);
+    displayEffectAnimationSystem(entityContainer);
     return objectContainer;
 }
