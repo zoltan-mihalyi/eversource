@@ -3,7 +3,7 @@ import * as React from 'react';
 import { injectSheet } from '../utils';
 import { QuestInfo } from '../../../../common/domain/InteractionTable';
 import { Rewards } from './Rewards';
-import { QuestStatus } from '../../../../server/src/character/CharacterDetails';
+import { QuestStatus } from '../../../../server/src/quest/QuestLog';
 import { TaskInfoItem } from './TaskInfoItem';
 import { Enumeration } from '../common/Enumeration';
 import { QuestStyle } from './QuestStyle';

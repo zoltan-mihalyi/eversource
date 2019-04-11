@@ -1,4 +1,4 @@
-import { QuestStatus } from '../../server/src/character/CharacterDetails';
+import { QuestStatus } from '../../server/src/quest/QuestLog';
 import { QuestInfo } from '../domain/InteractionTable';
 
 export interface QuestLogItem {

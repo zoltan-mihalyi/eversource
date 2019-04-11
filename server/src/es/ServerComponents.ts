@@ -1,6 +1,5 @@
 import { Position } from '../../../common/domain/Location';
 import { Entity } from '../../../common/es/Entity';
-import { QuestStatus } from '../character/CharacterDetails';
 import { CommonComponents, Xp } from '../../../common/components/CommonComponents';
 import { ChatMessage } from '../../../common/protocol/Messages';
 import { Spell } from '../Spell';
@@ -10,6 +9,7 @@ import { CharacterInventory } from '../character/CharacterInventory';
 import { LootElement } from '../world/Presets';
 import { Appearance, ObjectView, SimpleView } from '../../../common/components/View';
 import { Equipment } from '../../../common/domain/CharacterInfo';
+import { QuestLog } from '../quest/QuestLog';
 
 export interface Moving {
     readonly x: number;
@@ -65,8 +65,6 @@ export interface Interactable {
 interface Interacting {
     entity: Entity<ServerComponents>;
 }
-
-export type QuestLog = Map<QuestId, QuestStatus>;
 
 export interface Quests {
     questLog: QuestLog;

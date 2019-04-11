@@ -9,11 +9,7 @@ import { QuestLogItem } from '../../../common/protocol/QuestLogItem';
 import { Entity, EntityId } from '../../../common/es/Entity';
 import { ServerComponents } from '../es/ServerComponents';
 import { getInteractionTable, questRequirementsProgression } from '../es/InteractionSystem';
-import {
-    NetworkComponents,
-    PossibleInteraction,
-    PossibleInteractions,
-} from '../../../common/components/NetworkComponents';
+import { NetworkComponents, PossibleInteraction, PossibleInteractions, } from '../../../common/components/NetworkComponents';
 import { Nullable } from '../../../common/util/Types';
 import { getDirection } from '../../../common/game/direction';
 import { Direction, EffectAnimation } from '../../../common/components/CommonComponents';
@@ -25,6 +21,9 @@ import { InventoryItem, itemInfo } from '../Item';
 import { distanceY } from '../../../common/domain/Location';
 import { Diff } from '../../../common/protocol/Diff';
 import { EQUIPMENT_SLOTS } from '../../../common/components/View';
+import { forEachUpdatableTask, spellMatchesTask } from '../es/QuestSystem';
+import { getCurrentTasks } from '../quest/QuestLog';
+import { getRemainingItemCountForLoot } from '../es/LootSystem';
 
 const GLOW: EffectAnimation[] = [{
     image: 'quest-object-glow',
@@ -310,11 +309,44 @@ export class PlayingRequestHandler extends ClientState<PlayerData> {
                 'effects',
                 'player',
             ]),
-            ambientAnimations: getAmbientAnimations(viewer, entity),
+            ambientAnimations: this.getAmbientAnimations(viewer, entity),
             direction: getFacingDirection(viewer, entity),
             playerControllable: viewer === entity ? true : null,
             possibleInteractions: getPossibleInteractions(viewer, entity, this.context.world.dataContainer.questIndexer) || null, // TODO
         };
+    }
+
+    private getAmbientAnimations(viewer: Entity<ServerComponents>, entity: Entity<ServerComponents>): EffectAnimation[] | null {
+        const { questIndexer } = this.context.world.dataContainer;
+
+        const { quests, inventory } = viewer.components;
+        if (!quests) {
+            return null;
+        }
+
+        const { useSpell, loot } = entity.components;
+
+        if (loot && inventory) {
+            for (const tasks of getCurrentTasks(quests.questLog, questIndexer)) {
+                for (const lootItem of loot) {
+                    if (getRemainingItemCountForLoot(tasks, inventory, lootItem) > 0) {
+                        return GLOW;
+                    }
+                }
+            }
+        }
+
+        if (useSpell) {
+            let shouldProgress = false;
+            forEachUpdatableTask(questIndexer, quests, (task) => spellMatchesTask(task, useSpell) ? 'increase' : 'none', () => {
+                shouldProgress = true;
+            });
+            if (shouldProgress) {
+                return GLOW;
+            }
+        }
+
+        return null;
     }
 
     private networkUpdate = () => {
@@ -368,13 +400,6 @@ function getPossibleInteractions(source: Entity<ServerComponents>, target: Entit
         return ['story'];
     }
     return interactions;
-}
-
-function getAmbientAnimations(viewer: Entity<ServerComponents>, entity: Entity<ServerComponents>): EffectAnimation[] | null {
-    if (entity.components.loot) {
-        return GLOW;
-    }
-    return null;
 }
 
 function pickOrNull<T, K extends keyof T>(obj: T, keys: K[]): Nullable<Required<Pick<T, K>>> {
