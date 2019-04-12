@@ -43,7 +43,6 @@ export class CharacterInventory {
     private addCountToExistingItems(itemId: ItemId, count: number, stackSize: number): number {
         let remaining = count;
 
-
         this.map.forEach((inventoryItem, slotId) => {
             if (remaining === 0) {
                 return;
@@ -91,6 +90,12 @@ export class CharacterInventory {
         for (const item of items) {
             copy.removeItem(item);
         }
+        return copy;
+    }
+
+    replace(slotId: SlotId, newItem: InventoryItem) {
+        const copy = this.clone();
+        copy.map.set(slotId, newItem);
         return copy;
     }
 

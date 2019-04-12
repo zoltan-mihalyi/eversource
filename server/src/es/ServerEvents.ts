@@ -2,8 +2,9 @@ import { Quests, ServerComponents } from './ServerComponents';
 import { Entity } from '../../../common/es/Entity';
 import { QuestId, QuestInfo } from '../../../common/domain/InteractionTable';
 import { Spell } from '../Spell';
-import { CharacterInventory } from '../character/CharacterInventory';
 import { LootElement } from '../world/Presets';
+import { EquipmentSlotId } from '../../../common/domain/CharacterInfo';
+import { SlotId } from '../../../common/protocol/ItemInfo';
 
 export interface Hit {
     source: Entity<ServerComponents>;
@@ -77,6 +78,17 @@ interface ChatMessageEvent {
     text: string;
 }
 
+interface EquipEvent {
+    entity: Entity<ServerComponents>;
+    slotId: SlotId;
+    equipmentSlotId: EquipmentSlotId;
+}
+
+interface UnequipEvent {
+    entity: Entity<ServerComponents>;
+    equipmentSlotId: EquipmentSlotId;
+}
+
 export interface ServerEvents {
     init: void;
     update: Update;
@@ -95,4 +107,6 @@ export interface ServerEvents {
     acceptQuest: AcceptQuest;
     completeQuest: CompleteQuest;
     chatMessage: ChatMessageEvent;
+    equip: EquipEvent;
+    unequip: UnequipEvent;
 }

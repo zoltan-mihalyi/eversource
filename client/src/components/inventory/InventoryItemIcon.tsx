@@ -37,6 +37,9 @@ const styles: StyleRules<ClassKeys> = {
     },
     tooltip: {
         display: 'inline-block',
+        '& > .react-tooltip-lite': {
+            width: 'unset !important'
+        }
     },
     backgroundDecoration: {
         position: 'absolute',
@@ -125,16 +128,17 @@ const styles: StyleRules<ClassKeys> = {
 
 interface Props {
     itemInfo: ItemInfoWithCount;
+    onClick?: () => void;
 }
 
 class RawInventoryItemIcon extends React.Component<Props & WithStyles<ClassKeys>> {
     render() {
-        const { itemInfo:{count, itemInfo}, classes } = this.props;
+        const { itemInfo: { count, itemInfo }, classes, onClick } = this.props;
 
         return (
             <Tooltip arrow={false} content={<InventoryItemTooltip item={itemInfo}/>} direction="right"
                      className={classes.tooltip}>
-                <div className={classes.root}>
+                <div className={classes.root} onClick={onClick}>
                     <div className={classes.backgroundDecoration}
                          style={{ backgroundColor: itemInfo.questItem ? quest.active : dark }}/>
                     <div className={classes.image}>

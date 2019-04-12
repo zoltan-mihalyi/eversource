@@ -24,6 +24,7 @@ import { ItemInfoWithCount, SlotId } from '../../../common/protocol/ItemInfo';
 import { InventoryItem, itemInfo } from '../Item';
 import { distanceY } from '../../../common/domain/Location';
 import { Diff } from '../../../common/protocol/Diff';
+import { EQUIPMENT_SLOTS } from '../../../common/components/View';
 
 export interface PlayerData {
     entity: Entity<ServerComponents>;
@@ -122,6 +123,36 @@ export class PlayingRequestHandler extends ClientState<PlayerData> {
                     sender: entity,
                     text: params.substring(0, CHAT_MESSAGE_MAXIMUM_LENGTH),
                 });
+                break;
+            }
+            case 'equip': {
+                const parsed = params.split(':');
+                if (parsed.length > 2) {
+                    break;
+                }
+                const equipmentSlotId = parsed[0] as EquipmentSlotId;
+                if (EQUIPMENT_SLOTS.indexOf(equipmentSlotId) === -1) {
+                    break;
+                }
+
+                if (parsed.length === 1) {
+                    this.data.zone.eventBus.emit('unequip', {
+                        entity,
+                        equipmentSlotId,
+                    });
+                } else {
+                    const slotId = +parsed[1] as SlotId;
+                    if (isNaN(slotId)) {
+                        break;
+                    }
+
+                    this.data.zone.eventBus.emit('equip', {
+                        entity,
+                        slotId,
+                        equipmentSlotId,
+                    });
+                }
+                break;
             }
         }
     }

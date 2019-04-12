@@ -5,13 +5,12 @@ import { QuestLogItem } from '../../../../common/protocol/QuestLogItem';
 import { ActionButton } from '../common/Button/ActionButton';
 import { Positioned } from '../common/Positioned';
 import { Inventory } from '../inventory/Inventory';
-import { ItemInfoWithCount } from '../../../../common/protocol/ItemInfo';
 import { CharacterState } from '../../../../common/protocol/PlayerState';
 import { injectSheet, SMALL_DEVICE } from '../utils';
 import { StyleRules, WithStyles } from '../interfaces';
 import { EquipmentDialog } from '../equipment/EquipmentDialog';
 import { EquipmentSlotId } from '../../../../common/domain/CharacterInfo';
-import { ItemInfo } from '../../../../common/protocol/ItemInfo';
+import { ItemInfoWithCount, SlotId } from '../../../../common/protocol/ItemInfo';
 
 type ClassKeys = 'first' | 'margin';
 
@@ -31,10 +30,12 @@ const styles: StyleRules<ClassKeys> = {
 interface Props {
     questLog: Map<QuestId, QuestLogItem>;
     character: CharacterState;
-    inventory: ItemInfoWithCount[];
+    inventory: Map<SlotId, ItemInfoWithCount>;
     equipment: Map<EquipmentSlotId, ItemInfoWithCount>;
     onLeave: () => void;
     onAbandonQuest: (questId: QuestId) => void;
+    onEquip: (slotId: SlotId, equipmentSlotId: EquipmentSlotId) => void;
+    onUnequip: (equipmentSlotId: EquipmentSlotId) => void;
 }
 
 interface State {
@@ -68,11 +69,11 @@ class RawGameMenu extends React.PureComponent<Props & WithStyles<ClassKeys>, Sta
             );
         } else if (current === 'inventory') {
             content = (
-                <Inventory slots={character.inventorySize} items={inventory} onClose={this.close}/>
+                <Inventory slots={character.inventorySize} items={inventory} onClose={this.close} onEquip={this.props.onEquip}/>
             );
         } else if (current === 'equipment') {
             content = (
-                <EquipmentDialog equipment={equipment} onClose={this.close}/>
+                <EquipmentDialog equipment={equipment} onClose={this.close} onUnequip={this.props.onUnequip}/>
             );
         } else {
             content = (

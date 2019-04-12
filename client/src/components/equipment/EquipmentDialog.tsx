@@ -38,6 +38,7 @@ const styles: StyleRules<ClassKeys> = {
 interface Props {
     equipment: Map<EquipmentSlotId, ItemInfoWithCount>;
     onClose: () => void;
+    onUnequip: (equipmentSlotId: EquipmentSlotId) => void;
 }
 
 class RawEquipmentDialog extends React.PureComponent<Props & WithStyles<ClassKeys>> {
@@ -51,7 +52,8 @@ class RawEquipmentDialog extends React.PureComponent<Props & WithStyles<ClassKey
                         {EQUIPMENT_SLOTS.map(equipmentSlotId => (
                             <InventorySlot key={equipmentSlotId}>
                                 {equipment.has(equipmentSlotId) ? (
-                                    <InventoryItemIcon itemInfo={equipment.get(equipmentSlotId)!}/>
+                                    <InventoryItemIcon itemInfo={equipment.get(equipmentSlotId)!}
+                                                       onClick={() => this.unequip(equipmentSlotId)}/>
                                 ) : (
                                     <div className={classes.text}>{equipmentSlotName(equipmentSlotId)}</div>
                                 )}
@@ -61,6 +63,10 @@ class RawEquipmentDialog extends React.PureComponent<Props & WithStyles<ClassKey
                 </Scrollable>
             </Dialog>
         );
+    }
+
+    private unequip = (equipmentSlotId: EquipmentSlotId) => {
+        this.props.onUnequip(equipmentSlotId);
     }
 }
 

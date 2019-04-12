@@ -1,7 +1,7 @@
 import { storiesOf } from '@storybook/react';
 import * as React from 'react';
 import { Inventory } from '../../src/components/inventory/Inventory';
-import { ItemInfoWithCount, ItemId, ItemQuality, SlotId } from '../../../common/protocol/ItemInfo';
+import { ItemId, ItemInfoWithCount, ItemQuality, SlotId } from '../../../common/protocol/ItemInfo';
 import { Gui } from '../../src/components/common/Gui';
 import { times } from '../../src/components/utils';
 import TextureLoaderContext from '../../src/components/context/TextureLoaderContext';
@@ -63,14 +63,23 @@ storiesOf('Inventory', module)
         </Gui>
     )))
     .add('empty', () => (
-        <Inventory items={[]} slots={16} onClose={noop}/>
+        <Inventory items={inventoryMap([])} slots={16} onClose={noop} onEquip={noop}/>
     ))
     .add('normal', () => (
-        <Inventory items={times(6, createItem)} slots={16} onClose={noop}/>
+        <Inventory items={inventoryMap(times(6, createItem))} slots={16} onClose={noop} onEquip={noop}/>
     ))
     .add('equipment', () => (
-        <Inventory items={EQUIPMENT_SLOTS.map(createEquipmentItem)} slots={16} onClose={noop}/>
+        <Inventory items={inventoryMap(EQUIPMENT_SLOTS.map(createEquipmentItem))} slots={16} onClose={noop} onEquip={noop}/>
     ))
     .add('64', () => (
-        <Inventory items={times(64, createItem2)} slots={80} onClose={noop}/>
+        <Inventory items={inventoryMap(times(64, createItem2))} slots={80} onClose={noop} onEquip={noop}/>
     ));
+
+function inventoryMap(items: ItemInfoWithCount[]): Map<SlotId, ItemInfoWithCount> {
+    const result = new Map<SlotId, ItemInfoWithCount>();
+    let nextSlotId = 0;
+    for (const item of items) {
+        result.set(nextSlotId++ as SlotId, item);
+    }
+    return result;
+}
