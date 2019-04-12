@@ -24,12 +24,23 @@ export interface QuestBase {
     completion: string;
 }
 
+export interface ItemQuestRewardInfo extends ItemInfoWithCount {
+    type: 'item';
+}
+
+export type QuestRewardInfo = ItemQuestRewardInfo;
+
+export interface RewardOptionsInfo {
+    options: QuestRewardInfo[];
+}
+
 export interface QuestInfo extends QuestBase {
     id: QuestId;
     xpReward: number;
     progress?: string;
     requirements: RequirementInfo[];
     tasks: TaskInfo[];
+    rewards: RewardOptionsInfo[];
 }
 
 export interface InteractionTable {

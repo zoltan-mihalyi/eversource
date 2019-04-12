@@ -79,7 +79,18 @@
     "description": "Help the forester to find a job!",
     "taskDescription": "Cacal can help finding a job. Speak to her!",
     "completion": "He can work in my shop.",
-    "requires": []
+    "requires": [],
+    "rewards": [
+      {
+        "options": [
+          {
+            "type": "item",
+            "count": 1,
+            "itemId": 751
+          }
+        ]
+      }
+    ]
   },
   "5": {
     "level": 6,
@@ -104,7 +115,32 @@
           "itemId": 2
         }
       ]
-    }
+    },
+    "rewards": [
+      {
+        "options": [
+          {
+            "type": "item",
+            "count": 5,
+            "itemId": 3
+          }
+        ]
+      },
+      {
+        "options": [
+          {
+            "type": "item",
+            "count": 1,
+            "itemId": 203
+          },
+          {
+            "type": "item",
+            "count": 1,
+            "itemId": 620
+          }
+        ]
+      }
+    ]
   },
   "6": {
     "level": 4,

@@ -40,6 +40,18 @@ export interface Tasks {
 
 export type QuestDifficulty = 'easy' | 'normal' | 'hard';
 
+export interface ItemQuestReward {
+    type: 'item';
+    itemId: ItemId;
+    count: number;
+}
+
+export type QuestReward = ItemQuestReward;
+
+export interface RewardOptions {
+    options: QuestReward[];
+}
+
 export interface PresetQuest extends QuestBase {
     difficulty: QuestDifficulty;
     startsAt: string;
@@ -47,6 +59,7 @@ export interface PresetQuest extends QuestBase {
     requires: QuestId[];
     tasks?: Tasks;
     provides?: InventoryItem[];
+    rewards?: RewardOptions[];
 }
 
 export interface Quest extends PresetQuest {
