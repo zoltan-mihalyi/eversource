@@ -166,7 +166,7 @@ class RawLoginScreen extends React.Component<Props & WithStyles<ClassKeys>, Stat
     };
 
     private submit = () => {
-        this.form.current!.dispatchEvent(new Event('submit'));
+        this.form.current!.dispatchEvent(new Event('submit', { cancelable: true }));
     };
 
     private onSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
