@@ -1,9 +1,14 @@
 import * as React from 'react';
-import { PresetsTool } from './presets/PresetsTool';
 import { PalettesTool } from './palettes/PalettesTool';
+import { MonsterPresetTool } from './presets/monsters/MonsterPresetTool';
+import { HumanoidPresetsTool } from './presets/humanoids/HumanoidPresetsTool';
+import { SpellsTool } from './spells/SpellsTool';
+import { QuestsTool } from './quests/QuestsTool';
+import { ObjectPresetTool } from './presets/objects/ObjectPresetTool';
+import { ItemsTool } from './items/ItemsTool';
 
 interface State {
-    screen: 'presets' | 'palettes' | null;
+    screen: 'humanoids' | 'monsters' | 'objects' | 'items' | 'spells' | 'quests' | 'palettes' | null;
 }
 
 export class App extends React.Component<{}, State> {
@@ -21,22 +26,51 @@ export class App extends React.Component<{}, State> {
                 return (
                     <div>
                         <header>Eversource Tools</header>
+                        <h2>Presets</h2>
                         <div>
-                            <button className="big" onClick={this.showPresets}>Presets</button>
+                            <button className="big" onClick={this.showHumanoids}>Humanoids</button>
+                            <button className="big" onClick={this.showMonsters}>Monsters</button>
+                            <button className="big" onClick={this.showObjects}>Objects</button>
+                        </div>
+                        <h2>Others</h2>
+                        <div>
+                            <button className="big" onClick={this.showItems}>Items</button>
+                            <button className="big" onClick={this.showQuests}>Quests</button>
+                            <button className="big" onClick={this.showSpells}>Spells</button>
                         </div>
                         <div>
                             <button className="big" onClick={this.showPalettes}>Palettes</button>
                         </div>
                     </div>
                 );
-            case 'presets':
+            case 'humanoids':
                 return (
-                    <PresetsTool onExit={this.showMainMenu}/>
+                    <HumanoidPresetsTool onExit={this.showMainMenu}/>
+                );
+            case 'monsters':
+                return (
+                    <MonsterPresetTool onExit={this.showMainMenu}/>
+                );
+            case 'objects':
+                return (
+                    <ObjectPresetTool onExit={this.showMainMenu}/>
+                );
+            case 'items':
+                return (
+                    <ItemsTool onExit={this.showMainMenu}/>
+                );
+            case 'quests':
+                return (
+                    <QuestsTool onExit={this.showMainMenu}/>
+                );
+            case 'spells':
+                return (
+                    <SpellsTool onExit={this.showMainMenu}/>
                 );
             case 'palettes':
                 return (
                     <PalettesTool onExit={this.showMainMenu}/>
-                )
+                );
         }
     }
 
@@ -44,8 +78,23 @@ export class App extends React.Component<{}, State> {
         this.setState({ screen: null });
     };
 
-    private showPresets = () => {
-        this.setState({ screen: 'presets' });
+    private showHumanoids = () => {
+        this.setState({ screen: 'humanoids' });
+    };
+    private showMonsters = () => {
+        this.setState({ screen: 'monsters' });
+    };
+    private showObjects = () => {
+        this.setState({ screen: 'objects' });
+    };
+    private showSpells = () => {
+        this.setState({ screen: 'spells' });
+    };
+    private showItems = () => {
+        this.setState({ screen: 'items' });
+    };
+    private showQuests = () => {
+        this.setState({ screen: 'quests' });
     };
     private showPalettes = () => {
         this.setState({ screen: 'palettes' });

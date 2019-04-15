@@ -3,10 +3,13 @@ import { CharacterId, CharacterInfo, CharacterName, ClassId } from '../../common
 import { X, Y, ZoneId } from '../../common/domain/Location';
 import { UserDao } from '../src/dao/UserDao';
 import * as sinon from 'sinon';
+import { SinonStub } from 'sinon';
 import * as assert from 'assert';
 import { NetworkLoop } from '../src/NetworkLoop';
 import { CharacterDetails, QuestStatus } from '../src/character/CharacterDetails';
 import { QuestId } from '../../common/domain/InteractionTable';
+import { World } from '../src/world/World';
+import { fakeDataContainer } from './sampleData';
 
 function tick(): Promise<void> {
     return new Promise<void>(resolve => setTimeout(resolve, 1));
@@ -15,9 +18,12 @@ function tick(): Promise<void> {
 const characters: CharacterInfo[] = [
     {
         name: 'John' as CharacterName,
+        sex: 'male',
+        level: 12,
+        xp: 10,
         id: '1' as CharacterId,
         classId: 'warrior' as ClassId,
-
+        hp: 100,
         location: {
             position: {
                 x: 100 as X,
@@ -32,6 +38,7 @@ const characters: CharacterInfo[] = [
             eyes: [],
             hair: [],
             nose: [],
+            facial: [],
         },
         equipment: {
             chest: [],
@@ -43,12 +50,14 @@ const characters: CharacterInfo[] = [
             hands: [],
             cape: [],
             belt: [],
+            mask: [],
         },
     },
 ];
 
 const characterDetails: CharacterDetails = {
     info: characters[0],
+    items: [],
     questsDone: new Set<QuestId>(),
     questLog: new Map<QuestId, QuestStatus>(),
 };
@@ -68,14 +77,15 @@ class FakeUserDao implements UserDao {
 
 function fakeZone() {
     return {
-        addEntity: sinon.mock(),
+        createEntity: sinon.mock(),
         removeEntity: sinon.mock(),
     };
 }
 
-function fakeWorld(zone = fakeZone()) {
+function fakeWorld(zone = fakeZone()): World & { getZone: SinonStub } {
 
     return {
+        dataContainer: fakeDataContainer(),
         getZone: sinon.mock().callsFake((zoneId) => {
             return Promise.resolve(zone);
         }),
@@ -156,7 +166,7 @@ describe('ConnectionHandler', () => {
         await tick();
 
         sinon.assert.calledOnce(world.getZone);
-        sinon.assert.calledOnce(zone.addEntity);
+        sinon.assert.calledOnce(zone.createEntity);
     });
 
     it('should respond to ready with ready', async function () {
@@ -203,7 +213,7 @@ describe('ConnectionHandler', () => {
 
         await tick();
 
-        sinon.assert.notCalled(zone.addEntity);
+        sinon.assert.notCalled(zone.createEntity);
     });
 
     it('should create character on ready only once', async function () {
@@ -219,7 +229,7 @@ describe('ConnectionHandler', () => {
 
         await tick();
 
-        sinon.assert.calledOnce(zone.addEntity);
+        sinon.assert.calledOnce(zone.createEntity);
     });
 
     it('should do nothing when entering incorrect character id', async function () {
@@ -236,7 +246,7 @@ describe('ConnectionHandler', () => {
         await tick();
 
         sinon.assert.notCalled(world.getZone);
-        sinon.assert.notCalled(zone.addEntity);
+        sinon.assert.notCalled(zone.createEntity);
     });
 
     it('should remove character on leave', async function () {

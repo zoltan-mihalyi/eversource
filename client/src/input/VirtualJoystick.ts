@@ -16,9 +16,10 @@ export class VirtualJoystick {
             this.joystick = nipple.create({
                 zone: element,
                 mode: 'static',
-                position: { right: '80px', bottom: '80px' },
+                position: { right: '90px', bottom: '90px' },
                 color: 'white',
             });
+            this.joystick.get(void 0 as any).el.style.zIndex = '';
             this.joystick.on('move', this.onJoystickUpdate);
             this.joystick.on('end', this.onJoystickUpdate);
         });

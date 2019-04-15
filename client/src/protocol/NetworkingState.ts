@@ -1,12 +1,15 @@
-import { PlayerStateDiff, ResponseCommand, ResponseTypes } from '../../../common/protocol/Messages';
+import { ChatMessage, PlayerStateDiff, ResponseCommand, ResponseTypes } from '../../../common/protocol/Messages';
 import { State } from '../../../common/util/StateManager';
 import { ErrorCode } from '../../../common/protocol/ErrorCode';
 import { CharacterInfo } from '../../../common/domain/CharacterInfo';
 import { Display } from './Display';
 import { Diff } from '../../../common/protocol/Diff';
-import { EntityData, EntityId } from '../../../common/domain/EntityData';
 import { QuestId } from '../../../common/domain/InteractionTable';
 import { QuestLogItem } from '../../../common/protocol/QuestLogItem';
+import { EntityId } from '../../../common/es/Entity';
+import { NetworkComponents } from '../../../common/components/NetworkComponents';
+import { Nullable } from '../../../common/util/Types';
+import { InventoryItemInfo, SlotId } from '../../../common/protocol/Inventory';
 
 export type ResponseHandler = {
     [P in ResponseCommand]: (data: ResponseTypes[P]) => void;
@@ -30,15 +33,18 @@ export abstract class NetworkingState<T> extends State<NetworkingContext, T> imp
     onOpen() {
     }
 
-    onClose() {
-        this.context.display.showConnectionError(CONNECTION_CLOSED);
+    onError(message: string) {
+        this.context.display.showError(message);
         this.abort();
+        this.context.closeConnection();
+    }
+
+    onClose() {
+        this.onError(CONNECTION_CLOSED);
     }
 
     error(code: ErrorCode) {
-        this.context.display.showConnectionError(errorMessages[code]);
-        this.abort();
-        this.context.closeConnection();
+        this.onError(errorMessages[code]);
     }
 
     ready() {
@@ -50,13 +56,19 @@ export abstract class NetworkingState<T> extends State<NetworkingContext, T> imp
     characters(characters: CharacterInfo[]) {
     }
 
-    world(diffs: Diff<EntityId, EntityData>[]) {
+    world(diffs: Diff<EntityId, Nullable<NetworkComponents>>[]) {
+    }
+
+    chatMessage(message: ChatMessage) {
     }
 
     playerState(playerState: PlayerStateDiff) {
     }
 
     questLog(diffs: Diff<QuestId, QuestLogItem>[]) {
+    }
+
+    inventory(diffs: Diff<SlotId, InventoryItemInfo>[]) {
     }
 
     protected abort() {

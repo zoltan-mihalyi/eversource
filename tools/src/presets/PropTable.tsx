@@ -1,64 +1,34 @@
-import * as fs from 'fs';
-import * as path from 'path';
 import * as React from 'react';
-import { wwwDir } from '../Utils';
 import { SimpleSelect } from './SimpleSelect';
-import { Palettes } from '../../../client/src/game/Palettes';
-import { ColoredImage } from '../../../common/domain/ColoredImage';
-import { Appearance, Equipment } from '../../../common/domain/HumanoidEntityData';
-import { getPaletteFile } from '../../../client/src/display/HumanoidDisplay';
 
-interface Properties {
-    [key: string]: ColoredImage | string;
-}
-
-type PropData = Appearance & Equipment;
-
-interface Props {
-    data: Properties;
-    onChange: (data: any) => void;
-}
-
-const base = path.join(wwwDir, 'spritesheets', 'character');
-
-function filesInDir(directory: string): string[] {
-    return fs.readdirSync(path.join(base, directory))
-        .filter(file => path.extname(file) !== '')
-        .map(file => path.parse(file).name);
-}
-
-const possibleValues: { [P in keyof PropData]: string[] } = {
-    sex: ['female', 'male'],
-    body: filesInDir('body/female'),
-    ears: ['bigears', 'elvenears'],
-    eyes: filesInDir('eyes/female'),
-    nose: ['bignose', 'buttonnose', 'straightnose'],
-    cape: filesInDir('cape/female'),
-    belt: filesInDir('belt/female'),
-    chest: filesInDir('chest/female'),
-    feet: filesInDir('feet/female'),
-    hair: filesInDir('hair/female'),
-    head: filesInDir('head/female'),
-    legs: filesInDir('legs/female'),
-    arms: filesInDir('arms/female'),
-    hands: filesInDir('hands/female'),
-    shirt: filesInDir('shirt/female'),
+type Properties<T> = {
+    [P in keyof T]: [string, string] | [string] | [] | string;
 };
 
-interface State {
-    extraValues: { [P in keyof Properties]?: string[] };
+interface Props<T> {
+    data: T;
+    values: { [P in keyof T]: string[] };
+    forceSelect: (keyof T)[];
+    forceSelect2?: (keyof T)[];
+    readExtraValues: (key: keyof T, value: string) => string[];
+    onChange: (data: T) => void;
 }
 
-export class PropTable extends React.Component<Props, State> {
-    constructor(props: Props) {
+interface State<T> {
+    extraValues: { [P in keyof T]: string[] };
+}
+
+export class PropTable<T extends Properties<T>> extends React.Component<Props<T>, State<T>> {
+    constructor(props: Props<T>) {
         super(props);
 
-        const extraValues: State['extraValues'] = {};
-        for (const key of Object.keys(props.data) as (keyof PropData)[]) {
-            if (key === 'sex') {
-                continue;
+        const extraValues = {} as State<T>['extraValues'];
+        for (const key of Object.keys(props.values) as (keyof T)[]) {
+            const value = props.data[key];
+
+            if (Array.isArray(value)) {
+                extraValues[key] = props.readExtraValues(key, value[0]);
             }
-            extraValues[key] = readExtraValues(key, props.data[key][0]);
         }
 
         this.state = {
@@ -67,13 +37,13 @@ export class PropTable extends React.Component<Props, State> {
     }
 
     render() {
-        const { data } = this.props;
+        const { values } = this.props;
 
         return (
             <table className="prop-table">
                 <tbody>
-                {(Object.keys(data) as (keyof PropData)[]).map((key) => (
-                    <tr key={key}>
+                {(Object.keys(values) as (keyof T)[]).map((key) => (
+                    <tr key={key as string}>
                         <td className="prop-name">{key}</td>
                         <td className="prop-value">
                             {this.renderPropValue(key)}
@@ -82,34 +52,41 @@ export class PropTable extends React.Component<Props, State> {
                 ))}
                 </tbody>
             </table>
-        )
+        );
     }
 
-    private renderPropValue(key: keyof PropData) {
-        const { data } = this.props;
+    private renderPropValue(key: keyof T) {
+        const { data, values, forceSelect, forceSelect2, readExtraValues } = this.props;
         const { extraValues } = this.state;
 
-        const values = possibleValues[key];
+        const valuesForKey = values[key];
         const propValue = data[key];
-        if (typeof propValue==='string') {
-            return <SimpleSelect values={values} value={propValue} allowEmpty={false}
-                                 onChange={val => this.setValue(key, val as PropData['sex'])}/>
+        if (typeof propValue === 'string') {
+            return <SimpleSelect values={valuesForKey} value={propValue} allowEmpty={false}
+                                 onChange={val => this.setValue(key, val)}/>
         }
+
 
         return (
             <>
-                <SimpleSelect allowEmpty={key !== 'body'} values={possibleValues[key]}
+                <SimpleSelect allowEmpty={forceSelect.indexOf(key) === -1} values={values[key]}
                               value={propValue[0]} onChange={v => {
+                    const extraValues = readExtraValues(key, v);
                     this.setState({
                         extraValues: {
-                            ...this.state.extraValues,
-                            [key]: readExtraValues(key, v),
+                            ...this.state.extraValues as any,
+                            [key]: extraValues,
                         },
                     });
-                    this.setValue(key, v === '' ? [] : [v])
+                    if (forceSelect2 && forceSelect2.indexOf(key) !== -1) {
+                        this.setValue(key, [v, extraValues[0]])
+                    } else {
+                        this.setValue(key, v === '' ? [] : [v])
+                    }
                 }}/>
 
-                <SimpleSelect values={extraValues[key] || []} value={propValue[1]} allowEmpty={true}
+                <SimpleSelect values={extraValues[key] || []} value={propValue[1]}
+                              allowEmpty={forceSelect2 === void 0 || forceSelect2.indexOf(key) === -1}
                               onChange={v => {
                                   const primary = data[key][0];
                                   this.setValue(key, v === '' ? [primary] : [primary, v])
@@ -118,22 +95,12 @@ export class PropTable extends React.Component<Props, State> {
         );
     }
 
-    private setValue = <K extends keyof PropData>(key: K, value: PropData[K]) => {
+    private setValue = <K extends keyof T>(key: K, value: T[K]) => {
         const { data, onChange } = this.props;
 
         onChange({
-            ...data,
+            ...data as any,
             [key]: value,
         });
     };
-}
-
-function readExtraValues(key: keyof PropData, value: string) {
-    const filePath = `${base}/${getPaletteFile(key, value)}/palettes.json`;
-    try {
-        const palettes = JSON.parse(fs.readFileSync(filePath, 'utf-8')) as Palettes;
-        return Object.keys(palettes.variations);
-    } catch (e) {
-        return [];
-    }
 }

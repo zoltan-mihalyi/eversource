@@ -1,24 +1,45 @@
 import * as React from 'react';
-import { GameApplication } from '../../map/GameApplication';
-import { Button } from '../gui/Button';
 import { PlayingNetworkApi } from '../../protocol/PlayingState';
 import { QuestId } from '../../../../common/domain/InteractionTable';
-import { InteractionTableGui } from './InteractionTableGui';
-import { PlayerState } from '../../../../common/protocol/PlayerState';
-import { QuestLog } from './QuestLog';
-import { PlayerStateDiff } from '../../../../common/protocol/Messages';
+import { InteractionDialog } from '../quest/InteractionDialog';
+import { CharacterState, PlayerState } from '../../../../common/protocol/PlayerState';
 import { QuestLogItem } from '../../../../common/protocol/QuestLogItem';
-import { Diff } from '../../../../common/protocol/Diff';
+import { GameMenu } from './GameMenu';
+import { DebugInfo } from '../gui/DebugInfo';
+import { settings } from '../../settings/SettingsStore';
+import { InputManager } from '../../input/InputManager';
+import { XpBar } from './XpBar';
+import { maxXpFor } from '../../../../common/algorithms';
+import { Gui } from '../common/Gui';
+import CharacterContext, { EMPTY_CHARACTER } from '../context/CharacterContext';
+import { ChatBox } from '../chat/ChatBox';
+import { Positioned } from '../common/Positioned';
+import { ChatMessage } from '../../../../common/protocol/Messages';
+import { InventoryItemInfo } from '../../../../common/protocol/Inventory';
+import { TextureLoader } from '../../loader/TextureLoader';
+import TextureLoaderContext from '../context/TextureLoaderContext';
+import { Notifications } from './notification/Notifications';
+import { level, quest, red, xp } from '../theme';
+import { isComplete } from '../quest/QuestLog';
+import { NotificationText } from './notification/NotificationText';
+
+const MAX_MESSAGES = 100;
 
 interface Props {
-    game: GameApplication;
+    setScale: (width: number, height: number, scale: number) => void;
+    inputManager: InputManager;
+    canvas: HTMLCanvasElement;
     onMount: (gameScreen: GameScreen) => void;
     playingNetworkApi: PlayingNetworkApi;
+    textureLoader: TextureLoader;
 }
 
 interface State {
+    messages: ChatMessage[];
     playerState: PlayerState;
+    inventory: InventoryItemInfo[];
     questLog: Map<QuestId, QuestLogItem>;
+    debug: boolean;
 }
 
 interface ImageStyle extends CSSStyleDeclaration {
@@ -27,96 +48,184 @@ interface ImageStyle extends CSSStyleDeclaration {
 
 export class GameScreen extends React.Component<Props, State> {
     private canvas: HTMLCanvasElement | null = null;
+    private chatBoxInput = React.createRef<HTMLInputElement>();
+    private notifications = React.createRef<Notifications>();
 
     state: State = {
+        messages: [],
         playerState: { interaction: null, character: null },
+        inventory: [],
         questLog: new Map<QuestId, QuestLogItem>(),
+        debug: settings.get('debug') || false,
     };
 
     render() {
-        const { playerState: { interaction }, questLog } = this.state;
+        const { textureLoader } = this.props;
+        const { playerState: { interaction, character }, inventory, questLog, debug } = this.state;
+
+        const displayCharacter = character || EMPTY_CHARACTER;
 
         return (
-            <div>
-                <div ref={this.containerRef}/>
-                <div className="gui top right">
-                    <QuestLog questLog={questLog}/>
-                </div>
-                <div className="gui top">
-                    {
-                        interaction &&
-                        <InteractionTableGui interactions={interaction} onAcceptQuest={this.acceptQuest}
-                                             onCompleteQuest={this.completeQuest} onClose={this.closeInteraction}/>
-                    }
-                </div>
-                <div className="gui bottom">
-                    <Button onClick={this.leave}>Leave</Button>
-                </div>
-                <div ref={this.joystickContainerRef}/>
-            </div>
+            <Gui>
+                <TextureLoaderContext.Provider value={textureLoader}>
+                    <CharacterContext.Provider value={displayCharacter}>
+                        <div ref={this.containerRef}/>
+
+                        <Positioned horizontal="left" vertical="bottom">
+                            <ChatBox inputRef={this.chatBoxInput} sendMessage={this.sendChatMessage}
+                                     messages={this.state.messages}/>
+                        </Positioned>
+                        <Positioned horizontal="stretch" vertical="top">
+                            <Notifications ref={this.notifications} maxRows={3} timeInMs={4000}/>
+                        </Positioned>
+                        <Positioned horizontal="stretch" vertical="bottom">
+                            <XpBar level={displayCharacter.level} xp={displayCharacter.xp}
+                                   maxXp={maxXpFor(displayCharacter.level)}/>
+                        </Positioned>
+
+                        {debug && <DebugInfo/>}
+                        {interaction &&
+                        <InteractionDialog interactions={interaction} onAcceptQuest={this.acceptQuest}
+                                           onCompleteQuest={this.completeQuest}
+                                           onClose={this.closeInteraction}/>}
+
+                        <div ref={this.joystickContainerRef}/>
+                        <GameMenu character={displayCharacter} questLog={questLog} inventory={inventory} onLeave={this.leave}
+                                  onAbandonQuest={this.abandonQuest}/>
+                    </CharacterContext.Provider>
+                </TextureLoaderContext.Provider>
+            </Gui>
         );
     }
 
     componentDidMount() {
         this.props.onMount(this);
+        document.body.addEventListener('keydown', this.onKeyDown);
+        document.body.addEventListener('keypress', this.onKeyPress);
     }
 
-    updatePlayerState(playerStateDiff: PlayerStateDiff): void { // TODO interface
-        const { playerState } = this.state;
-
-        const newPlayerState: PlayerState = { ...playerState };
-        for (const key of Object.keys(playerStateDiff) as (keyof PlayerState)[]) {
-            const valueDiff = playerStateDiff[key] as PlayerState[keyof PlayerState];
-            let newValue: PlayerState[keyof PlayerState];
-            if (valueDiff === null) {
-                newValue = null;
-            } else {
-                if (playerState[key]) {
-                    newValue = { ...playerState[key], ...valueDiff };
-                } else {
-                    newValue = valueDiff;
-                }
-            }
-
-            newPlayerState[key] = newValue;
-        }
-
-        this.setState({ playerState: newPlayerState });
+    componentWillUnmount() {
+        document.body.removeEventListener('keydown', this.onKeyDown);
+        document.body.removeEventListener('keypress', this.onKeyPress);
     }
 
-    updateQuestLog(diffs: Diff<QuestId, QuestLogItem>[]) {
-        const oldQuestLog = this.state.questLog;
-        const questLog = new Map(oldQuestLog);
-
-        for (const diff of diffs) {
-            switch (diff.type) {
-                case 'create':
-                    questLog.set(diff.id, diff.data);
-                    break;
-                case 'change':
-                    questLog.set(diff.id, { ...questLog.get(diff.id)!, ...diff.changes });
-                    break;
-                case 'remove':
-                    questLog.delete(diff.id);
-            }
+    updatePlayerState(playerState: PlayerState) { // TODO interface
+        const { character } = this.state.playerState;
+        if (character && playerState.character) {
+            this.addCharacterNotifications(character, playerState.character);
         }
 
-        this.setState({
-            questLog,
+        this.setState({ playerState });
+    }
+
+    chatMessageReceived(message: ChatMessage) {
+        this.setState((state) => {
+            const messages = [...state.messages, message];
+            if (messages.length > MAX_MESSAGES) {
+                messages.shift();
+            }
+
+            return {
+                messages,
+            };
         });
     }
 
+    updateQuestLog(questLog: Map<QuestId, QuestLogItem>) {
+        this.state.questLog.forEach((questLogItem, questId) => {
+            const newQuestLogItem = questLog.get(questId);
+            if (!newQuestLogItem || newQuestLogItem.status === questLogItem.status) {
+                return;
+            }
+
+            this.addQuestLogItemChangeNotifications(questLogItem, newQuestLogItem);
+        });
+
+        this.setState({ questLog });
+    }
+
+    updateInventory(inventory: InventoryItemInfo[]) {
+        this.setState({ inventory });
+    }
+
+    private addQuestLogItemChangeNotifications(questLogItem: QuestLogItem, newQuestLogItem: QuestLogItem) {
+        if (newQuestLogItem.status === 'failed') {
+            this.addSimpleNotification(`${newQuestLogItem.info.name} failed.`, red.normal);
+        } else if (questLogItem.status !== 'failed') {
+            for (let i = 0; i < newQuestLogItem.status.length; i++) {
+                const taskStatus = newQuestLogItem.status[i];
+                if (taskStatus === questLogItem.status[i]) {
+                    continue;
+                }
+                const taskInfo = newQuestLogItem.info.tasks[i];
+                if (!taskInfo.track) {
+                    continue;
+                }
+                this.addSimpleNotification(`${taskInfo.track.title} ${taskStatus}/${taskInfo.count}`, quest.active);
+            }
+        }
+
+        if (isComplete(newQuestLogItem)) {
+            this.addSimpleNotification(`✓ ${newQuestLogItem.info.name}`, quest.active);
+        }
+    }
+
+    private addCharacterNotifications(prevCharacter: CharacterState, character: CharacterState) {
+        if (character === prevCharacter) {
+            return;
+        }
+
+        if (character.xp !== prevCharacter.xp) {
+            let xpGain = -prevCharacter.xp;
+            let level = prevCharacter.level;
+            while (level < character.level) {
+                xpGain += maxXpFor(level);
+                level++;
+            }
+            xpGain += character.xp;
+            this.addSimpleNotification(`${xpGain} XP`, xp.bright);
+        }
+
+        if (character.level !== prevCharacter.level) {
+            this.addSimpleNotification(`Level ${character.level} reached!`, level.higher);
+        }
+    }
+
+    private addSimpleNotification(text: string, color: string) {
+        this.notifications.current!.add(
+            <NotificationText color={color}>{text}</NotificationText>
+        );
+    }
+
     private joystickContainerRef = (div: HTMLDivElement | null) => {
-        const { inputManager } = this.props.game;
+        const { inputManager } = this.props;
         if (div) {
             inputManager.initializeJoystick(div);
         }
     };
 
-    private initialize(container: HTMLElement) {
-        const { game } = this.props;
+    private onKeyDown = (event: KeyboardEvent) => {
+        if (event.which === 112) { // F1=112
+            event.preventDefault();
+            const debug = !this.state.debug;
+            this.setState({ debug });
+            settings.set('debug', debug);
+        }
+    };
 
-        const canvas = game.view;
+    private onKeyPress = (event: KeyboardEvent) => {
+        if (event.which === 13) {
+            const chatBox = this.chatBoxInput.current;
+            if (chatBox) {
+                event.stopPropagation();
+                chatBox.focus();
+            }
+        }
+    };
+
+    private initialize(container: HTMLElement) {
+        const { canvas } = this.props;
+
         this.canvas = canvas;
         canvas.addEventListener('contextmenu', this.onContextMenu);
         container.appendChild(canvas);
@@ -146,25 +255,23 @@ export class GameScreen extends React.Component<Props, State> {
     };
 
     private updateSize = () => {
-        const { game } = this.props;
-        const canvas = game.view;
+        const { canvas, setScale } = this.props;
 
-        const width = window.innerWidth;
-        const height = window.innerHeight;
+        const devicePixelRatio = window.devicePixelRatio || 1;
+
+        const cssWidth = window.innerWidth;
+        const cssHeight = window.innerHeight;
+
+        const width = window.innerWidth * devicePixelRatio;
+        const height = window.innerHeight * devicePixelRatio;
 
         const widthRatio = width / 800;
-        const heightRatio = height / 600;
+        const heightRatio = height / 450;
 
-        const pixelRatio = restrict((widthRatio + heightRatio) / 2, 1, 2);
+        canvas.style.width = `${cssWidth}px`;
+        canvas.style.height = `${cssHeight}px`;
 
-        const canvasWidth = Math.floor(width / pixelRatio);
-        const canvasHeight = Math.floor(height / pixelRatio);
-
-        canvas.style.width = `${canvasWidth * pixelRatio}px`;
-        canvas.style.height = `${canvasHeight * pixelRatio}px`;
-
-        game.renderer.resize(canvasWidth, canvasHeight);
-        game.updateView();
+        setScale(width, height, roundScale(Math.max(widthRatio, heightRatio)));
     };
 
     private onContextMenu = (event: Event) => {
@@ -173,6 +280,10 @@ export class GameScreen extends React.Component<Props, State> {
 
     private leave = () => {
         this.props.playingNetworkApi.leaveGame();
+    };
+
+    private abandonQuest = (questId: QuestId) => {
+        this.props.playingNetworkApi.abandonQuest(questId);
     };
 
     private acceptQuest = (id: QuestId) => {
@@ -186,14 +297,15 @@ export class GameScreen extends React.Component<Props, State> {
     private closeInteraction = () => {
         this.props.playingNetworkApi.closeInteraction();
     };
+
+    private sendChatMessage = (message: string) => {
+        this.props.playingNetworkApi.sendChatMessage(message);
+    };
 }
 
-function restrict(num: number, start: number, end: number): number {
-    if (num < start) {
-        return start;
+function roundScale(scale: number): number {
+    if (scale < 2) {
+        return Math.ceil(scale);
     }
-    if (num > end) {
-        return end;
-    }
-    return num;
+    return Math.round(scale * 32) / 32;
 }

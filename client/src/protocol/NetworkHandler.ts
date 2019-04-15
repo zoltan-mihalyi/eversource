@@ -1,23 +1,29 @@
 import { StateManager } from '../../../common/util/StateManager';
 import { parseCommand } from '../utils';
 import { ResponseCommand } from '../../../common/protocol/Messages';
-import { ConnectingState } from './ConnectingState';
+import { ConnectingData, ConnectingState } from './ConnectingState';
 import { Display } from './Display';
+import { NetworkingContext, NetworkingState } from './NetworkingState';
 
-export function connect(display: Display, wsUri: string, username: string, password: string) {
+export function connect(display: Display, wsUri: string, username: string, password: string, onClose: () => void): StateManager<NetworkingState<any>, NetworkingContext> {
     const ws = new WebSocket(wsUri);
 
-    const context = {
+    const context: NetworkingContext = {
         ws,
         display,
         closeConnection: () => {
             ws.onmessage = null;
             ws.onclose = null;
             ws.close();
+            onClose();
         }
     };
 
-    const stateManager = StateManager.create(context, ConnectingState, { username, password });
+    const connectingData = {
+        username,
+        password
+    };
+    const stateManager = StateManager.create<NetworkingState<any>, NetworkingContext, ConnectingData>(context, ConnectingState, connectingData);
 
     ws.onopen = () => {
         stateManager.getCurrentState().onOpen();
@@ -33,4 +39,6 @@ export function connect(display: Display, wsUri: string, username: string, passw
     ws.onclose = () => {
         stateManager.getCurrentState().onClose();
     };
+
+    return stateManager;
 }

@@ -1,0 +1,90 @@
+{
+  "consume_vegetable": {
+    "name": "Consume vegetable",
+    "effects": [
+      {
+        "type": "heal",
+        "amount": 15,
+        "target": "caster"
+      },
+      {
+        "type": "destroy",
+        "target": "target"
+      },
+      {
+        "type": "chat",
+        "target": "caster",
+        "text": {
+          "type": "randomOption",
+          "values": [
+            {
+              "type": "constant",
+              "value": "Delicious!"
+            },
+            {
+              "type": "constant",
+              "value": "Tasty!"
+            },
+            {
+              "type": "constant",
+              "value": "Juicy!"
+            }
+          ]
+        }
+      }
+    ],
+    "condition": {
+      "type": "task"
+    }
+  },
+  "fireball": {
+    "name": "Fireball",
+    "effects": [
+      {
+        "type": "damage",
+        "target": "target",
+        "amount": 100
+      }
+    ]
+  },
+  "heal": {
+    "name": "Heal",
+    "effects": [
+      {
+        "type": "heal",
+        "amount": 200,
+        "target": "target"
+      }
+    ]
+  },
+  "demonic_blast": {
+    "name": "Demonic blast",
+    "effects": [
+      {
+        "type": "damage",
+        "target": "target",
+        "amount": 100
+      },
+      {
+        "type": "damage",
+        "target": "caster",
+        "amount": 10
+      }
+    ]
+  },
+  "transfer_health": {
+    "name": "Transfer health",
+    "effects": [
+      {
+        "type": "heal",
+        "amount": 200,
+        "target": "target"
+      },
+      {
+        "type": "damage",
+        "target": "caster",
+        "amount": 200
+      }
+    ]
+  }
+}

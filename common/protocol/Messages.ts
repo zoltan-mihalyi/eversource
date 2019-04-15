@@ -2,9 +2,12 @@ import { CharacterInfo } from '../domain/CharacterInfo';
 import { ErrorCode } from './ErrorCode';
 import { Diff } from './Diff';
 import { PlayerState } from './PlayerState';
-import { EntityData, EntityId } from '../domain/EntityData';
 import { QuestId } from '../domain/InteractionTable';
 import { QuestLogItem } from './QuestLogItem';
+import { EntityId } from '../es/Entity';
+import { NetworkComponents } from '../components/NetworkComponents';
+import { Nullable } from '../util/Types';
+import { InventoryItemInfo, SlotId } from './Inventory';
 
 export interface RequestTypes {
     enter: string;
@@ -21,16 +24,24 @@ export type PlayerStateDiff = {
     [P in keyof PlayerState]?: Partial<PlayerState[P]>;
 }
 
+export interface ChatMessage {
+    sender: string;
+    entityId?: EntityId;
+    text: string;
+}
+
 export interface ResponseTypes {
     error: ErrorCode;
     leaved: LeaveReason;
     characters: CharacterInfo[];
     ready: void;
-    world: Diff<EntityId, EntityData>[];
+    world: Diff<EntityId, Nullable<NetworkComponents>>[];
     playerState: PlayerStateDiff;
+    chatMessage: ChatMessage;
     questLog: Diff<QuestId, QuestLogItem>[];
+    inventory: Diff<SlotId, InventoryItemInfo>[];
 }
 
 export type ResponseCommand = keyof ResponseTypes;
 
-export const PROTOCOL_VERSION = 12;
+export const PROTOCOL_VERSION = 13;

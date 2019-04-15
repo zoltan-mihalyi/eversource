@@ -1,39 +1,54 @@
-import { QuestId } from '../../../common/domain/InteractionTable';
-import { NonEmptyArray } from '../../../common/util/NonEmptyArray';
+import { QuestBase, QuestId, TaskTrack } from '../../../common/domain/InteractionTable';
+import { ItemId } from '../../../common/protocol/Inventory';
+import { InventoryItem } from '../Item';
 
-interface BaseTask {
+export interface BaseTask {
+    type: string;
     count: number;
-    title: string;
+    track?: TaskTrack;
 }
 
-interface VisitAreaTask extends BaseTask {
+export interface ItemRequirement extends BaseTask {
+    type: 'item';
+    itemId: ItemId;
+}
+
+export type QuestRequirement = ItemRequirement;
+
+export interface VisitAreaTask extends BaseTask {
     type: 'visit';
     areaName: string;
 }
 
-interface KillTask extends BaseTask {
+export interface KillTask extends BaseTask {
     type: 'kill';
+    npcIds: string[];
 }
 
-interface ItemTask extends BaseTask {
-    type: 'item';
+export interface SpellTask extends BaseTask {
+    type: 'spell';
+    spellIds: string[];
 }
 
-type Task = VisitAreaTask | KillTask | ItemTask;
+export type Task = VisitAreaTask | KillTask | SpellTask;
 
 export interface Tasks {
     progress: string;
-    list: NonEmptyArray<Task>;
+    list: Task[];
+    requirements: QuestRequirement[];
 }
 
-export interface Quest {
-    id: QuestId;
-    name: string;
+export type QuestDifficulty = 'easy' | 'normal' | 'hard';
+
+export interface PresetQuest extends QuestBase {
+    difficulty: QuestDifficulty;
     startsAt: string;
     endsAt: string;
-    description: string;
-    taskDescription: string;
-    completion: string;
     requires: QuestId[];
     tasks?: Tasks;
+    provides?: InventoryItem[];
+}
+
+export interface Quest extends PresetQuest {
+    id: QuestId;
 }

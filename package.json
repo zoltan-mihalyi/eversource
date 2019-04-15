@@ -1,10 +1,12 @@
 {
   "name": "eversource",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "scripts": {
+    "postinstall": "npm run build",
+    "deployheroku": "git push heroku heroku:master -f",
     "install": "npm run install-client && npm run install-server && npm run install-tools",
-    "install-client": "cd client && npm i",
-    "install-server": "cd server && npm i",
+    "install-client": "cd client && npm i --dev",
+    "install-server": "cd server && npm i --dev",
     "install-tools": "cd tools && npm i",
     "build": "npm run build-client && npm run build-server",
     "build-client": "cd client && npm run webpack",

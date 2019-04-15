@@ -1,0 +1,8 @@
+Copyright © 2018 Zoltan Mihalyi and contributors
+
+You are allowed to copy, modify and run the software for personal use only.
+You are NOT allowed to distribute, sell, or host it.
+Any commercial use is forbidden.
+The software is provided without warranty of any kind.
+
+The project uses third party libraries and assets. Details can be found in AUTHORS.md file.

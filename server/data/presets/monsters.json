@@ -1,0 +1,248 @@
+{
+  "bee": {
+    "name": "Bee",
+    "image": "bee",
+    "palette": null,
+    "scale": 0.8,
+    "movement": {
+      "interval": 2,
+      "radiusX": 1,
+      "radiusY": 1,
+      "running": true
+    },
+    "level": 6
+  },
+  "bee_lava": {
+    "name": "Lava Bee",
+    "image": "bee",
+    "palette": "lava",
+    "movement": {
+      "interval": 5,
+      "radiusY": 0
+    },
+    "level": 7
+  },
+  "bee_emerald": {
+    "name": "Emerald Bee",
+    "image": "bee",
+    "palette": "emerald",
+    "movement": {
+      "interval": 5,
+      "running": true
+    },
+    "level": 30
+  },
+  "bee_queen": {
+    "name": "Queen Bee",
+    "image": "bee",
+    "palette": "gold",
+    "scale": 1.5,
+    "movement": {
+      "interval": 5,
+      "running": true
+    },
+    "level": 8
+  },
+  "bee_night": {
+    "name": "Night Bee",
+    "image": "bee",
+    "palette": "night",
+    "movement": {
+      "interval": 5,
+      "running": true
+    },
+    "effects": [
+      {
+        "type": "alpha",
+        "param": 0.3
+      }
+    ],
+    "level": 40
+  },
+  "bee_pink": {
+    "name": "Pink Bee",
+    "image": "bee",
+    "palette": "pink",
+    "effects": [
+      {
+        "type": "speed",
+        "param": 1
+      }
+    ],
+    "level": 22
+  },
+  "slime_lava": {
+    "name": "Lava Slime",
+    "image": "slime",
+    "palette": null,
+    "level": 3
+  },
+  "slime_lava_rock": {
+    "name": "Lava Rock Slime",
+    "image": "slime",
+    "palette": "lava-rock",
+    "attitude": "neutral",
+    "level": 1
+  },
+  "spider": {
+    "name": "Forest Spider",
+    "image": "spider01",
+    "palette": null,
+    "level": 15
+  },
+  "black_widow": {
+    "name": "Black Widow",
+    "image": "spider01",
+    "palette": "black-widow",
+    "scale": 1.5,
+    "movement": {
+      "running": true
+    },
+    "effects": [
+      {
+        "type": "speed",
+        "param": 2
+      }
+    ],
+    "level": 17
+  },
+  "golem": {
+    "name": "Golem",
+    "image": "golem",
+    "palette": null,
+    "level": 35
+  },
+  "golem_dirt": {
+    "name": "Dirt Golem",
+    "image": "golem",
+    "palette": "dirt",
+    "scale": 1.5,
+    "level": 16
+  },
+  "golem_emerald": {
+    "name": "Emerald Golem",
+    "image": "golem",
+    "palette": "emerald",
+    "scale": 1.5,
+    "level": 20
+  },
+  "golem_gold": {
+    "name": "Gold Golem",
+    "image": "golem",
+    "palette": "gold",
+    "level": 1
+  },
+  "golem_lava": {
+    "name": "Lava Golem",
+    "image": "golem",
+    "palette": "lava",
+    "scale": 1.5,
+    "level": 5
+  },
+  "golem_ice": {
+    "name": "Ice Golem",
+    "image": "golem",
+    "palette": "ice",
+    "effects": [
+      {
+        "type": "alpha",
+        "param": 0.7
+      }
+    ],
+    "level": 52
+  },
+  "golem_forest": {
+    "name": "Forest Golem",
+    "image": "golem",
+    "palette": "forest",
+    "attitude": "friendly",
+    "scale": 2,
+    "level": 1
+  },
+  "golem_stone": {
+    "name": "Stone Golem",
+    "image": "golem",
+    "palette": "stone",
+    "scale": 1.5,
+    "level": 1
+  },
+  "golem_pink": {
+    "name": "Tourmaline Golem",
+    "image": "golem",
+    "palette": "pink",
+    "level": 1
+  },
+  "golem_purple": {
+    "name": "Ametrine Golem",
+    "image": "golem",
+    "palette": "purple",
+    "level": 1
+  },
+  "golem_ruby": {
+    "name": "Ruby Golem",
+    "image": "golem",
+    "palette": "ruby",
+    "level": 1
+  },
+  "imp": {
+    "name": "Imp",
+    "image": "imp",
+    "palette": null,
+    "level": 20
+  },
+  "imp_blue": {
+    "name": "Imp Servant",
+    "image": "imp",
+    "palette": "blue",
+    "level": 20
+  },
+  "imp_green": {
+    "name": "Imp Corruptor",
+    "image": "imp",
+    "palette": "green",
+    "level": 20
+  },
+  "imp_dark": {
+    "name": "Souleater Imp",
+    "image": "imp",
+    "palette": "dark",
+    "scale": 1.5,
+    "level": 20
+  },
+  "imp_void": {
+    "name": "Void Imp",
+    "image": "imp",
+    "palette": "void",
+    "level": 20
+  },
+  "impling": {
+    "name": "Impling",
+    "image": "impling",
+    "palette": null,
+    "level": 18
+  },
+  "impling_blue": {
+    "name": "Impling Servant",
+    "image": "impling",
+    "palette": "blue",
+    "level": 18
+  },
+  "impling_green": {
+    "name": "Impling Corruptor",
+    "image": "impling",
+    "palette": "green",
+    "level": 18
+  },
+  "impling_dark": {
+    "name": "Souleater Impling",
+    "image": "impling",
+    "palette": "dark",
+    "level": 18
+  },
+  "impling_void": {
+    "name": "Void Impling",
+    "image": "impling",
+    "palette": "void",
+    "level": 18
+  }
+}

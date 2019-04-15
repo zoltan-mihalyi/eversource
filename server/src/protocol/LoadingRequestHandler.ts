@@ -1,10 +1,10 @@
 import { ClientState } from './ClientState';
 import { PlayingRequestHandler } from './PlayingRequestHandler';
 import { CancellableProcess } from '../../../common/util/CancellableProcess';
-import { BASE_HUMANOID, CreatureEntity } from '../entity/CreatureEntity';
-import { PlayerController } from '../entity/controller/PlayerController';
+import { hpForLevel } from '../../../common/algorithms';
 import { CharacterDetails } from '../character/CharacterDetails';
-import { HiddenPlayerInfo } from '../entity/Entity';
+import { CreatureAttitude } from '../../../common/components/CommonComponents';
+import { CharacterInventory } from '../character/CharacterInventory';
 
 export class LoadingRequestHandler extends ClientState<CharacterDetails> {
     private serverLoading = false;
@@ -16,32 +16,53 @@ export class LoadingRequestHandler extends ClientState<CharacterDetails> {
         }
         this.serverLoading = true;
 
-        const { info } = this.data;
+        const { info, items } = this.data;
 
         const { name, location: { zoneId, position } } = info;
 
-        const zone = await this.process.runPromise(this.context.world.getZone(zoneId));
+        const { world } = this.context;
+        const zone = await this.process.runPromise(world.getZone(zoneId));
 
-        const controller = new PlayerController();
-        const player: HiddenPlayerInfo = {
-            state: {
-                questLog: this.data.questLog,
-            },
-            details: this.data,
-        };
-        const hidden = { player, quests: [], questCompletions: [] };
-        const character = new CreatureEntity({
-            ...BASE_HUMANOID,
+        const entity = zone.createEntity({
+            level: { value: info.level },
+            xp: { value: info.xp },
             position,
-            name,
+            name: { value: name },
             player: true,
-            appearance: info.appearance,
-            equipment: info.equipment,
-        }, hidden, controller);
-        zone.addEntity(character);
+            speed: {
+                walking: 2,
+                running: 4,
+            },
+            quests: {
+                questLog: this.data.questLog,
+                questsDone: this.data.questsDone,
+            },
+            hp: {
+                max: hpForLevel(info.level),
+                current: info.hp,
+            },
+            scale: { value: 1 },
+            activity: 'standing',
+            direction: 'down',
+            view: {
+                type: 'humanoid',
+                appearance: info.appearance,
+                equipment: info.equipment,
+            },
+            attitude: {
+                value: CreatureAttitude.FRIENDLY,
+            },
+            weapon: {
+                damage: 1,
+            },
+            chatListener: {
+                onChatMessage: message => this.context.sendCommand('chatMessage', message),
+            },
+            inventory: new CharacterInventory(world.dataContainer.items, items)
+        });
 
         this.context.sendCommand('ready', void 0);
-        this.manager.enter(PlayingRequestHandler, { zone, character, controller, hidden });
+        this.manager.enter(PlayingRequestHandler, { zone, entity, characterInfo: info });
     }
 
     handleExit() {

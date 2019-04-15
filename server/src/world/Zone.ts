@@ -1,75 +1,98 @@
-import { Grid } from '../../../common/Grid';
-import { Entity } from '../entity/Entity';
 import * as rbush from 'rbush';
-import { EntityId } from '../../../common/domain/EntityData';
-import { X, Y } from '../../../common/domain/Location';
-
-interface EntityBox extends rbush.BBox {
-    entity: Entity;
-}
-
-interface AreaBox extends rbush.BBox {
-    name: string;
-}
+import { Grid } from '../../../common/Grid';
+import { Position } from '../../../common/domain/Location';
+import { ServerComponents } from '../es/ServerComponents';
+import { EventBus } from '../../../common/es/EventBus';
+import { ServerEvents } from '../es/ServerEvents';
+import { aiMovingSystem } from '../es/AIMovingSystem';
+import { areaSystem } from '../es/AreaSystem';
+import { attackSystem } from '../es/AttackSystem';
+import { damageSystem } from '../es/DamageSystem';
+import { hpRegenSystem } from '../es/HpRegenSystem';
+import { movingSystem } from '../es/MovingSystem';
+import { questSystem } from '../es/QuestSystem';
+import { spawnSystem } from '../es/SpawnSystem';
+import { xpSystem } from '../es/XpSystem';
+import { Entity, EntityId } from '../../../common/es/Entity';
+import { interactionSystem } from '../es/InteractionSystem';
+import { PositionBox, spatialIndexingSystem } from '../es/SpatialIndexingSystem';
+import { ServerEntityContainer } from '../es/ServerEntityContainer';
+import { spellSystem } from '../es/SpellSystem';
+import { chatSystem } from '../es/ChatSystem';
+import { lootSystem } from '../es/LootSystem';
+import { DataContainer } from '../data/DataContainer';
 
 export class Zone {
-    private areas = rbush<AreaBox>();
-    private entities = new Map<EntityId, EntityBox>();
-    private entityIndex = rbush<EntityBox>();
+    private entityContainer = new ServerEntityContainer();
+    readonly eventBus = new EventBus<ServerEvents>(); // TODO private
+    private readonly index: rbush.RBush<PositionBox>;
 
-    constructor(private grid: Grid) {
+    constructor(private grid: Grid, dataContainer: DataContainer) {
+        spawnSystem(this.entityContainer, this.eventBus);
+
+        this.index = spatialIndexingSystem(this.entityContainer, this.eventBus);
+        aiMovingSystem(this.entityContainer, this.eventBus);
+        movingSystem(grid, this.entityContainer, this.eventBus);
+        areaSystem(this.index, this.entityContainer, this.eventBus);
+        attackSystem(this.eventBus);
+        damageSystem(this.eventBus);
+        hpRegenSystem(this.entityContainer, this.eventBus);
+        interactionSystem(this.entityContainer, this.eventBus, dataContainer);
+        questSystem(this.eventBus, dataContainer);
+        xpSystem(this.eventBus);
+        spellSystem(this.eventBus, dataContainer);
+        chatSystem(this.index, this.eventBus);
+        lootSystem(this.eventBus, dataContainer);
     }
 
-    addEntity(entity: Entity) {
-        const bBox = entityBBox(entity);
-        this.entities.set(entity.id, bBox);
-        this.entityIndex.insert(bBox);
+    createEntity(components: Partial<ServerComponents>): Entity<ServerComponents> {
+        return this.entityContainer.createEntity(components);
     }
 
-    addArea(x: X, y: Y, width: number, height: number, name: string) {
-        this.areas.insert({ minX: x, minY: y, maxX: x + width, maxY: y + height, name });
-    }
-
-    getEntity(id: EntityId): Entity | null {
-        const entityBox = this.entities.get(id);
-        return entityBox ? entityBox.entity : null;
-    }
-
-    removeEntity(entity: Entity): void {
-        const bBox = this.entities.get(entity.id)!;
-        this.entities.delete(entity.id);
-        this.entityIndex.remove(bBox);
-    }
-
-    query(minX: number, minY: number, maxX: number, maxY: number): Entity[] {
-        return this.entityIndex.search({ minX, minY, maxX, maxY }).map(box => box.entity);
-    }
-
-    update(interval: number) {
-        this.entities.forEach((entityBox: EntityBox) => {
-            const entity = entityBox.entity;
-            const lastPosition = entity.get().position;
-            entity.update(this.grid, interval);
-            if (entity.get().position !== lastPosition) {
-                this.handlePositionChange(entity);
-            }
-
-            for (const area of this.areas.search(entityBox)) {
-                entity.emit('area', area.name);
-            }
+    addSpawner(spawnTime: number, template: Partial<ServerComponents>) { // TODO creature builders should be at the same place
+        this.createEntity({
+            spawner: {
+                spawnTime,
+                template,
+            },
+            spawnTimer: {
+                nextSpawnTime: 0,
+            },
         });
     }
 
-    private handlePositionChange(entity: Entity) {
-        const bBox = entityBBox(entity);
-        const prevBox = this.entities.get(entity.id)!;
-        this.entityIndex.remove(prevBox);
-        this.entities.set(entity.id, bBox);
-        this.entityIndex.insert(bBox);
+    addArea(center: Position, width: number, height: number, name: string) {
+        this.createEntity({
+            position: center,
+            area: {
+                name,
+                width,
+                height,
+            },
+        });
     }
-}
 
-function entityBBox(entity: Entity): EntityBox {
-    const { x, y } = entity.get().position;
-    return { minX: x, minY: y, maxX: x, maxY: y, entity };
+    getEntity(id: EntityId): Entity<ServerComponents> | null {
+        return this.entityContainer.getEntity(id);
+    }
+
+    removeEntity(entity: Entity<ServerComponents>): void {
+        this.entityContainer.removeEntity(entity);
+    }
+
+    query(minX: number, minY: number, maxX: number, maxY: number): Entity<ServerComponents>[] { // TODO network system
+        return this.index.search({ minX, minY, maxX, maxY }).map(box => box.entity);
+    }
+
+    update(interval: number) {
+        this.eventBus.emit('update', {
+            now: Date.now(),
+            delta: interval,
+            deltaInSec: interval / 1000,
+        });
+    }
+
+    init() {
+        this.eventBus.emit('init', void 0);
+    }
 }

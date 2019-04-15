@@ -1,0 +1,34 @@
+{
+  "1": {
+    "name": "The Artichoke of Knowledge",
+    "image": "plants",
+    "animation": "artichoke",
+    "quality": "epic",
+    "questId": 10,
+    "condition": {
+      "type": "task"
+    }
+  },
+  "2": {
+    "name": "Sting of The Queen Bee",
+    "image": "plants",
+    "animation": "carrot",
+    "quality": "common",
+    "questId": 5
+  },
+  "3": {
+    "name": "Magic pepper",
+    "image": "plants",
+    "animation": "pepper",
+    "quality": "rare",
+    "stackSize": 5
+  },
+  "100": {
+    "name": "Nefag's Letter",
+    "image": "common",
+    "animation": "letter-love",
+    "quality": "common",
+    "questId": 3,
+    "lore": "It has the scent of love"
+  }
+}

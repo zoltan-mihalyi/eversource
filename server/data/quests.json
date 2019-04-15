@@ -1,0 +1,208 @@
+{
+  "1": {
+    "level": 1,
+    "difficulty": "normal",
+    "name": "A simple quest",
+    "startsAt": "cacal",
+    "endsAt": "cacal",
+    "description": "The lava slimes are causing so much trouble these days!",
+    "taskDescription": "Lava slimes live near lava holes. Get rid of them!",
+    "completion": "Wasn't that hard, was it?",
+    "requires": [
+      7
+    ],
+    "tasks": {
+      "progress": "Have you slain the lava slimes, %class%?",
+      "list": [
+        {
+          "type": "kill",
+          "count": 10,
+          "track": {
+            "title": "Intruders slain"
+          },
+          "npcIds": [
+            "slime_lava",
+            "slime_lava_rock"
+          ]
+        }
+      ],
+      "requirements": []
+    }
+  },
+  "2": {
+    "level": 1,
+    "difficulty": "easy",
+    "name": "What next",
+    "startsAt": "cacal",
+    "endsAt": "nefag",
+    "description": "You are a nice %sex%! You killed the slimes, tell it to Nefag!",
+    "taskDescription": "Nefag is a forester standing on the remainings of the forest. Talk to him!",
+    "completion": "Thank you, traveller!",
+    "requires": [
+      1
+    ]
+  },
+  "3": {
+    "level": 3,
+    "difficulty": "easy",
+    "name": "The lonely forester",
+    "startsAt": "nefag",
+    "endsAt": "diana",
+    "description": "I am so lonely here. I am dreaming of Diana all day. Bring my letter to her!",
+    "taskDescription": "Diana likes walking near the corn fields. Find her and hand over the letter!",
+    "completion": "Oh, Nefag loves me? I love him too!",
+    "requires": [],
+    "provides": [
+      {
+        "itemId": 100,
+        "count": 1
+      }
+    ],
+    "tasks": {
+      "progress": "Are you done?",
+      "list": [],
+      "requirements": [
+        {
+          "type": "item",
+          "itemId": 100,
+          "count": 1
+        }
+      ]
+    }
+  },
+  "4": {
+    "level": 2,
+    "difficulty": "easy",
+    "name": "A forester without job",
+    "startsAt": "nefag",
+    "endsAt": "cacal",
+    "description": "Help the forester to find a job!",
+    "taskDescription": "Cacal can help finding a job. Speak to her!",
+    "completion": "He can work in my shop.",
+    "requires": []
+  },
+  "5": {
+    "level": 6,
+    "difficulty": "normal",
+    "name": "The queen bee",
+    "startsAt": "diana",
+    "endsAt": "diana",
+    "description": "I need an amulet made of the sting of the queen bee. I'll pay you well, if you help me.",
+    "taskDescription": "Kill the queen bee and bring their sting!",
+    "completion": "Yes! This is it!",
+    "requires": [],
+    "tasks": {
+      "progress": "Have you found the queen bee? It is the biggest one with golden sting!",
+      "list": [],
+      "requirements": [
+        {
+          "type": "item",
+          "count": 1,
+          "track": {
+            "title": "Sting of the queen bee"
+          },
+          "itemId": 2
+        }
+      ]
+    }
+  },
+  "6": {
+    "level": 4,
+    "difficulty": "normal",
+    "name": "Strange guests",
+    "startsAt": "dark",
+    "endsAt": "protector",
+    "description": "Investigate the lava slimes!",
+    "taskDescription": "There are a bunch of lava slimes eastward. Find them!",
+    "completion": "Hmm, interesting.",
+    "requires": [],
+    "tasks": {
+      "progress": "Have you find them, %name%?",
+      "list": [
+        {
+          "count": 1,
+          "type": "visit",
+          "areaName": "slimes",
+          "track": {
+            "title": "Visit eastern slimes"
+          }
+        }
+      ],
+      "requirements": []
+    }
+  },
+  "7": {
+    "level": 1,
+    "difficulty": "easy",
+    "name": "Trust issues",
+    "startsAt": "cacal",
+    "endsAt": "cacal",
+    "description": "I am not sure if we can trust you. Answer me: are the lava slimes your friends?",
+    "taskDescription": "Answer the question!",
+    "completion": "The lava slimes are your enemies? I was hoping you'd say that. Come, I have some tasks for you.",
+    "requires": []
+  },
+  "8": {
+    "level": 7,
+    "difficulty": "hard",
+    "name": "Destroy the world",
+    "startsAt": "cactus_bonus",
+    "endsAt": "obelus",
+    "description": "WA HA HA HA",
+    "taskDescription": "Find Obelus!",
+    "completion": "OMG!",
+    "requires": []
+  },
+  "9": {
+    "level": 3,
+    "difficulty": "normal",
+    "name": "Poor's feast",
+    "startsAt": "nefag",
+    "endsAt": "nefag",
+    "description": "Hello, %class%! Look at these vegetables! They look fine, but do they taste good as well?",
+    "taskDescription": "Taste the vegetables!",
+    "completion": "Well, I think I will give it a try.",
+    "requires": [],
+    "tasks": {
+      "progress": "Hmm?",
+      "list": [
+        {
+          "type": "spell",
+          "count": 8,
+          "track": {
+            "title": "Vegetables tasted"
+          },
+          "spellIds": [
+            "consume_vegetable"
+          ]
+        }
+      ],
+      "requirements": []
+    }
+  },
+  "10": {
+    "name": "Pick it",
+    "level": 1,
+    "difficulty": "easy",
+    "startsAt": "cacal",
+    "endsAt": "cacal",
+    "requires": [],
+    "completion": "Good job!",
+    "description": "Pick up the item!",
+    "taskDescription": "Pick it up!",
+    "tasks": {
+      "progress": "Are you done?",
+      "list": [],
+      "requirements": [
+        {
+          "type": "item",
+          "track": {
+            "title": "Bring the item"
+          },
+          "count": 3,
+          "itemId": 1
+        }
+      ]
+    }
+  }
+}

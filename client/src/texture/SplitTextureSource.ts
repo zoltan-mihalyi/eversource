@@ -1,26 +1,22 @@
 import { BaseTexture, Rectangle, Texture } from 'pixi.js';
 import { TaskQueue } from './TaskQueue';
+import { loadImages } from './ImageLoader';
 
-const SPLIT_W = 256;
-const SPLIT_H = 256;
+const SPLIT_W = 512;
+const SPLIT_H = 512;
 
-const taskQueue = new TaskQueue(8);
+export const taskQueue = new TaskQueue(2);
 
-class SplitBaseTexture extends BaseTexture {
-    constructor(private x: number, private y: number) {
+export class SplitBaseTexture extends BaseTexture {
+    constructor(readonly x: number, readonly y: number) {
         super();
+        this.mipmap = false;
     }
 
-    imageLoaded(img: HTMLImageElement) {
-        const canvas = document.createElement('canvas') as HTMLCanvasElement;
-        canvas.width = SPLIT_W;
-        canvas.height = SPLIT_H;
-
-        const ctx = canvas.getContext('2d')!;
-
-        ctx.drawImage(img, this.x * SPLIT_W, this.y * SPLIT_H, SPLIT_W, SPLIT_H, 0, 0, SPLIT_W, SPLIT_H);
-
-        taskQueue.enqueue(() => this.loadSource(canvas));
+    loadLater(source: HTMLImageElement | HTMLCanvasElement | HTMLVideoElement) {
+        taskQueue.enqueue(() => {
+            super.loadSource(source);
+        });
     }
 }
 
@@ -44,10 +40,8 @@ export class SplitTextureSource {
     }
 
     loadFrom(src: string) {
-        const img = document.createElement('img') as HTMLImageElement;
-        img.src = src;
-        img.onload = () => { // TODO destroy callback on end
-            this.baseTextures.forEach((baseTexture) => baseTexture.imageLoaded(img));
-        };
+        const baseTextures: SplitBaseTexture[] = Array.from(this.baseTextures.values());
+
+        loadImages(src, SPLIT_W, SPLIT_H, baseTextures);
     }
 }

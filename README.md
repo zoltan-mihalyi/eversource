@@ -3,6 +3,11 @@
 
 A HTML5-based 2D MMORPG with LPC style pixel graphics.
 
+![Screenshot of game](resources/screenshot.png "Screenshot of game")
+
+## Live demo
+http://eversource.tk/ (first load takes a while)
+
 ## Features
 - Browser and mobile support with Apache Cordova
 - Tiled map support

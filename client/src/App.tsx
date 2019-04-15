@@ -11,6 +11,8 @@ import { Display } from './protocol/Display';
 import { connect } from './protocol/NetworkHandler';
 import { CreditsScreen } from './components/menu/CreditsScreen';
 import { PlayingNetworkApi } from './protocol/PlayingState';
+import { NetworkingContext, NetworkingState } from './protocol/NetworkingState';
+import { StateManager } from '../../common/util/StateManager';
 
 type ShowLoginScreen = {
     type: 'login';
@@ -56,6 +58,18 @@ export class App extends React.Component<{}, State> implements Display {
         screen: { type: 'login', state: { type: 'initial' } },
     };
 
+    private stateManager: StateManager<NetworkingState<any>, NetworkingContext> | null = null;
+
+    componentDidMount() {
+        window.addEventListener('error', this.onError);
+        window.addEventListener('unhandledrejection', this.onPromiseRejection);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('error', this.onError);
+        window.removeEventListener('unhandledrejection', this.onPromiseRejection);
+    }
+
     render(): ReactChild {
         const screen = this.state.screen;
         switch (screen.type) {
@@ -79,13 +93,40 @@ export class App extends React.Component<{}, State> implements Display {
                 );
             case 'game':
                 return (
-                    <GameScreen game={screen.game} onMount={screen.onMount} playingNetworkApi={screen.playingNetworkApi}/>
+                    <GameScreen inputManager={screen.game.inputManager} canvas={screen.game.view}
+                                setScale={screen.game.setScale} onMount={screen.onMount}
+                                textureLoader={screen.game.textureLoader}
+                                playingNetworkApi={screen.playingNetworkApi}/>
                 );
         }
     }
 
+    componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
+        this.handleApplicationError(error);
+    }
+
+    private handleApplicationError(error: Error) {
+        // TODO send error log
+        const message = 'Application error';
+        if (this.stateManager) { // TODO stateManager always available?
+            this.stateManager.getCurrentState().onError(message);
+        } else {
+            this.showError(message);
+        }
+    }
+
+    private onError = (event: ErrorEvent) => {
+        this.handleApplicationError(event.error);
+    };
+
+    private onPromiseRejection = (event: Event) => {
+        this.handleApplicationError((event as PromiseRejectionEvent).reason);
+    };
+
     private onSubmitLogin = (username: string, password: string) => {
-        connect(this, wsUri, username, password);
+        this.stateManager = connect(this, wsUri, username, password, () => {
+            this.stateManager = null;
+        });
     };
 
     private showCredits = () => {
@@ -123,7 +164,7 @@ export class App extends React.Component<{}, State> implements Display {
         });
     }
 
-    showConnectionError(message: string) {
+    showError(message: string) {
         this.setState({
             screen: {
                 type: 'login',

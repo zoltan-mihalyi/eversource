@@ -1,0 +1,135 @@
+{
+  "base": [
+    {
+      "color": "#1d131e",
+      "coordinates": [
+        333,
+        31
+      ]
+    },
+    {
+      "color": "#3d3748",
+      "coordinates": [
+        333,
+        32
+      ]
+    },
+    {
+      "color": "#e5e6c7",
+      "coordinates": [
+        334,
+        32
+      ]
+    },
+    {
+      "color": "#726b7e",
+      "coordinates": [
+        335,
+        32
+      ]
+    },
+    {
+      "color": "#867e7f",
+      "coordinates": [
+        334,
+        33
+      ]
+    },
+    {
+      "color": "#c4b59f",
+      "coordinates": [
+        336,
+        33
+      ]
+    },
+    {
+      "color": "#2e2533",
+      "coordinates": [
+        338,
+        33
+      ]
+    },
+    {
+      "color": "#a8b3b8",
+      "coordinates": [
+        21,
+        34
+      ]
+    },
+    {
+      "color": "#4d4a5d",
+      "coordinates": [
+        23,
+        34
+      ]
+    },
+    {
+      "color": "#b19998",
+      "coordinates": [
+        337,
+        34
+      ]
+    },
+    {
+      "color": "#ffffff",
+      "coordinates": [
+        21,
+        36
+      ]
+    }
+  ],
+  "variations": {
+    "bronze": [
+      "#15090c",
+      "#602a32",
+      "#e5b97f",
+      "#d7603b",
+      "#d7953f",
+      "#e7c08c",
+      "#36181d",
+      "#d7953f",
+      "#9e3a43",
+      "#d7603b",
+      "#e7c08c"
+    ],
+    "dark": [
+      "#040404",
+      "#161616",
+      "#727272",
+      "#414141",
+      "#5d5d5d",
+      "#7b7b7b",
+      "#0b0b0b",
+      "#5d5d5d",
+      "#262626",
+      "#414141",
+      "#7b7b7b"
+    ],
+    "silver": [
+      "#0e0e0e",
+      "#505050",
+      "#f4f4f4",
+      "#9b9b9b",
+      "#dbdbdb",
+      "#ffffff",
+      "#363636",
+      "#dbdbdb",
+      "#6f6f6f",
+      "#9b9b9b",
+      "#ffffff"
+    ],
+    "gold": [
+      "#1e0c08",
+      "#8c4322",
+      "#ffffdf",
+      "#ffc95a",
+      "#ffff61",
+      "#ffffff",
+      "#4f2313",
+      "#ffff61",
+      "#dc6f35",
+      "#ffc95a",
+      "#ffffff"
+    ]
+  }
+}

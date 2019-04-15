@@ -1,18 +1,34 @@
 import { X, Y, ZoneId } from '../../../common/domain/Location';
 import { UserDao } from '../dao/UserDao';
-import { CharacterId, CharacterInfo, CharacterName, ClassId } from '../../../common/domain/CharacterInfo';
+import { CharacterId, CharacterInfo, CharacterName } from '../../../common/domain/CharacterInfo';
 import { CharacterDetails } from '../character/CharacterDetails';
+import { hpForLevel } from '../../../common/algorithms';
+import { ItemId } from '../../../common/protocol/Inventory';
+import { InventoryItem} from '../Item';
+import { CharacterInventory } from '../character/CharacterInventory';
+
+function inventoryItem(itemId: number, count = 1): InventoryItem {
+    return {
+        itemId: itemId as ItemId,
+        count,
+    };
+}
 
 export class FakeUserDao implements UserDao {
     private characters: CharacterDetails[] = [
         {
             questsDone: new Set(),
             questLog: new Map(),
+            items: [inventoryItem(1)],
             info:
                 {
                     id: '1' as CharacterId,
+                    level: 21,
+                    xp: 180,
                     name: 'John' as CharacterName,
-                    classId: 'warrior' as ClassId,
+                    sex: 'male',
+                    classId: 'warrior',
+                    hp: hpForLevel(21),
 
                     location: {
                         position: {
@@ -23,14 +39,15 @@ export class FakeUserDao implements UserDao {
                     },
                     appearance: {
                         sex: 'male',
-                        body: ['normal','dark'],
+                        body: ['normal', 'dark'],
+                        facial: [],
                         hair: ['messy1'],
                         ears: [],
                         eyes: ['normal', 'red'],
                         nose: ['bignose'],
                     },
                     equipment: {
-                        shirt: ['simple', 'white'],
+                        shirt: ['long_sleeve', 'white'],
                         head: ['bandana'],
                         cape: [],
                         belt: ['cloth'],
@@ -39,16 +56,22 @@ export class FakeUserDao implements UserDao {
                         legs: ['pants'],
                         hands: [],
                         feet: ['shoes', 'black'],
+                        mask: ['sunglasses'],
                     },
                 },
         },
         {
             questsDone: new Set(),
             questLog: new Map(),
+            items: [inventoryItem(1, 1), inventoryItem(2), inventoryItem(3, 11)],
             info: {
                 id: '2' as CharacterId,
+                level: 2,
+                xp: 280,
                 name: 'Robin' as CharacterName,
-                classId: 'hunter' as ClassId,
+                sex: 'male',
+                classId: 'hunter',
+                hp: hpForLevel(2) * 0.3,
 
                 location: {
                     position: {
@@ -60,6 +83,7 @@ export class FakeUserDao implements UserDao {
                 appearance: {
                     sex: 'male',
                     body: ['normal'],
+                    facial: [],
                     hair: ['bedhead'],
                     ears: [],
                     eyes: [],
@@ -67,24 +91,30 @@ export class FakeUserDao implements UserDao {
                 },
                 equipment: {
                     shirt: [],
-                    head: ['ornate_metal_helm'],
+                    head: ['ornate_metal_helm', 'gold'],
                     cape: ['normal', 'red'],
                     belt: [],
-                    arms: ['ornate_metal_arms'],
-                    chest: ['ornate_metal_chest'],
-                    legs: ['ornate_metal_greaves'],
+                    arms: ['plate', 'gold'],
+                    chest: ['plate', 'gold'],
+                    legs: ['plate', 'gold'],
                     hands: ['gloves', 'gold'],
-                    feet: ['ornate_metal_boots'],
+                    feet: ['plate', 'gold'],
+                    mask: [],
                 },
             },
         },
         {
             questsDone: new Set(),
             questLog: new Map(),
+            items: [inventoryItem(3)],
             info: {
                 id: '3' as CharacterId,
+                level: 10,
+                xp: 730,
                 name: 'Unimaginable' as CharacterName,
-                classId: 'mage' as ClassId,
+                sex: 'female',
+                classId: 'mage',
+                hp: hpForLevel(10),
 
                 location: {
                     position: {
@@ -96,6 +126,7 @@ export class FakeUserDao implements UserDao {
                 appearance: {
                     sex: 'female',
                     body: ['normal'],
+                    facial: [],
                     hair: ['xlongknot'],
                     ears: ['elvenears'],
                     eyes: ['normal'],
@@ -111,6 +142,7 @@ export class FakeUserDao implements UserDao {
                     legs: [],
                     hands: [],
                     feet: ['shoes', 'maroon'],
+                    mask: [],
                 },
             },
         },

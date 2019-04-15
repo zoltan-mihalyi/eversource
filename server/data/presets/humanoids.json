@@ -1,0 +1,1703 @@
+{
+  "orc": {
+    "appearance": {
+      "sex": "male",
+      "body": [
+        "orc"
+      ],
+      "eyes": [],
+      "ears": [],
+      "hair": [],
+      "nose": [],
+      "facial": []
+    },
+    "equipment": {
+      "chest": [],
+      "shirt": [],
+      "feet": [
+        "shoes",
+        "black"
+      ],
+      "head": [],
+      "legs": [
+        "pants",
+        "brown"
+      ],
+      "hands": [],
+      "arms": [],
+      "cape": [],
+      "belt": [],
+      "mask": []
+    },
+    "name": "Orc",
+    "attitude": "hostile",
+    "level": 6
+  },
+  "diana": {
+    "appearance": {
+      "sex": "female",
+      "body": [
+        "normal",
+        "darkelf2"
+      ],
+      "eyes": [
+        "normal",
+        "purple"
+      ],
+      "ears": [
+        "elvenears"
+      ],
+      "hair": [
+        "princess",
+        "pink2"
+      ],
+      "nose": [],
+      "facial": []
+    },
+    "equipment": {
+      "chest": [
+        "vest"
+      ],
+      "shirt": [
+        "underdress"
+      ],
+      "feet": [
+        "shoes",
+        "black"
+      ],
+      "head": [],
+      "legs": [
+        "robe_skirt",
+        "teal"
+      ],
+      "hands": [],
+      "arms": [],
+      "cape": [],
+      "belt": [
+        "overskirt"
+      ],
+      "mask": []
+    },
+    "name": "Diana",
+    "level": 15,
+    "story": "I love the smell of the fields."
+  },
+  "cacal": {
+    "appearance": {
+      "sex": "female",
+      "body": [
+        "normal",
+        "dark2"
+      ],
+      "eyes": [
+        "normal"
+      ],
+      "ears": [],
+      "hair": [
+        "jewfro",
+        "brown"
+      ],
+      "nose": [],
+      "facial": []
+    },
+    "equipment": {
+      "chest": [],
+      "shirt": [
+        "sleeveless",
+        "maroon"
+      ],
+      "feet": [
+        "shoes",
+        "white"
+      ],
+      "head": [],
+      "legs": [
+        "pants",
+        "brown"
+      ],
+      "hands": [],
+      "arms": [],
+      "cape": [],
+      "belt": [],
+      "mask": []
+    },
+    "name": "Cacal",
+    "level": 16,
+    "story": "I'm just stayin here."
+  },
+  "priest": {
+    "appearance": {
+      "sex": "male",
+      "body": [
+        "normal"
+      ],
+      "nose": [
+        "straightnose"
+      ],
+      "hair": [
+        "bangs"
+      ],
+      "eyes": [
+        "normal",
+        "brown"
+      ],
+      "ears": [],
+      "facial": []
+    },
+    "equipment": {
+      "shirt": [
+        "long_sleeve",
+        "white"
+      ],
+      "legs": [
+        "robe_skirt",
+        "white"
+      ],
+      "head": [
+        "cloth_hood",
+        "white"
+      ],
+      "feet": [
+        "shoes",
+        "white"
+      ],
+      "chest": [],
+      "hands": [],
+      "arms": [],
+      "cape": [
+        "normal",
+        "white"
+      ],
+      "belt": [],
+      "mask": []
+    },
+    "name": "Priest",
+    "level": 8
+  },
+  "warlock": {
+    "appearance": {
+      "sex": "male",
+      "body": [
+        "normal"
+      ],
+      "nose": [
+        "straightnose"
+      ],
+      "hair": [
+        "bangs"
+      ],
+      "eyes": [
+        "normal",
+        "red"
+      ],
+      "ears": [],
+      "facial": []
+    },
+    "equipment": {
+      "shirt": [
+        "long_sleeve",
+        "black"
+      ],
+      "legs": [
+        "robe_skirt",
+        "black"
+      ],
+      "head": [
+        "cloth_hood",
+        "black"
+      ],
+      "feet": [
+        "shoes",
+        "black"
+      ],
+      "chest": [],
+      "hands": [],
+      "arms": [],
+      "cape": [],
+      "belt": [],
+      "mask": []
+    },
+    "name": "Warlock",
+    "level": 10
+  },
+  "mage": {
+    "appearance": {
+      "sex": "female",
+      "body": [
+        "normal",
+        "tanned"
+      ],
+      "nose": [],
+      "hair": [],
+      "eyes": [],
+      "ears": [],
+      "facial": []
+    },
+    "equipment": {
+      "shirt": [
+        "sleeveless",
+        "red"
+      ],
+      "legs": [
+        "robe_skirt",
+        "red"
+      ],
+      "head": [
+        "cloth_hood",
+        "red"
+      ],
+      "feet": [
+        "shoes",
+        "black"
+      ],
+      "chest": [],
+      "hands": [],
+      "arms": [],
+      "cape": [],
+      "belt": [],
+      "mask": []
+    },
+    "name": "Mage",
+    "level": 10
+  },
+  "monk": {
+    "appearance": {
+      "sex": "male",
+      "body": [
+        "normal",
+        "tanned2"
+      ],
+      "nose": [
+        "bignose"
+      ],
+      "hair": [],
+      "eyes": [
+        "normal",
+        "brown"
+      ],
+      "ears": [],
+      "facial": []
+    },
+    "equipment": {
+      "shirt": [
+        "long_sleeve"
+      ],
+      "legs": [
+        "robe_skirt"
+      ],
+      "head": [
+        "cloth_hood"
+      ],
+      "feet": [],
+      "chest": [],
+      "hands": [],
+      "arms": [],
+      "cape": [],
+      "belt": [
+        "cloth"
+      ],
+      "mask": []
+    },
+    "name": "Monk",
+    "level": 6
+  },
+  "knight": {
+    "appearance": {
+      "sex": "male",
+      "body": [
+        "normal",
+        "tanned"
+      ],
+      "nose": [],
+      "hair": [],
+      "eyes": [],
+      "ears": [],
+      "facial": []
+    },
+    "equipment": {
+      "shirt": [],
+      "legs": [
+        "plate"
+      ],
+      "head": [
+        "metal_helm"
+      ],
+      "feet": [
+        "plate"
+      ],
+      "chest": [
+        "plate"
+      ],
+      "hands": [
+        "gloves",
+        "steel"
+      ],
+      "arms": [
+        "plate"
+      ],
+      "cape": [],
+      "belt": [],
+      "mask": []
+    },
+    "name": "Knight",
+    "level": 14
+  },
+  "knight_mail": {
+    "appearance": {
+      "sex": "male",
+      "body": [
+        "normal",
+        "tanned"
+      ],
+      "nose": [
+        "straightnose"
+      ],
+      "hair": [],
+      "eyes": [],
+      "ears": [],
+      "facial": []
+    },
+    "equipment": {
+      "shirt": [],
+      "legs": [
+        "plate"
+      ],
+      "head": [
+        "chain_hood"
+      ],
+      "feet": [
+        "plate"
+      ],
+      "chest": [
+        "mail"
+      ],
+      "hands": [
+        "gloves",
+        "steel"
+      ],
+      "arms": [],
+      "cape": [
+        "bordered",
+        "maroon"
+      ],
+      "belt": [],
+      "mask": []
+    },
+    "name": "Lieutenant Murova",
+    "level": 20
+  },
+  "kumas": {
+    "appearance": {
+      "sex": "male",
+      "body": [
+        "normal",
+        "dark2"
+      ],
+      "nose": [
+        "bignose"
+      ],
+      "hair": [
+        "shortknot",
+        "blue"
+      ],
+      "eyes": [
+        "normal",
+        "orange"
+      ],
+      "ears": [
+        "elvenears"
+      ],
+      "facial": [
+        "beard",
+        "blue"
+      ]
+    },
+    "equipment": {
+      "shirt": [
+        "long_sleeve",
+        "teal"
+      ],
+      "legs": [
+        "pants",
+        "brown"
+      ],
+      "head": [],
+      "feet": [
+        "shoes",
+        "maroon"
+      ],
+      "chest": [],
+      "hands": [],
+      "arms": [],
+      "cape": [],
+      "belt": [
+        "cloth",
+        "teal"
+      ],
+      "mask": [
+        "formal_glasses"
+      ]
+    },
+    "name": "Kumas",
+    "level": 18
+  },
+  "nefag": {
+    "appearance": {
+      "sex": "male",
+      "body": [
+        "normal",
+        "tanned"
+      ],
+      "nose": [
+        "straightnose"
+      ],
+      "hair": [
+        "bedhead",
+        "white"
+      ],
+      "eyes": [
+        "normal"
+      ],
+      "ears": [],
+      "facial": [
+        "beard",
+        "gray"
+      ]
+    },
+    "equipment": {
+      "shirt": [],
+      "legs": [
+        "pants",
+        "green"
+      ],
+      "head": [
+        "leather_cap",
+        "green"
+      ],
+      "feet": [
+        "shoes"
+      ],
+      "chest": [
+        "leather_chest",
+        "green"
+      ],
+      "hands": [
+        "gloves"
+      ],
+      "arms": [],
+      "cape": [],
+      "belt": [],
+      "mask": []
+    },
+    "name": "Forester Nefag",
+    "level": 6,
+    "story": "Long time ago this place was a forest."
+  },
+  "bandit": {
+    "appearance": {
+      "sex": "male",
+      "body": [
+        "normal",
+        "dark"
+      ],
+      "nose": [
+        "bignose"
+      ],
+      "hair": [
+        "bangslong",
+        "brown"
+      ],
+      "eyes": [],
+      "ears": [],
+      "facial": [
+        "fiveoclock",
+        "black"
+      ]
+    },
+    "equipment": {
+      "shirt": [
+        "long_sleeve",
+        "white"
+      ],
+      "legs": [
+        "pants",
+        "brown"
+      ],
+      "head": [
+        "bandana"
+      ],
+      "feet": [
+        "shoes",
+        "black"
+      ],
+      "chest": [],
+      "hands": [],
+      "arms": [],
+      "cape": [],
+      "belt": [],
+      "mask": [
+        "patch"
+      ]
+    },
+    "name": "Bandit",
+    "attitude": "hostile",
+    "level": 4
+  },
+  "bandit_dock": {
+    "appearance": {
+      "sex": "male",
+      "body": [
+        "normal",
+        "tanned"
+      ],
+      "nose": [
+        "bignose"
+      ],
+      "hair": [
+        "pixie",
+        "blonde2"
+      ],
+      "eyes": [
+        "normal",
+        "gray"
+      ],
+      "ears": [],
+      "facial": []
+    },
+    "equipment": {
+      "shirt": [
+        "long_sleeve",
+        "white"
+      ],
+      "legs": [
+        "pants",
+        "green"
+      ],
+      "head": [
+        "bandana",
+        "purple"
+      ],
+      "feet": [
+        "shoes",
+        "black"
+      ],
+      "chest": [],
+      "hands": [],
+      "arms": [],
+      "cape": [],
+      "belt": [],
+      "mask": []
+    },
+    "name": "Apprentice Bandit",
+    "attitude": "hostile",
+    "scale": 0.9,
+    "level": 2
+  },
+  "skeleton_warlock": {
+    "appearance": {
+      "sex": "male",
+      "body": [
+        "skeleton"
+      ],
+      "nose": [],
+      "hair": [],
+      "eyes": [],
+      "ears": [],
+      "facial": []
+    },
+    "equipment": {
+      "shirt": [],
+      "legs": [
+        "robe_skirt",
+        "black"
+      ],
+      "head": [
+        "cloth_hood",
+        "black"
+      ],
+      "feet": [],
+      "chest": [],
+      "hands": [],
+      "arms": [],
+      "cape": [],
+      "belt": [],
+      "mask": []
+    },
+    "name": "Skeleton Warlock",
+    "attitude": "hostile",
+    "level": 8
+  },
+  "skeleton_hunter": {
+    "appearance": {
+      "sex": "male",
+      "body": [
+        "skeleton",
+        "dark"
+      ],
+      "nose": [],
+      "hair": [
+        "bedhead",
+        "gray2"
+      ],
+      "eyes": [],
+      "ears": [],
+      "facial": []
+    },
+    "equipment": {
+      "shirt": [],
+      "legs": [
+        "pants",
+        "brown"
+      ],
+      "head": [
+        "leather_cap"
+      ],
+      "feet": [],
+      "chest": [
+        "leather_chest"
+      ],
+      "hands": [],
+      "arms": [],
+      "cape": [],
+      "belt": [],
+      "mask": []
+    },
+    "name": "Skeleton Hunter",
+    "attitude": "hostile",
+    "level": 7
+  },
+  "skeleton_lava_warrior": {
+    "appearance": {
+      "sex": "male",
+      "body": [
+        "skeleton",
+        "lava"
+      ],
+      "nose": [],
+      "hair": [],
+      "eyes": [],
+      "ears": [],
+      "facial": []
+    },
+    "equipment": {
+      "shirt": [],
+      "legs": [
+        "plate"
+      ],
+      "head": [
+        "chain_hood"
+      ],
+      "feet": [
+        "plate"
+      ],
+      "chest": [
+        "plate"
+      ],
+      "hands": [],
+      "arms": [],
+      "cape": [
+        "tattered",
+        "maroon"
+      ],
+      "belt": [],
+      "mask": []
+    },
+    "name": "Skeleton Lava Warrior",
+    "attitude": "hostile",
+    "scale": 1.2,
+    "level": 10
+  },
+  "skeleton_punk": {
+    "appearance": {
+      "sex": "male",
+      "body": [
+        "skeleton",
+        "dark"
+      ],
+      "nose": [],
+      "hair": [
+        "mohawk",
+        "green2"
+      ],
+      "eyes": [],
+      "ears": [],
+      "facial": []
+    },
+    "equipment": {
+      "shirt": [],
+      "legs": [],
+      "head": [],
+      "feet": [],
+      "chest": [],
+      "hands": [],
+      "arms": [],
+      "cape": [],
+      "belt": [],
+      "mask": []
+    },
+    "name": "Skeleton Punk",
+    "attitude": "hostile",
+    "level": 6
+  },
+  "skeleton_priest": {
+    "appearance": {
+      "sex": "male",
+      "body": [
+        "skeleton",
+        "dark"
+      ],
+      "nose": [],
+      "hair": [],
+      "eyes": [],
+      "ears": [],
+      "facial": []
+    },
+    "equipment": {
+      "shirt": [],
+      "legs": [
+        "robe_skirt",
+        "white"
+      ],
+      "head": [
+        "cloth_hood",
+        "white"
+      ],
+      "feet": [],
+      "chest": [],
+      "hands": [],
+      "arms": [],
+      "cape": [],
+      "belt": [],
+      "mask": []
+    },
+    "name": "Skeleton Priest",
+    "attitude": "hostile",
+    "level": 8
+  },
+  "protector": {
+    "appearance": {
+      "sex": "male",
+      "body": [
+        "normal",
+        "tanned"
+      ],
+      "nose": [
+        "buttonnose"
+      ],
+      "hair": [
+        "pixie",
+        "brown"
+      ],
+      "eyes": [
+        "normal"
+      ],
+      "ears": [
+        "elvenears"
+      ],
+      "facial": [
+        "mustache",
+        "brown"
+      ]
+    },
+    "equipment": {
+      "shirt": [],
+      "legs": [
+        "plate"
+      ],
+      "head": [
+        "chainhat",
+        "blue"
+      ],
+      "feet": [
+        "plate"
+      ],
+      "chest": [
+        "plate"
+      ],
+      "hands": [],
+      "arms": [
+        "plate"
+      ],
+      "cape": [
+        "normal",
+        "blue"
+      ],
+      "belt": [],
+      "mask": []
+    },
+    "name": "Protector Treguna",
+    "level": 20,
+    "story": "We really need your help to protect the city."
+  },
+  "bronze": {
+    "appearance": {
+      "sex": "female",
+      "body": [
+        "normal",
+        "tanned"
+      ],
+      "nose": [],
+      "hair": [],
+      "eyes": [],
+      "ears": [],
+      "facial": []
+    },
+    "equipment": {
+      "shirt": [],
+      "legs": [
+        "plate",
+        "bronze"
+      ],
+      "head": [
+        "ornate_metal_helm",
+        "bronze"
+      ],
+      "feet": [
+        "plate",
+        "bronze"
+      ],
+      "chest": [
+        "plate",
+        "bronze"
+      ],
+      "hands": [
+        "gloves",
+        "bronze"
+      ],
+      "arms": [
+        "plate",
+        "bronze"
+      ],
+      "cape": [
+        "normal",
+        "blue"
+      ],
+      "belt": [],
+      "mask": []
+    },
+    "name": "Bronze Champion",
+    "level": 16
+  },
+  "dark": {
+    "appearance": {
+      "sex": "male",
+      "body": [
+        "normal",
+        "dark2"
+      ],
+      "nose": [],
+      "hair": [],
+      "eyes": [],
+      "ears": [],
+      "facial": []
+    },
+    "equipment": {
+      "shirt": [],
+      "legs": [
+        "plate",
+        "dark"
+      ],
+      "head": [
+        "metal_helm",
+        "dark"
+      ],
+      "feet": [
+        "plate",
+        "dark"
+      ],
+      "chest": [
+        "plate",
+        "dark"
+      ],
+      "hands": [
+        "gloves",
+        "dark"
+      ],
+      "arms": [
+        "plate",
+        "dark"
+      ],
+      "cape": [],
+      "belt": [],
+      "mask": []
+    },
+    "name": "Dark Champion",
+    "scale": 1,
+    "level": 15,
+    "story": "Greetings, %class%!"
+  },
+  "silver": {
+    "appearance": {
+      "sex": "female",
+      "body": [
+        "normal"
+      ],
+      "nose": [],
+      "hair": [],
+      "eyes": [],
+      "ears": [],
+      "facial": []
+    },
+    "equipment": {
+      "shirt": [],
+      "legs": [
+        "plate",
+        "silver"
+      ],
+      "head": [
+        "ornate_metal_helm",
+        "silver"
+      ],
+      "feet": [
+        "plate",
+        "silver"
+      ],
+      "chest": [
+        "plate",
+        "silver"
+      ],
+      "hands": [
+        "gloves",
+        "silver"
+      ],
+      "arms": [
+        "plate",
+        "silver"
+      ],
+      "cape": [
+        "normal",
+        "green"
+      ],
+      "belt": [],
+      "mask": []
+    },
+    "name": "Silver Champion",
+    "level": 17
+  },
+  "dark_open": {
+    "appearance": {
+      "sex": "male",
+      "body": [
+        "normal",
+        "tanned"
+      ],
+      "nose": [],
+      "hair": [],
+      "eyes": [],
+      "ears": [],
+      "facial": []
+    },
+    "equipment": {
+      "shirt": [],
+      "legs": [
+        "plate",
+        "dark"
+      ],
+      "head": [
+        "ornate_metal_helm_open",
+        "dark"
+      ],
+      "feet": [
+        "plate",
+        "dark"
+      ],
+      "chest": [
+        "plate",
+        "dark"
+      ],
+      "hands": [
+        "gloves",
+        "dark"
+      ],
+      "arms": [
+        "plate",
+        "dark"
+      ],
+      "cape": [
+        "normal",
+        "black"
+      ],
+      "belt": [],
+      "mask": []
+    },
+    "name": "Dark George",
+    "level": 15
+  },
+  "mia_rak": {
+    "name": "Mia Rak",
+    "appearance": {
+      "sex": "female",
+      "body": [
+        "normal",
+        "tanned"
+      ],
+      "nose": [],
+      "hair": [
+        "xlong",
+        "brunette"
+      ],
+      "eyes": [],
+      "ears": [],
+      "facial": []
+    },
+    "equipment": {
+      "shirt": [
+        "sleeveless",
+        "white"
+      ],
+      "legs": [],
+      "head": [],
+      "cape": [],
+      "belt": [],
+      "arms": [],
+      "hands": [],
+      "feet": [
+        "shoes",
+        "white"
+      ],
+      "chest": [
+        "dress_with_sash"
+      ],
+      "mask": []
+    },
+    "level": 22
+  },
+  "kia_rak": {
+    "name": "Kia Rak",
+    "appearance": {
+      "sex": "female",
+      "body": [
+        "normal",
+        "tanned"
+      ],
+      "nose": [],
+      "hair": [
+        "xlong",
+        "brown"
+      ],
+      "eyes": [
+        "normal",
+        "brown"
+      ],
+      "ears": [],
+      "facial": []
+    },
+    "equipment": {
+      "shirt": [
+        "sleeveless"
+      ],
+      "legs": [],
+      "head": [],
+      "cape": [],
+      "belt": [],
+      "arms": [],
+      "hands": [],
+      "feet": [
+        "shoes",
+        "green"
+      ],
+      "chest": [
+        "dress_with_sash"
+      ],
+      "mask": []
+    },
+    "level": 22
+  },
+  "tia_rak": {
+    "name": "Tia Rak",
+    "appearance": {
+      "sex": "female",
+      "body": [
+        "normal",
+        "tanned2"
+      ],
+      "nose": [],
+      "hair": [
+        "long",
+        "brunette2"
+      ],
+      "eyes": [],
+      "ears": [],
+      "facial": []
+    },
+    "equipment": {
+      "shirt": [
+        "sara"
+      ],
+      "legs": [
+        "pants",
+        "teal"
+      ],
+      "head": [
+        "tiara",
+        "silver"
+      ],
+      "cape": [
+        "normal",
+        "gray"
+      ],
+      "belt": [],
+      "arms": [],
+      "hands": [],
+      "feet": [
+        "shoes",
+        "white"
+      ],
+      "chest": [],
+      "mask": []
+    },
+    "level": 22
+  },
+  "cactus_bonus": {
+    "name": "Cactus Bonus",
+    "appearance": {
+      "sex": "male",
+      "body": [
+        "normal",
+        "tanned2"
+      ],
+      "nose": [],
+      "hair": [],
+      "eyes": [
+        "normal",
+        "brown"
+      ],
+      "ears": [],
+      "facial": []
+    },
+    "equipment": {
+      "shirt": [],
+      "legs": [
+        "legion_skirt"
+      ],
+      "head": [
+        "legion3",
+        "brass"
+      ],
+      "cape": [
+        "normal",
+        "red"
+      ],
+      "belt": [],
+      "arms": [
+        "legion",
+        "brass"
+      ],
+      "hands": [],
+      "feet": [
+        "sandals"
+      ],
+      "chest": [
+        "plate",
+        "brass"
+      ],
+      "mask": []
+    },
+    "level": 25,
+    "story": "This place is in ruins. But We can rebuild it together!"
+  },
+  "obelus": {
+    "name": "Obelus",
+    "appearance": {
+      "sex": "male",
+      "body": [
+        "normal",
+        "tanned"
+      ],
+      "nose": [],
+      "hair": [],
+      "eyes": [],
+      "ears": [],
+      "facial": [
+        "bigstache",
+        "light-blonde"
+      ]
+    },
+    "equipment": {
+      "shirt": [],
+      "legs": [
+        "legion_skirt",
+        "red"
+      ],
+      "head": [
+        "legion1",
+        "steel"
+      ],
+      "cape": [],
+      "belt": [],
+      "arms": [
+        "legion",
+        "steel"
+      ],
+      "hands": [],
+      "feet": [
+        "sandals"
+      ],
+      "chest": [
+        "legion",
+        "steel"
+      ],
+      "mask": []
+    },
+    "level": 25,
+    "story": "You look like a foreign to me."
+  },
+  "legionary": {
+    "name": "Legionary",
+    "appearance": {
+      "sex": "male",
+      "body": [
+        "normal",
+        "tanned"
+      ],
+      "nose": [],
+      "hair": [],
+      "eyes": [],
+      "ears": [],
+      "facial": []
+    },
+    "equipment": {
+      "shirt": [],
+      "legs": [
+        "legion_skirt"
+      ],
+      "head": [
+        "legion1",
+        "brass"
+      ],
+      "cape": [],
+      "belt": [],
+      "arms": [
+        "legion",
+        "brass"
+      ],
+      "hands": [],
+      "feet": [
+        "sandals"
+      ],
+      "chest": [
+        "legion",
+        "brass"
+      ],
+      "mask": []
+    },
+    "level": 23
+  },
+  "butcher_bob": {
+    "name": "Butcher Bob",
+    "appearance": {
+      "sex": "male",
+      "body": [
+        "normal",
+        "tanned"
+      ],
+      "nose": [
+        "buttonnose"
+      ],
+      "hair": [],
+      "eyes": [],
+      "ears": [],
+      "facial": []
+    },
+    "equipment": {
+      "shirt": [],
+      "legs": [
+        "pants"
+      ],
+      "head": [],
+      "cape": [],
+      "belt": [
+        "leather"
+      ],
+      "arms": [],
+      "hands": [
+        "gloves",
+        "white"
+      ],
+      "feet": [
+        "shoes"
+      ],
+      "chest": [
+        "apron"
+      ],
+      "mask": []
+    },
+    "level": 10
+  },
+  "smith_sam": {
+    "name": "Smith Sam",
+    "appearance": {
+      "sex": "male",
+      "body": [
+        "normal",
+        "dark"
+      ],
+      "nose": [],
+      "hair": [],
+      "eyes": [
+        "normal",
+        "brown"
+      ],
+      "ears": [],
+      "facial": []
+    },
+    "equipment": {
+      "shirt": [
+        "long_sleeve",
+        "black"
+      ],
+      "legs": [
+        "pants",
+        "brown"
+      ],
+      "head": [],
+      "cape": [],
+      "belt": [],
+      "arms": [],
+      "hands": [
+        "gloves",
+        "gray"
+      ],
+      "feet": [
+        "shoes",
+        "black"
+      ],
+      "chest": [
+        "apron",
+        "gray"
+      ],
+      "mask": []
+    },
+    "level": 10
+  },
+  "miller_mike": {
+    "name": "Miller Mike",
+    "appearance": {
+      "sex": "male",
+      "body": [
+        "normal",
+        "tanned2"
+      ],
+      "nose": [
+        "straightnose"
+      ],
+      "hair": [],
+      "eyes": [
+        "normal",
+        "green"
+      ],
+      "ears": [],
+      "facial": []
+    },
+    "equipment": {
+      "shirt": [],
+      "legs": [
+        "pants",
+        "white"
+      ],
+      "head": [
+        "bandana",
+        "bright"
+      ],
+      "cape": [],
+      "belt": [],
+      "arms": [],
+      "hands": [
+        "gloves",
+        "white"
+      ],
+      "feet": [
+        "shoes",
+        "white"
+      ],
+      "chest": [
+        "apron",
+        "bright"
+      ],
+      "mask": []
+    },
+    "level": 10
+  },
+  "fishmonger_filomena": {
+    "name": "Fishmonger Filomena",
+    "appearance": {
+      "sex": "female",
+      "body": [
+        "normal",
+        "tanned2"
+      ],
+      "nose": [
+        "buttonnose"
+      ],
+      "hair": [
+        "bangs",
+        "dark-blonde"
+      ],
+      "eyes": [
+        "normal",
+        "orange"
+      ],
+      "ears": [],
+      "facial": []
+    },
+    "equipment": {
+      "shirt": [
+        "long_sleeve",
+        "blue_gray"
+      ],
+      "legs": [
+        "pants",
+        "green"
+      ],
+      "head": [],
+      "cape": [],
+      "belt": [
+        "cloth",
+        "brown"
+      ],
+      "arms": [],
+      "hands": [],
+      "feet": [
+        "shoes"
+      ],
+      "chest": [
+        "apron",
+        "brown"
+      ],
+      "mask": []
+    },
+    "level": 12
+  },
+  "gargon_servant": {
+    "name": "Gargon Servant",
+    "appearance": {
+      "sex": "male",
+      "body": [
+        "normal",
+        "orange"
+      ],
+      "nose": [],
+      "hair": [],
+      "eyes": [
+        "normal",
+        "green"
+      ],
+      "ears": [],
+      "facial": []
+    },
+    "equipment": {
+      "shirt": [
+        "long_sleeve",
+        "black"
+      ],
+      "legs": [
+        "pants",
+        "white"
+      ],
+      "head": [],
+      "cape": [],
+      "belt": [],
+      "arms": [],
+      "hands": [],
+      "feet": [
+        "sandals"
+      ],
+      "chest": [],
+      "mask": []
+    },
+    "attitude": "neutral",
+    "level": 23
+  },
+  "gargon_captain": {
+    "name": "Gargon Captain",
+    "appearance": {
+      "sex": "female",
+      "body": [
+        "normal",
+        "orange"
+      ],
+      "nose": [],
+      "hair": [
+        "longhawk",
+        "green2"
+      ],
+      "eyes": [
+        "normal",
+        "yellow"
+      ],
+      "ears": [],
+      "facial": []
+    },
+    "equipment": {
+      "shirt": [
+        "sleeveless"
+      ],
+      "legs": [
+        "plate"
+      ],
+      "head": [],
+      "cape": [],
+      "belt": [],
+      "arms": [],
+      "hands": [
+        "gloves",
+        "steel"
+      ],
+      "feet": [
+        "plate"
+      ],
+      "chest": [
+        "legion",
+        "steel"
+      ],
+      "mask": []
+    },
+    "attitude": "neutral",
+    "level": 25
+  },
+  "?": {
+    "name": "?",
+    "appearance": {
+      "sex": "female",
+      "body": [
+        "normal",
+        "tanned"
+      ],
+      "nose": [],
+      "facial": [],
+      "hair": [
+        "ponytail2",
+        "light-blonde"
+      ],
+      "eyes": [],
+      "ears": []
+    },
+    "equipment": {
+      "shirt": [
+        "underdress"
+      ],
+      "legs": [],
+      "head": [],
+      "cape": [],
+      "belt": [],
+      "arms": [],
+      "hands": [],
+      "feet": [],
+      "chest": [
+        "vest"
+      ],
+      "mask": [
+        "mask"
+      ]
+    },
+    "effects": [
+      {
+        "type": "fire",
+        "param": 1
+      }
+    ],
+    "level": 1
+  },
+  "wilhelm": {
+    "name": "Baron Wilhelm",
+    "appearance": {
+      "sex": "male",
+      "body": [
+        "normal"
+      ],
+      "nose": [],
+      "facial": [
+        "bigstache",
+        "brown"
+      ],
+      "hair": [
+        "bangslong",
+        "brown"
+      ],
+      "eyes": [],
+      "ears": []
+    },
+    "equipment": {
+      "shirt": [],
+      "legs": [
+        "plate",
+        "silver"
+      ],
+      "head": [],
+      "cape": [],
+      "belt": [],
+      "arms": [
+        "plate",
+        "silver"
+      ],
+      "hands": [
+        "gloves",
+        "silver"
+      ],
+      "feet": [
+        "shoes"
+      ],
+      "chest": [
+        "plate",
+        "silver"
+      ],
+      "mask": [
+        "formal_monocle"
+      ]
+    },
+    "level": 22,
+    "story": "Y-y-yes, S-S-Sir?"
+  },
+  "rufus": {
+    "name": "Rufus The Stoned",
+    "appearance": {
+      "sex": "male",
+      "body": [
+        "normal",
+        "tanned"
+      ],
+      "nose": [],
+      "facial": [
+        "bigstache",
+        "blonde2"
+      ],
+      "hair": [
+        "bangs",
+        "blonde2"
+      ],
+      "eyes": [],
+      "ears": []
+    },
+    "equipment": {
+      "shirt": [],
+      "legs": [
+        "plate",
+        "gold"
+      ],
+      "head": [],
+      "cape": [],
+      "belt": [],
+      "arms": [
+        "legion"
+      ],
+      "hands": [
+        "gloves",
+        "gold"
+      ],
+      "feet": [
+        "sandals"
+      ],
+      "chest": [
+        "legion"
+      ],
+      "mask": []
+    },
+    "effects": [
+      {
+        "type": "stone",
+        "param": 1
+      }
+    ],
+    "level": 25
+  }
+}

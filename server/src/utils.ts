@@ -1,4 +1,4 @@
-type Grouped<T> = {
+export type Grouped<T> = {
     [key: string]: T[] | undefined
 }
 

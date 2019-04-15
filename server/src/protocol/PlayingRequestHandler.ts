@@ -1,29 +1,36 @@
 import { ClientState } from './ClientState';
 import { Zone } from '../world/Zone';
 import { CharacterSelectionRequestHandler } from './CharacterSelectionRequestHandler';
-import { Entity, HiddenEntityData, HiddenPlayerInfo } from '../entity/Entity';
-import { CreatureEntity } from '../entity/CreatureEntity';
-import { EntityData, EntityId } from '../../../common/domain/EntityData';
-import { PlayerController } from '../entity/controller/PlayerController';
-import { canInteract } from '../../../common/game/Interaction';
 import { PlayerState } from '../../../common/protocol/PlayerState';
-import { QuestId, QuestInfo } from '../../../common/domain/InteractionTable';
-import { questInfoMap, questsById } from '../quest/QuestIndexer';
-import { DynamicDiffable } from './diffable/DynamicDiffable';
+import { QuestId } from '../../../common/domain/InteractionTable';
+import { DynamicDiffable, mapDiffs } from './diffable/DynamicDiffable';
 import { DiffablePlayerState } from './diffable/DiffablePlayerState';
 import { QuestLogItem } from '../../../common/protocol/QuestLogItem';
+import { Entity, EntityId } from '../../../common/es/Entity';
+import { ServerComponents } from '../es/ServerComponents';
+import { getInteractionTable, questRequirementsProgression } from '../es/InteractionSystem';
+import { NetworkComponents, PossibleInteraction, PossibleInteractions, } from '../../../common/components/NetworkComponents';
+import { Nullable } from '../../../common/util/Types';
+import { getDirection } from '../../../common/game/direction';
+import { Direction } from '../../../common/components/CommonComponents';
+import { CharacterInfo } from '../../../common/domain/CharacterInfo';
+import { CHAT_MESSAGE_MAXIMUM_LENGTH } from '../../../common/constants';
+import { QuestIndexer } from '../quest/QuestIndexer';
+import { InventoryItemInfo, SlotId } from '../../../common/protocol/Inventory';
+import { InventoryItem, itemInfo } from '../Item';
+import { distanceY } from '../../../common/domain/Location';
 
 export interface PlayerData {
+    entity: Entity<ServerComponents>;
+    characterInfo: CharacterInfo;
     zone: Zone;
-    character: CreatureEntity;
-    controller: PlayerController;
-    hidden: HiddenEntityData;
 }
 
 export class PlayingRequestHandler extends ClientState<PlayerData> {
-    private readonly worldDiff = new DynamicDiffable<EntityId, EntityData>();
+    private readonly worldDiff = new DynamicDiffable<EntityId, Nullable<NetworkComponents>>();
     private readonly playerStateDiff = new DiffablePlayerState();
     private readonly questLogDiff = new DynamicDiffable<QuestId, QuestLogItem>();
+    private readonly inventoryDiff = new DynamicDiffable<SlotId, InventoryItem>();
     private detectionDistance = 15;
 
     leave() {
@@ -36,7 +43,7 @@ export class PlayingRequestHandler extends ClientState<PlayerData> {
         const command = separatorIndex === -1 ? data : data.substring(0, separatorIndex); // todo duplicate
         const params = separatorIndex === -1 ? '' : data.substring(separatorIndex + 1);
 
-        const player = this.data.hidden.player!;
+        const entity = this.data.entity;
         switch (command) {
             case 'move': {
                 const split = params.split(',');
@@ -48,7 +55,11 @@ export class PlayingRequestHandler extends ClientState<PlayerData> {
                 if (!validNumber(sX) || !validNumber(sY)) {
                     return;
                 }
-                this.data.controller.move(sX, sY);
+                entity.set('moving', {
+                    running: true,
+                    x: sX,
+                    y: sY,
+                });
                 break;
             }
             case 'interact': {
@@ -56,39 +67,55 @@ export class PlayingRequestHandler extends ClientState<PlayerData> {
                 if (isNaN(id)) {
                     return;
                 }
-                const entity = this.data.zone.getEntity(id as EntityId);
-                if (!entity) {
+                const targetEntity = this.data.zone.getEntity(id as EntityId);
+                if (!targetEntity) {
                     return;
                 }
-                const entityData = entity.getFor(player.details);
-                if (!canInteract(this.data.character.get(), entityData)) {
-                    return;
-                }
-                player.state.interacting = entity;
+                this.data.zone.eventBus.emit('tryInteract', {
+                    source: entity,
+                    target: targetEntity,
+                });
                 break;
             }
             case 'interact-end': {
-                player.state.interacting = void 0;
+                entity.unset('interacting');
                 break;
             }
             case 'accept-quest': {
-                const quest = findQuest(player, params, 'acceptable');
-                if (!quest) {
+                const questId = +params as QuestId;
+                if (isNaN(questId)) {
                     return;
                 }
-                const tasks = questsById[quest.id]!.tasks;
-                const progression = tasks ? tasks.list.map(() => 0) : [];
-                player.details.questLog.set(quest.id, progression);
+
+                this.data.zone.eventBus.emit('tryAcceptQuest', { entity, questId });
                 break;
             }
             case 'complete-quest': {
-                const quest = findQuest(player, params, 'completable');
-                if (!quest) {
+                const questId = +params as QuestId;
+                if (isNaN(questId)) {
                     return;
                 }
-                player.details.questLog.delete(quest.id);
-                player.details.questsDone.add(quest.id);
+
+                this.data.zone.eventBus.emit('tryCompleteQuest', { entity, questId });
                 break;
+            }
+            case 'abandon-quest': {
+                const questId = +params as QuestId;
+                if (isNaN(questId)) {
+                    return;
+                }
+
+                this.data.zone.eventBus.emit('tryAbandonQuest', { entity, questId });
+                break;
+            }
+            case 'chat-message': {
+                if (params.trim() === '') {
+                    break;
+                }
+                this.data.zone.eventBus.emit('chatMessage', {
+                    sender: entity,
+                    text: params.substring(0, CHAT_MESSAGE_MAXIMUM_LENGTH),
+                });
             }
         }
     }
@@ -102,28 +129,35 @@ export class PlayingRequestHandler extends ClientState<PlayerData> {
     }
 
     private cleanup() {
-        const { zone, character } = this.data;
+        const { zone, entity } = this.data;
 
         this.context.networkLoop.remove(this.networkUpdate);
-        zone.removeEntity(character);
+        zone.removeEntity(entity);
     }
 
-    private indexEntities(entities: Entity[]): Map<EntityId, EntityData> {
-        const result = new Map<EntityId, EntityData>();
+    private indexEntities(entities: Entity<ServerComponents>[]): Map<EntityId, Nullable<NetworkComponents>> {
+        const result = new Map<EntityId, Nullable<NetworkComponents>>();
         for (const entity of entities) {
-            result.set(entity.id, entity.getFor(this.data.hidden.player!.details));
+            result.set(entity.id, this.getFor(entity));
         }
         return result;
     }
 
     private sendPlayerData() {
-        const { state, details } = this.data.hidden.player!;
+        const { entity, characterInfo } = this.data;
 
-        let { interacting } = state;
+        const { interacting } = entity.components;
+
+        const questIndexer = this.context.world.dataContainer.questIndexer;
         const playerState: PlayerState = {
-            interaction: !interacting ? null : interacting.getInteractionsFor(details),
+            interaction: !interacting ? null : getInteractionTable(entity, interacting.entity, questIndexer),
             character: {
-                id: this.data.character.id,
+                sex: characterInfo.sex,
+                name: characterInfo.name,
+                classId: characterInfo.classId,
+                xp: entity.components.xp!.value,
+                level: entity.components.level!.value,
+                inventorySize: 32,
             },
         };
 
@@ -135,11 +169,20 @@ export class PlayingRequestHandler extends ClientState<PlayerData> {
     }
 
     private sendQuestLog() {
-        const questLog = this.data.hidden.player!.details.questLog;
+        const { questInfoMap, quests } = this.context.world.dataContainer.questIndexer;
+        const { quests: playerQuests, inventory } = this.data.entity.components;
+        const questLog = playerQuests!.questLog;
 
         const qLogByQ = new Map<QuestId, QuestLogItem>();
 
-        questLog.forEach((status, id) => qLogByQ.set(id, { info: questInfoMap.get(id)!, status }));
+        questLog.forEach((taskStatus, id) => {
+            const status = taskStatus === 'failed' ? taskStatus : [
+                ...taskStatus,
+                ...questRequirementsProgression(quests.get(id)!, inventory!),
+            ];
+
+            qLogByQ.set(id, { info: questInfoMap.get(id)!, status });
+        });
 
         const diffs = this.questLogDiff.update(qLogByQ);
 
@@ -148,11 +191,33 @@ export class PlayingRequestHandler extends ClientState<PlayerData> {
         }
     }
 
+    private sendInventory() {
+        const diffs = this.inventoryDiff.update(this.data.entity.components.inventory!.getMap());
+        const items = this.context.world.dataContainer.items;
+
+        if (diffs !== null) {
+            this.context.sendCommand('inventory', mapDiffs(diffs, (data, slotId) => {
+                const { count, itemId } = data;
+
+                const result: Partial<InventoryItemInfo> = {
+                    count,
+                    slotId,
+                };
+
+                if (itemId) {
+                    Object.assign(result, itemInfo(items, itemId));
+                }
+
+                return result;
+            }));
+        }
+    }
+
     private sendWorldData() {
-        const { character, zone } = this.data;
+        const { entity, zone } = this.data;
 
         const distance = this.detectionDistance;
-        const { x, y } = character.get().position;
+        const { x, y } = entity.components.position!; // TODO
         const entities = zone.query(x - distance, y - distance, x + distance, y + distance);
         const entityMap = this.indexEntities(entities);
 
@@ -163,9 +228,34 @@ export class PlayingRequestHandler extends ClientState<PlayerData> {
         }
     }
 
+    private getFor(entity: Entity<ServerComponents>): Nullable<NetworkComponents> {
+        const viewer = this.data.entity;
+
+        return {
+            ...pickOrNull(entity.components, [
+                'position',
+                'level',
+                'hp',
+                'view',
+                'direction',
+                'animation',
+                'activity',
+                'attitude',
+                'name',
+                'scale',
+                'effects',
+                'player',
+            ]),
+            direction: getFacingDirection(viewer, entity),
+            playerControllable: viewer === entity ? true : null,
+            possibleInteractions: getPossibleInteractions(viewer, entity, this.context.world.dataContainer.questIndexer) || null, // TODO
+        };
+    }
+
     private networkUpdate = () => {
         this.sendPlayerData();
         this.sendQuestLog();
+        this.sendInventory();
         this.sendWorldData();
     };
 }
@@ -174,15 +264,52 @@ function validNumber(num: number): boolean {
     return !isNaN(num) && isFinite(num);
 }
 
-function findQuest(player: HiddenPlayerInfo, params: string, type: 'acceptable' | 'completable'): QuestInfo | undefined {
-    const questId = +params as QuestId;
-    if (isNaN(questId)) {
-        return;
+
+function getFacingDirection(viewer: Entity<ServerComponents>, entity: Entity<ServerComponents>): Direction | null {
+    let direction = entity.components.direction || null;
+
+    const { interacting, position } = viewer.components;
+    if (position && interacting && interacting.entity === entity && entity.components.position) {
+        const entityPosition = entity.components.position;
+        direction = getDirection(position.x - entityPosition.x, distanceY(position.y, entityPosition.y)) || direction;
     }
-    const entity = player.state.interacting;
-    if (!entity) {
-        return;
+
+    return direction;
+}
+
+function getPossibleInteractions(source: Entity<ServerComponents>, target: Entity<ServerComponents>,
+                                 questIndexer: QuestIndexer): PossibleInteractions | null {
+
+    const interactionTable = getInteractionTable(source, target, questIndexer);
+    if (interactionTable === null) {
+        return null;
     }
-    const interactionTable = entity.getInteractionsFor(player.details);
-    return interactionTable[type].find(q => q.id === questId);
+
+    const interactions: PossibleInteraction[] = [];
+
+    const { completable, completableLater, acceptable } = interactionTable;
+    if (acceptable.length !== 0) {
+        interactions.push('quest');
+    }
+    if (completable.length !== 0) {
+        interactions.push('quest-complete');
+    }
+    if (completableLater.length !== 0) {
+        interactions.push('quest-complete-later');
+    }
+
+    if (interactions.length === 0) {
+        return ['story'];
+    }
+    return interactions;
+}
+
+function pickOrNull<T, K extends keyof T>(obj: T, keys: K[]): Nullable<Required<Pick<T, K>>> {
+    const result = {} as Nullable<Required<Pick<T, K>>>;
+
+    for (const key of keys) {
+        result[key] = obj[key] === void 0 ? null : obj[key];
+    }
+
+    return result;
 }

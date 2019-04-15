@@ -12,10 +12,8 @@ export class Chunk {
         const { map } = loadedMap;
 
         for (const container of [this.base, this.above]) {
-            container.x = chunkX;
-            container.y = chunkY;
-            container.scale.x = 1 / map.tilewidth;
-            container.scale.y = 1 / map.tileheight;
+            container.x = chunkX * map.tilewidth;
+            container.y = chunkY * map.tileheight;
         }
 
         for (const layer of loadedMap.layers) {

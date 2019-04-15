@@ -1,8 +1,13 @@
 import { InteractionTable } from '../domain/InteractionTable';
-import { EntityId } from '../domain/EntityData';
+import { ClassId } from '../domain/CharacterInfo';
 
-interface CharacterState {
-    id: EntityId;
+export interface CharacterState {
+    name: string;
+    sex: 'male' | 'female';
+    classId: ClassId;
+    level: number;
+    xp: number;
+    inventorySize: number;
 }
 
 export interface PlayerState {
