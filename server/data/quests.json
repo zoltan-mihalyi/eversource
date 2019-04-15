@@ -68,7 +68,23 @@
           "count": 1
         }
       ]
-    }
+    },
+    "rewards": [
+      {
+        "options": [
+          {
+            "type": "item",
+            "count": 1,
+            "itemId": 273
+          },
+          {
+            "type": "item",
+            "count": 1,
+            "itemId": 1002
+          }
+        ]
+      }
+    ]
   },
   "4": {
     "level": 2,

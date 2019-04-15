@@ -38,13 +38,13 @@ storiesOf('Common', module)
     .add('Checkbox', () => (
         <Panel padding>
             <div>
-                <Checkbox checked={true} onChange={noop} label="Remember password"/>
+                <Checkbox checked={true} onChange={noop}>Remember password</Checkbox>
             </div>
             <div>
-                <Checkbox checked={false} onChange={noop} label="Accept conditions"/>
+                <Checkbox checked={false} onChange={noop}>Accept conditions</Checkbox>
             </div>
             <div>
-                <Checkbox checked={true} disabled={true} onChange={noop} label="Disabled"/>
+                <Checkbox checked={true} disabled={true} onChange={noop}>Disabled</Checkbox>
             </div>
         </Panel>
     ))

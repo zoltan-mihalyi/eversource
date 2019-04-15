@@ -299,8 +299,8 @@ export class GameScreen extends React.Component<Props, State> {
         this.props.playingNetworkApi.acceptQuest(id);
     };
 
-    private completeQuest = (id: QuestId) => {
-        this.props.playingNetworkApi.completeQuest(id);
+    private completeQuest = (id: QuestId, selectedRewards: number[]) => {
+        this.props.playingNetworkApi.completeQuest(id, selectedRewards);
     };
 
     private closeInteraction = () => {

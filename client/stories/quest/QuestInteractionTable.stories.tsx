@@ -117,4 +117,9 @@ storiesOf('Quest/QuestInteractionTable', module)
         <QuestInteractionTable info={questInfo(1, 'Quest info', { rewards: REWARDS })} state={QuestItemState.ACCEPTABLE} onBack={noop}
                                onAccept={noop}
                                onComplete={noop}/>
+    ))
+    .add('rewards completable', () => (
+        <QuestInteractionTable info={questInfo(1, 'Quest info', { rewards: REWARDS })} state={QuestItemState.COMPLETABLE} onBack={noop}
+                               onAccept={noop}
+                               onComplete={noop}/>
     ));

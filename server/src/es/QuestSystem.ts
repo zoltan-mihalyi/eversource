@@ -51,17 +51,18 @@ export function questSystem(eventBus: EventBus<ServerEvents>, { questIndexer }: 
         quests.questLog.set(questId, progression);
         const { inventory } = entity.components;
         if (inventory && quest.provides) {
+            //TODO check inventory size
             entity.set('inventory', inventory.add(quest.provides));
         }
     });
 
-    eventBus.on('completeQuest', ({ entity, quests, quest }) => {
+    eventBus.on('completeQuest', ({ entity, quests, quest, selectedItems }) => {
         const questId = quest.id;
 
         const requiredItems = quest.requirements.map(inventoryItem);
         let inventory = entity.components.inventory!.remove(requiredItems);
 
-        inventory = inventory.add(quest.rewards.map(rewardOptions => inventoryItem(rewardOptions.options[0]))); // TODO Let the user chose
+        inventory = inventory.add(selectedItems.map(inventoryItem));
         //TODO check inventory size
 
         entity.set('inventory', inventory);

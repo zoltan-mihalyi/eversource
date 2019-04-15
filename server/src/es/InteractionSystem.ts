@@ -6,11 +6,12 @@ import { Quest } from '../quest/Quest';
 import { QuestProgression } from '../character/CharacterDetails';
 import { EntityContainer } from '../../../common/es/EntityContainer';
 import { Entity } from '../../../common/es/Entity';
-import { Position, distanceY } from '../../../common/domain/Location';
+import { distanceY, Position } from '../../../common/domain/Location';
 import { CreatureAttitude } from '../../../common/components/CommonComponents';
 import { QuestIndexer } from '../quest/QuestIndexer';
 import { CharacterInventory } from '../character/CharacterInventory';
 import { DataContainer } from '../data/DataContainer';
+import { ItemInfoWithCount } from '../../../common/protocol/ItemInfo';
 
 export function interactionSystem(entityContainer: EntityContainer<ServerComponents>, eventBus: EventBus<ServerEvents>,
                                   { questIndexer }: DataContainer) {
@@ -88,14 +89,30 @@ export function interactionSystem(entityContainer: EntityContainer<ServerCompone
         });
     });
 
-    eventBus.on('tryCompleteQuest', ({ entity, questId }) => {
+    eventBus.on('tryCompleteQuest', ({ entity, questId, selectedItems }) => {
         const questContext = findQuest(entity, questId, 'completable');
         if (!questContext) {
             return;
         }
 
+        const rewards = questContext.quest.rewards;
+        if (selectedItems.length !== rewards.length) {
+            return;
+        }
+
+        const selectedInventoryItems: ItemInfoWithCount[] = [];
+        for (let i = 0; i < selectedItems.length; i++) {
+            const itemIndex = selectedItems[i];
+            const questRewardInfo = rewards[i].options[itemIndex];
+            if (!questRewardInfo) {
+                return;
+            }
+            selectedInventoryItems.push(questRewardInfo);
+        }
+
         eventBus.emit('completeQuest', {
             entity,
+            selectedItems: selectedInventoryItems,
             quests: questContext.quests,
             quest: questContext.quest,
         });
