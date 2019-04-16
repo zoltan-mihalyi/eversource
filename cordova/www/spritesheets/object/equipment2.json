@@ -89,6 +89,10 @@
          "direction":"up",
          "image":"normal",
          "name":"cape-red"
+        },
+     "63":
+        {
+         "name":"bald-wig"
         }
     },
  "tilepropertytypes":
@@ -172,6 +176,10 @@
          "color":"string",
          "direction":"string",
          "image":"string",
+         "name":"string"
+        },
+     "63":
+        {
          "name":"string"
         }
     },

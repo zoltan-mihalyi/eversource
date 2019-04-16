@@ -230,7 +230,18 @@
         }
       ],
       "requirements": []
-    }
+    },
+    "rewards": [
+      {
+        "options": [
+          {
+            "type": "item",
+            "count": 1,
+            "itemId": 2000
+          }
+        ]
+      }
+    ]
   },
   "10": {
     "name": "Pick it",

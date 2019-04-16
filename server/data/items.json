@@ -513,5 +513,18 @@
         "dark"
       ]
     }
+  },
+  "2000": {
+    "name": "Bald Wig",
+    "image": "equipment2",
+    "animation": "bald-wig",
+    "quality": "epic",
+    "equip": {
+      "slotId": "head",
+      "image": [
+        "bald_helm"
+      ]
+    },
+    "lore": "Tricky, tricky!"
   }
 }
