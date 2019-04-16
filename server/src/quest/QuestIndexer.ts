@@ -1,5 +1,5 @@
 import { groupBy, Grouped } from '../utils';
-import { QuestId, QuestInfo, RequirementInfo, TaskInfo } from '../../../common/domain/InteractionTable';
+import { QuestId, QuestInfo, RequirementInfo, RewardOptionsInfo, TaskInfo } from '../../../common/domain/InteractionTable';
 import { questXpReward } from '../../../common/algorithms';
 import { PresetQuest, Quest, Tasks } from './Quest';
 import { itemInfo, Items } from '../Item';
@@ -39,6 +39,7 @@ export class QuestIndexer {
                 completion: quest.completion,
                 tasks,
                 requirements,
+                rewards: getRewards(quest, items),
             };
             if (questTasks) {
                 questInfo.progress = questTasks.progress;
@@ -63,5 +64,18 @@ function getRequirements(items: Items, questTasks?: Tasks): RequirementInfo[] {
     return questTasks.requirements.map(({ count, itemId }) => ({
         itemInfo: itemInfo(items, itemId),
         count,
+    }));
+}
+
+function getRewards(quest: Quest, items: Items): RewardOptionsInfo[] {
+    if (!quest.rewards) {
+        return [];
+    }
+    return quest.rewards.map((rewardOptions) => ({
+        options: rewardOptions.options.map(({ type, count, itemId }) => ({
+            type,
+            count,
+            itemInfo: itemInfo(items, itemId),
+        }))
     }));
 }

@@ -121,9 +121,9 @@ class RawLoginScreen extends React.Component<Props & WithStyles<ClassKeys>, Stat
                                     </div>
                                 </Centered>
                                 <div>
-                                    <Checkbox onChange={this.saveUsernameChanged} disabled={username === ''}
-                                              checked={saveUsername}
-                                              label="Save user name"/>
+                                    <Checkbox onChange={this.saveUsernameChanged} disabled={username === ''} checked={saveUsername}>
+                                        Save user name
+                                    </Checkbox>
                                 </div>
                                 <input type="submit" className={classes.hidden}/>
                             </form>

@@ -94,7 +94,7 @@
     },
     "lore": "Like a pirate! Harr!"
   },
-  "250": {
+  "253": {
     "name": "Golden Ornate Helm",
     "image": "equipment1",
     "animation": "ornate-metal-helm-gold",
@@ -104,6 +104,20 @@
       "image": [
         "ornate_metal_helm",
         "gold"
+      ]
+    }
+  },
+  "273": {
+    "name": "Golden Ornate Helm (Open)",
+    "image": "equipment1",
+    "animation": "ornate-metal-helm-open-gold",
+    "quality": "rare",
+    "equip": {
+      "slotId": "head",
+      "image": [
+        "ornate_metal_helm_open",
+        "gold",
+        "Better vision, less protection"
       ]
     }
   },
@@ -499,5 +513,18 @@
         "dark"
       ]
     }
+  },
+  "2000": {
+    "name": "Bald Wig",
+    "image": "equipment2",
+    "animation": "bald-wig",
+    "quality": "epic",
+    "equip": {
+      "slotId": "head",
+      "image": [
+        "bald_helm"
+      ]
+    },
+    "lore": "Tricky, tricky!"
   }
 }

@@ -9,11 +9,7 @@ import { QuestLogItem } from '../../../common/protocol/QuestLogItem';
 import { Entity, EntityId } from '../../../common/es/Entity';
 import { ServerComponents } from '../es/ServerComponents';
 import { getInteractionTable, questRequirementsProgression } from '../es/InteractionSystem';
-import {
-    NetworkComponents,
-    PossibleInteraction,
-    PossibleInteractions,
-} from '../../../common/components/NetworkComponents';
+import { NetworkComponents, PossibleInteraction, PossibleInteractions, } from '../../../common/components/NetworkComponents';
 import { Nullable } from '../../../common/util/Types';
 import { getDirection } from '../../../common/game/direction';
 import { Direction } from '../../../common/components/CommonComponents';
@@ -98,12 +94,16 @@ export class PlayingRequestHandler extends ClientState<PlayerData> {
                 break;
             }
             case 'complete-quest': {
-                const questId = +params as QuestId;
+                const questParams = params.split(',');
+                if (questParams.length === 0) {
+                    return;
+                }
+                const [questId, ...selectedItems] = questParams.map(Number);
                 if (isNaN(questId)) {
                     return;
                 }
 
-                this.data.zone.eventBus.emit('tryCompleteQuest', { entity, questId });
+                this.data.zone.eventBus.emit('tryCompleteQuest', { entity, questId: questId as QuestId, selectedItems });
                 break;
             }
             case 'abandon-quest': {

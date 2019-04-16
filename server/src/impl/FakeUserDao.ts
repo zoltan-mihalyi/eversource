@@ -88,7 +88,7 @@ export class FakeUserDao implements UserDao {
                     nose: ['straightnose'],
                 },
                 equipment: map({
-                    head: { itemId: 250 as ItemId, count: 1 },
+                    head: { itemId: 253 as ItemId, count: 1 },
                     cape: { itemId: 301 as ItemId, count: 1 },
                     arms: { itemId: 903 as ItemId, count: 1 },
                     chest: { itemId: 603 as ItemId, count: 1 },

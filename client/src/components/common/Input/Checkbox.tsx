@@ -11,11 +11,12 @@ const styles: StyleRules<ClassKeys> = {
         appearance: 'none',
         width: 20,
         height: 20,
-        verticalAlign: 'top',
+        verticalAlign: 'bottom',
         marginTop: 0,
         marginRight: 10,
 
         '&:before': {
+            backgroundColor: brown.darker,
             verticalAlign: 'top',
             display: 'inline-block',
             content: '""',
@@ -48,6 +49,8 @@ const styles: StyleRules<ClassKeys> = {
 
         [SMALL_DEVICE]: {
             width: 10,
+            height: 10,
+            marginRight: 5,
             '&:before': {
                 width: 10,
                 height: 10,
@@ -61,17 +64,16 @@ const styles: StyleRules<ClassKeys> = {
 export interface Props {
     checked: boolean;
     disabled?: boolean;
-    label: string;
     onChange: (checked: boolean) => void;
 }
 
 class RawCheckbox extends React.Component<Props & WithStyles<ClassKeys>> {
     render() {
-        const { classes, checked, disabled, label } = this.props;
+        const { classes, checked, disabled, children } = this.props;
         return (
             <label>
                 <input type="checkbox" checked={checked} disabled={disabled} onChange={this.onChange} className={classes.root}/>
-                {label}
+                {children}
             </label>
         );
     }

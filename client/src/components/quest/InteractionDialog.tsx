@@ -14,7 +14,7 @@ interface Props {
     interactions: InteractionTable;
     onClose: () => void;
     onAcceptQuest: (id: QuestId) => void;
-    onCompleteQuest: (id: QuestId) => void;
+    onCompleteQuest: (id: QuestId, selectedRewards: number[]) => void;
 }
 
 interface State {
@@ -94,8 +94,8 @@ export class InteractionDialog extends React.PureComponent<Props, State> {
         this.props.onAcceptQuest(this.state.selectedId!);
     };
 
-    private onComplete = () => {
-        this.props.onCompleteQuest(this.state.selectedId!);
+    private onComplete = (selectedRewards: number[]) => {
+        this.props.onCompleteQuest(this.state.selectedId!, selectedRewards);
     };
 }
 

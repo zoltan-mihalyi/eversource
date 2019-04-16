@@ -4,7 +4,7 @@ import { QuestId, QuestInfo } from '../../../common/domain/InteractionTable';
 import { Spell } from '../Spell';
 import { LootElement } from '../world/Presets';
 import { EquipmentSlotId } from '../../../common/domain/CharacterInfo';
-import { SlotId } from '../../../common/protocol/ItemInfo';
+import { ItemInfoWithCount, SlotId } from '../../../common/protocol/ItemInfo';
 
 export interface Hit {
     source: Entity<ServerComponents>;
@@ -43,6 +43,12 @@ export interface Update {
 interface TryCompleteQuest {
     entity: Entity<ServerComponents>;
     questId: QuestId;
+    selectedItems: number[];
+}
+
+interface TryAbandonQuest {
+    entity: Entity<ServerComponents>;
+    questId: QuestId;
 }
 
 interface TryInteract {
@@ -65,6 +71,7 @@ interface CompleteQuest {
     entity: Entity<ServerComponents>;
     quests: Quests;
     quest: QuestInfo;
+    selectedItems: ItemInfoWithCount[];
 }
 
 interface SpellCast {
@@ -103,7 +110,7 @@ export interface ServerEvents {
     tryInteract: TryInteract;
     tryAcceptQuest: TryAcceptQuest;
     tryCompleteQuest: TryCompleteQuest;
-    tryAbandonQuest: TryCompleteQuest;
+    tryAbandonQuest: TryAbandonQuest;
     acceptQuest: AcceptQuest;
     completeQuest: CompleteQuest;
     chatMessage: ChatMessageEvent;

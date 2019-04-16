@@ -1,12 +1,13 @@
 import { ServerEvents } from './ServerEvents';
 import { EventBus } from '../../../common/es/EventBus';
 import { Task } from '../quest/Quest';
-import { QuestId, RequirementInfo } from '../../../common/domain/InteractionTable';
+import { QuestId } from '../../../common/domain/InteractionTable';
 import { QuestProgression } from '../character/CharacterDetails';
 import { QuestLog, Quests } from './ServerComponents';
 import { InventoryItem } from '../Item';
 import { DataContainer } from '../data/DataContainer';
 import { Spell } from '../Spell';
+import { ItemInfoWithCount } from '../../../common/protocol/ItemInfo';
 
 type QuestUpdate = 'none' | 'increase' | { setValue: number };
 
@@ -50,18 +51,20 @@ export function questSystem(eventBus: EventBus<ServerEvents>, { questIndexer }: 
         quests.questLog.set(questId, progression);
         const { inventory } = entity.components;
         if (inventory && quest.provides) {
+            //TODO check inventory size
             entity.set('inventory', inventory.add(quest.provides));
         }
     });
 
-    eventBus.on('completeQuest', ({ entity, quests, quest }) => {
+    eventBus.on('completeQuest', ({ entity, quests, quest, selectedItems }) => {
         const questId = quest.id;
 
-        const requiredItems = quest.requirements.map(({ itemInfo, count }: RequirementInfo): InventoryItem => ({
-            itemId: itemInfo.id,
-            count,
-        }));
-        const inventory = entity.components.inventory!.remove(requiredItems);
+        const requiredItems = quest.requirements.map(inventoryItem);
+        let inventory = entity.components.inventory!.remove(requiredItems);
+
+        inventory = inventory.add(selectedItems.map(inventoryItem));
+        //TODO check inventory size
+
         entity.set('inventory', inventory);
 
         quests.questLog.delete(questId);
@@ -130,6 +133,13 @@ function updateQuest(questLog: QuestLog, questId: QuestId, task: Task, taskIndex
 
 function increase(hasIncrease: boolean): QuestUpdate {
     return hasIncrease ? 'increase' : 'none';
+}
+
+function inventoryItem({ itemInfo, count }: ItemInfoWithCount): InventoryItem {
+    return {
+        itemId: itemInfo.id,
+        count,
+    };
 }
 
 export function spellMatchesTask(task: Task, spell: Spell): boolean {

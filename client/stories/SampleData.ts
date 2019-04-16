@@ -3,7 +3,7 @@ import { QuestLogItem } from '../../common/protocol/QuestLogItem';
 import { QuestStatus } from '../../server/src/character/CharacterDetails';
 import { EntityId } from '../../common/es/Entity';
 import { CharacterState } from '../../common/protocol/PlayerState';
-import { ItemId, ItemInfo, ItemInfoWithCount, SlotId } from '../../common/protocol/ItemInfo';
+import { ItemId, ItemInfo, ItemInfoWithCount } from '../../common/protocol/ItemInfo';
 import { TextureLoader } from '../src/loader/TextureLoader';
 import { CancellableProcess } from '../../common/util/CancellableProcess';
 import { PlayingNetworkApi } from '../src/protocol/PlayingState';
@@ -22,7 +22,7 @@ app.stage.addChild(appContainer);
 function noop() {
 }
 
-const ITEM_INFO: ItemInfo = {
+export const ITEM_INFO: ItemInfo = {
     id: 0 as ItemId,
     name: 'Sting of the Queen Bee',
     image: 'plants',
@@ -48,6 +48,7 @@ export function questInfo(id: number, name: string, extra?: Partial<QuestInfo>):
         description: 'The lava slimes are causing so much trouble these days! We need an experienced %class% to solve this.',
         taskDescription: 'Slay the intruders and explore the area!',
         progress: 'Come back once you are done!',
+        rewards: [],
         ...extra,
     };
 }
