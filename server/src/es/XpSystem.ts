@@ -36,5 +36,7 @@ function addXp(entity: Entity<ServerComponents>, amount: number) {
     }
 
     entity.set('xp', { value: newXp });
-    entity.set('level', { value: newLevel });
+    if (newLevel !== level.value) {
+        entity.set('level', { value: newLevel });
+    }
 }

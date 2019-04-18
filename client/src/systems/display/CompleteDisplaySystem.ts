@@ -20,7 +20,7 @@ import { displayChatSystem } from './DisplayChatSystem';
 import { displayEffectAnimationSystem } from './DisplayEffectAnimationSystem';
 
 export function completeDisplaySystem(entityContainer: EntityContainer<ClientComponents>,
-                                      eventBus: EventBus<ClientEvents>, metric: Metric, textureLoader:TextureLoader) {
+                                      eventBus: EventBus<ClientEvents>, metric: Metric, textureLoader: TextureLoader): PIXI.Container {
 
     const objectContainer = new PIXI.Container();
 
@@ -36,6 +36,6 @@ export function completeDisplaySystem(entityContainer: EntityContainer<ClientCom
     displayAnimationSystem(entityContainer, eventBus);
     metadataLoaderSystem(entityContainer, textureLoader);
     displayChatSystem(entityContainer, eventBus, metric);
-    displayEffectAnimationSystem(entityContainer);
+    displayEffectAnimationSystem(entityContainer, eventBus);
     return objectContainer;
 }

@@ -10,6 +10,7 @@ import { Entity, EntityId } from '../../../common/es/Entity';
 import { TestScreen } from './TestScreen';
 import * as React from 'react';
 import { Direction } from '../../../common/components/CommonComponents';
+import * as PIXI from "pixi.js";
 
 const DIRECTIONS: Direction[] = [
     'right',
@@ -17,6 +18,13 @@ const DIRECTIONS: Direction[] = [
     'left',
     'up',
 ];
+
+export interface DisplayScreenComponents {
+    container: EntityContainer<ClientComponents>;
+    eventBus: EventBus<ClientEvents>;
+    objectContainer: PIXI.Container;
+    entity: Entity<ClientComponents>;
+}
 
 interface Props {
     template: Partial<ClientComponents>;
@@ -27,29 +35,40 @@ const metric = new Metric(32, 32);
 metric.scale = 2;
 
 export class DisplayScreen extends React.PureComponent<Props> {
-    private container = new EntityContainer<ClientComponents>();
-    private eventBus = new EventBus<ClientEvents>();
-    private objectContainer = completeDisplaySystem(this.container, this.eventBus, metric, textureLoader);
-
-    private entity: Entity<ClientComponents>;
+    private readonly screenComponents: DisplayScreenComponents;
 
     constructor(props: Props) {
         super(props);
-
-        this.eventBus.on('interact', () => {
-            const direction = this.entity.components.direction;
-            if (!direction) {
-                return;
-            }
-            this.entity.set('direction', nextValue(DIRECTIONS, direction));
-        });
-
-        this.entity = this.container.createEntityWithId(0 as EntityId, props.template);
+        this.screenComponents = createDisplayScreenComponents(props.template);
     }
 
     render() {
+        const { objectContainer, eventBus } = this.screenComponents;
+
         return (
-            <TestScreen display={this.objectContainer} eventBus={this.eventBus} backgroundColor={this.props.backgroundColor || 0xffcc88}/>
+            <TestScreen display={objectContainer} eventBus={eventBus} backgroundColor={this.props.backgroundColor}/>
         );
     }
+}
+
+export function createDisplayScreenComponents(template?: Partial<ClientComponents>): DisplayScreenComponents {
+    const container = new EntityContainer<ClientComponents>();
+    const eventBus = new EventBus<ClientEvents>();
+    const objectContainer = completeDisplaySystem(container, eventBus, metric, textureLoader);
+    const entity = container.createEntityWithId(0 as EntityId, template);
+
+    eventBus.on('interact', () => {
+        const direction = entity.components.direction;
+        if (!direction) {
+            return;
+        }
+        entity.set('direction', nextValue(DIRECTIONS, direction));
+    });
+
+    return {
+        container,
+        entity,
+        eventBus,
+        objectContainer,
+    };
 }

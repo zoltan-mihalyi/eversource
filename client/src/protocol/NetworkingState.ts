@@ -1,4 +1,4 @@
-import { ChatMessage, PlayerStateDiff, ResponseCommand, ResponseTypes } from '../../../common/protocol/Messages';
+import { Action, ChatMessage, PlayerStateDiff, ResponseCommand, ResponseTypes } from '../../../common/protocol/Messages';
 import { State } from '../../../common/util/StateManager';
 import { ErrorCode } from '../../../common/protocol/ErrorCode';
 import { CharacterInfo, EquipmentSlotId } from '../../../common/domain/CharacterInfo';
@@ -61,6 +61,9 @@ export abstract class NetworkingState<T> extends State<NetworkingContext, T> imp
     }
 
     chatMessage(message: ChatMessage) {
+    }
+
+    action(action: Action) {
     }
 
     playerState(playerState: PlayerStateDiff) {

@@ -3,6 +3,8 @@ import { ClientComponents } from '../../es/ClientComponents';
 import { PartialPick } from '../../../../common/util/Types';
 import { textureLoader } from '../../../stories/SampleData';
 import { EntityDisplay } from '../../display/EntityDisplay';
+import { EventBus } from '../../../../common/es/EventBus';
+import { ClientEvents } from '../../es/ClientEvents';
 import { EffectAnimation } from '../../../../common/components/CommonComponents';
 import AnimatedSprite = PIXI.extras.AnimatedSprite;
 
@@ -10,7 +12,7 @@ interface AnimationSpriteMapping {
     [animation: string]: AnimatedSprite | undefined;
 }
 
-export function displayEffectAnimationSystem(entityContainer: EntityContainer<ClientComponents>) {
+export function displayEffectAnimationSystem(entityContainer: EntityContainer<ClientComponents>, eventBus: EventBus<ClientEvents>) {
     const entities = entityContainer.createQuery('display', 'ambientAnimations');
 
     const animationSpriteMappings = new Map<EntityDisplay, AnimationSpriteMapping>();
@@ -22,6 +24,27 @@ export function displayEffectAnimationSystem(entityContainer: EntityContainer<Cl
         updateAmbientAnimations({ display, ambientAnimations: [] });
         animationSpriteMappings.delete(display);
     });
+
+    eventBus.on('effectAnimationAction', ({ entityId, effectAnimation }) => {
+        const entity = entityContainer.getEntity(entityId);
+        if (!entity) {
+            return;
+        }
+
+        const { display } = entity.components;
+        if (!display) {
+            return;
+        }
+
+        const animatedSprite = effectAnimationSprite(effectAnimation);
+        animatedSprite.loop = false;
+        animatedSprite.onComplete = () => {
+            animatedSprite.parent.removeChild(animatedSprite);
+            animatedSprite.destroy({ children: true });
+        };
+        display.animationEffectFg.addChild(animatedSprite);
+    });
+
 
     function updateAmbientAnimations({ display, ambientAnimations }: PartialPick<ClientComponents, 'display' | 'ambientAnimations'>) {
         let mapping = animationSpriteMappings.get(display);
