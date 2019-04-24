@@ -23,6 +23,7 @@ import { lootSystem } from '../es/LootSystem';
 import { DataContainer } from '../data/DataContainer';
 import { equipmentViewSystem } from '../es/EquipmentViewSystem';
 import { equipmentSystem } from '../es/EquipmentSystem';
+import { actionListenerIndexingSystem } from '../es/ActionListenerIndexingSystem';
 
 export class Zone {
     private entityContainer = new ServerEntityContainer();
@@ -33,6 +34,7 @@ export class Zone {
         spawnSystem(this.entityContainer, this.eventBus);
 
         this.index = spatialIndexingSystem(this.entityContainer, this.eventBus);
+        const listenerIndex = actionListenerIndexingSystem(this.entityContainer, this.eventBus);
         aiMovingSystem(this.entityContainer, this.eventBus);
         movingSystem(grid, this.entityContainer, this.eventBus);
         areaSystem(this.index, this.entityContainer, this.eventBus);
@@ -43,7 +45,7 @@ export class Zone {
         questSystem(this.eventBus, dataContainer);
         xpSystem(this.eventBus);
         spellSystem(this.eventBus, dataContainer);
-        chatSystem(this.index, this.eventBus);
+        chatSystem(listenerIndex, this.eventBus);
         lootSystem(this.eventBus, dataContainer);
         equipmentViewSystem(this.entityContainer, dataContainer);
         equipmentSystem(this.eventBus, dataContainer);

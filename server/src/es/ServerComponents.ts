@@ -73,7 +73,7 @@ export interface Quests {
     questsDone: Set<QuestId>;
 }
 
-interface ChatListener {
+export interface ActionListener {
     onChatMessage: (message: ChatMessage) => void;
 }
 
@@ -101,7 +101,7 @@ export interface ServerComponents extends CommonComponents {
     listening: true;
     useSpell: Spell;
     loot: LootElement[];
-    chatListener: ChatListener;
+    actionListener: ActionListener;
     inventory: CharacterInventory;
     equipment: Equipment;
     viewBase: ViewBase;

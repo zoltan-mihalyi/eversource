@@ -1,11 +1,9 @@
 import { EventBus } from '../../../common/es/EventBus';
 import { ServerEvents } from './ServerEvents';
 import * as rbush from "rbush";
-import { PositionBox } from './SpatialIndexingSystem';
+import { ListenerBox } from './ActionListenerIndexingSystem';
 
-const CHAT_DISTANCE = 18;
-
-export function chatSystem(index: rbush.RBush<PositionBox>, eventBus: EventBus<ServerEvents>) {
+export function chatSystem(listenerIndex: rbush.RBush<ListenerBox>, eventBus: EventBus<ServerEvents>) {
     eventBus.on('chatMessage', ({ sender, text }) => {
         const { position, name } = sender.components;
         if (!position || !name) {
@@ -14,25 +12,21 @@ export function chatSystem(index: rbush.RBush<PositionBox>, eventBus: EventBus<S
 
         const { x, y } = position;
 
-        const boxes = index.search({
-            minX: x - CHAT_DISTANCE,
-            minY: y - CHAT_DISTANCE,
-            maxX: x + CHAT_DISTANCE,
-            maxY: y + CHAT_DISTANCE,
+        const boxes = listenerIndex.search({
+            minX: x,
+            minY: y,
+            maxX: x,
+            maxY: y
         });
 
+        const message = {
+            sender: name.value,
+            entityId: sender.id,
+            text,
+        };
 
-        for (const entity of boxes) {
-            const { chatListener } = entity.entity.components;
-            if (!chatListener) {
-                continue;
-            }
-
-            chatListener.onChatMessage({
-                sender: name.value,
-                entityId: sender.id,
-                text,
-            });
+        for (const { actionListener } of boxes) {
+            actionListener.onChatMessage(message);
         }
     });
 }

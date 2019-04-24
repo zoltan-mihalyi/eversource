@@ -5,7 +5,6 @@ import { hpForLevel } from '../../../common/algorithms';
 import { CharacterDetails } from '../character/CharacterDetails';
 import { CreatureAttitude } from '../../../common/components/CommonComponents';
 import { CharacterInventory } from '../character/CharacterInventory';
-import { Equipment } from '../../../common/domain/CharacterInfo';
 
 export class LoadingRequestHandler extends ClientState<CharacterDetails> {
     private serverLoading = false;
@@ -56,7 +55,7 @@ export class LoadingRequestHandler extends ClientState<CharacterDetails> {
             weapon: {
                 damage: 1,
             },
-            chatListener: {
+            actionListener: {
                 onChatMessage: message => this.context.sendCommand('chatMessage', message),
             },
             inventory: new CharacterInventory(world.dataContainer.items, items)
