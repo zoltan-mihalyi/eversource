@@ -52,6 +52,13 @@ function applyEffect(effect: SpellEffect, eventBus: EventBus<ServerEvents>,
         case 'chat':
             eventBus.emit('chatMessage', { sender: effectTarget, text: evaluate(effect.text) });
             break;
+        case 'animation':
+            eventBus.emit('effectAnimation', {
+                target: effectTarget,
+                image: effect.image,
+                animation: effect.animation,
+            });
+            break;
     }
 }
 

@@ -4,13 +4,19 @@ import * as rbush from 'rbush';
 import { ListenerBox } from './ActionListenerIndexingSystem';
 import { Entity } from '../../../common/es/Entity';
 import { EffectAnimationAction } from '../../../common/protocol/Messages';
+import { EventBus } from '../../../common/es/EventBus';
+import { ServerEvents } from './ServerEvents';
 
-export function effectAnimationActionSystem(listenerIndex: rbush.RBush<ListenerBox>, container: EntityContainer<ServerComponents>) {
+export function effectAnimationActionSystem(listenerIndex: rbush.RBush<ListenerBox>,
+                                            container: EntityContainer<ServerComponents>, eventBus: EventBus<ServerEvents>) {
+
     const entitiesWithLevel = container.createQuery('level');
 
     entitiesWithLevel.on('update', (components, entity) => {
-        createEffectAnimation(entity, 'level-up', 'level-up');
+        eventBus.emit('effectAnimation', { target: entity, image: 'level-up', animation: 'level-up' })
     });
+
+    eventBus.on('effectAnimation', ({ target, image, animation }) => createEffectAnimation(target, image, animation));
 
     function createEffectAnimation(entity: Entity<ServerComponents>, image: string, animation: string) {
         const { position } = entity.components;
@@ -31,7 +37,7 @@ export function effectAnimationActionSystem(listenerIndex: rbush.RBush<ListenerB
         const action: EffectAnimationAction = {
             type: 'effect',
             entityId: entity.id,
-            effectAnimation: { image, animation }
+            effectAnimation: { image, animation },
         };
 
         for (const { actionListener } of listenerBoxes) {

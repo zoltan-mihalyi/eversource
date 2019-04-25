@@ -20,7 +20,7 @@ const TEMPLATE: Partial<ClientComponents> = {
     view: {
         type: 'object',
         image: 'plants',
-        animation: 'carrot'
+        animation: 'carrot',
     },
 };
 
@@ -47,24 +47,30 @@ function createToggleableEffectDemo(ambientAnimations: EffectAnimation[]) {
     );
 }
 
-function createActionAnimationDemo(effectAnimation: EffectAnimation) {
+function createActionAnimationDemo(effectAnimations: EffectAnimation[]) {
     const screenComponents = createDisplayScreenComponents({
         ...TEMPLATE,
         view: HUMANOID_VIEW,
     });
 
-    function fire() {
+    function fire(effectAnimation: EffectAnimation) {
         screenComponents.eventBus.emit('effectAnimationAction', { type: 'effect', entityId: screenComponents.entity.id, effectAnimation });
     }
 
     return (
         <>
             <TestScreen display={screenComponents.objectContainer} eventBus={screenComponents.eventBus} backgroundColor={0x1c6300}/>
-            <button onClick={fire}>Fire!</button>
+            {effectAnimations.map((animation, i) => (
+                <button key={i} onClick={() => fire(animation)}>{animation.image}</button>
+            ))}
         </>
     );
 }
 
 storiesOf('EffectAnimation', module)
     .add('quest-object-glow', () => createToggleableEffectDemo([{ image: 'quest-object-glow', animation: 'glow' }]))
-    .add('level-up', () => createActionAnimationDemo({ image: 'level-up', animation: 'level-up' }));
+    .add('action', () => createActionAnimationDemo([
+        { image: 'level-up', animation: 'level-up' },
+        { image: 'heal1', animation: 'heal1' },
+        { image: 'heal3', animation: 'heal3' },
+    ]));

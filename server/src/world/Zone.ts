@@ -50,7 +50,7 @@ export class Zone {
         lootSystem(this.eventBus, dataContainer);
         equipmentViewSystem(this.entityContainer, dataContainer);
         equipmentSystem(this.eventBus, dataContainer);
-        effectAnimationActionSystem(listenerIndex, this.entityContainer);
+        effectAnimationActionSystem(listenerIndex, this.entityContainer, this.eventBus);
     }
 
     createEntity(components: Partial<ServerComponents>): Entity<ServerComponents> {
