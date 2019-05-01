@@ -14,15 +14,16 @@ import { Gui } from '../common/Gui';
 import CharacterContext, { EMPTY_CHARACTER } from '../context/CharacterContext';
 import { ChatBox, MessageEntry } from '../chat/ChatBox';
 import { Positioned } from '../common/Positioned';
-import { Action, ChatMessage, FailedAction } from '../../../../common/protocol/Messages';
+import { Action, ChatMessage, FailedAction, QuestStatusAction } from '../../../../common/protocol/Messages';
 import { ItemInfoWithCount, SlotId } from '../../../../common/protocol/ItemInfo';
 import { TextureLoader } from '../../loader/TextureLoader';
 import TextureLoaderContext from '../context/TextureLoaderContext';
 import { Notifications } from './notification/Notifications';
-import { brown, level, quest, red, xp } from '../theme';
+import { level, quest, red, xp } from '../theme';
 import { isComplete } from '../quest/QuestLog';
 import { NotificationText } from './notification/NotificationText';
 import { EquipmentSlotId } from '../../../../common/domain/CharacterInfo';
+import { gui } from '../../audio/AudioEngine';
 
 const MAX_MESSAGES = 100;
 
@@ -161,6 +162,7 @@ export class GameScreen extends React.Component<Props, State> {
                 break;
             case 'quest-status':
                 this.addMessageEntry(action);
+                playQuestStatusSound(action);
         }
     }
 
@@ -355,4 +357,18 @@ function roundScale(scale: number): number {
         return Math.ceil(scale);
     }
     return Math.round(scale * 32) / 32;
+}
+
+function playQuestStatusSound(action: QuestStatusAction) {
+    switch (action.actionType) {
+        case 'accepted':
+            gui.playSound('quest-accept');
+            break;
+        case 'abandoned':
+            gui.playSound('quest-abandon');
+            break;
+        case 'completed':
+            gui.playSound('quest-done');
+            break;
+    }
 }

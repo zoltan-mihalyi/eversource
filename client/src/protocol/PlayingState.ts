@@ -76,10 +76,15 @@ export class PlayingState extends NetworkingState<PlayingStateData> implements P
     }
 
     action(action: Action) {
-        if (action.type === 'effect') {
-            this.game.eventBus.emit('effectAnimationAction', action);
-        } else {
-            this.gameScreen.action(action);
+        switch (action.type) {
+            case 'effect':
+                this.game.eventBus.emit('effectAnimationAction', action);
+                break;
+            case 'sound':
+                this.game.eventBus.emit('soundEffectAction', action);
+                break;
+            default:
+                this.gameScreen.action(action);
         }
     }
 

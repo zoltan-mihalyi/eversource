@@ -5,7 +5,8 @@ import { Spell } from '../Spell';
 import { LootElement } from '../world/Presets';
 import { EquipmentSlotId } from '../../../common/domain/CharacterInfo';
 import { ItemInfoWithCount, SlotId } from '../../../common/protocol/ItemInfo';
-import { EffectAnimation } from '../../../common/components/CommonComponents';
+import { Action } from '../../../common/protocol/Messages';
+import { Position } from '../../../common/domain/Location';
 
 export interface Hit {
     source: Entity<ServerComponents>;
@@ -97,8 +98,9 @@ interface UnequipEvent {
     equipmentSlotId: EquipmentSlotId;
 }
 
-interface EffectAnimationEvent extends EffectAnimation {
-    target: Entity<ServerComponents>;
+interface ActionEvent {
+    position: Position;
+    action: Action;
 }
 
 export interface ServerEvents {
@@ -119,7 +121,7 @@ export interface ServerEvents {
     acceptQuest: AcceptQuest;
     completeQuest: CompleteQuest;
     chatMessage: ChatMessageEvent;
-    effectAnimation: EffectAnimationEvent;
     equip: EquipEvent;
     unequip: UnequipEvent;
+    action: ActionEvent;
 }

@@ -8,6 +8,7 @@ import { spellMatchesTask } from './QuestSystem';
 import { Spell, SpellEffect } from '../Spell';
 import { Entity } from '../../../common/es/Entity';
 import { ServerComponents } from './ServerComponents';
+import { tryDispatchEffectAnimation, tryDispatchSoundEffect } from './ActionDispatcherSystem';
 
 
 export function spellSystem(eventBus: EventBus<ServerEvents>, dataContainer: DataContainer) {
@@ -53,11 +54,10 @@ function applyEffect(effect: SpellEffect, eventBus: EventBus<ServerEvents>,
             eventBus.emit('chatMessage', { sender: effectTarget, text: evaluate(effect.text) });
             break;
         case 'animation':
-            eventBus.emit('effectAnimation', {
-                target: effectTarget,
-                image: effect.image,
-                animation: effect.animation,
-            });
+            tryDispatchEffectAnimation(eventBus, effectTarget, effect.image, effect.animation);
+            break;
+        case 'sound':
+            tryDispatchSoundEffect(eventBus, effectTarget, effect.name, effect.volume);
             break;
     }
 }

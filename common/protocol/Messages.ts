@@ -31,9 +31,12 @@ export interface ChatMessage {
     text: string;
 }
 
-export interface EffectAnimationAction {
-    type: 'effect';
+interface BaseAction {
     entityId: EntityId;
+}
+
+export interface EffectAnimationAction extends BaseAction {
+    type: 'effect';
     effectAnimation: EffectAnimation;
 }
 
@@ -60,7 +63,13 @@ export interface FailedAction {
     actionType: 'too-far-away' | 'no-reward-selected';
 }
 
-export type Action = EffectAnimationAction | QuestStatusAction | EquipmentAction | InventoryAction | FailedAction;
+export interface SoundEffectAction extends BaseAction {
+    type: 'sound';
+    name: string;
+    volume: number;
+}
+
+export type Action = EffectAnimationAction | QuestStatusAction | EquipmentAction | InventoryAction | FailedAction | SoundEffectAction;
 
 export interface ResponseTypes {
     error: ErrorCode;

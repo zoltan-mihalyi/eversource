@@ -416,3 +416,18 @@ Beard and Mustache
 They are not responsible for any terrible job I do messing with color sliders for hair and clothing.
 
 License: GNU GPL 3.0 and CC-BY-SA 3.0
+
+## Eating sound effect
+- SilverIllusionist
+
+License: CC-BY 3.0
+
+https://freesound.org/s/411170/
+
+
+## Level up sound effect
+- Seidhepriest
+
+License: CC-BY 3.0
+
+https://freesound.org/s/382915/

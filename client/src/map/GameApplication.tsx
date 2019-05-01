@@ -13,6 +13,7 @@ import { ClientComponents } from '../es/ClientComponents';
 import { networkSystem } from '../systems/NetworkSystem';
 import { cameraFollowSystem } from '../systems/CameraFollowSystem';
 import { FragmentPosition, Metric } from '../systems/display/Metric';
+import { audioSystem } from '../systems/AudioSystem';
 
 export class GameApplication extends PIXI.Application {
     private viewContainer = new PIXI.Container();
@@ -56,8 +57,8 @@ export class GameApplication extends PIXI.Application {
         registerCursors(this.renderer.plugins.interaction.cursorStyles);
 
         networkSystem(playingNetworkApi, entityContainer, this.eventBus);
-        cameraFollowSystem(entityContainer, this.eventBus, (pos) => this.setViewCenter(pos));
-
+        const cameraPosition = cameraFollowSystem(entityContainer, this.eventBus, (pos) => this.setViewCenter(pos));
+        audioSystem(entityContainer, this.eventBus, cameraPosition);
     }
 
     setScale = (width: number, height: number, scale: number) => {
