@@ -8,7 +8,7 @@ import { EntityId } from '../es/Entity';
 import { NetworkComponents } from '../components/NetworkComponents';
 import { Nullable } from '../util/Types';
 import { ItemInfoWithCount, SlotId } from './ItemInfo';
-import { ItemInfo } from './ItemInfo';
+import { EffectAnimation } from '../components/CommonComponents';
 
 export interface RequestTypes {
     enter: string;
@@ -31,6 +31,14 @@ export interface ChatMessage {
     text: string;
 }
 
+export interface EffectAnimationAction {
+    type: 'effect';
+    entityId: EntityId;
+    effectAnimation: EffectAnimation;
+}
+
+export type Action = EffectAnimationAction;
+
 export interface ResponseTypes {
     error: ErrorCode;
     leaved: LeaveReason;
@@ -39,6 +47,7 @@ export interface ResponseTypes {
     world: Diff<EntityId, Nullable<NetworkComponents>>[];
     playerState: PlayerStateDiff;
     chatMessage: ChatMessage;
+    action: Action;
     questLog: Diff<QuestId, QuestLogItem>[];
     inventory: Diff<SlotId, ItemInfoWithCount>[];
     equipment: Diff<EquipmentSlotId, ItemInfoWithCount>[];

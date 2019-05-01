@@ -1,8 +1,7 @@
 import { Position } from '../../../common/domain/Location';
 import { Entity } from '../../../common/es/Entity';
-import { QuestStatus } from '../character/CharacterDetails';
 import { CommonComponents, Xp } from '../../../common/components/CommonComponents';
-import { ChatMessage } from '../../../common/protocol/Messages';
+import { Action, ChatMessage } from '../../../common/protocol/Messages';
 import { Spell } from '../Spell';
 import { QuestId } from '../../../common/domain/InteractionTable';
 import { Quest } from '../quest/Quest';
@@ -10,6 +9,7 @@ import { CharacterInventory } from '../character/CharacterInventory';
 import { LootElement } from '../world/Presets';
 import { Appearance, ObjectView, SimpleView } from '../../../common/components/View';
 import { Equipment } from '../../../common/domain/CharacterInfo';
+import { QuestLog } from '../quest/QuestLog';
 
 export interface Moving {
     readonly x: number;
@@ -66,8 +66,6 @@ interface Interacting {
     entity: Entity<ServerComponents>;
 }
 
-export type QuestLog = Map<QuestId, QuestStatus>;
-
 export interface Quests {
     questLog: QuestLog;
     questsDone: Set<QuestId>;
@@ -75,6 +73,7 @@ export interface Quests {
 
 export interface ActionListener {
     onChatMessage: (message: ChatMessage) => void;
+    onAction: (action: Action) => void;
 }
 
 interface HumanoidViewBase {

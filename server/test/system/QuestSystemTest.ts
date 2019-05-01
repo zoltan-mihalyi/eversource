@@ -1,15 +1,15 @@
 import { EventBus } from '../../../common/es/EventBus';
-import { QuestLog, ServerComponents } from '../../src/es/ServerComponents';
+import { ServerComponents } from '../../src/es/ServerComponents';
 import { ServerEvents } from '../../src/es/ServerEvents';
 import * as assert from 'assert';
 import { questSystem } from '../../src/es/QuestSystem';
 import { QuestId } from '../../../common/domain/InteractionTable';
-import { QuestStatus } from '../../src/character/CharacterDetails';
 import { Entity } from '../../../common/es/Entity';
 import { ServerEntityContainer } from '../../src/es/ServerEntityContainer';
 import { PresetQuest } from '../../src/quest/Quest';
 import { QuestIndexer } from '../../src/quest/QuestIndexer';
 import { fakeDataContainer } from '../sampleData';
+import { QuestLog, QuestStatus } from '../../src/quest/QuestLog';
 
 const quests: { [key: number]: PresetQuest } = {
     1: {

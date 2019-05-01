@@ -37,13 +37,7 @@ export function lootSystem(eventBus: EventBus<ServerEvents>, dataContainer: Data
             }
 
             const getRemainingItemCount = (tasks: Tasks): number => {
-                for (let i = 0; i < tasks.requirements.length; i++) {
-                    const task = tasks.requirements[i];
-                    if (task.itemId === lootElement.itemId) {
-                        return task.count - inventory.getCount(task.itemId);
-                    }
-                }
-                return 0;
+                return getRemainingItemCountForLoot(tasks, inventory, lootElement);
             };
 
             const maxLoot = condition ? getRemainingCount(condition, entity, dataContainer, getRemainingItemCount) : Infinity;
@@ -62,5 +56,13 @@ export function lootSystem(eventBus: EventBus<ServerEvents>, dataContainer: Data
         }
         return inventoryItems;
     }
+}
 
+export function getRemainingItemCountForLoot(tasks: Tasks, inventory: CharacterInventory, lootElement: LootElement) {
+    for (const task of tasks.requirements) {
+        if (task.itemId === lootElement.itemId) {
+            return task.count - inventory.getCount(task.itemId);
+        }
+    }
+    return 0;
 }

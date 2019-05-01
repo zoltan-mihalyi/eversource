@@ -57,6 +57,7 @@ export class LoadingRequestHandler extends ClientState<CharacterDetails> {
             },
             actionListener: {
                 onChatMessage: message => this.context.sendCommand('chatMessage', message),
+                onAction: action => this.context.sendCommand('action', action),
             },
             inventory: new CharacterInventory(world.dataContainer.items, items)
         });

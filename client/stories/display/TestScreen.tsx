@@ -22,7 +22,7 @@ export class TestScreen extends React.PureComponent<Props> {
     }
 
     componentDidMount() {
-        app.renderer.backgroundColor = this.props.backgroundColor || 0;
+        app.renderer.backgroundColor = this.props.backgroundColor || 0xffcc88;
         this.containerRef.current!.appendChild(app.view);
         appContainer.addChild(this.props.display);
 

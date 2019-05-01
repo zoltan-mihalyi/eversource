@@ -3,7 +3,7 @@ import { ServerEvents } from './ServerEvents';
 import { InteractionTable, QuestId, QuestInfo } from '../../../common/domain/InteractionTable';
 import { Quests, ServerComponents } from './ServerComponents';
 import { Quest } from '../quest/Quest';
-import { QuestProgression } from '../character/CharacterDetails';
+import { QuestProgression } from '../quest/QuestLog';
 import { EntityContainer } from '../../../common/es/EntityContainer';
 import { Entity } from '../../../common/es/Entity';
 import { distanceY, Position } from '../../../common/domain/Location';

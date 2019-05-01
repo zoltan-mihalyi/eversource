@@ -7,7 +7,7 @@ import { Diff } from '../../../common/protocol/Diff';
 import { Position } from '../../../common/domain/Location';
 import { GameScreen } from '../components/game/GameScreen';
 import { LoadedMap } from '../../../common/tiled/TiledResolver';
-import { ChatMessage, PlayerStateDiff } from '../../../common/protocol/Messages';
+import { Action, ChatMessage, PlayerStateDiff } from '../../../common/protocol/Messages';
 import { QuestId } from '../../../common/domain/InteractionTable';
 import { QuestLogItem } from '../../../common/protocol/QuestLogItem';
 import { PlayerState } from '../../../common/protocol/PlayerState';
@@ -73,6 +73,10 @@ export class PlayingState extends NetworkingState<PlayingStateData> implements P
     chatMessage(message: ChatMessage) {
         this.game.eventBus.emit('chatMessage', message);
         this.gameScreen.chatMessageReceived(message);
+    }
+
+    action(action: Action) {
+        this.game.eventBus.emit('effectAnimationAction', action);
     }
 
     playerState(playerStateDiff: PlayerStateDiff) {

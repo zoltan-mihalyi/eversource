@@ -3,6 +3,7 @@ import { ServerComponents } from './es/ServerComponents';
 import { Entity } from '../../common/es/Entity';
 import { Tasks } from './quest/Quest';
 import { DataContainer } from './data/DataContainer';
+import { forEachCurrentTasks } from './quest/QuestLog';
 
 export interface QuestCondition {
     type: 'quest';
@@ -33,18 +34,9 @@ export function getRemainingCount(condition: Condition, entity: Entity<ServerCom
             return quests.questLog.has(condition.questId) ? Infinity : 0;
         case 'task': {
             let remaining = 0;
-            quests.questLog.forEach((status, questId) => {
-                if (status === 'failed') {
-                    return;
-                }
-
-                const quest = questIndexer.quests.get(questId)!;
-
-                if (!quest.tasks) {
-                    return;
-                }
-                remaining = Math.max(remaining, getRemaining(quest.tasks, status));
-            });
+            forEachCurrentTasks(quests.questLog, questIndexer, ((tasks, questId, progression) => {
+                remaining = Math.max(remaining, getRemaining(tasks, progression));
+            }));
             return remaining;
         }
     }

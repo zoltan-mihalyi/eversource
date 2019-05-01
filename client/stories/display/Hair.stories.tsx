@@ -5,6 +5,7 @@ import { X, Y } from '../../../common/domain/Location';
 import { DisplayScreen } from './DisplayScreen';
 import { Gui } from '../../src/components/common/Gui';
 import { ColoredImage } from '../../../common/domain/ColoredImage';
+import { HUMANOID_VIEW } from './DisplaySampleData';
 
 function createHairDemo(head: ColoredImage): React.ReactElement<any> {
     const template: Partial<ClientComponents> = {
@@ -21,27 +22,10 @@ function createHairDemo(head: ColoredImage): React.ReactElement<any> {
             speed: 3,
         },
         view: {
-            type: 'humanoid',
-            appearance: {
-                sex: 'female',
-                body: ['normal'],
-                eyes: [],
-                ears: [],
-                facial: [],
-                hair: ['xlong', 'redhead'],
-                nose: []
-            },
-            equipment: {
-                head,
-                shirt: [],
-                arms: [],
-                belt: [],
-                cape: [],
-                chest: [],
-                feet: [],
-                hands: [],
-                legs: [],
-                mask: [],
+            ...HUMANOID_VIEW,
+            equipment:{
+                ...HUMANOID_VIEW.equipment,
+                head
             }
         },
     };

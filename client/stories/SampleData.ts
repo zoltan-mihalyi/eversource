@@ -1,6 +1,6 @@
 import { InteractionTable, QuestId, QuestInfo } from '../../common/domain/InteractionTable';
 import { QuestLogItem } from '../../common/protocol/QuestLogItem';
-import { QuestStatus } from '../../server/src/character/CharacterDetails';
+import { QuestStatus } from '../../server/src/quest/QuestLog';
 import { EntityId } from '../../common/es/Entity';
 import { CharacterState } from '../../common/protocol/PlayerState';
 import { ItemId, ItemInfo, ItemInfoWithCount } from '../../common/protocol/ItemInfo';

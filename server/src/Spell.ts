@@ -31,12 +31,18 @@ export interface DestroyEffect extends BaseEffect {
     type: 'destroy';
 }
 
+export interface AnimationEffect extends BaseEffect {
+    type: 'animation';
+    image: string;
+    animation: string;
+}
+
 export interface ChatEffect extends BaseEffect {
     type: 'chat';
     text: Expression<string>;
 }
 
-export type SpellEffect = HealEffect | DamageEffect | DestroyEffect | ChatEffect;
+export type SpellEffect = HealEffect | DamageEffect | DestroyEffect | ChatEffect | AnimationEffect;
 
 export interface Spells {
     [id: string]: Spell;

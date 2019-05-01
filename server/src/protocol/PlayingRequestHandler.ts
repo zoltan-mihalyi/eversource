@@ -12,7 +12,7 @@ import { getInteractionTable, questRequirementsProgression } from '../es/Interac
 import { NetworkComponents, PossibleInteraction, PossibleInteractions, } from '../../../common/components/NetworkComponents';
 import { Nullable } from '../../../common/util/Types';
 import { getDirection } from '../../../common/game/direction';
-import { Direction } from '../../../common/components/CommonComponents';
+import { Direction, EffectAnimation } from '../../../common/components/CommonComponents';
 import { CharacterInfo, EquipmentSlotId } from '../../../common/domain/CharacterInfo';
 import { CHAT_MESSAGE_MAXIMUM_LENGTH } from '../../../common/constants';
 import { QuestIndexer } from '../quest/QuestIndexer';
@@ -21,6 +21,14 @@ import { InventoryItem, itemInfo } from '../Item';
 import { distanceY } from '../../../common/domain/Location';
 import { Diff } from '../../../common/protocol/Diff';
 import { EQUIPMENT_SLOTS } from '../../../common/components/View';
+import { forEachUpdatableTask, spellMatchesTask } from '../es/QuestSystem';
+import { getCurrentTasks } from '../quest/QuestLog';
+import { getRemainingItemCountForLoot } from '../es/LootSystem';
+
+const GLOW: EffectAnimation[] = [{
+    image: 'quest-object-glow',
+    animation: 'glow',
+}];
 
 export interface PlayerData {
     entity: Entity<ServerComponents>;
@@ -103,7 +111,11 @@ export class PlayingRequestHandler extends ClientState<PlayerData> {
                     return;
                 }
 
-                this.data.zone.eventBus.emit('tryCompleteQuest', { entity, questId: questId as QuestId, selectedItems });
+                this.data.zone.eventBus.emit('tryCompleteQuest', {
+                    entity,
+                    questId: questId as QuestId,
+                    selectedItems,
+                });
                 break;
             }
             case 'abandon-quest': {
@@ -297,10 +309,44 @@ export class PlayingRequestHandler extends ClientState<PlayerData> {
                 'effects',
                 'player',
             ]),
+            ambientAnimations: this.getAmbientAnimations(viewer, entity),
             direction: getFacingDirection(viewer, entity),
             playerControllable: viewer === entity ? true : null,
             possibleInteractions: getPossibleInteractions(viewer, entity, this.context.world.dataContainer.questIndexer) || null, // TODO
         };
+    }
+
+    private getAmbientAnimations(viewer: Entity<ServerComponents>, entity: Entity<ServerComponents>): EffectAnimation[] | null {
+        const { questIndexer } = this.context.world.dataContainer;
+
+        const { quests, inventory } = viewer.components;
+        if (!quests) {
+            return null;
+        }
+
+        const { useSpell, loot } = entity.components;
+
+        if (loot && inventory) {
+            for (const tasks of getCurrentTasks(quests.questLog, questIndexer)) {
+                for (const lootItem of loot) {
+                    if (getRemainingItemCountForLoot(tasks, inventory, lootItem) > 0) {
+                        return GLOW;
+                    }
+                }
+            }
+        }
+
+        if (useSpell) {
+            let shouldProgress = false;
+            forEachUpdatableTask(questIndexer, quests, (task) => spellMatchesTask(task, useSpell) ? 'increase' : 'none', () => {
+                shouldProgress = true;
+            });
+            if (shouldProgress) {
+                return GLOW;
+            }
+        }
+
+        return null;
     }
 
     private networkUpdate = () => {

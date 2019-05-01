@@ -31,6 +31,12 @@
             }
           ]
         }
+      },
+      {
+        "type": "animation",
+        "target": "caster",
+        "image": "heal3",
+        "animation": "heal3"
       }
     ],
     "condition": {

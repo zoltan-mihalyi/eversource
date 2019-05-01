@@ -2,12 +2,13 @@ import { ServerEvents } from './ServerEvents';
 import { EventBus } from '../../../common/es/EventBus';
 import { Task } from '../quest/Quest';
 import { QuestId } from '../../../common/domain/InteractionTable';
-import { QuestProgression } from '../character/CharacterDetails';
-import { QuestLog, Quests } from './ServerComponents';
+import { forEachCurrentTasks, QuestProgression } from '../quest/QuestLog';
+import { Quests } from './ServerComponents';
 import { InventoryItem } from '../Item';
 import { DataContainer } from '../data/DataContainer';
 import { Spell } from '../Spell';
 import { ItemInfoWithCount } from '../../../common/protocol/ItemInfo';
+import { QuestIndexer } from '../quest/QuestIndexer';
 
 type QuestUpdate = 'none' | 'increase' | { setValue: number };
 
@@ -33,7 +34,7 @@ export function questSystem(eventBus: EventBus<ServerEvents>, { questIndexer }: 
         updateQuestLog(quests, task => increase(task.type === 'visit' && task.areaName === name));
     });
 
-    eventBus.on('spellCast', ({ caster, target, spell }) => {
+    eventBus.on('spellCast', ({ caster, spell }) => {
         const { quests } = caster.components;
         if (!quests) {
             return;
@@ -92,43 +93,43 @@ export function questSystem(eventBus: EventBus<ServerEvents>, { questIndexer }: 
     function updateQuestLog(quests: Quests, update: (task: Task) => QuestUpdate) {
         const { questLog } = quests;
 
-        questLog.forEach((q, questId) => {
-            if (q === 'failed') {
-                return;
-            }
-            const tasks = questIndexer.quests.get(questId)!.tasks;
-            if (!tasks) {
-                return;
-            }
+        forEachUpdatableTask(questIndexer, quests, update, (questId, currentProgression, taskIndex, newProgress) => {
 
-            tasks.list.forEach((task, i) => {
-                updateQuest(questLog, questId, task, i, update(task));
+            const progression = currentProgression.map((progress, index) => {
+                if (index === taskIndex) {
+                    return newProgress;
+                }
+                return progress;
             });
+            questLog.set(questId, progression);
         });
     }
-
 }
 
-function updateQuest(questLog: QuestLog, questId: QuestId, task: Task, taskIndex: number, update: QuestUpdate) {
-    if (update === 'none') {
-        return;
-    }
+export function forEachUpdatableTask(questIndexer: QuestIndexer, quests: Quests, update: (task: Task) => QuestUpdate,
+                                     cb: (questId: QuestId, currentProgression: ReadonlyArray<number>, taskIndex: number, newProgress: number) => void) {
 
-    const currentProgression = questLog.get(questId) as QuestProgression;
-    const currentProgress = currentProgression[taskIndex];
+    const { questLog } = quests;
 
-    const newProgress = Math.min(task.count, update === 'increase' ? currentProgress + 1 : update.setValue);
-    if (newProgress === currentProgress) {
-        return;
-    }
+    forEachCurrentTasks(questLog, questIndexer, (tasks, questId) => {
+        tasks.list.forEach((task, taskIndex) => {
+            const questUpdate = update(task);
 
-    const progression = currentProgression.map((progress, index) => {
-        if (index === taskIndex) {
-            return newProgress
-        }
-        return progress;
+            if (questUpdate === 'none') {
+                return;
+            }
+
+            const questStatus = questLog.get(questId) as QuestProgression;
+            const currentProgress = questStatus[taskIndex];
+
+            const newProgress = Math.min(task.count, questUpdate === 'increase' ? currentProgress + 1 : questUpdate.setValue);
+            if (newProgress === currentProgress) {
+                return;
+            }
+
+            cb(questId, questStatus, taskIndex, newProgress);
+        });
     });
-    questLog.set(questId, progression);
 }
 
 function increase(hasIncrease: boolean): QuestUpdate {
