@@ -1,18 +1,20 @@
 import { EntityContainer } from '../../../../common/es/EntityContainer';
 import { ClientComponents } from '../../es/ClientComponents';
 import { PartialPick } from '../../../../common/util/Types';
-import { textureLoader } from '../../../stories/SampleData';
 import { EntityDisplay } from '../../display/EntityDisplay';
 import { EventBus } from '../../../../common/es/EventBus';
 import { ClientEvents } from '../../es/ClientEvents';
 import { EffectAnimation } from '../../../../common/components/CommonComponents';
+import { TextureLoader } from '../../loader/TextureLoader';
 import AnimatedSprite = PIXI.extras.AnimatedSprite;
 
 interface AnimationSpriteMapping {
     [animation: string]: AnimatedSprite | undefined;
 }
 
-export function displayEffectAnimationSystem(entityContainer: EntityContainer<ClientComponents>, eventBus: EventBus<ClientEvents>) {
+export function displayEffectAnimationSystem(entityContainer: EntityContainer<ClientComponents>,
+                                             eventBus: EventBus<ClientEvents>, textureLoader: TextureLoader) {
+
     const entities = entityContainer.createQuery('display', 'ambientAnimations');
 
     const animationSpriteMappings = new Map<EntityDisplay, AnimationSpriteMapping>();
@@ -78,13 +80,13 @@ export function displayEffectAnimationSystem(entityContainer: EntityContainer<Cl
             animatedSprite.destroy({ children: true });
         }
     }
-}
 
-function effectAnimationSprite(effectAnimation: EffectAnimation): AnimatedSprite {
-    const fileName = `fx/${effectAnimation.image}`;
-    const animation = effectAnimation.animation;
+    function effectAnimationSprite(effectAnimation: EffectAnimation): AnimatedSprite {
+        const fileName = `fx/${effectAnimation.image}`;
+        const animation = effectAnimation.animation;
 
-    const animatedSprite = textureLoader.createCustomAnimatedSprite(fileName, fileName, animation, '');
-    animatedSprite.blendMode = PIXI.BLEND_MODES.ADD; //TODO in json?
-    return animatedSprite;
+        const animatedSprite = textureLoader.createCustomAnimatedSprite(fileName, fileName, animation, '');
+        animatedSprite.blendMode = PIXI.BLEND_MODES.ADD; //TODO in json?
+        return animatedSprite;
+    }
 }
