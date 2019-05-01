@@ -9,6 +9,7 @@ import { InteractionItemList } from './InteractionItemList';
 import { Positioned } from '../common/Positioned';
 import { ResolvedText } from './ResolvedText';
 import { QuestStyle } from './QuestStyle';
+import { gui, playSoundEffect } from '../../systems/AudioSystem';
 
 interface Props {
     interactions: InteractionTable;
@@ -45,6 +46,14 @@ export class InteractionDialog extends React.PureComponent<Props, State> {
             }
         }
         return null;
+    }
+
+    componentDidMount() {
+        playSoundEffect('flipping-pages', gui);
+    }
+
+    componentWillUnmount() {
+        playSoundEffect('flipping-pages-2', gui);
     }
 
     render() {

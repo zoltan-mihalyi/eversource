@@ -1,5 +1,13 @@
 import * as React from 'react';
-import { AnimationEffect, ChatEffect, DamageEffect, DestroyEffect, HealEffect, SpellEffect } from '../../../server/src/Spell';
+import {
+    AnimationEffect,
+    ChatEffect,
+    DamageEffect,
+    DestroyEffect,
+    HealEffect,
+    SoundEffect,
+    SpellEffect,
+} from '../../../server/src/Spell';
 import { unionEdit } from '../components/edit/UnionEdit';
 import { objectEdit, PropertyConfig } from '../components/edit/ObjectEdit';
 import { NumberEdit } from '../components/edit/NumberEdit';
@@ -21,31 +29,38 @@ function spellEffectEdit<T extends SpellEffect, K extends keyof T = never>(confi
 export const SpellEffectEdit = unionEdit<SpellEffect>({
     heal: {
         component: () => spellEffectEdit<HealEffect>({
-            amount: { component: NumberEdit }
+            amount: { component: NumberEdit },
         }),
-        defaultValue: { type: 'heal', target: 'target', amount: 100 }
+        defaultValue: { type: 'heal', target: 'target', amount: 100 },
     },
     damage: {
         component: () => spellEffectEdit<DamageEffect>({
-            amount: { component: NumberEdit }
+            amount: { component: NumberEdit },
         }),
-        defaultValue: { type: 'damage', target: 'target', amount: 100 }
+        defaultValue: { type: 'damage', target: 'target', amount: 100 },
     },
     destroy: {
         component: () => spellEffectEdit<DestroyEffect>({}),
-        defaultValue: { type: 'destroy', target: 'target' }
+        defaultValue: { type: 'destroy', target: 'target' },
     },
     chat: {
         component: () => spellEffectEdit<ChatEffect>({
             text: { component: StringExpressionEdit },
         }),
-        defaultValue: { type: 'chat', target: 'target', text: { type: 'constant', value: 'Hello!' } }
+        defaultValue: { type: 'chat', target: 'target', text: { type: 'constant', value: 'Hello!' } },
     },
     animation: {
         component: () => spellEffectEdit<AnimationEffect>({
             image: { component: TextEdit },
             animation: { component: TextEdit },
         }),
-        defaultValue: { type: 'animation', target: 'target', image: 'heal3', animation: 'heal3' }
-    }
+        defaultValue: { type: 'animation', target: 'target', image: 'heal3', animation: 'heal3' },
+    },
+    sound: {
+        component: () => spellEffectEdit<SoundEffect>({
+            name: { component: TextEdit },
+            volume: { component: NumberEdit },
+        }),
+        defaultValue: { type: 'sound', target: 'caster', name: 'eating', volume: 100 },
+    },
 });

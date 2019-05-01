@@ -37,12 +37,18 @@ export interface AnimationEffect extends BaseEffect {
     animation: string;
 }
 
+export interface SoundEffect extends BaseEffect {
+    type: 'sound';
+    name: string;
+    volume: number;
+}
+
 export interface ChatEffect extends BaseEffect {
     type: 'chat';
     text: Expression<string>;
 }
 
-export type SpellEffect = HealEffect | DamageEffect | DestroyEffect | ChatEffect | AnimationEffect;
+export type SpellEffect = HealEffect | DamageEffect | DestroyEffect | ChatEffect | AnimationEffect | SoundEffect;
 
 export interface Spells {
     [id: string]: Spell;

@@ -25,6 +25,7 @@ import { equipmentViewSystem } from '../es/EquipmentViewSystem';
 import { equipmentSystem } from '../es/EquipmentSystem';
 import { actionListenerIndexingSystem } from '../es/ActionListenerIndexingSystem';
 import { effectAnimationActionSystem } from '../es/EffectAnimationActionSystem';
+import { actionDispatcherSystem } from '../es/ActionDispatcherSystem';
 
 export class Zone {
     private entityContainer = new ServerEntityContainer();
@@ -50,7 +51,8 @@ export class Zone {
         lootSystem(this.eventBus, dataContainer);
         equipmentViewSystem(this.entityContainer, dataContainer);
         equipmentSystem(this.eventBus, dataContainer);
-        effectAnimationActionSystem(listenerIndex, this.entityContainer, this.eventBus);
+        effectAnimationActionSystem(this.entityContainer, this.eventBus);
+        actionDispatcherSystem(listenerIndex, this.eventBus);
     }
 
     createEntity(components: Partial<ServerComponents>): Entity<ServerComponents> {

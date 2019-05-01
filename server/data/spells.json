@@ -37,6 +37,12 @@
         "target": "caster",
         "image": "heal3",
         "animation": "heal3"
+      },
+      {
+        "type": "sound",
+        "target": "caster",
+        "name": "eating",
+        "volume": 100
       }
     ],
     "condition": {
