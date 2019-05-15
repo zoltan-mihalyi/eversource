@@ -2,7 +2,7 @@ import { groupBy, Grouped } from '../utils';
 import { QuestId, QuestInfo, RequirementInfo, RewardOptionsInfo, TaskInfo } from '../../../common/domain/InteractionTable';
 import { questXpReward } from '../../../common/algorithms';
 import { PresetQuest, Quest, Tasks } from './Quest';
-import { itemInfo, Items } from '../Item';
+import { itemInfo, itemInfoWithCount, Items } from '../Item';
 
 export class QuestIndexer {
     readonly quests = new Map<QuestId, Quest>();
@@ -61,10 +61,7 @@ function getRequirements(items: Items, questTasks?: Tasks): RequirementInfo[] {
     if (!questTasks) {
         return [];
     }
-    return questTasks.requirements.map(({ count, itemId }) => ({
-        itemInfo: itemInfo(items, itemId),
-        count,
-    }));
+    return questTasks.requirements.map((item) => itemInfoWithCount(items, item));
 }
 
 function getRewards(quest: Quest, items: Items): RewardOptionsInfo[] {

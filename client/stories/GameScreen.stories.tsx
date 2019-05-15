@@ -2,7 +2,7 @@ import { storiesOf } from '@storybook/react';
 import * as React from 'react';
 import { GameScreen } from '../src/components/game/GameScreen';
 import { InputManager } from '../src/input/InputManager';
-import { FAKE_API, QUEST_LOG, textureLoader } from './SampleData';
+import { createCustomItem, FAKE_API, QUEST_LOG, questInfo, textureLoader } from './SampleData';
 import { CharacterState, PlayerState } from '../../common/protocol/PlayerState';
 import { QuestLogItem } from '../../common/protocol/QuestLogItem';
 import { QuestId } from '../../common/domain/InteractionTable';
@@ -84,6 +84,24 @@ function initScreen(gameScreen: GameScreen) {
     gameScreen.updatePlayerState(playerState);
     gameScreen.chatMessageReceived({ sender: 'John', text: 'Hello there!' });
     gameScreen.chatMessageReceived({ sender: 'John', text: 'What happens, when a very long message is added?' });
+    gameScreen.action({
+        type: 'inventory',
+        actionType: 'loot',
+        items: [
+            createCustomItem({ name: 'Common pepper', quality: 'common', lore: void 0, questItem: true }, 15),
+            createCustomItem()
+        ]
+    });
+    gameScreen.action({
+        type: 'quest-status',
+        quest: questInfo(0, 'A Simple Quest', {level:8}),
+        actionType: 'completed',
+    });
+    gameScreen.action({
+        type: 'quest-status',
+        quest: questInfo(0, 'Hardening the Steel', {level:15}),
+        actionType: 'accepted',
+    });
     gameScreen.chatMessageReceived({ sender: 'John', text: 'Type: x to add xp, type p to update progress, f to fail!' });
 }
 

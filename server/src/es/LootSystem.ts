@@ -8,6 +8,7 @@ import { ServerComponents } from './ServerComponents';
 import { Tasks } from '../quest/Quest';
 import { DataContainer } from '../data/DataContainer';
 import { CharacterInventory } from '../character/CharacterInventory';
+import { addToInventoryAndSendAction } from '../utils';
 
 export function lootSystem(eventBus: EventBus<ServerEvents>, dataContainer: DataContainer) {
 
@@ -22,7 +23,7 @@ export function lootSystem(eventBus: EventBus<ServerEvents>, dataContainer: Data
             return;
         }
 
-        entity.set('inventory', inventory.add(items));
+        addToInventoryAndSendAction(dataContainer.items, entity, inventory, items);
         eventBus.emit('kill', { killer: entity, killed: looted });
     });
 

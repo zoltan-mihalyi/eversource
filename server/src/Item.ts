@@ -1,5 +1,5 @@
 import { QuestId } from '../../common/domain/InteractionTable';
-import { ItemId, ItemInfo, ItemQuality } from '../../common/protocol/ItemInfo';
+import { ItemId, ItemInfo, ItemInfoWithCount, ItemQuality } from '../../common/protocol/ItemInfo';
 import { Condition } from './Condition';
 import { EquipmentSlotId } from '../../common/domain/CharacterInfo';
 import { ColoredImage } from '../../common/domain/ColoredImage';
@@ -42,5 +42,12 @@ export function itemInfo(items: Items, itemId: ItemId): ItemInfo { // Todo index
         animation,
         quality,
         lore,
+    };
+}
+
+export function itemInfoWithCount(items: Items, { itemId, count }: InventoryItem): ItemInfoWithCount {
+    return {
+        count,
+        itemInfo: itemInfo(items, itemId)
     };
 }

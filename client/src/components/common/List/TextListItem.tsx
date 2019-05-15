@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { className, injectSheet, SMALL_DEVICE } from '../../utils';
+import { injectSheet, SMALL_DEVICE } from '../../utils';
 import { StyleRules, WithStyles } from '../../interfaces';
-import { level } from '../../theme';
 import { ListItem, Props as ListItemProps } from './ListItem';
+import { LevelColoredText } from '../../character/LevelColoredText';
 
-type ClassKeys = 'root' | 'status' | Level;
+type ClassKeys = 'root' | 'status';
 
 const styles: StyleRules<ClassKeys> = {
     root: {
@@ -26,21 +26,6 @@ const styles: StyleRules<ClassKeys> = {
         textAlign: 'right',
         marginRight: 3,
     },
-    lowest: {
-        color: level.lowest,
-    },
-    lower: {
-        color: level.lower
-    },
-    normal: {
-        color: level.normal
-    },
-    higher: {
-        color: level.higher
-    },
-    highest: {
-        color: level.highest
-    },
 };
 
 export type Level = 'lowest' | 'lower' | 'normal' | 'higher' | 'highest';
@@ -52,9 +37,11 @@ interface Props extends ListItemProps {
 
 const RawTextListItem: React.FunctionComponent<Props & WithStyles<ClassKeys>> = ({ children, classes, level, checked, ...rest }) => (
     <ListItem {...rest}>
-        <div className={className(classes.root, classes[level || 'normal'])}>
-            <span className={classes.status}>{checked ? '✓ ' : ''}</span>
-            {children}
+        <div className={classes.root}>
+            <LevelColoredText level={level || 'normal'}>
+                <span className={classes.status}>{checked ? '✓ ' : ''}</span>
+                {children}
+            </LevelColoredText>
         </div>
     </ListItem>
 );

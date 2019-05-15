@@ -1,13 +1,17 @@
 import * as React from 'react';
 import { injectSheet } from '../utils';
 import { StyleRules, WithStyles } from '../interfaces';
-import { brown, player } from '../theme';
-import { ChatMessage } from '../../../../common/protocol/Messages';
+import { black, brown } from '../theme';
+import { ChatMessage, InventoryAction, QuestStatusAction } from '../../../../common/protocol/Messages';
 import { Scrollable } from '../common/Scrollable';
 import { CHAT_MESSAGE_MAXIMUM_LENGTH } from '../../../../common/constants';
 import { Input } from '../common/Input';
+import { ChatMessageRow } from './ChatMessageRow';
+import { InventoryActionRow } from './InventoryActionRow';
+import { QuestStatusActionRow } from './QuestStatusActionRow';
+import CharacterContext from '../context/CharacterContext';
 
-type ClassKeys = 'root' | 'background' | 'content' | 'message' | 'sender' | 'entry' | 'input';
+type ClassKeys = 'root' | 'background' | 'content' | 'entry' | 'input';
 
 const styles: StyleRules<ClassKeys> = {
     root: {
@@ -29,13 +33,7 @@ const styles: StyleRules<ClassKeys> = {
     content: {
         position: 'relative',
         overflowWrap: 'break-word',
-    },
-    sender: {
-        color: player,
-    },
-    message: {
-        color: brown.lightest,
-        marginLeft: 8,
+        textShadow: `1px 1px 3px ${black}`
     },
     entry: {
         marginLeft: 10,
@@ -55,9 +53,16 @@ const styles: StyleRules<ClassKeys> = {
     },
 };
 
+interface ChatMessageEntry {
+    type: 'chat';
+    message: ChatMessage;
+}
+
+export type MessageEntry = ChatMessageEntry | QuestStatusAction | InventoryAction;
+
 interface Props {
     inputRef?: React.Ref<HTMLInputElement>;
-    messages: ChatMessage[];
+    messages: MessageEntry[];
     sendMessage: (message: string) => void;
 }
 
@@ -82,8 +87,7 @@ export class RawChatBox extends React.PureComponent<Props & WithStyles<ClassKeys
                     <Scrollable autoScroll>
                         {this.props.messages.map((message, i) => (
                             <p key={i} className={classes.entry}>
-                                <span className={classes.sender}>{message.sender}</span>
-                                <span className={classes.message}>{message.text}</span>
+                                {renderMessageEntry(message)}
                             </p>
                         ))}
                     </Scrollable>
@@ -136,3 +140,24 @@ export class RawChatBox extends React.PureComponent<Props & WithStyles<ClassKeys
 }
 
 export const ChatBox = injectSheet(styles)(RawChatBox);
+
+function renderMessageEntry(messageEntry: MessageEntry): React.ReactNode {
+    switch (messageEntry.type) {
+        case 'chat':
+            return (
+                <ChatMessageRow message={messageEntry.message}/>
+            );
+        case 'inventory':
+            return (
+                <InventoryActionRow action={messageEntry}/>
+            );
+        case 'quest-status':
+            return (
+                <CharacterContext.Consumer>
+                    {(character) => (
+                        <QuestStatusActionRow playerLevel={character.level} action={messageEntry}/>
+                    )}
+                </CharacterContext.Consumer>
+            );
+    }
+}

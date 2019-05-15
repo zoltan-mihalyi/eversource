@@ -3,6 +3,7 @@ import { StyleRules, WithStyles } from './interfaces';
 import * as React from 'react';
 import { Omit } from '../../../common/util/Omit';
 import { EquipmentSlotId } from '../../../common/domain/CharacterInfo';
+import { Level } from './character/LevelColoredText';
 
 export function className(...classes: (string | null | boolean | undefined)[]) {
     return classes.filter(name => name).join(' ');
@@ -31,4 +32,22 @@ export function times<T>(n: number, fn: (i: number) => T): T[] {
 
 export function equipmentSlotName(equipmentSlotId: EquipmentSlotId): string {
     return equipmentSlotId[0].toUpperCase() + equipmentSlotId.substring(1);
+}
+
+export function questLevel(playerLevel: number, questLevel: number): Level {
+    const diff = questLevel - playerLevel;
+
+    if (diff > 4) {
+        return 'highest';
+    }
+    if (diff > 2) {
+        return 'higher';
+    }
+    if (diff >= -2) {
+        return 'normal';
+    }
+    if (diff >= -4) {
+        return 'lower';
+    }
+    return 'lowest';
 }

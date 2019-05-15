@@ -145,3 +145,23 @@ export function createEquipmentItem(equipmentSlotId: EquipmentSlotId): ItemInfoW
         count: 1,
     };
 }
+
+export function createCustomItem(override?: Partial<ItemInfo>, count = 1): ItemInfoWithCount {
+    return {
+        itemInfo: {
+            id: 123 as ItemId,
+            name: 'Legendary Carrot',
+            image: 'plants',
+            animation: 'carrot',
+            quality: 'legendary',
+            lore: 'This carrot was enchanted by a wizard.',
+            questItem: false,
+            ...override,
+        },
+        count,
+    };
+}
+
+export function createItem(): ItemInfoWithCount {
+    return createCustomItem();
+}

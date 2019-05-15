@@ -21,8 +21,6 @@ const styles: StyleRules<ClassKeys> = {
     },
 };
 
-export type Level = 'lowest' | 'lower' | 'normal' | 'higher' | 'highest';
-
 export interface Props {
     selected?: boolean;
     onClick?: () => void;

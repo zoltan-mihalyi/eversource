@@ -1,8 +1,9 @@
 import { EventBus } from '../../../common/es/EventBus';
 import { ServerEvents } from './ServerEvents';
 import { EquipmentSlotId } from '../../../common/domain/CharacterInfo';
-import { InventoryItem } from '../Item';
+import { InventoryItem, itemInfo } from '../Item';
 import { DataContainer } from '../data/DataContainer';
+import { trySendAction } from '../utils';
 
 export function equipmentSystem(eventBus: EventBus<ServerEvents>, dataContainer: DataContainer) {
     const { items } = dataContainer;
@@ -32,6 +33,11 @@ export function equipmentSystem(eventBus: EventBus<ServerEvents>, dataContainer:
         entity.set('inventory', newInventory);
         entity.set('equipment', newEquipment);
 
+        trySendAction(entity, {
+            type: 'equipment',
+            item: itemInfo(items, item.itemId),
+            actionType: 'equip',
+        });
     });
 
     eventBus.on('unequip', ({ entity, equipmentSlotId }) => {
@@ -53,5 +59,11 @@ export function equipmentSystem(eventBus: EventBus<ServerEvents>, dataContainer:
 
         entity.set('inventory', newInventory);
         entity.set('equipment', newEquipment);
+
+        trySendAction(entity, {
+            type: 'equipment',
+            item: itemInfo(items, item.itemId),
+            actionType: 'unequip',
+        });
     });
 }

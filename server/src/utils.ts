@@ -1,3 +1,10 @@
+import { Action } from '../../common/protocol/Messages';
+import { Entity } from '../../common/es/Entity';
+import { ServerComponents } from './es/ServerComponents';
+import { CharacterInventory } from './character/CharacterInventory';
+import { InventoryItem, itemInfoWithCount, Items } from './Item';
+import { ItemInfoWithCount } from '../../common/protocol/ItemInfo';
+
 export type Grouped<T> = {
     [key: string]: T[] | undefined
 }
@@ -26,4 +33,23 @@ export function indexBy<T extends { [P in K]: string | number }, K extends keyof
         result[item[property]] = item;
     }
     return result;
+}
+
+export function trySendAction(entity: Entity<ServerComponents>, action: Action) {
+    const { actionListener } = entity.components;
+    if (actionListener) {
+        actionListener.onAction(action);
+    }
+}
+
+export function addToInventoryAndSendAction(items: Items, entity: Entity<ServerComponents>, inventory: CharacterInventory,
+                                            inventoryItems: InventoryItem[]) {
+
+    entity.set('inventory', inventory.add(inventoryItems));
+
+    trySendAction(entity, {
+        type: 'inventory',
+        actionType: 'loot',
+        items: inventoryItems.map((item) => itemInfoWithCount(items, item)),
+    });
 }

@@ -2,12 +2,12 @@ import { CharacterInfo, EquipmentSlotId } from '../domain/CharacterInfo';
 import { ErrorCode } from './ErrorCode';
 import { Diff } from './Diff';
 import { PlayerState } from './PlayerState';
-import { QuestId } from '../domain/InteractionTable';
+import { QuestId, QuestInfo } from '../domain/InteractionTable';
 import { QuestLogItem } from './QuestLogItem';
 import { EntityId } from '../es/Entity';
 import { NetworkComponents } from '../components/NetworkComponents';
 import { Nullable } from '../util/Types';
-import { ItemInfoWithCount, SlotId } from './ItemInfo';
+import { ItemInfo, ItemInfoWithCount, SlotId } from './ItemInfo';
 import { EffectAnimation } from '../components/CommonComponents';
 
 export interface RequestTypes {
@@ -37,7 +37,30 @@ export interface EffectAnimationAction {
     effectAnimation: EffectAnimation;
 }
 
-export type Action = EffectAnimationAction;
+export interface QuestStatusAction {
+    type: 'quest-status';
+    quest: QuestInfo;
+    actionType: 'accepted' | 'abandoned' | 'completed';
+}
+
+interface EquipmentAction {
+    type: 'equipment';
+    item: ItemInfo;
+    actionType: 'equip' | 'unequip';
+}
+
+export interface InventoryAction {
+    type: 'inventory';
+    items: ItemInfoWithCount[];
+    actionType: 'loot' | 'destroy';
+}
+
+export interface FailedAction {
+    type: 'failed';
+    actionType: 'too-far-away' | 'no-reward-selected';
+}
+
+export type Action = EffectAnimationAction | QuestStatusAction | EquipmentAction | InventoryAction | FailedAction;
 
 export interface ResponseTypes {
     error: ErrorCode;

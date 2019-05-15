@@ -9,10 +9,11 @@ import { DataContainer } from '../data/DataContainer';
 import { Spell } from '../Spell';
 import { ItemInfoWithCount } from '../../../common/protocol/ItemInfo';
 import { QuestIndexer } from '../quest/QuestIndexer';
+import { addToInventoryAndSendAction, trySendAction } from '../utils';
 
 type QuestUpdate = 'none' | 'increase' | { setValue: number };
 
-export function questSystem(eventBus: EventBus<ServerEvents>, { questIndexer }: DataContainer) {
+export function questSystem(eventBus: EventBus<ServerEvents>, { questIndexer, items }: DataContainer) {
 
     eventBus.on('kill', ({ killer, killed }) => {
         const killerQuests = killer.components.quests;
@@ -53,8 +54,14 @@ export function questSystem(eventBus: EventBus<ServerEvents>, { questIndexer }: 
         const { inventory } = entity.components;
         if (inventory && quest.provides) {
             //TODO check inventory size
-            entity.set('inventory', inventory.add(quest.provides));
+            addToInventoryAndSendAction(items, entity, inventory, quest.provides);
         }
+
+        trySendAction(entity, {
+            type: 'quest-status',
+            quest: questIndexer.questInfoMap.get(questId)!,
+            actionType: 'accepted',
+        });
     });
 
     eventBus.on('completeQuest', ({ entity, quests, quest, selectedItems }) => {
@@ -63,15 +70,21 @@ export function questSystem(eventBus: EventBus<ServerEvents>, { questIndexer }: 
         const requiredItems = quest.requirements.map(inventoryItem);
         let inventory = entity.components.inventory!.remove(requiredItems);
 
-        inventory = inventory.add(selectedItems.map(inventoryItem));
-        //TODO check inventory size
-
-        entity.set('inventory', inventory);
+        if (selectedItems.length > 0) {
+            addToInventoryAndSendAction(items, entity, inventory, selectedItems.map(inventoryItem));
+        } else {
+            entity.set('inventory', inventory);
+        }
 
         quests.questLog.delete(questId);
         quests.questsDone.add(questId);
-    });
 
+        trySendAction(entity, {
+            type: 'quest-status',
+            quest,
+            actionType: 'completed',
+        });
+    });
 
     eventBus.on('tryAbandonQuest', ({ entity, questId }) => {
         const { quests } = entity.components;
@@ -88,6 +101,11 @@ export function questSystem(eventBus: EventBus<ServerEvents>, { questIndexer }: 
         if (inventory) {
             entity.set('inventory', inventory.removeIf(item => item.questId === questId));
         }
+        trySendAction(entity, {
+            type: 'quest-status',
+            quest: questIndexer.questInfoMap.get(questId)!,
+            actionType: 'abandoned',
+        });
     });
 
     function updateQuestLog(quests: Quests, update: (task: Task) => QuestUpdate) {

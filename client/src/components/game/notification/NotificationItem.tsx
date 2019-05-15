@@ -2,7 +2,7 @@ import * as React from 'react';
 import { StyleRules, WithStyles } from '../../interfaces';
 import { className, injectSheet } from '../../utils';
 
-export type ClassKeys = 'root' | 'hide';
+type ClassKeys = 'root' | 'hide';
 
 const styles: StyleRules<ClassKeys> = {
     root: {

@@ -76,7 +76,11 @@ export class PlayingState extends NetworkingState<PlayingStateData> implements P
     }
 
     action(action: Action) {
-        this.game.eventBus.emit('effectAnimationAction', action);
+        if (action.type === 'effect') {
+            this.game.eventBus.emit('effectAnimationAction', action);
+        } else {
+            this.gameScreen.action(action);
+        }
     }
 
     playerState(playerStateDiff: PlayerStateDiff) {

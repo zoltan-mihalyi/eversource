@@ -12,6 +12,7 @@ import { QuestIndexer } from '../quest/QuestIndexer';
 import { CharacterInventory } from '../character/CharacterInventory';
 import { DataContainer } from '../data/DataContainer';
 import { ItemInfoWithCount } from '../../../common/protocol/ItemInfo';
+import { trySendAction } from '../utils';
 
 export function interactionSystem(entityContainer: EntityContainer<ServerComponents>, eventBus: EventBus<ServerEvents>,
                                   { questIndexer }: DataContainer) {
@@ -67,6 +68,10 @@ export function interactionSystem(entityContainer: EntityContainer<ServerCompone
         }
 
         if (!inInteractionRadius(source.components, target.components)) {
+            trySendAction(source, {
+                type: 'failed',
+                actionType: 'too-far-away',
+            });
             return;
         }
 
@@ -105,6 +110,10 @@ export function interactionSystem(entityContainer: EntityContainer<ServerCompone
             const itemIndex = selectedItems[i];
             const questRewardInfo = rewards[i].options[itemIndex];
             if (!questRewardInfo) {
+                trySendAction(entity, {
+                    type: 'failed',
+                    actionType: 'no-reward-selected',
+                });
                 return;
             }
             selectedInventoryItems.push(questRewardInfo);

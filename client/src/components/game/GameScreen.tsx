@@ -12,14 +12,14 @@ import { XpBar } from './XpBar';
 import { maxXpFor } from '../../../../common/algorithms';
 import { Gui } from '../common/Gui';
 import CharacterContext, { EMPTY_CHARACTER } from '../context/CharacterContext';
-import { ChatBox } from '../chat/ChatBox';
+import { ChatBox, MessageEntry } from '../chat/ChatBox';
 import { Positioned } from '../common/Positioned';
-import { ChatMessage } from '../../../../common/protocol/Messages';
+import { Action, ChatMessage, FailedAction } from '../../../../common/protocol/Messages';
 import { ItemInfoWithCount, SlotId } from '../../../../common/protocol/ItemInfo';
 import { TextureLoader } from '../../loader/TextureLoader';
 import TextureLoaderContext from '../context/TextureLoaderContext';
 import { Notifications } from './notification/Notifications';
-import { level, quest, red, xp } from '../theme';
+import { brown, level, quest, red, xp } from '../theme';
 import { isComplete } from '../quest/QuestLog';
 import { NotificationText } from './notification/NotificationText';
 import { EquipmentSlotId } from '../../../../common/domain/CharacterInfo';
@@ -36,7 +36,7 @@ interface Props {
 }
 
 interface State {
-    messages: ChatMessage[];
+    messages: MessageEntry[];
     playerState: PlayerState;
     inventory: Map<SlotId, ItemInfoWithCount>;
     equipment: Map<EquipmentSlotId, ItemInfoWithCount>;
@@ -124,15 +124,9 @@ export class GameScreen extends React.Component<Props, State> {
     }
 
     chatMessageReceived(message: ChatMessage) {
-        this.setState((state) => {
-            const messages = [...state.messages, message];
-            if (messages.length > MAX_MESSAGES) {
-                messages.shift();
-            }
-
-            return {
-                messages,
-            };
+        this.addMessageEntry({
+            type: 'chat',
+            message,
         });
     }
 
@@ -155,6 +149,42 @@ export class GameScreen extends React.Component<Props, State> {
 
     updateEquipment(equipment: Map<EquipmentSlotId, ItemInfoWithCount>) {
         this.setState({ equipment });
+    }
+
+    action(action: Action) {
+        switch (action.type) {
+            case 'failed':
+                this.addFailedActionNotification(action);
+                break;
+            case 'inventory':
+                this.addMessageEntry(action);
+                break;
+            case 'quest-status':
+                this.addMessageEntry(action);
+        }
+    }
+
+    private addFailedActionNotification(action: FailedAction) {
+        switch (action.actionType) {
+            case 'too-far-away':
+                this.addSimpleNotification('Too far away!', red.normal);
+                break;
+            case 'no-reward-selected':
+                this.addSimpleNotification('No reward selected!', red.normal);
+        }
+    }
+
+    private addMessageEntry(messageEntry: MessageEntry) {
+        this.setState((state) => {
+            const messages = [...state.messages, messageEntry];
+            if (messages.length > MAX_MESSAGES) {
+                messages.shift();
+            }
+
+            return {
+                messages,
+            };
+        });
     }
 
     private addQuestLogItemChangeNotifications(questLogItem: QuestLogItem, newQuestLogItem: QuestLogItem) {

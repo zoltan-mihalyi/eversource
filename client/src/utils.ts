@@ -46,9 +46,14 @@ function cleanup(textures: { [key: string]: Texture | BaseTexture }) {
         }
         textures[key].destroy();
     }
-
 }
 
 export function colorToNumber(color: string) {
     return parseInt(color.substring(1), 16);
+}
+
+export function withOpacity(color: string, opacity: number): string {
+    const opacityHex = Math.floor(255 * opacity).toString(16);
+    const suffix = opacityHex.length === 1 ? `0${opacityHex}` : opacityHex;
+    return color + suffix;
 }

@@ -5,7 +5,7 @@ import { ItemId, ItemInfoWithCount, ItemQuality, SlotId } from '../../../common/
 import { Gui } from '../../src/components/common/Gui';
 import { times } from '../../src/components/utils';
 import TextureLoaderContext from '../../src/components/context/TextureLoaderContext';
-import { createEquipmentItem, textureLoader } from '../SampleData';
+import { createEquipmentItem, createItem, textureLoader } from '../SampleData';
 import { EQUIPMENT_SLOTS } from '../../../common/components/View';
 
 const QUALITIES: ItemQuality[] = ['common', 'rare', 'epic', 'legendary'];
@@ -20,20 +20,6 @@ const ITEM_NAMES: { [key: string]: string } = {
 };
 const ITEM_ANIMATIONS = Object.keys(ITEM_NAMES);
 
-function createItem(): ItemInfoWithCount {
-    return {
-        itemInfo: {
-            id: 123 as ItemId,
-            name: 'Legendary Carrot',
-            image: 'plants',
-            animation: 'carrot',
-            quality: 'legendary',
-            lore: 'This carrot was enchanted by a wizard.',
-            questItem: false,
-        },
-        count: 1,
-    };
-}
 
 function createItem2(slotId: number): ItemInfoWithCount {
     const animation = ITEM_ANIMATIONS[slotId % ITEM_ANIMATIONS.length];
