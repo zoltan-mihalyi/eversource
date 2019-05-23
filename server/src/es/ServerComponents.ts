@@ -104,4 +104,5 @@ export interface ServerComponents extends CommonComponents {
     inventory: CharacterInventory;
     equipment: Equipment;
     viewBase: ViewBase;
+    killSound: string;
 }
