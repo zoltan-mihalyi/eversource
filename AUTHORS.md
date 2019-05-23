@@ -431,3 +431,17 @@ https://freesound.org/s/411170/
 License: CC-BY 3.0
 
 https://freesound.org/s/382915/
+
+## Male grunt sounds
+-HaelDB
+
+License: OGA-BY 3.0
+
+https://opengameart.org/content/male-gruntyelling-sounds
+
+## Female battle grounds
+-AmeAngelofSin
+
+License: CC-BY 3.0
+
+https://freesound.org/people/AmeAngelofSin/sounds/393599/

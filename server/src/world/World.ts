@@ -74,6 +74,7 @@ export class WorldImpl implements World {
                         appearance,
                         equipment,
                     },
+                    killSound: appearance.sex === 'male' ? '2yell10' : 'female_dying',
                     ...controllers,
                 });
             } else if (object.type === 'monster') {
@@ -128,7 +129,7 @@ export class WorldImpl implements World {
 
     private update = () => {
         this.zones.forEach((zone) => {
-                zone.update(INTERVAL);
+            zone.update(INTERVAL);
         });
     };
 }

@@ -77,6 +77,8 @@ export function playSoundEffect(name: string, target: AudioNode = sfx, volume: n
     const sourceNode = audioContext.createMediaElementSource(audio);
     sourceNode.connect(effectVolume);
 
+    const randomFactor = 0.2;
+    audio.playbackRate = Math.pow(1 + randomFactor, Math.random() * 2 - 1);
     audio.play();
     audio.onended = () => {
         effectVolume.disconnect();
