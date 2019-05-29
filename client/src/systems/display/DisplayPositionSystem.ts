@@ -1,10 +1,10 @@
 import { EntityContainer, Query } from '../../../../common/es/EntityContainer';
 import { ClientComponents } from '../../es/ClientComponents';
-import { PartialPick } from '../../../../common/util/Types';
 import { EventBus } from '../../../../common/es/EventBus';
-import { ClientEvents } from '../../es/ClientEvents';
+import { ClientEvents, CreateDisplayEvent } from '../../es/ClientEvents';
 import * as PIXI from 'pixi.js';
 import { Metric } from './Metric';
+import { Position } from '../../../../common/domain/Location';
 
 export class DisplayPositionSystem {
     private nextId = 0;
@@ -16,22 +16,26 @@ export class DisplayPositionSystem {
 
         this.positions = container.createQuery('position', 'display');
 
-        this.positions.on('add', this.onAdd.bind(this));
-        this.positions.on('remove', this.onRemove.bind(this));
-        this.positions.on('update', this.updatePosition.bind(this));
+        this.positions.on('add', ({ display, position }) => eventBus.emit('createDisplay', { display, position }));
+        this.positions.on('remove', ({ display }) => eventBus.emit('removeDisplay', display));
+        this.positions.on('update', ({ display, position }) => this.updatePosition(display, position));
+
+        eventBus.on('createDisplay', this.onCreateDisplay.bind(this));
+        eventBus.on('removeDisplay', this.onRemoveDisplay.bind(this));
+
         eventBus.on('render', this.onRender.bind(this));
     }
 
-    private onAdd(components: PartialPick<ClientComponents, 'position' | 'display'>) {
-        this.displayOrder.set(components.display, this.nextId++);
-        this.updatePosition(components);
+    private onCreateDisplay({ display, position }: CreateDisplayEvent) {
+        this.displayOrder.set(display, this.nextId++);
+        this.updatePosition(display, position);
     }
 
-    private onRemove({ display }: PartialPick<ClientComponents, 'display'>) {
+    private onRemoveDisplay(display: PIXI.DisplayObject) {
         this.displayOrder.delete(display);
     }
 
-    private updatePosition({ position, display }: PartialPick<ClientComponents, 'position' | 'display'>) {
+    private updatePosition(display: PIXI.DisplayObject, position: Position) {
         const { x, y } = this.metric.toFragmentPosition(position);
         display.position.set(x, y);
     }

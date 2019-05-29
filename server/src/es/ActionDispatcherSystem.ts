@@ -46,6 +46,26 @@ export function tryDispatchEffectAnimation(eventBus: EventBus<ServerEvents>, ent
     tryDispatchAction(eventBus, entity, action);
 }
 
+export function tryDispatchPositionEffectAnimation(eventBus: EventBus<ServerEvents>, entity: Entity<ServerComponents>, image: string, animation: string) {
+    const { position } = entity.components;
+
+    if (!position) {
+        return;
+    }
+
+    eventBus.emit('action', {
+        position,
+        action: {
+            type: 'position-effect',
+            effectAnimation: {
+                image,
+                animation,
+            },
+            position,
+        },
+    });
+}
+
 export function tryDispatchSoundEffect(eventBus: EventBus<ServerEvents>, entity: Entity<ServerComponents>, name: string, volume = 100) {
     const action: SoundEffectAction = {
         type: 'sound',

@@ -1,6 +1,7 @@
 import { basicAttack } from '../../../common/algorithms';
 import { ServerEvents } from './ServerEvents';
 import { EventBus } from '../../../common/es/EventBus';
+import { tryDispatchPositionEffectAnimation } from './ActionDispatcherSystem';
 
 export function attackSystem(eventBus: EventBus<ServerEvents>) {
     eventBus.on('hit', (hit) => {
@@ -13,6 +14,7 @@ export function attackSystem(eventBus: EventBus<ServerEvents>) {
                 source: hit.source,
                 target: hit.target,
             });
+            tryDispatchPositionEffectAnimation(eventBus, hit.target, 'slash', 'slash');
         }
     });
 }

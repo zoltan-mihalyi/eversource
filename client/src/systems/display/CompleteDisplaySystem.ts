@@ -36,6 +36,6 @@ export function completeDisplaySystem(entityContainer: EntityContainer<ClientCom
     displayAnimationSystem(entityContainer, eventBus);
     metadataLoaderSystem(entityContainer, textureLoader);
     displayChatSystem(entityContainer, eventBus, metric);
-    displayEffectAnimationSystem(entityContainer, eventBus, textureLoader);
+    displayEffectAnimationSystem(objectContainer, entityContainer, eventBus, textureLoader);
     return objectContainer;
 }

@@ -12,7 +12,7 @@ interface AnimationSpriteMapping {
     [animation: string]: AnimatedSprite | undefined;
 }
 
-export function displayEffectAnimationSystem(entityContainer: EntityContainer<ClientComponents>,
+export function displayEffectAnimationSystem(objectContainer: PIXI.Container, entityContainer: EntityContainer<ClientComponents>,
                                              eventBus: EventBus<ClientEvents>, textureLoader: TextureLoader) {
 
     const entities = entityContainer.createQuery('display', 'ambientAnimations');
@@ -47,6 +47,18 @@ export function displayEffectAnimationSystem(entityContainer: EntityContainer<Cl
         display.animationEffectFg.addChild(animatedSprite);
     });
 
+    eventBus.on('positionEffectAnimationAction', ({ position, effectAnimation }) => {
+        const animatedSprite = effectAnimationSprite(effectAnimation);
+        animatedSprite.loop = false;
+        animatedSprite.onComplete = () => {
+            animatedSprite.parent.removeChild(animatedSprite);
+            animatedSprite.destroy({ children: true });
+            eventBus.emit('removeDisplay', animatedSprite);
+        };
+        objectContainer.addChild(animatedSprite);
+
+        eventBus.emit('createDisplay', { position, display: animatedSprite });
+    });
 
     function updateAmbientAnimations({ display, ambientAnimations }: PartialPick<ClientComponents, 'display' | 'ambientAnimations'>) {
         let mapping = animationSpriteMappings.get(display);

@@ -9,6 +9,7 @@ import { NetworkComponents } from '../components/NetworkComponents';
 import { Nullable } from '../util/Types';
 import { ItemInfo, ItemInfoWithCount, SlotId } from './ItemInfo';
 import { EffectAnimation } from '../components/CommonComponents';
+import { Position } from '../domain/Location'
 
 export interface RequestTypes {
     enter: string;
@@ -37,6 +38,12 @@ interface BaseAction {
 
 export interface EffectAnimationAction extends BaseAction {
     type: 'effect';
+    effectAnimation: EffectAnimation;
+}
+
+export interface PositionEffectAnimationAction {
+    type: 'position-effect';
+    position: Position;
     effectAnimation: EffectAnimation;
 }
 
@@ -69,7 +76,14 @@ export interface SoundEffectAction extends BaseAction {
     volume: number;
 }
 
-export type Action = EffectAnimationAction | QuestStatusAction | EquipmentAction | InventoryAction | FailedAction | SoundEffectAction;
+export type Action =
+    EffectAnimationAction
+    | PositionEffectAnimationAction
+    | QuestStatusAction
+    | EquipmentAction
+    | InventoryAction
+    | FailedAction
+    | SoundEffectAction;
 
 export interface ResponseTypes {
     error: ErrorCode;

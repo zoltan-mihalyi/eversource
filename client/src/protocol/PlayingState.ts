@@ -80,6 +80,9 @@ export class PlayingState extends NetworkingState<PlayingStateData> implements P
             case 'effect':
                 this.game.eventBus.emit('effectAnimationAction', action);
                 break;
+            case 'position-effect':
+                this.game.eventBus.emit('positionEffectAnimationAction', action);
+                break;
             case 'sound':
                 this.game.eventBus.emit('soundEffectAction', action);
                 break;
