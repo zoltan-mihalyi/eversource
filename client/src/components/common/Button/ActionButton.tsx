@@ -3,6 +3,7 @@ import * as React from 'react';
 import { injectSheet, SMALL_DEVICE } from '../../utils';
 import { Button, Props as ButtonProps } from './index';
 import { brown, red } from '../../theme';
+import { Omit } from '../../../../../common/util/Omit';
 
 
 type ClassKeys = 'root';
@@ -32,11 +33,10 @@ const styles: StyleRules<ClassKeys> = {
     },
 };
 
-interface Props extends ButtonProps {
-}
+type Props = Omit<ButtonProps, 'sound'>;
 
 const RawActionButton: React.FunctionComponent<Props & WithStyles<ClassKeys>> = ({ children, classes, theme, ...rest }) => (
-    <Button className={classes.root} {...rest}>
+    <Button className={classes.root} sound="click" {...rest}>
         {children}
     </Button>
 );

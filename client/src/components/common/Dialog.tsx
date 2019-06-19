@@ -54,7 +54,7 @@ const RawDialog: React.ComponentType<Props & WithStyles<ClassKeys>> = ({ title, 
         <Panel margin>
             <div className={classes.header}>
                 <span className={classes.title}>{title}</span>
-                <Button className={classes.closeButton} onClick={onClose}>X</Button>
+                <Button className={classes.closeButton} sound="close" onClick={onClose}>X</Button>
             </div>
             {children}
         </Panel>

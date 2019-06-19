@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { className, injectSheet } from '../../utils';
 import { StyleRules, WithStyles } from '../../interfaces';
+import { gui } from '../../../audio/AudioEngine';
 
 type ClassKeys = 'root' | 'selected' | 'status';
 
@@ -26,10 +27,24 @@ export interface Props {
     onClick?: () => void;
 }
 
-const RawListItem: React.FunctionComponent<Props & WithStyles<ClassKeys>> = ({ children, classes, selected, onClick }) => (
-    <li className={className(classes.root, selected && classes.selected)} onClick={onClick}>
-        {children}
-    </li>
-);
+class RawListItem extends React.Component<Props & WithStyles<ClassKeys>> {
+    render() {
+        const { children, classes, selected, onClick } = this.props;
+        return (
+            <li className={className(classes.root, selected && classes.selected)} onClick={this.onClick}>
+                {children}
+            </li>
+        );
+    }
+
+    private onClick = () => {
+        const { onClick } = this.props;
+        gui.playSound('click');
+
+        if (onClick) {
+            onClick();
+        }
+    }
+}
 
 export const ListItem = injectSheet(styles)(RawListItem);

@@ -3,6 +3,7 @@ import * as React from 'react';
 import { injectSheet } from '../../utils';
 import { Button, Props as ButtonProps } from './index';
 import { brown } from '../../theme';
+import { Omit } from '../../../../../common/util/Omit';
 
 
 type ClassKeys = 'root';
@@ -22,11 +23,10 @@ const styles: StyleRules<ClassKeys> = {
     },
 };
 
-interface Props extends ButtonProps {
-}
+type Props = Omit<ButtonProps, 'sound'>;
 
 const RawInteractionItemButton: React.FunctionComponent<Props & WithStyles<ClassKeys>> = ({ children, classes, theme, ...rest }) => (
-    <Button className={classes.root} {...rest}>
+    <Button className={classes.root} sound="flipping-pages-3" {...rest}>
         {children}
     </Button>
 );

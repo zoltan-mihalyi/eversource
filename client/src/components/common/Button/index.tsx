@@ -1,7 +1,7 @@
 import { StyleRules, WithStyles } from '../../interfaces';
 import * as React from 'react';
 import { className as classNameFunction, injectSheet, SMALL_DEVICE } from '../../utils';
-
+import { gui } from '../../../audio/AudioEngine';
 
 type ClassKeys = 'root' | 'centerer' | 'centered';
 
@@ -35,16 +35,28 @@ const styles: StyleRules<ClassKeys> = {
 
 export interface Props {
     className?: string;
-    onClick?: () => void;
+    onClick: () => void;
+    sound: string;
 }
 
-const RawButton: React.FunctionComponent<Props & WithStyles<ClassKeys>> = ({ children, classes, className, onClick }) => (
-    <div className={classNameFunction(classes.root, className)} onClick={onClick}>
-        <span className={classes.centerer}/>
-        <span className={classes.centered}>
-            {children}
-        </span>
-    </div>
-);
+class RawButton extends React.Component<Props & WithStyles<ClassKeys>> {
+    render() {
+        const { children, classes, className } = this.props;
+        return (
+            <div className={classNameFunction(classes.root, className)} onClick={this.onClick}>
+                <span className={classes.centerer}/>
+                <span className={classes.centered}>
+                    {children}
+                </span>
+            </div>
+        );
+    }
+
+    private onClick = () => {
+        const { onClick, sound } = this.props;
+        gui.playSound(sound);
+        onClick();
+    }
+}
 
 export const Button = injectSheet(styles)(RawButton);
