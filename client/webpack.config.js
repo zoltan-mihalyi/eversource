@@ -38,11 +38,12 @@ module.exports = {
             from: '../common/maps',
             to: 'maps',
             transform: require('./build/map').convert,
-        }]),
-        new CopyWebpackPlugin([{
+            cache: true,
+        },{
             from: '../AUTHORS.md',
             to: 'authors.html',
             transform: require('./build/authors').convert,
+            cache: true,
         }]),
     ],
     mode: "development"
