@@ -1,14 +1,15 @@
 interface PlaySoundOptions {
     volume?: number;
+    loop?: boolean;
     destroyOnEnd?: WrappedAudioNode<AudioNode>;
 }
 
 export class WrappedAudioNode<T extends AudioNode> {
-    constructor(protected readonly context: AudioContext, protected readonly audioNode: T, protected readonly directory: string) {
+    constructor(readonly context: AudioContext, readonly audioNode: T, protected readonly directory: string) {
     }
 
     playSound(name: string, options: PlaySoundOptions = {}) {
-        const { volume = 100, destroyOnEnd } = options;
+        const { volume = 100, destroyOnEnd, loop = false } = options;
 
         const audio = document.createElement('audio');
         audio.src = `audio/${this.directory}/${name}.mp3`;
@@ -20,6 +21,7 @@ export class WrappedAudioNode<T extends AudioNode> {
         const sourceNode = this.context.createMediaElementSource(audio);
         sourceNode.connect(effectVolume);
 
+        audio.loop = loop;
         audio.play();
         audio.onended = () => {
             const destroyNode = destroyOnEnd ? destroyOnEnd.audioNode : effectVolume;
@@ -40,6 +42,12 @@ export class WrappedAudioNode<T extends AudioNode> {
 
         panner.connect(this.audioNode);
         return new WrappedPannerNode(this.context, panner, this.directory);
+    }
+
+    createGain(): WrappedAudioNode<GainNode> {
+        const gain = this.context.createGain();
+        gain.connect(this.audioNode);
+        return new WrappedAudioNode<GainNode>(this.context, gain, this.directory);
     }
 }
 

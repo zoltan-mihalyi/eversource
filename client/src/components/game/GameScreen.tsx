@@ -23,7 +23,7 @@ import { level, quest, red, xp } from '../theme';
 import { isComplete } from '../quest/QuestLog';
 import { NotificationText } from './notification/NotificationText';
 import { EquipmentSlotId } from '../../../../common/domain/CharacterInfo';
-import { gui } from '../../audio/AudioEngine';
+import { gui, musicPlayer, startThemeMusic } from '../../audio/AudioEngine';
 
 const MAX_MESSAGES = 100;
 
@@ -105,12 +105,14 @@ export class GameScreen extends React.Component<Props, State> {
     }
 
     componentDidMount() {
+        musicPlayer.playMusic('a-darkness-opus');
         this.props.onMount(this);
         document.body.addEventListener('keydown', this.onKeyDown);
         document.body.addEventListener('keypress', this.onKeyPress);
     }
 
     componentWillUnmount() {
+        startThemeMusic();
         document.body.removeEventListener('keydown', this.onKeyDown);
         document.body.removeEventListener('keypress', this.onKeyPress);
     }
