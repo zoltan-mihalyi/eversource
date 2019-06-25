@@ -1,8 +1,10 @@
 import { EntityContainer } from '../../../common/es/EntityContainer';
-import { ServerComponents } from './ServerComponents';
+import { CreatureSoundDescriptor, CreatureSoundKind, ServerComponents } from './ServerComponents';
 import { EventBus } from '../../../common/es/EventBus';
 import { ServerEvents } from './ServerEvents';
 import { tryDispatchEffectAnimation, tryDispatchSoundEffect } from './ActionDispatcherSystem';
+import { Entity } from '../../../common/es/Entity';
+
 
 export function effectAnimationActionSystem(container: EntityContainer<ServerComponents>, //TODO rename
                                             eventBus: EventBus<ServerEvents>) {
@@ -19,9 +21,30 @@ export function effectAnimationActionSystem(container: EntityContainer<ServerCom
     });
 
     eventBus.on('kill', ({ killed }) => {
-        const { killSound } = killed.components;
-        if (killSound) {
-            tryDispatchSoundEffect(eventBus, killed, killSound, 50);
+        const { creatureSound } = killed.components;
+        if (!creatureSound) {
+            return;
         }
+        tryDispatchCreatureSound(killed, creatureSound, 'die');
     });
+
+    const noisyCreatures = container.createQuery('creatureSound');
+
+    eventBus.on('update', () => {
+        noisyCreatures.forEach(({ creatureSound }, entity) => {
+            if (Math.random() * 100 < 0.1) {
+                tryDispatchCreatureSound(entity, creatureSound, 'idle');
+            }
+        });
+    });
+
+    function tryDispatchCreatureSound(entity: Entity<ServerComponents>, sound: CreatureSoundDescriptor, kind: CreatureSoundKind) {
+        const soundCount = sound[kind];
+        if (soundCount === 0) {
+            return;
+        }
+        const variant = Math.floor(Math.random() * soundCount) + 1;
+
+        tryDispatchSoundEffect(eventBus, entity, `${sound.directory}/${kind}${variant}`);
+    }
 }

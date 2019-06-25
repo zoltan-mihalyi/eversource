@@ -83,6 +83,14 @@ interface HumanoidViewBase {
 
 export type ViewBase = HumanoidViewBase | SimpleView | ObjectView;
 
+export type CreatureSoundKind = 'aggro' | 'attack' | 'die' | 'idle';
+
+export type CreatureSoundDescriptor = {
+    directory: string;
+} & {
+    [P in CreatureSoundKind]: number;
+}
+
 export interface ServerComponents extends CommonComponents {
     xp: Xp;
     speed: Speed;
@@ -104,5 +112,5 @@ export interface ServerComponents extends CommonComponents {
     inventory: CharacterInventory;
     equipment: Equipment;
     viewBase: ViewBase;
-    killSound: string;
+    creatureSound: CreatureSoundDescriptor;
 }

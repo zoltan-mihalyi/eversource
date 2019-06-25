@@ -74,7 +74,13 @@ export class WorldImpl implements World {
                         appearance,
                         equipment,
                     },
-                    killSound: appearance.sex === 'male' ? '2yell10' : 'female_dying',
+                    creatureSound: {
+                        directory: appearance.sex,
+                        aggro: 0,
+                        attack: 0,
+                        die: 1,
+                        idle: 0
+                    },
                     ...controllers,
                 });
             } else if (object.type === 'monster') {
@@ -183,6 +189,7 @@ function creatureBaseFromPreset(questIndexer: QuestIndexer, preset: CreaturePres
         attitude: {
             value: resolvePresetAttitude(preset.attitude, monster),
         },
+        creatureSound: preset.sound,
         speed: {
             running: 4,
             walking: 2,

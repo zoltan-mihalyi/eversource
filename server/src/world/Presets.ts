@@ -1,6 +1,7 @@
 import { Appearance, EquipmentView } from '../../../common/components/View';
 import { CreatureAttitude, Effect } from '../../../common/components/CommonComponents';
 import { ItemId } from '../../../common/protocol/ItemInfo';
+import { CreatureSoundDescriptor } from '../es/ServerComponents';
 
 export interface BasePreset {
     name: string;
@@ -12,6 +13,7 @@ export interface BasePreset {
 export interface CreaturePreset extends BasePreset {
     level: number;
     attitude?: PresetAttitude;
+    sound?: CreatureSoundDescriptor;
 }
 
 export type PresetAttitude = "friendly" | "neutral" | "hostile";

@@ -10,7 +10,14 @@
       "radiusY": 1,
       "running": true
     },
-    "level": 6
+    "level": 6,
+    "sound": {
+      "directory": "bee",
+      "aggro": 0,
+      "attack": 0,
+      "idle": 2,
+      "die": 2
+    }
   },
   "bee_lava": {
     "name": "Lava Bee",
@@ -20,7 +27,14 @@
       "interval": 5,
       "radiusY": 0
     },
-    "level": 7
+    "level": 7,
+    "sound": {
+      "directory": "bee",
+      "aggro": 0,
+      "attack": 0,
+      "idle": 2,
+      "die": 2
+    }
   },
   "bee_emerald": {
     "name": "Emerald Bee",
@@ -30,7 +44,14 @@
       "interval": 5,
       "running": true
     },
-    "level": 30
+    "level": 30,
+    "sound": {
+      "directory": "bee",
+      "aggro": 0,
+      "attack": 0,
+      "idle": 2,
+      "die": 2
+    }
   },
   "bee_queen": {
     "name": "Queen Bee",
@@ -41,7 +62,14 @@
       "interval": 5,
       "running": true
     },
-    "level": 8
+    "level": 8,
+    "sound": {
+      "directory": "bee",
+      "aggro": 0,
+      "attack": 0,
+      "idle": 2,
+      "die": 2
+    }
   },
   "bee_night": {
     "name": "Night Bee",
@@ -57,7 +85,14 @@
         "param": 0.3
       }
     ],
-    "level": 40
+    "level": 40,
+    "sound": {
+      "directory": "bee",
+      "aggro": 0,
+      "attack": 0,
+      "idle": 2,
+      "die": 2
+    }
   },
   "bee_pink": {
     "name": "Pink Bee",
@@ -69,26 +104,54 @@
         "param": 1
       }
     ],
-    "level": 22
+    "level": 22,
+    "sound": {
+      "directory": "bee",
+      "aggro": 0,
+      "attack": 0,
+      "idle": 2,
+      "die": 2
+    }
   },
   "slime_lava": {
     "name": "Lava Slime",
     "image": "slime",
     "palette": null,
-    "level": 3
+    "level": 3,
+    "sound": {
+      "directory": "slime",
+      "aggro": 0,
+      "attack": 0,
+      "idle": 2,
+      "die": 2
+    }
   },
   "slime_lava_rock": {
     "name": "Lava Rock Slime",
     "image": "slime",
     "palette": "lava-rock",
     "attitude": "neutral",
-    "level": 1
+    "level": 1,
+    "sound": {
+      "directory": "slime",
+      "aggro": 0,
+      "attack": 0,
+      "idle": 2,
+      "die": 2
+    }
   },
   "spider": {
     "name": "Forest Spider",
     "image": "spider01",
     "palette": null,
-    "level": 15
+    "level": 15,
+    "sound": {
+      "directory": "spider",
+      "aggro": 0,
+      "attack": 0,
+      "idle": 0,
+      "die": 2
+    }
   },
   "black_widow": {
     "name": "Black Widow",
@@ -104,13 +167,27 @@
         "param": 2
       }
     ],
-    "level": 17
+    "level": 17,
+    "sound": {
+      "directory": "spider",
+      "aggro": 0,
+      "attack": 0,
+      "idle": 0,
+      "die": 2
+    }
   },
   "golem": {
     "name": "Golem",
     "image": "golem",
     "palette": null,
-    "level": 35
+    "level": 35,
+    "sound": {
+      "directory": "monster",
+      "aggro": 2,
+      "attack": 3,
+      "idle": 3,
+      "die": 3
+    }
   },
   "golem_dirt": {
     "name": "Dirt Golem",
@@ -124,7 +201,14 @@
     "image": "golem",
     "palette": "emerald",
     "scale": 1.5,
-    "level": 20
+    "level": 20,
+    "sound": {
+      "directory": "monster",
+      "aggro": 2,
+      "attack": 2,
+      "idle": 3,
+      "die": 3
+    }
   },
   "golem_gold": {
     "name": "Gold Golem",
@@ -188,61 +272,131 @@
     "name": "Imp",
     "image": "imp",
     "palette": null,
-    "level": 20
+    "level": 20,
+    "sound": {
+      "directory": "goblin",
+      "aggro": 2,
+      "attack": 2,
+      "idle": 2,
+      "die": 2
+    }
   },
   "imp_blue": {
     "name": "Imp Servant",
     "image": "imp",
     "palette": "blue",
-    "level": 20
+    "level": 20,
+    "sound": {
+      "directory": "goblin",
+      "aggro": 2,
+      "attack": 2,
+      "idle": 2,
+      "die": 2
+    }
   },
   "imp_green": {
     "name": "Imp Corruptor",
     "image": "imp",
     "palette": "green",
-    "level": 20
+    "level": 20,
+    "sound": {
+      "directory": "goblin",
+      "aggro": 2,
+      "attack": 2,
+      "idle": 2,
+      "die": 2
+    }
   },
   "imp_dark": {
     "name": "Souleater Imp",
     "image": "imp",
     "palette": "dark",
     "scale": 1.5,
-    "level": 20
+    "level": 20,
+    "sound": {
+      "directory": "goblin",
+      "aggro": 2,
+      "attack": 2,
+      "idle": 2,
+      "die": 2
+    }
   },
   "imp_void": {
     "name": "Void Imp",
     "image": "imp",
     "palette": "void",
-    "level": 20
+    "level": 20,
+    "sound": {
+      "directory": "goblin",
+      "aggro": 2,
+      "attack": 2,
+      "idle": 2,
+      "die": 2
+    }
   },
   "impling": {
     "name": "Impling",
     "image": "impling",
     "palette": null,
-    "level": 18
+    "level": 18,
+    "sound": {
+      "directory": "goblin",
+      "aggro": 2,
+      "attack": 2,
+      "idle": 2,
+      "die": 2
+    }
   },
   "impling_blue": {
     "name": "Impling Servant",
     "image": "impling",
     "palette": "blue",
-    "level": 18
+    "level": 18,
+    "sound": {
+      "directory": "goblin",
+      "aggro": 2,
+      "attack": 2,
+      "idle": 2,
+      "die": 2
+    }
   },
   "impling_green": {
     "name": "Impling Corruptor",
     "image": "impling",
     "palette": "green",
-    "level": 18
+    "level": 18,
+    "sound": {
+      "directory": "goblin",
+      "aggro": 2,
+      "attack": 2,
+      "idle": 2,
+      "die": 2
+    }
   },
   "impling_dark": {
     "name": "Souleater Impling",
     "image": "impling",
     "palette": "dark",
-    "level": 18
+    "level": 18,
+    "sound": {
+      "directory": "goblin",
+      "aggro": 2,
+      "attack": 2,
+      "idle": 2,
+      "die": 2
+    }
   },
   "impling_void": {
     "name": "Void Impling",
     "image": "impling",
     "palette": "void",
-    "level": 18
+    "level": 18,
+    "sound": {
+      "directory": "goblin",
+      "aggro": 2,
+      "attack": 2,
+      "idle": 2,
+      "die": 2
+    }
   }
 }
