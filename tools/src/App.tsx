@@ -8,9 +8,10 @@ import { ObjectPresetTool } from './presets/objects/ObjectPresetTool';
 import { ItemsTool } from './items/ItemsTool';
 import { openFileDialog } from './Utils';
 import { generateEquipmentImage } from './EquipmentImageGenerator';
+import { MonsterTemplatesTool } from './templates/MonsterTemplatesTool';
 
 interface State {
-    screen: 'humanoids' | 'monsters' | 'objects' | 'items' | 'spells' | 'quests' | 'palettes' | null;
+    screen: 'humanoids' | 'monsters' | 'objects' | 'monster-templates' | 'items' | 'spells' | 'quests' | 'palettes' | null;
 }
 
 export class App extends React.Component<{}, State> {
@@ -34,6 +35,8 @@ export class App extends React.Component<{}, State> {
                             <button className="big" onClick={this.showMonsters}>Monsters</button>
                             <button className="big" onClick={this.showObjects}>Objects</button>
                         </div>
+                        <h2>Templates</h2>
+                            <button className="big" onClick={this.showMonsterTemplates}>Monster templates</button>
                         <h2>Others</h2>
                         <div>
                             <button className="big" onClick={this.showItems}>Items</button>
@@ -61,6 +64,10 @@ export class App extends React.Component<{}, State> {
             case 'objects':
                 return (
                     <ObjectPresetTool onExit={this.showMainMenu}/>
+                );
+            case 'monster-templates':
+                return (
+                    <MonsterTemplatesTool onExit={this.showMainMenu}/>
                 );
             case 'items':
                 return (
@@ -93,6 +100,9 @@ export class App extends React.Component<{}, State> {
     };
     private showObjects = () => {
         this.setState({ screen: 'objects' });
+    };
+    private showMonsterTemplates = () => {
+        this.setState({ screen: 'monster-templates' });
     };
     private showSpells = () => {
         this.setState({ screen: 'spells' });

@@ -38,11 +38,16 @@ export interface MonsterPreset extends CreaturePreset {
     image: string;
     palette: string | null;
     movement?: MovementConfig;
+    templates?: string[];
 }
 
 export interface MonsterPresets {
     [id: string]: MonsterPreset;
 }
+
+export type MonsterTemplate = Pick<MonsterPreset, 'name' | 'sound'>;
+
+export type MonsterTemplates = { [key: string]: MonsterTemplate };
 
 export interface LootElement {
     minCount: number;

@@ -6,33 +6,9 @@ import * as path from "path";
 import { wwwDir } from '../../Utils';
 import * as fs from "fs";
 import { getVariations } from '../utils';
-import { objectEdit } from '../../components/edit/ObjectEdit';
-import { optionalEdit } from '../../components/edit/OptionalEdit';
-import { CreatureSoundDescriptor } from '../../../../server/src/es/ServerComponents';
-import { TextEdit } from '../../components/edit/TextEdit';
-import { NumberEdit } from '../../components/edit/NumberEdit';
+import { MonsterExtraPropsEdit } from '../../templates/MonsterTemplateEdit';
 
 const base = path.join(wwwDir, 'spritesheets', 'monster');
-
-const EMPTY_SOUND_DESCRIPTOR: CreatureSoundDescriptor = {
-    directory: 'goblin',
-    aggro: 0,
-    attack: 0,
-    idle: 0,
-    die: 0
-};
-
-const MonsterPresetPropsEditor = objectEdit<MonsterPreset, 'image' | 'palette' | 'movement' | 'level' | 'attitude' | 'name' | 'story' | 'scale' | 'effects'>({
-    sound: {
-        component: optionalEdit<CreatureSoundDescriptor, undefined>(EMPTY_SOUND_DESCRIPTOR, objectEdit<CreatureSoundDescriptor>({
-            directory: { component: TextEdit },
-            aggro: { component: NumberEdit },
-            attack: { component: NumberEdit },
-            die: { component: NumberEdit },
-            idle: { component: NumberEdit },
-        }), void 0)
-    }
-});
 
 const possibleValues: { [P in keyof All]: string[] } = {
     appearance: fs.readdirSync(base),
@@ -58,7 +34,7 @@ export class MonsterEdit extends React.PureComponent<EditPresetProps<MonsterPres
             <>
                 <PropTable data={all} values={possibleValues} forceSelect={['appearance']} readExtraValues={readExtraValues}
                            onChange={this.onChangeAppearance}/>
-                <MonsterPresetPropsEditor value={preset} onChange={this.props.onChange}/>
+                <MonsterExtraPropsEdit value={preset} onChange={this.props.onChange}/>
             </>
         );
     }

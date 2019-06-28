@@ -18,3 +18,4 @@ function createGetValues<T>(file: string, convertKey: (key: string) => T): () =>
 export const ItemIdEdit = idEdit(createGetValues('items', key => +key as ItemId));
 export const QuestIdEdit = idEdit(createGetValues('quests', key => +key as QuestId));
 export const SpellIdEdit = idEdit(createGetValues('spells', key => key));
+export const MonsterTemplateIdEdit = idEdit(createGetValues('templates/monster-templates', key => key));

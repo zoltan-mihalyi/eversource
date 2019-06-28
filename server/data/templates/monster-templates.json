@@ -1,0 +1,52 @@
+{
+  "1": {
+    "name": "Sound: Bee",
+    "sound": {
+      "directory": "bee",
+      "aggro": 0,
+      "attack": 0,
+      "idle": 2,
+      "die": 2
+    }
+  },
+  "3": {
+    "name": "Sound: Spider",
+    "sound": {
+      "directory": "spider",
+      "aggro": 0,
+      "attack": 0,
+      "idle": 0,
+      "die": 2
+    }
+  },
+  "4": {
+    "name": "Sound: Golem",
+    "sound": {
+      "directory": "monster",
+      "aggro": 2,
+      "attack": 3,
+      "idle": 3,
+      "die": 3
+    }
+  },
+  "5": {
+    "name": "Sound: Imp",
+    "sound": {
+      "directory": "goblin",
+      "aggro": 2,
+      "attack": 2,
+      "idle": 2,
+      "die": 2
+    }
+  },
+  "2": {
+    "name": "Sound: Slime",
+    "sound": {
+      "directory": "slime",
+      "aggro": 0,
+      "attack": 0,
+      "idle": 2,
+      "die": 2
+    }
+  }
+}
