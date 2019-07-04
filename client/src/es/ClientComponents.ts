@@ -1,5 +1,6 @@
 import { NetworkComponents } from '../../../common/components/NetworkComponents';
 import { EntityDisplay } from '../display/EntityDisplay';
+import { EntityId } from '../../../common/es/Entity';
 
 interface ChatMessageDisplay {
     text: string;
@@ -12,4 +13,5 @@ export interface ClientComponents extends NetworkComponents {
     mouseOver: true;
     fixAnimationSpeed: number | null;
     shadowSize: number;
+    targetMark: PIXI.DisplayObject;
 }

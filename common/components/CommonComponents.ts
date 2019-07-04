@@ -1,5 +1,6 @@
 import { Position } from '../domain/Location';
 import { View } from './View';
+import { EntityId } from '../es/Entity';
 
 export type Direction = 'up' | 'down' | 'left' | 'right';
 export type Activity = 'walking' | 'casting' | 'standing';
@@ -51,6 +52,10 @@ export interface EffectAnimation {
     animation: string;
 }
 
+export interface Target {
+    entityId: EntityId;
+}
+
 export interface CommonComponents {
     direction: Direction;
     activity: Activity;
@@ -65,4 +70,5 @@ export interface CommonComponents {
     player: true;
     effects: Effect[];
     ambientAnimations: EffectAnimation[];
+    target: Target;
 }

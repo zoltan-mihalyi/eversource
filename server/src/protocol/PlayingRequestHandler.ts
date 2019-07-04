@@ -308,6 +308,7 @@ export class PlayingRequestHandler extends ClientState<PlayerData> {
                 'scale',
                 'effects',
                 'player',
+                'target'
             ]),
             ambientAnimations: this.getAmbientAnimations(viewer, entity),
             direction: getFacingDirection(viewer, entity),

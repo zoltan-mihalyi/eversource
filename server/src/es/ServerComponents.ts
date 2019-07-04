@@ -1,5 +1,5 @@
 import { Position } from '../../../common/domain/Location';
-import { Entity } from '../../../common/es/Entity';
+import { Entity, EntityId } from '../../../common/es/Entity';
 import { CommonComponents, Xp } from '../../../common/components/CommonComponents';
 import { Action, ChatMessage } from '../../../common/protocol/Messages';
 import { Spell } from '../Spell';

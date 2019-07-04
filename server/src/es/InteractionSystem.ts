@@ -44,6 +44,9 @@ export function interactionSystem(entityContainer: EntityContainer<ServerCompone
         const { attitude } = target.components;
 
         if (attitude && attitude.value !== CreatureAttitude.FRIENDLY) {
+            source.set('target', {
+                entityId: target.id,
+            });
             eventBus.emit('hit', {
                 source,
                 target,

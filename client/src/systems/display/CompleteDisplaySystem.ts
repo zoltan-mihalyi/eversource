@@ -18,6 +18,7 @@ import { Metric } from './Metric';
 import { TextureLoader } from '../../loader/TextureLoader';
 import { displayChatSystem } from './DisplayChatSystem';
 import { displayEffectAnimationSystem } from './DisplayEffectAnimationSystem';
+import { displayTargetSystem } from './DisplayTargetSystem';
 
 export function completeDisplaySystem(entityContainer: EntityContainer<ClientComponents>,
                                       eventBus: EventBus<ClientEvents>, metric: Metric, textureLoader: TextureLoader): PIXI.Container {
@@ -37,5 +38,6 @@ export function completeDisplaySystem(entityContainer: EntityContainer<ClientCom
     metadataLoaderSystem(entityContainer, textureLoader);
     displayChatSystem(entityContainer, eventBus, metric);
     displayEffectAnimationSystem(entityContainer, eventBus, textureLoader);
+    displayTargetSystem(entityContainer, eventBus, textureLoader);
     return objectContainer;
 }
