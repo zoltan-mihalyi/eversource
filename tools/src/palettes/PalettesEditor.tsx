@@ -1,8 +1,9 @@
+import * as fs from 'fs';
+import * as path from 'path';
 import * as React from 'react';
 import { Palette, Palettes } from '../../../client/src/game/Palettes';
-import * as fs from 'fs';
+import * as PIXI from '../../../client/src/pixi';
 import { openFileDialog, saveFileDialog } from '../Utils';
-import * as path from 'path';
 
 export interface Props {
     defaultFilename: string | null;
@@ -20,7 +21,7 @@ const PaletteBoxes: React.SFC<{ palette: Palette }> = ({ palette }) => {
     return (
         <div>
             {palette.map((color, index) => (
-                <div key={index} className="color" style={{ background: color }}/>
+                <div key={index} className="color" style={{ background: color }} />
             ))}
         </div>
     );
@@ -59,18 +60,19 @@ export class PalettesEditor extends React.Component<Props, State> {
                     <button className="big" onClick={this.setBase}>Set base</button>
                 ) : (
                     <div>
-                        <PaletteSizeWarning size={palettes.base.length}/>
+                        <PaletteSizeWarning size={palettes.base.length} />
 
                         <h3>Base</h3>
-                        <PaletteBoxes palette={palettes.base.map(info => info.color)}/>
+                        <PaletteBoxes palette={palettes.base.map(info => info.color)} />
                         <button className="big" onClick={this.add}>+</button>
                         {Object.keys(palettes.variations).map(key => (
                             <div key={key}>
+                                <button onClick={() => this.createImage(key)}>Create image</button>
                                 <button onClick={() => this.rename(key)}>Rename</button>
                                 <button onClick={() => this.remove(key)}>X</button>
                                 <h3>{key}</h3>
-                                <br/>
-                                <PaletteBoxes palette={palettes.variations[key]}/>
+                                <br />
+                                <PaletteBoxes palette={palettes.variations[key]} />
                             </div>
                         ))}
                     </div>
@@ -84,6 +86,48 @@ export class PalettesEditor extends React.Component<Props, State> {
             loadImageToCanvasContext(file, this.readPaletteImage);
         });
     };
+
+    private createImage(key: string) {
+        const palettes = this.state.palettes!;
+        const base = palettes.base.map(b => b.color);
+        const palette = palettes.variations[key];
+        openFileDialog((file) => {
+            loadImageToCanvasContext(file, (img, ctx) => {
+                const buffer = this.createRecoloredImage(img, ctx, base, palette);
+                saveFileDialog('out.png', (file) => {
+                    fs.writeFileSync(file, buffer);
+                    alert('Saved');
+                });
+            });
+        });
+    };
+
+    private createRecoloredImage(image: HTMLImageElement, ctx: CanvasRenderingContext2D, basePalette: Palette, newPalette: Palette): Buffer {
+        const basePaletteColors = basePalette.map(string2hex);
+        const newPaletteColors = newPalette.map(string2hex);
+
+        const imageData = ctx.getImageData(0, 0, image.width, image.height);
+        const data = imageData.data;
+        for (let i = 0; i < data.length; i += 4) {
+            if (data[i + 3] === 0) {
+                continue;
+            }
+            const color = getColor(data, i);
+            const colorIndex = basePaletteColors.indexOf(color);
+            if (colorIndex === -1) {
+                alert('Cannot find color!');
+            }
+            setColor(data, i, newPaletteColors[colorIndex]);
+        }
+
+        const canvas = document.createElement('canvas');
+        canvas.width = image.width;
+        canvas.height = image.height;
+        canvas.getContext('2d')!.putImageData(imageData, 0, 0);
+
+        const resultBase64 = canvas.toDataURL().replace(/^data:image\/\w+;base64,/, "");
+        return new Buffer(resultBase64, 'base64');
+    }
 
     private readPaletteImage = (image: HTMLImageElement, ctx: CanvasRenderingContext2D) => {
         const palettes = this.state.palettes!;
@@ -201,4 +245,15 @@ function loadImageToCanvasContext(file: string, callback: (image: HTMLImageEleme
 
 function getColor(data: Uint8ClampedArray, i: number) {
     return (data[i] * 256 + data[i + 1]) * 256 + data[i + 2];
+}
+
+function setColor(data: Uint8ClampedArray, i: number, color: number) {
+    data[i] = (color >> 16) & 255;
+    data[i + 1] = (color >> 8) & 255;
+    data[i + 2] = color & 255;
+}
+
+// todo duplicate
+function string2hex(color: string): number {
+    return parseInt(color.substring(1), 16);
 }
